@@ -2,7 +2,6 @@ package com.gruppe1.pem.challengeme;
 
 import android.app.LocalActivityManager;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
@@ -12,7 +11,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -90,12 +88,12 @@ public class TabsActivity extends AppCompatActivity {
         mDrawerList.setClickable(true);
         mDrawerList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         mDrawerList.setTextFilterEnabled(true);
-        NavigationDrawerItem [] navigationDrawerItems = {
-                new NavigationDrawerItem(android.R.drawable.ic_menu_agenda, menuItems[0]),
-                new NavigationDrawerItem(android.R.drawable.ic_menu_info_details, menuItems[1]),
-                new NavigationDrawerItem(android.R.drawable.ic_menu_sort_by_size, menuItems[2]),
-                new NavigationDrawerItem(android.R.drawable.ic_menu_save, menuItems[3]),
-                new NavigationDrawerItem(android.R.drawable.ic_menu_preferences, menuItems[4])
+        ListItemIconName[] navigationDrawerItems = {
+                new ListItemIconName(android.R.drawable.ic_menu_agenda, menuItems[0]),
+                new ListItemIconName(android.R.drawable.ic_menu_info_details, menuItems[1]),
+                new ListItemIconName(android.R.drawable.ic_menu_sort_by_size, menuItems[2]),
+                new ListItemIconName(android.R.drawable.ic_menu_save, menuItems[3]),
+                new ListItemIconName(android.R.drawable.ic_menu_preferences, menuItems[4])
         };
         mDrawerList.setAdapter(new NavigationDrawerItemAdapter(this, R.layout.list_item_navigation_drawer, navigationDrawerItems));
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -173,9 +171,9 @@ public class TabsActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+        //if (id == R.id.action_settings) {
+        //    return true;
+        //}
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }

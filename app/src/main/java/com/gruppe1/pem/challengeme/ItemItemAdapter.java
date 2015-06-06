@@ -12,13 +12,13 @@ import android.widget.TextView;
 /**
  * Created by bianka on 05.06.2015.
  */
-public class NavigationDrawerItemAdapter extends ArrayAdapter<ListItemIconName>
+public class ItemItemAdapter extends ArrayAdapter<ListItemIconName>
 {
     private final Context context;
     private final int layoutResourceId;
     private ListItemIconName data[] = null;
 
-    public NavigationDrawerItemAdapter(Context context, int layoutResourceId, ListItemIconName[] data)
+    public ItemItemAdapter(Context context, int layoutResourceId, ListItemIconName[] data)
     {
         super(context, layoutResourceId, data);
         this.context = context;
@@ -33,13 +33,11 @@ public class NavigationDrawerItemAdapter extends ArrayAdapter<ListItemIconName>
 
         View v = inflater.inflate(layoutResourceId, parent, false);
 
-        ImageView imageView = (ImageView) v.findViewById(R.id.navDrawerImageView);
-        TextView textView = (TextView) v.findViewById(R.id.navDrawerTextView);
+        ImageView imageView = (ImageView) v.findViewById(R.id.itemImageView);
 
         ListItemIconName choice = data[position];
 
         imageView.setImageResource(choice.icon);
-        textView.setText(choice.name);
 
         return v;
     }
