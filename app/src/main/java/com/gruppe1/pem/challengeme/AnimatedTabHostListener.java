@@ -24,6 +24,7 @@ public class AnimatedTabHostListener implements TabHost.OnTabChangeListener
 
     private static final int ANIMATION_TIME = 240;
     private TabHost tabHost;
+    private TabsActivity context;
     private View previousView;
     private View currentView;
     private GestureDetector gestureDetector;
@@ -35,8 +36,9 @@ public class AnimatedTabHostListener implements TabHost.OnTabChangeListener
      * @param context
      * @param tabHost
      */
-    public AnimatedTabHostListener(Context context, TabHost tabHost)
+    public AnimatedTabHostListener(TabsActivity context, TabHost tabHost)
     {
+        this.context = context;
         this.tabHost = tabHost;
         this.previousView = tabHost.getCurrentView();
         gestureDetector = new GestureDetector(context, new MyGestureDetector());
@@ -63,6 +65,7 @@ public class AnimatedTabHostListener implements TabHost.OnTabChangeListener
     @Override
     public void onTabChanged(String tabId)
     {
+        context.setSelectedNavigationDrawerItem();
         for (int i = 0; i < tabHost.getTabWidget().getChildCount(); i++) {
             TextView tv = (TextView) tabHost.getTabWidget().getChildAt(i).findViewById(android.R.id.title); //Unselected Tabs
             tv.setTextColor(Color.parseColor("#A4A4A4"));

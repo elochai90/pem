@@ -89,7 +89,9 @@ public class ItemsListFragment extends Fragment implements AbsListView.OnItemCli
         if(sharedPreferences.getBoolean("gridView", true))
             mAdapter = new ItemItemAdapter(getActivity(), R.layout.grid_item_item, dummyItemItems);
         else
-            mAdapter = new ItemItemAdapter(getActivity(), R.layout.list_item_categories, dummyItemItems);
+            mAdapter = new ItemItemAdapter(getActivity(), R.layout.list_item_item, dummyItemItems);
+
+
     }
 
     @Override
@@ -145,28 +147,6 @@ public class ItemsListFragment extends Fragment implements AbsListView.OnItemCli
 
     public interface OnFragmentInteractionListener {
         public void selectItem(int id);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        inflater.inflate(R.menu.menu_categories_items, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                // TODO: openSettings();
-                return true;
-            case R.id.action_add:
-                // TODO: not add, but change list/grid view
-                System.out.println("Change grid view ");
-                CategoriesAvtivity.changeListGridView(getActivity());
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
 }

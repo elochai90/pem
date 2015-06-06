@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 /**
@@ -72,6 +73,7 @@ public class CategoriesListFragment extends Fragment implements AbsListView.OnIt
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         sharedPreferences = getActivity().getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
 /*
@@ -93,6 +95,7 @@ public class CategoriesListFragment extends Fragment implements AbsListView.OnIt
             mAdapter = new CategoriesItemAdapter(getActivity(), R.layout.grid_item_categories, dummyCategoryItems);
         else
             mAdapter = new CategoriesItemAdapter(getActivity(), R.layout.list_item_categories, dummyCategoryItems);
+
     }
 
     @Override
@@ -111,6 +114,8 @@ public class CategoriesListFragment extends Fragment implements AbsListView.OnIt
 
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
+
+        setHasOptionsMenu(true);
 
         return view;
     }
@@ -151,27 +156,4 @@ public class CategoriesListFragment extends Fragment implements AbsListView.OnIt
         public void selectCategory(int id);
     }
 
-
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        inflater.inflate(R.menu.menu_categories_activity, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                // TODO: openSettings();
-                return true;
-            case R.id.action_add:
-                // TODO: not add, but change list/grid view
-                System.out.println("Change grid view ");
-                CategoriesAvtivity.changeListGridView(getActivity());
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
 }

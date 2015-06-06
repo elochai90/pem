@@ -6,19 +6,19 @@
     android:padding="5dp">
 
     <ImageView
-        android:id="@+id/categoryImageView"
+        android:id="@+id/itemImageView"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_centerVertical="true"
         android:paddingRight="10dp"/>
 
     <TextView
-        android:id="@+id/categoryTextView"
+        android:id="@+id/itemTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toEndOf="@+id/categoryImageView"
-        android:layout_toRightOf="@+id/categoryImageView"
+        android:layout_toRightOf="@+id/itemImageView"
+        android:layout_toEndOf="@+id/itemImageView"
         android:textAppearance="?android:attr/textAppearanceListItemSmall"/>
 
 </RelativeLayout>

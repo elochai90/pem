@@ -33,9 +33,15 @@ public class ItemItemAdapter extends ArrayAdapter<ListItemIconName>
 
         View v = inflater.inflate(layoutResourceId, parent, false);
 
+        ListItemIconName choice = data[position];
+
         ImageView imageView = (ImageView) v.findViewById(R.id.itemImageView);
 
-        ListItemIconName choice = data[position];
+        if(v.findViewById(R.id.itemTextView) != null) {
+            TextView textView = (TextView) v.findViewById(R.id.itemTextView);
+            textView.setText(choice.name);
+        }
+
 
         imageView.setImageResource(choice.icon);
 
