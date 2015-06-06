@@ -22,6 +22,7 @@ public class TabsActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private LocalActivityManager mlam;
     private ListView mDrawerList;
+    TabHost tabs;
 
     private String mTitle;
 
@@ -41,7 +42,7 @@ public class TabsActivity extends AppCompatActivity {
 
         mlam = new LocalActivityManager(this, false);
         mlam.dispatchCreate(savedInstanceState);
-        final TabHost tabs=(TabHost)findViewById(R.id.tabHost);
+        tabs=(TabHost)findViewById(R.id.tabHost);
 
         tabs.setup(mlam);
 
@@ -63,13 +64,15 @@ public class TabsActivity extends AppCompatActivity {
         spec.setIndicator(getString(R.string.title_activity_wishlist));
         tabs.addTab(spec);
 
-        tabs.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+        /*tabs.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(String tabId) {
                 System.out.println(tabs.getCurrentTab());
                 mDrawerList.setItemChecked(tabs.getCurrentTab(), true);
             }
-        });
+        });*/
+
+        tabs.setOnTabChangedListener(new AnimatedTabHostListener(getApplicationContext(), tabs));
 
 
         for(int i=0;i<tabs.getTabWidget().getChildCount();i++)
@@ -193,6 +196,15 @@ public class TabsActivity extends AppCompatActivity {
     protected void onResume(){
         super.onResume();
         mlam.dispatchResume();
+        for(int i=0;i<tabs.getTabWidget().getChildCount();i++)
+        {
+            TextView tv = (TextView) tabs.getTabWidget().getChildAt(i).findViewById(android.R.id.title);
+            tv.setTextColor(Color.parseColor("#A4A4A4"));
+            tv.setTextSize(14);
+        }
+        TextView tv = (TextView) tabs.getCurrentTabView().findViewById(android.R.id.title); //for Selected Tab
+        tv.setTextColor(Color.parseColor("#ffffff"));
+
     }
 
     @Override
@@ -200,4 +212,6 @@ public class TabsActivity extends AppCompatActivity {
         super.onPause();
         mlam.dispatchPause(isFinishing());
     }
+
+
 }
