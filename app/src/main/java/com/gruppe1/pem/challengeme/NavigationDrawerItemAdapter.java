@@ -30,17 +30,35 @@ public class NavigationDrawerItemAdapter extends ArrayAdapter<ListItemIconName>
     public View getView(int position, View convertView, ViewGroup parent)
     {
         LayoutInflater inflater = ((Activity) context).getLayoutInflater();
+        View v;
+        if(position == 0) {
 
-        View v = inflater.inflate(layoutResourceId, parent, false);
+            v = inflater.inflate(R.layout.list_item_navigation_drawer_weather, parent, false);
 
-        ImageView imageView = (ImageView) v.findViewById(R.id.navDrawerImageView);
-        TextView textView = (TextView) v.findViewById(R.id.navDrawerTextView);
+            ImageView imageView = (ImageView) v.findViewById(R.id.navDrawerWeatherImage);
+            TextView descTextView = (TextView) v.findViewById(R.id.navDrawerWeatherDescription);
+            TextView tempTextView = (TextView) v.findViewById(R.id.navDrawerWeatherTemp);
 
-        ListItemIconName choice = data[position];
+            new WeatherRequest(context, imageView, descTextView, tempTextView);
 
-        imageView.setImageResource(choice.icon);
-        textView.setText(choice.name);
+        } else {
 
+            v = inflater.inflate(layoutResourceId, parent, false);
+
+            ImageView imageView = (ImageView) v.findViewById(R.id.navDrawerImageView);
+            TextView textView = (TextView) v.findViewById(R.id.navDrawerTextView);
+
+            ListItemIconName choice = data[position-1];
+
+            imageView.setImageResource(choice.icon);
+            textView.setText(choice.name);
+        }
         return v;
+    }
+
+    @Override
+    public int getCount()
+    {
+        return data.length+1;
     }
 }

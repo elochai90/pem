@@ -7,10 +7,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Typeface;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +25,11 @@ import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.List;
+import java.util.Locale;
 
 public class TabsActivity extends AppCompatActivity {
 
@@ -39,14 +50,28 @@ public class TabsActivity extends AppCompatActivity {
     private  String[] menuItems = {"Categories", "Compare", "Wishlist", "Saved Compares", "Settings"};
 
     public void setSelectedNavigationDrawerItem() {
-        mDrawerList.setItemChecked(tabs.getCurrentTab(), true);
+        mDrawerList.setItemChecked(tabs.getCurrentTab()+1, true);
         mTitle = menuItems[tabs.getCurrentTab()];
         getSupportActionBar().setTitle(mTitle);
+    }
+
+    private void setDefaultFont() {
+        try {
+            final Typeface customFontTypeface = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/texgyreadventor-regular.otf");
+
+            final Field defaultFontTypefaceField = Typeface.class.getDeclaredField("SERIF");
+            defaultFontTypefaceField.setAccessible(true);
+            defaultFontTypefaceField.set(null, customFontTypeface);
+        } catch (Exception e) {
+        }
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setDefaultFont();
+
         setContentView(R.layout.activity_tabs);
 
         mTitle = getString(R.string.app_name);
@@ -153,23 +178,27 @@ public class TabsActivity extends AppCompatActivity {
                 //String[] menuItems = getResources().getStringArray(R.array.menus);
                 Toast.makeText(getApplicationContext(), "Inside ClickListener...", Toast.LENGTH_SHORT).show();
                 // Currently selected river
-                mTitle = menuItems[position];
+                if(position != 0)
+                    mTitle = menuItems[position-1];
 
                 switch (position) {
                     case 0:
-                        tabs.setCurrentTab(position);
+                        // TODO: actualizeWeather();
                         break;
                     case 1:
-                        tabs.setCurrentTab(position);
+                        tabs.setCurrentTab(0);
                         break;
                     case 2:
-                        tabs.setCurrentTab(position);
-                        break;
-                    case 3:
-                        // TODO: to saved compares Fragment
                         tabs.setCurrentTab(1);
                         break;
+                    case 3:
+                        tabs.setCurrentTab(2);
+                        break;
                     case 4:
+                        // TODO: to saved compares Fragment
+                        tabs.setCurrentTab(2);
+                        break;
+                    case 5:
                         // TODO: Intent intent = new Intent(this, Preferences);
                         break;
                     default:
@@ -195,6 +224,7 @@ public class TabsActivity extends AppCompatActivity {
         };
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
+        mDrawerList.setItemChecked(1,true);
     }
 
     public void setupTabHost(Bundle savedInstanceState) {
