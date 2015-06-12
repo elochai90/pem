@@ -86,22 +86,7 @@ public class TabsActivity extends Activity {
         // DB Connection test start
 
         DataBaseHelper db_helper = new DataBaseHelper(this);
-
-        try {
-            db_helper.createDataBase();
-        } catch (IOException ioe) {
-            throw new Error("Unable to create database");
-        }
-
-        try {
-            db_helper.openDataBase();
-        } catch (SQLException sqle){
-            try {
-                throw sqle;
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+        db_helper.init();
 
         // DB Connection test end
     }
