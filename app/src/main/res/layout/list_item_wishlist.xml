@@ -1,0 +1,35 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="?android:attr/listPreferredItemHeight"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:background="?android:attr/activatedBackgroundIndicator"
+    tools:layout_gravity="center">
+
+    <ImageView
+        android:id="@+id/wishlistImageView"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerVertical="true"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"/>
+
+
+    <TextView
+        android:id="@+id/wishlistTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/wishlistImageView"
+        android:textAppearance="?android:attr/textAppearanceListItemSmall"/>
+
+    <CheckBox
+        android:id="@+id/wishlistItemCheckbox"
+        android:text="To Categories"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"/>
+
+</RelativeLayout>

@@ -75,11 +75,14 @@ public class MyLocationListener implements LocationListener {
     }
 
     private String replaceUmlauteFromString(String string) {
-        String result = string.toLowerCase();
-        result = string.replace("ä","ae");
-        result = string.replace("ö","oe");
-        result = string.replace("ü","ue");
-        result = string.replace("ß","ss");
+        String result = "";
+        if(string != null) {
+            result = string.toLowerCase();
+            result = string.replace("ä","ae");
+            result = string.replace("ö","oe");
+            result = string.replace("ü","ue");
+            result = string.replace("ß","ss");
+        }
         return result;
     }
 
