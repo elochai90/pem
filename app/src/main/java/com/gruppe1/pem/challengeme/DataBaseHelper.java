@@ -19,7 +19,7 @@ import java.sql.SQLException;
  */
 public class DataBaseHelper extends SQLiteOpenHelper {
     private static final int DB_VERSION = 1;
-    private static final String DB_NAME = "db";
+    private static final String DB_NAME = "organice";
     private static String DB_PATH = "/data/data/com.gruppe1.pem.challengeme/databases/";
 
     private SQLiteDatabase database;
