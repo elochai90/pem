@@ -54,7 +54,7 @@ public class WishlistAvtivity extends Activity {
             "Clothes", "Accessoires", "Shoes", "Bags", "Others"
         };
 
-        mAdapter = new WishlistItemAdapter(dummyCategoryItemsList);
+        mAdapter = new WishlistItemAdapter(this,dummyCategoryItemsList);
         mRecyclerView.setAdapter(mAdapter);
     }
 
