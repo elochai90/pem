@@ -1,5 +1,6 @@
 package com.gruppe1.pem.challengeme;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.LocalActivityManager;
@@ -31,7 +32,7 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Locale;
 
-public class TabsActivity extends AppCompatActivity {
+public class TabsActivity extends Activity {
 
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
@@ -52,8 +53,9 @@ public class TabsActivity extends AppCompatActivity {
     public void setSelectedNavigationDrawerItem() {
         mDrawerList.setItemChecked(tabs.getCurrentTab()+1, true);
         mTitle = menuItems[tabs.getCurrentTab()];
-        getSupportActionBar().setTitle(mTitle);
+        getActionBar().setTitle(mTitle);
     }
+/*
 
     private void setDefaultFont() {
         try {
@@ -65,17 +67,17 @@ public class TabsActivity extends AppCompatActivity {
         } catch (Exception e) {
         }
     }
+*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setDefaultFont();
 
         setContentView(R.layout.activity_tabs);
 
         mTitle = getString(R.string.app_name);
-        getSupportActionBar().setTitle(mTitle);
+        getActionBar().setTitle(mTitle);
 
         setupTabHost(savedInstanceState);
         setupNavigationDrawer();
@@ -152,7 +154,7 @@ public class TabsActivity extends AppCompatActivity {
 
 
     public  void setupNavigationDrawer() {
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
@@ -211,13 +213,13 @@ public class TabsActivity extends AppCompatActivity {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                getSupportActionBar().setTitle("Menu");
+                getActionBar().setTitle("Menu");
                 invalidateOptionsMenu();
             }
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                getSupportActionBar().setTitle(mTitle);
+                getActionBar().setTitle(mTitle);
                 invalidateOptionsMenu();
             }
         };

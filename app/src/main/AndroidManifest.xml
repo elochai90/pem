@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -30,6 +31,54 @@
         <activity
             android:name=".WishlistAvtivity"
             android:label="@string/title_activity_wishlist" >
+        </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".TabsActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.gruppe1.pem.challengeme.TabsActivity" />
+        </activity>
+        <activity
+            android:name=".SavedComparesActivity"
+            android:label="@string/title_activity_saved_compares"
+            android:parentActivityName=".TabsActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.gruppe1.pem.challengeme.TabsActivity" />
+        </activity>
+        <activity
+            android:name=".SavedComparesDetailActivity"
+            android:label="@string/title_activity_saved_compares_detail"
+            android:parentActivityName=".SavedComparesActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.gruppe1.pem.challengeme.SavedComparesActivity" />
+        </activity>
+        <activity
+            android:name=".NewItemActivity"
+            android:label="@string/title_activity_new_item"
+            android:parentActivityName=".TabsActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.gruppe1.pem.challengeme.TabsActivity" />
+        </activity>
+        <activity
+            android:name=".NewCategoryActivity"
+            android:label="@string/title_activity_new_category"
+            android:parentActivityName=".TabsActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.gruppe1.pem.challengeme.TabsActivity" />
+        </activity>
+        <activity
+            android:name=".NewAttributeActivity"
+            android:label="@string/title_activity_new_attribute"
+            android:parentActivityName=".TabsActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.gruppe1.pem.challengeme.TabsActivity" />
         </activity>
     </application>
 
