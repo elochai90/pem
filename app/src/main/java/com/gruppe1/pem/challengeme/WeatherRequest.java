@@ -149,7 +149,6 @@ public class WeatherRequest {
         // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(String result) {
-            Toast.makeText(context, "Received!", Toast.LENGTH_LONG).show();
             System.out.println("Received: \n" + result);
             JSONObject json = null; // convert String to JSONObject
             try {

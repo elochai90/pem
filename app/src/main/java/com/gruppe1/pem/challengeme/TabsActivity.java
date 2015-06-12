@@ -92,7 +92,6 @@ public class TabsActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Toast.makeText(this, "onOptionsItemSelected", Toast.LENGTH_LONG).show();
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }

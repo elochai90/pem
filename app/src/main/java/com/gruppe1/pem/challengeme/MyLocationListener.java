@@ -27,14 +27,23 @@ public class MyLocationListener implements LocationListener {
     String cityName;
     String countryCode;
 
+
+
+    // TODO: implement Methods to check if GPS is turned on
+
+
     MyLocationListener(Context context, LocationManager locationManager) {
         this.context = context;
         this.locationManager = locationManager;
 
-        getLastGPS();
+        if(!getLastGPS()){
+            System.out.println("no GPS found");
+            this.cityName = "Muenchen"; // TODO: get default location from sharedPreferences
+            this.countryCode = "DE"; // TODO: get default location from sharedPreferences
+        }
     }
 
-    private void getLastGPS() {
+    private boolean getLastGPS() {
 
 
         List<String> providers = locationManager.getProviders(true);
@@ -47,7 +56,10 @@ public class MyLocationListener implements LocationListener {
         }
 
         double[] gps = new double[2];
-        if (l != null) {
+        if(l == null) {
+            return false;
+        }
+        else {
             gps[0] = l.getLatitude();
             gps[1] = l.getLongitude();
         }
@@ -58,15 +70,26 @@ public class MyLocationListener implements LocationListener {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("GPS: " + cityName + " - " + countryCode);
+        System.out.println("GPS found: " + cityName + " - " + countryCode);
+        return true;
+    }
+
+    private String replaceUmlauteFromString(String string) {
+        String result = string.toLowerCase();
+        result = string.replace("ä","ae");
+        result = string.replace("ö","oe");
+        result = string.replace("ü","ue");
+        result = string.replace("ß","ss");
+        return result;
     }
 
     public String getCityName() {
-        return cityName;
+
+        return replaceUmlauteFromString(cityName);
     }
 
     public String getCountryCode() {
-        return countryCode;
+        return replaceUmlauteFromString(countryCode);
     }
 
     @Override
@@ -77,13 +100,13 @@ public class MyLocationListener implements LocationListener {
             addresses = gcd.getFromLocation(loc.getLatitude(),loc.getLongitude(), 1);
             System.out.println(addresses);
             if (addresses.size() > 0) {
-                System.out.println(addresses.get(0).getLocality());
                 cityName = addresses.get(0).getLocality();
                 countryCode = addresses.get(0).getCountryCode();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println("GPS updated: " + cityName + " - " + countryCode);
     }
 
     @Override
