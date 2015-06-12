@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Locale;
 
@@ -81,6 +82,29 @@ public class TabsActivity extends Activity {
 
         setupTabHost(savedInstanceState);
         setupNavigationDrawer();
+
+        // DB Connection test start
+
+        DataBaseHelper db_helper = new DataBaseHelper(this);
+
+        try {
+            db_helper.createDataBase();
+        } catch (IOException ioe) {
+            throw new Error("Unable to create database");
+        }
+
+        try {
+            db_helper.openDataBase();
+        } catch (SQLException sqle){
+            try {
+                throw sqle;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // DB Connection test end
+
     }
 
     @Override
