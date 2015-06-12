@@ -104,7 +104,6 @@ public class TabsActivity extends Activity {
         }
 
         // DB Connection test end
-
     }
 
     @Override
