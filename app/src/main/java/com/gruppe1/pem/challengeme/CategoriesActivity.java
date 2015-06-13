@@ -5,14 +5,17 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 
 
-public class CategoriesAvtivity extends FragmentActivity implements CategoriesListFragment.OnFragmentInteractionListener, ItemsListFragment.OnFragmentInteractionListener {
+public class CategoriesActivity extends FragmentActivity implements CategoriesListFragment.OnFragmentInteractionListener, ItemsListFragment.OnFragmentInteractionListener {
 
     private FragmentManager fragmentManager;
 
@@ -62,4 +65,10 @@ public class CategoriesAvtivity extends FragmentActivity implements CategoriesLi
         fragmentTransaction.replace(R.id.fragment_container, fragment, "categories_items_detail");
         fragmentTransaction.commit();
     }
+
+    public void callActivityMethod(Intent intent, ImageView vw, int requestCode){
+        TabsActivity tabsActivity = (TabsActivity) getParent();
+        tabsActivity.callAction(intent, vw, requestCode);
+    }
+
 }

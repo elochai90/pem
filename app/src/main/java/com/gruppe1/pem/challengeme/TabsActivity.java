@@ -1,37 +1,30 @@
 package com.gruppe1.pem.challengeme;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.app.LocalActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Typeface;
-import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
+import android.net.Uri;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Locale;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 public class TabsActivity extends Activity {
 
@@ -40,6 +33,7 @@ public class TabsActivity extends Activity {
     private LocalActivityManager mlam;
     private ListView mDrawerList;
     TabHost tabs;
+    private ImageView imgPhoto;
 
     // TODO: make only one Instance in another file, to be able to access it from everywhere
     public static final String MY_PREFERENCES = "Preferences_File";
@@ -49,10 +43,10 @@ public class TabsActivity extends Activity {
     static String TAG_TAB_1 = "tag01";
     static String TAG_TAB_2 = "tag02";
     static String TAG_TAB_3 = "tag03";
-    private  String[] menuItems = {"Categories", "Compare", "Wishlist", "Saved Compares", "Settings"};
+    private String[] menuItems = {"Categories", "Compare", "Wishlist", "Saved Compares", "Settings"};
 
     public void setSelectedNavigationDrawerItem() {
-        mDrawerList.setItemChecked(tabs.getCurrentTab()+1, true);
+        mDrawerList.setItemChecked(tabs.getCurrentTab() + 1, true);
         mTitle = menuItems[tabs.getCurrentTab()];
         getActionBar().setTitle(mTitle);
     }
@@ -77,6 +71,7 @@ public class TabsActivity extends Activity {
 
         setContentView(R.layout.activity_tabs);
 
+        imgPhoto = (ImageView) findViewById(R.id.itemDetailImage);
         mTitle = getString(R.string.app_name);
         getActionBar().setTitle(mTitle);
 
@@ -133,11 +128,10 @@ public class TabsActivity extends Activity {
 
 
     @Override
-    protected void onResume(){
+    protected void onPostResume() {
         super.onResume();
         mlam.dispatchResume();
-        for(int i=0;i<tabs.getTabWidget().getChildCount();i++)
-        {
+        for (int i = 0; i < tabs.getTabWidget().getChildCount(); i++) {
             TextView tv = (TextView) tabs.getTabWidget().getChildAt(i).findViewById(android.R.id.title);
             tv.setTextColor(Color.parseColor("#A4A4A4"));
             tv.setTextSize(14);
@@ -148,13 +142,13 @@ public class TabsActivity extends Activity {
     }
 
     @Override
-    protected void onPause(){
+    protected void onPause() {
         super.onPause();
         mlam.dispatchPause(isFinishing());
     }
 
 
-    public  void setupNavigationDrawer() {
+    public void setupNavigationDrawer() {
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -180,8 +174,8 @@ public class TabsActivity extends Activity {
                 //String[] menuItems = getResources().getStringArray(R.array.menus);
                 Toast.makeText(getApplicationContext(), "Inside ClickListener...", Toast.LENGTH_SHORT).show();
                 // Currently selected river
-                if(position != 0)
-                    mTitle = menuItems[position-1];
+                if (position != 0)
+                    mTitle = menuItems[position - 1];
 
                 switch (position) {
                     case 0:
@@ -217,6 +211,7 @@ public class TabsActivity extends Activity {
                 getActionBar().setTitle("Menu");
                 invalidateOptionsMenu();
             }
+
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
@@ -226,30 +221,30 @@ public class TabsActivity extends Activity {
         };
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-        mDrawerList.setItemChecked(1,true);
+        mDrawerList.setItemChecked(1, true);
     }
 
     public void setupTabHost(Bundle savedInstanceState) {
         mlam = new LocalActivityManager(this, false);
         mlam.dispatchCreate(savedInstanceState);
-        tabs=(TabHost)findViewById(R.id.tabHost);
+        tabs = (TabHost) findViewById(R.id.tabHost);
 
         tabs.setup(mlam);
 
         TabHost.TabSpec spec = tabs.newTabSpec(TAG_TAB_1);
-        Intent intent1 = new Intent(getApplicationContext(), CategoriesAvtivity.class);
+        Intent intent1 = new Intent(getApplicationContext(), CategoriesActivity.class);
         spec.setContent(intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
         spec.setIndicator(getString(R.string.title_activity_categories));
         tabs.addTab(spec);
 
         spec = tabs.newTabSpec(TAG_TAB_2);
-        Intent intent2 = new Intent(getApplicationContext(), CompareAvtivity.class);
+        Intent intent2 = new Intent(getApplicationContext(), CompareActivity.class);
         spec.setContent(intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
         spec.setIndicator(getString(R.string.title_activity_compare));
         tabs.addTab(spec);
 
         spec = tabs.newTabSpec(TAG_TAB_3);
-        Intent intent3 = new Intent(getApplicationContext(), WishlistAvtivity.class);
+        Intent intent3 = new Intent(getApplicationContext(), WishlistActivity.class);
         spec.setContent(intent3.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
         spec.setIndicator(getString(R.string.title_activity_wishlist));
         tabs.addTab(spec);
@@ -265,10 +260,46 @@ public class TabsActivity extends Activity {
         tabs.setOnTabChangedListener(new AnimatedTabHostListener(this, tabs));
 
 
-        for(int i=0;i<tabs.getTabWidget().getChildCount();i++)
-        {
+        for (int i = 0; i < tabs.getTabWidget().getChildCount(); i++) {
             TextView tv = (TextView) tabs.getTabWidget().getChildAt(i).findViewById(android.R.id.title);
             tv.setTextColor(Color.parseColor("#FFFFFF"));
         }
     }
+
+    public void callAction(Intent intent, ImageView vw, int requestCode) {
+        imgPhoto = vw;
+        startActivityForResult(intent, requestCode);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+
+            if (requestCode == 1) {
+                try {
+                    Bitmap photo = (Bitmap) data.getExtras().get("data");
+                    imgPhoto.setImageBitmap(photo);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }else if (requestCode == 2) {
+                Uri selectedImage = data.getData();
+
+                try {
+                    InputStream imageStream = getContentResolver().openInputStream(selectedImage);
+                    Bitmap yourSelectedImage = BitmapFactory.decodeStream(imageStream);
+                    imgPhoto.setImageBitmap(yourSelectedImage);
+
+                }catch(FileNotFoundException e){
+                    e.printStackTrace();
+                }
+
+            }
+        }
+    }
 }
+

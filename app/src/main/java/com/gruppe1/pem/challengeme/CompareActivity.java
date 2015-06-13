@@ -7,7 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class CompareAvtivity extends Activity {
+public class CompareActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
