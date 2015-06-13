@@ -36,6 +36,12 @@ public class CategoriesAvtivity extends FragmentActivity implements CategoriesLi
         CategoriesListFragment fragment = new CategoriesListFragment();
         fragmentTransaction.add(R.id.fragment_container, fragment, "categories");
         fragmentTransaction.commit();
+
+        DataBaseHelper db_helper = new DataBaseHelper(getApplicationContext());
+        db_helper.init();
+
+        // TEST
+        Category testCategory = new Category(1, db_helper);
     }
 
 

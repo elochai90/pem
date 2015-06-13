@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.text.TextUtils;
 import android.util.Log;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -20,21 +21,32 @@ import java.sql.SQLException;
 public class DataBaseHelper extends SQLiteOpenHelper {
     private static final int DB_VERSION = 1;
     private static final String DB_NAME = "organice";
-    private static String DB_PATH = "/data/data/com.gruppe1.pem.challengeme/databases/";
+    private static final String DB_PATH = "/data/data/com.gruppe1.pem.challengeme/databases/";
+    private static final String DB_FULL_PATH = DB_PATH + DB_NAME;
+    private static boolean db_existanceChecked = false;
 
-    private SQLiteDatabase database;
     private final Context context;
+    private SQLiteDatabase database;
+
+    private String mTable;
+    private String[] mColumns;
+    private String mWhere;
+    private String mOrderBy;
+    private String mLimit;
 
     public DataBaseHelper(Context context){
         super(context, DB_NAME, null, DB_VERSION);
         this.context = context;
     }
 
-    public void init(){
-        try {
-            this.createDataBase();
-        } catch (IOException ioe) {
-            throw new Error("Unable to create database");
+    public void init() {
+        if(!db_existanceChecked) {
+            try {
+                this.createDataBase();
+                db_existanceChecked = true;
+            } catch (IOException ioe) {
+                throw new Error("Unable to create database");
+            }
         }
 
         try {
@@ -89,8 +101,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase checkDB = null;
 
         try{
-            String db_Path = DB_PATH + DB_NAME;
-            checkDB = SQLiteDatabase.openDatabase(db_Path, null, SQLiteDatabase.OPEN_READONLY);
+            checkDB = SQLiteDatabase.openDatabase(DB_FULL_PATH, null, SQLiteDatabase.OPEN_READONLY);
 
         } catch(SQLiteException e){
             //database does't exist yet.
@@ -108,11 +119,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         //Open your local db as the input stream
         InputStream myInput = context.getAssets().open(DB_NAME);
 
-        // Path to the just created empty db
-        String outFileName = DB_PATH + DB_NAME;
-
         //Open the empty db as the output stream
-        OutputStream myOutput = new FileOutputStream(outFileName);
+        OutputStream myOutput = new FileOutputStream(DB_FULL_PATH);
 
         //transfer bytes from the inputfile to the outputfile
         byte[] buffer = new byte[1024];
@@ -129,22 +137,82 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     public void openDataBase() throws SQLException {
         //Open the database
-        String db_Path = DB_PATH + DB_NAME;
-        database = SQLiteDatabase.openDatabase(db_Path, null, SQLiteDatabase.OPEN_READWRITE);
+        this.database = SQLiteDatabase.openDatabase(DB_FULL_PATH, null, SQLiteDatabase.OPEN_READWRITE);
 
         // test insert start
 
         this.database.execSQL("INSERT INTO orga_nice_categories (name) VALUES (\"cat1\")");
 
-        String query = "SELECT * FROM orga_nice_categories";
-        Cursor cursor = this.database.rawQuery(query, null);
+        // test insert end
+
+    }
+
+    /*
+     * --------------------------------------------------------------------
+     * ------------------------- Getter and setter ------------------------
+     * --------------------------------------------------------------------
+     */
+
+    public void setTable(String p_table) {
+        this.mTable = p_table;
+    }
+
+    public String getTable() {
+        return this.mTable;
+    }
+
+    public void setColumns(String[] p_columns) {
+        this.mColumns = p_columns;
+    }
+
+    public String[] getmColumns() {
+        return this.mColumns;
+    }
+
+    public void setWhere(CharSequence p_concat, String[] p_restrictions) {
+       this.mWhere = TextUtils.join(p_concat + " ", p_restrictions);
+    }
+
+    public String getWhere() {
+        return this.mWhere;
+    }
+
+    public void setOrderBy(String p_orderBy) {
+        this.mOrderBy = p_orderBy;
+    }
+
+    public String getmOrderBy() {
+        return this.mOrderBy;
+    }
+
+    public void setQuery() {
+        //sqlite_escape_string(...)
+    }
+
+    /*
+     * --------------------------------------------------------------------
+     * -------------------------- Query handling --------------------------
+     * --------------------------------------------------------------------
+     */
+
+    public void select() {
+        Cursor cursor = this.database.query(this.mTable, this.mColumns, this.mWhere, null, null,null, this.mOrderBy);
 
         if (cursor != null) {
             cursor.moveToFirst();
-            Log.e("###NAME###", "" + cursor.getString(1));
+            Log.e("###FROM DB###", "" + cursor.getString(1));
         }
+    }
 
-        // test insert end
+    public void insert() {
+
+    }
+
+    public void update(){
+
+    }
+
+    public void delete() {
 
     }
 }

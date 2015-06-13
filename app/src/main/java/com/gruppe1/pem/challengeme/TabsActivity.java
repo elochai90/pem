@@ -82,13 +82,6 @@ public class TabsActivity extends Activity {
 
         setupTabHost(savedInstanceState);
         setupNavigationDrawer();
-
-        // DB Connection test start
-
-        DataBaseHelper db_helper = new DataBaseHelper(this);
-        db_helper.init();
-
-        // DB Connection test end
     }
 
     @Override
