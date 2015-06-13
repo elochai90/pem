@@ -60,6 +60,48 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    /*
+     * --------------------------------------------------------------------
+     * ------------------------- Getter and setter ------------------------
+     * --------------------------------------------------------------------
+     */
+
+    public void setTable(String p_table) {
+        this.mTable = p_table;
+    }
+
+    public String getTable() {
+        return this.mTable;
+    }
+
+    public void setColumns(String[] p_columns) {
+        this.mColumns = p_columns;
+    }
+
+    public String[] getmColumns() {
+        return this.mColumns;
+    }
+
+    public void setWhere(CharSequence p_concat, String[] p_restrictions) {
+        this.mWhere = TextUtils.join(p_concat + " ", p_restrictions);
+    }
+
+    public String getWhere() {
+        return this.mWhere;
+    }
+
+    public void setOrderBy(String p_orderBy) {
+        this.mOrderBy = p_orderBy;
+    }
+
+    public String getmOrderBy() {
+        return this.mOrderBy;
+    }
+
+    public void setQuery() {
+        //sqlite_escape_string(...)
+    }
+
     @Override
     public synchronized void close() {
         if(database != null) {
@@ -108,11 +150,12 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
 
         if(checkDB != null){
-            checkDB.close();
+
+        checkDB.close();
         }
 
-        return checkDB != null;
-    }
+    return checkDB != null;
+}
 
     private void copyDataBase() throws IOException {
 
@@ -126,67 +169,25 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         byte[] buffer = new byte[1024];
         int length;
         while ((length = myInput.read(buffer) )> 0) {
-            myOutput.write(buffer, 0, length);
+        myOutput.write(buffer, 0, length);
         }
 
-        //Close the streams
-        myOutput.flush();
-        myOutput.close();
-        myInput.close();
-    }
+    //Close the streams
+    myOutput.flush();
+    myOutput.close();
+    myInput.close();
+}
 
     public void openDataBase() throws SQLException {
-        //Open the database
-        this.database = SQLiteDatabase.openDatabase(DB_FULL_PATH, null, SQLiteDatabase.OPEN_READWRITE);
+    //Open the database
+    this.database = SQLiteDatabase.openDatabase(DB_FULL_PATH, null, SQLiteDatabase.OPEN_READWRITE);
 
-        // test insert start
+    // test insert start
 
-        this.database.execSQL("INSERT INTO orga_nice_categories (name) VALUES (\"cat1\")");
+    this.database.execSQL("INSERT INTO orga_nice_categories (name) VALUES (\"cat1\")");
 
-        // test insert end
+    // test insert end
 
-    }
-
-    /*
-     * --------------------------------------------------------------------
-     * ------------------------- Getter and setter ------------------------
-     * --------------------------------------------------------------------
-     */
-
-    public void setTable(String p_table) {
-        this.mTable = p_table;
-    }
-
-    public String getTable() {
-        return this.mTable;
-    }
-
-    public void setColumns(String[] p_columns) {
-        this.mColumns = p_columns;
-    }
-
-    public String[] getmColumns() {
-        return this.mColumns;
-    }
-
-    public void setWhere(CharSequence p_concat, String[] p_restrictions) {
-       this.mWhere = TextUtils.join(p_concat + " ", p_restrictions);
-    }
-
-    public String getWhere() {
-        return this.mWhere;
-    }
-
-    public void setOrderBy(String p_orderBy) {
-        this.mOrderBy = p_orderBy;
-    }
-
-    public String getmOrderBy() {
-        return this.mOrderBy;
-    }
-
-    public void setQuery() {
-        //sqlite_escape_string(...)
     }
 
     /*
