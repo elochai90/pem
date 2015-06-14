@@ -44,7 +44,20 @@ public class CategoriesActivity extends FragmentActivity implements CategoriesLi
         db_helper.init();
 
         // TEST
-        Category testCategory = new Category(1, db_helper);
+    /*
+        Category testCategory1 = new Category(0, db_helper);
+        testCategory1.setName("cat1");
+        testCategory1.save();
+
+        Category testCategory2 = new Category(0, db_helper);
+        testCategory2.setName("cat2");
+        testCategory2.save();
+
+        Category testCategory3 = new Category(0, db_helper);
+        testCategory3.setName("cat3");
+        testCategory3.save();
+    */
+
     }
 
 

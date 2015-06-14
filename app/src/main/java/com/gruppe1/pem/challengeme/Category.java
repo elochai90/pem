@@ -1,8 +1,12 @@
 package com.gruppe1.pem.challengeme;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.util.Log;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Simon on 13.06.2015.
@@ -10,11 +14,14 @@ import java.util.ArrayList;
 public class Category {
     private static final String DB_TABLE = Constants.DB_TABLE_PREFIX + "categories";
 
-    private String m_id;
+    private int m_id;
     private String m_name;
-    private String m_parent_cat_id;
+    private int m_parent_cat_id;
     private ArrayList<Attribute> m_defaultAttributes;
     private DataBaseHelper m_dbHelper;
+
+    // used for output resource strings
+    private static final String[] databaseColumnsIdentifiers = {"id", "category_name", "parent_category_id"};
 
     public Category(int m_id, DataBaseHelper p_dbHelper) {
         this.m_dbHelper = p_dbHelper;
@@ -24,7 +31,17 @@ public class Category {
             // get data from existing category
             this.m_dbHelper.setColumns(new String[]{"*"});
             this.m_dbHelper.setWhere("", new String[]{"_id=" + m_id});
-            this.m_dbHelper.select();
+            Cursor categoryData = this.m_dbHelper.select();
+
+            if(categoryData.moveToFirst()) {
+                Log.e("###Category Id:###", "" + categoryData.getInt(0));
+                this.m_id = categoryData.getInt(0);
+                this.m_name = categoryData.getString(1);
+                this.m_parent_cat_id = categoryData.getInt(2);
+            } else {
+                Log.e("###NO_SUCH_CATEGORY_ID", "" + m_id);
+            }
+
         } else {
             // prepare new category
         }
@@ -44,11 +61,11 @@ public class Category {
         this.m_dbHelper = m_dbHelper;
     }
 
-    public String getId() {
+    public int getId() {
         return m_id;
     }
 
-    public void setId(String m_id) {
+    public void setId(int m_id) {
         this.m_id = m_id;
     }
 
@@ -60,11 +77,11 @@ public class Category {
         this.m_name = m_name;
     }
 
-    public String getParentCatId() {
+    public int getParentCatId() {
         return m_parent_cat_id;
     }
 
-    public void setParentCatId(String m_parent_cat_id) {
+    public void setParentCatId(int m_parent_cat_id) {
         this.m_parent_cat_id = m_parent_cat_id;
     }
 
@@ -84,7 +101,22 @@ public class Category {
         return null;
     }
 
+    /**
+     * save category changes or insert new category
+     */
     public void save() {
-        //save changes
+        if(this.m_id == 0) {
+            // insert as new categoy
+            this.m_dbHelper.setStringValue("name", this.m_name);
+            int id = this.m_dbHelper.insert();
+
+            if (id > -1) {
+                this.m_id = id;
+            } else {
+                Log.e("Category-Error", "save failed");
+            }
+        } else {
+            //save changes to existing category
+        }
     }
 }

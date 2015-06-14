@@ -1,5 +1,6 @@
 package com.gruppe1.pem.challengeme;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,7 +12,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Array;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by Simon on 12.06.2015.
@@ -33,10 +38,12 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private String mWhere;
     private String mOrderBy;
     private String mLimit;
+    private ContentValues mValues;
 
     public DataBaseHelper(Context context){
         super(context, DB_NAME, null, DB_VERSION);
         this.context = context;
+        this.mValues = new ContentValues();
     }
 
     public void init() {
@@ -98,8 +105,16 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return this.mOrderBy;
     }
 
-    public void setQuery() {
-        //sqlite_escape_string(...)
+    public void setIntegerValue(String p_key, int p_value) {
+        this.mValues.put(p_key, p_value);
+    }
+
+    public void setStringValue(String p_key, String p_value) {
+        this.mValues.put(p_key, p_value);
+    }
+
+    public ContentValues getValues(){
+        return this.mValues;
     }
 
     @Override
@@ -184,7 +199,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     // test insert start
 
-    this.database.execSQL("INSERT INTO orga_nice_categories (name) VALUES (\"cat1\")");
+    //this.database.execSQL("INSERT INTO orga_nice_categories (name) VALUES (\"cat1\")");
 
     // test insert end
 
@@ -196,17 +211,23 @@ public class DataBaseHelper extends SQLiteOpenHelper {
      * --------------------------------------------------------------------
      */
 
-    public void select() {
-        Cursor cursor = this.database.query(this.mTable, this.mColumns, this.mWhere, null, null,null, this.mOrderBy);
-
-        if (cursor != null) {
-            cursor.moveToFirst();
-            Log.e("###FROM DB###", "" + cursor.getString(1));
-        }
+    public Cursor select() {
+        return this.database.query(this.mTable, this.mColumns, this.mWhere, null, null,null, this.mOrderBy);
     }
 
-    public void insert() {
+    public int insert() {
+        this.database.insert(this.mTable, null, this.mValues);
+        Log.e("###", "inserted");
+        this.mColumns = new String[]{"MAX(_id)"};
+        Cursor cursor = this.select();
 
+        //return _id of (new) insert
+        if (cursor != null) {
+            cursor.moveToFirst();
+            return cursor.getInt(0);
+        }
+
+        return -1;
     }
 
     public void update(){
