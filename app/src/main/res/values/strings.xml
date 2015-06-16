@@ -15,11 +15,10 @@
     <string name="title_activity_saved_compares">SavedComparesActivity</string>
 
     <string name="hello_world">Hello world!</string>
-    <string name="title_activity_saved_compares_detail">SavedComparesDetailActivity</string>
-    <string name="title_activity_new_item">NewItemActivity</string>
-    <string name="title_activity_new_category">NewCategoryActivity</string>
-    <string name="title_activity_new_attribute">NewAttributeActivity</string>
-    <string name="title_activity_categories_list">CategoriesListActivity</string>
+    <string name="title_activity_saved_compares_detail">Saved Compare</string>
+    <string name="title_activity_new_item">New Item</string>
+    <string name="title_activity_new_category">New Category</string>
+    <string name="title_activity_categories_list">Categories</string>
     <string name="title_activity_items_list">Items</string>
-    <string name="title_activity_categories_item_detail">New Item</string>
+    <string name="title_activity_categories_item_detail">Item</string>
 </resources>

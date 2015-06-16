@@ -31,15 +31,11 @@ public class WishlistItemAdapter extends RecyclerView.Adapter<WishlistItemAdapte
         public View mView;
         public TextView mTextView;
         public ImageView mImageView;
-        public ViewHolder(View v, boolean isViewAsList) {
+        public ViewHolder(View v) {
             super(v);
             mView = v;
-            if(isViewAsList) {
-                mTextView = (TextView) v.findViewById(R.id.wishlistTextView);
-                mImageView = (ImageView) v.findViewById(R.id.wishlistImageView);
-            } else {
-                mImageView = (ImageView) v.findViewById(R.id.itemImageView);
-            }
+            mTextView = (TextView) v.findViewById(R.id.wishlistTextView);
+            mImageView = (ImageView) v.findViewById(R.id.wishlistImageView);
         }
     }
 
@@ -66,11 +62,11 @@ public class WishlistItemAdapter extends RecyclerView.Adapter<WishlistItemAdapte
         if(isViewAsList) {
             v = LayoutInflater.from(context).inflate(R.layout.list_item_wishlist, parent, false);
         } else {
-            v = LayoutInflater.from(context).inflate(R.layout.grid_item_item, parent, false);
+            v = LayoutInflater.from(context).inflate(R.layout.grid_item_wishlist, parent, false);
         }
         // TODO: set the view's size, margins, paddings and layout parameters
 
-        ViewHolder vh = new ViewHolder(v, isViewAsList);
+        ViewHolder vh = new ViewHolder(v);
         vh.mView.setOnClickListener(WishlistItemAdapter.this);
         vh.mView.setOnLongClickListener(WishlistItemAdapter.this);
         vh.mView.setTag(vh);
@@ -82,12 +78,8 @@ public class WishlistItemAdapter extends RecyclerView.Adapter<WishlistItemAdapte
     public void onBindViewHolder(ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        if(isViewAsList) {
-            holder.mTextView.setText(mDataset.get(position).name);
-            holder.mImageView.setImageResource(mDataset.get(position).icon);
-        } else {
-            holder.mImageView.setImageResource(mDataset.get(position).icon);
-        }
+        holder.mTextView.setText(mDataset.get(position).name);
+        holder.mImageView.setImageResource(mDataset.get(position).icon);
 
     }
 
@@ -100,14 +92,12 @@ public class WishlistItemAdapter extends RecyclerView.Adapter<WishlistItemAdapte
     public void addItem(int position, ListItemIconName data) {
         mDataset.add(position, data);
         notifyItemInserted(position);
-        notifyDataSetChanged();
         // Call this method to refresh the list and display the "updated" list
     }
 
     public void removeItem(int position) {
         mDataset.remove(position);
         notifyItemRemoved(position);
-        notifyDataSetChanged();
         // Call this method to refresh the list and display the "updated" list
     }
 

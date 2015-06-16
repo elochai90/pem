@@ -49,7 +49,7 @@ public class WishlistActivity extends Activity {
         }
 
         mRecyclerView.setLayoutManager(mLayoutManager);
-        //mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
         mAdapter = new WishlistItemAdapter(this,mDataset,isViewAsList);
         mRecyclerView.setAdapter(mAdapter);
@@ -118,7 +118,8 @@ public class WishlistActivity extends Activity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_switchView) {
+            setRecyclerViewLayoutManager(!isViewAsList);
             return true;
         }
 
@@ -136,11 +137,11 @@ public class WishlistActivity extends Activity {
     private void initDataset() {
         // TODO: replace by database data
         mDataset = new ArrayList<ListItemIconName>();
-        mDataset.add(new ListItemIconName(R.mipmap.test_tshirt, "Clothes"));
-        mDataset.add(new ListItemIconName(R.mipmap.test_tshirt, "Accessoires"));
-        mDataset.add(new ListItemIconName(R.mipmap.test_tshirt, "Shoes"));
-        mDataset.add(new ListItemIconName(R.mipmap.test_tshirt, "Bags"));
-        mDataset.add(new ListItemIconName(R.mipmap.test_tshirt, "Others"));
+        mDataset.add(new ListItemIconName(R.mipmap.test_tshirt, "T-Shirt in rosa"));
+        mDataset.add(new ListItemIconName(R.mipmap.test_tshirt, "T-Shirt in rosa"));
+        mDataset.add(new ListItemIconName(R.mipmap.test_tshirt, "T-Shirt in rosa"));
+        mDataset.add(new ListItemIconName(R.mipmap.test_tshirt, "T-Shirt in rosa"));
+        mDataset.add(new ListItemIconName(R.mipmap.test_tshirt, "T-Shirt in rosa"));
 
 
     }

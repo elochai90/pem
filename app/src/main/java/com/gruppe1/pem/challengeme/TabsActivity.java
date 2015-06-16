@@ -43,7 +43,7 @@ public class TabsActivity extends Activity {
     static String TAG_TAB_1 = "tag01";
     static String TAG_TAB_2 = "tag02";
     static String TAG_TAB_3 = "tag03";
-    private String[] menuItems = {"Categories", "Compare", "Wishlist", "Saved Compares", "Settings"};
+    private String[] menuItems = {"Categories", "Compare", "Wishlist", "Settings"};
 
     public void setSelectedNavigationDrawerItem() {
         mDrawerList.setItemChecked(tabs.getCurrentTab() + 1, true);
@@ -160,8 +160,7 @@ public class TabsActivity extends Activity {
                 new ListItemIconName(android.R.drawable.ic_menu_agenda, menuItems[0]),
                 new ListItemIconName(android.R.drawable.ic_menu_info_details, menuItems[1]),
                 new ListItemIconName(android.R.drawable.ic_menu_sort_by_size, menuItems[2]),
-                new ListItemIconName(android.R.drawable.ic_menu_save, menuItems[3]),
-                new ListItemIconName(android.R.drawable.ic_menu_preferences, menuItems[4])
+                new ListItemIconName(android.R.drawable.ic_menu_preferences, menuItems[3])
         };
         mDrawerList.setAdapter(new NavigationDrawerItemAdapter(this, R.layout.list_item_navigation_drawer, navigationDrawerItems));
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -191,11 +190,9 @@ public class TabsActivity extends Activity {
                         tabs.setCurrentTab(2);
                         break;
                     case 4:
-                        // TODO: to saved compares Fragment
-                        tabs.setCurrentTab(2);
-                        break;
-                    case 5:
-                        // TODO: Intent intent = new Intent(this, Preferences);
+                        Intent intent = new Intent();
+                        intent.setClassName(getPackageName(), getPackageName() + ".SettingsActivity");
+                        startActivity(intent);
                         break;
                     default:
                 }
