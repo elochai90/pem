@@ -20,7 +20,6 @@ import java.util.Objects;
 
 /**
  * Created by Simon on 12.06.2015.
- *
  * handles the database connection and requests
  */
 public class DataBaseHelper extends SQLiteOpenHelper {
