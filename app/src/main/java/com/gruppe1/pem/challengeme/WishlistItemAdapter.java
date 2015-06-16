@@ -21,6 +21,7 @@ public class WishlistItemAdapter extends RecyclerView.Adapter<WishlistItemAdapte
     private List<ListItemIconName> mDataset;
 
     private Context context;
+    private boolean isViewAsList;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -30,34 +31,46 @@ public class WishlistItemAdapter extends RecyclerView.Adapter<WishlistItemAdapte
         public View mView;
         public TextView mTextView;
         public ImageView mImageView;
-        public ViewHolder(View v) {
+        public ViewHolder(View v, boolean isViewAsList) {
             super(v);
             mView = v;
-            mTextView = (TextView) v.findViewById(R.id.wishlistTextView);
-            mImageView = (ImageView) v.findViewById(R.id.wishlistImageView);
+            if(isViewAsList) {
+                mTextView = (TextView) v.findViewById(R.id.wishlistTextView);
+                mImageView = (ImageView) v.findViewById(R.id.wishlistImageView);
+            } else {
+                mImageView = (ImageView) v.findViewById(R.id.itemImageView);
+            }
         }
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public WishlistItemAdapter(Context context, List<ListItemIconName> myDataset) {
+    public WishlistItemAdapter(Context context, List<ListItemIconName> myDataset, boolean isViewAsList) {
         this.context = context;
+        this.isViewAsList = isViewAsList;
         mDataset = myDataset;
     }
     public void updateList(List<ListItemIconName> data) {
         mDataset = data;
         notifyDataSetChanged();
     }
+    public void updateView(boolean shouldBeViewAsList) {
+        isViewAsList = shouldBeViewAsList;
+        notifyDataSetChanged();
+    }
 
     // Create new views (invoked by the layout manager)
     @Override
-    public WishlistItemAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                   int viewType) {
+    public WishlistItemAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = null;
         // create a new view
-        View v = LayoutInflater.from(context)
-                .inflate(R.layout.list_item_wishlist, parent, false);
+        if(isViewAsList) {
+            v = LayoutInflater.from(context).inflate(R.layout.list_item_wishlist, parent, false);
+        } else {
+            v = LayoutInflater.from(context).inflate(R.layout.grid_item_item, parent, false);
+        }
         // TODO: set the view's size, margins, paddings and layout parameters
 
-        ViewHolder vh = new ViewHolder(v);
+        ViewHolder vh = new ViewHolder(v, isViewAsList);
         vh.mView.setOnClickListener(WishlistItemAdapter.this);
         vh.mView.setOnLongClickListener(WishlistItemAdapter.this);
         vh.mView.setTag(vh);
@@ -69,8 +82,12 @@ public class WishlistItemAdapter extends RecyclerView.Adapter<WishlistItemAdapte
     public void onBindViewHolder(ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.mTextView.setText(mDataset.get(position).name);
-        holder.mImageView.setImageResource(mDataset.get(position).icon);
+        if(isViewAsList) {
+            holder.mTextView.setText(mDataset.get(position).name);
+            holder.mImageView.setImageResource(mDataset.get(position).icon);
+        } else {
+            holder.mImageView.setImageResource(mDataset.get(position).icon);
+        }
 
     }
 
@@ -83,12 +100,14 @@ public class WishlistItemAdapter extends RecyclerView.Adapter<WishlistItemAdapte
     public void addItem(int position, ListItemIconName data) {
         mDataset.add(position, data);
         notifyItemInserted(position);
+        notifyDataSetChanged();
         // Call this method to refresh the list and display the "updated" list
     }
 
     public void removeItem(int position) {
         mDataset.remove(position);
         notifyItemRemoved(position);
+        notifyDataSetChanged();
         // Call this method to refresh the list and display the "updated" list
     }
 
@@ -97,7 +116,7 @@ public class WishlistItemAdapter extends RecyclerView.Adapter<WishlistItemAdapte
     public void onClick(View view) {
         ViewHolder holder = (ViewHolder) view.getTag();
         if (view.getId() == holder.mView.getId()) {
-            Toast.makeText(context, holder.mTextView.getText(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Item: " + holder.getPosition(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -109,9 +128,10 @@ public class WishlistItemAdapter extends RecyclerView.Adapter<WishlistItemAdapte
            removeItem(holder.getPosition());
 
 
-            Toast.makeText(context, "Item " + holder.mTextView.getText() + " has been removed from list", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Item " + holder.getPosition() + " has been removed from list", Toast.LENGTH_SHORT).show();
         }
         return false;
     }
+
 
 }

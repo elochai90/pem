@@ -3,10 +3,13 @@ package com.gruppe1.pem.challengeme;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.RadioButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,16 +17,23 @@ import java.util.List;
 
 public class WishlistActivity extends Activity {
 
+    private static final String KEY_VIEW_AS_LIST = "ViewAsList";
+
+    private boolean isViewAsList;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private List<ListItemIconName> mDataset;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wishlist);
+
+        initDataset();
+
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+        //mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -31,31 +41,65 @@ public class WishlistActivity extends Activity {
 
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(this);
+        isViewAsList = true;
+
+        if (savedInstanceState != null) {
+            // Restore saved layout manager type.
+            isViewAsList = savedInstanceState.getBoolean(KEY_VIEW_AS_LIST, true);
+        }
+
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        //mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        // specify an adapter (see also next example)
-        // TODO: replace by database categories
-        List<ListItemIconName> dummyCategoryItemsList = new ArrayList<ListItemIconName>();
-        dummyCategoryItemsList.add(new ListItemIconName(R.mipmap.test_tshirt, "Clothes"));
-        dummyCategoryItemsList.add(new ListItemIconName(R.mipmap.test_tshirt, "Accessoires"));
-        dummyCategoryItemsList.add(new ListItemIconName(R.mipmap.test_tshirt, "Shoes"));
-        dummyCategoryItemsList.add(new ListItemIconName(R.mipmap.test_tshirt, "Bags"));
-        dummyCategoryItemsList.add(new ListItemIconName(R.mipmap.test_tshirt, "Others"));
-        ListItemIconName[] dummyCategoryItems = {
-                new ListItemIconName(R.mipmap.test_tshirt, "Clothes"),
-                new ListItemIconName(R.mipmap.test_tshirt, "Accessoires"),
-                new ListItemIconName(R.mipmap.test_tshirt, "Shoes"),
-                new ListItemIconName(R.mipmap.test_tshirt, "Bags"),
-                new ListItemIconName(R.mipmap.test_tshirt, "Others")
-        };
-
-        String[] dummyItems = {
-            "Clothes", "Accessoires", "Shoes", "Bags", "Others"
-        };
-
-        mAdapter = new WishlistItemAdapter(this,dummyCategoryItemsList);
+        mAdapter = new WishlistItemAdapter(this,mDataset,isViewAsList);
         mRecyclerView.setAdapter(mAdapter);
+
+
+        RadioButton mLinearLayoutRadioButton = (RadioButton) findViewById(R.id.linear_layout_rb);
+        mLinearLayoutRadioButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //setRecyclerViewLayoutManager(LayoutManagerType.LINEAR_LAYOUT_MANAGER);
+                setRecyclerViewLayoutManager(true);
+            }
+        });
+
+        RadioButton mGridLayoutRadioButton = (RadioButton) findViewById(R.id.grid_layout_rb);
+        mGridLayoutRadioButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setRecyclerViewLayoutManager(false);
+            }
+        });
+
+    }
+
+    /**
+     * Set RecyclerView's LayoutManager to the one given.
+     *
+     * @param shouldBeViewAsList if the view should be shown as list or as grid
+     */
+    public void setRecyclerViewLayoutManager(boolean shouldBeViewAsList) {
+        int scrollPosition = 0;
+
+        isViewAsList = shouldBeViewAsList;
+
+        // If a layout manager has already been set, get current scroll position.
+        if (mRecyclerView.getLayoutManager() != null) {
+            scrollPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager())
+                    .findFirstCompletelyVisibleItemPosition();
+        }
+
+        if(!isViewAsList) {
+            mLayoutManager = new GridLayoutManager(this, 3);
+        } else {
+            mLayoutManager = new LinearLayoutManager(this);
+        }
+
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.scrollToPosition(scrollPosition);
+        mAdapter.notifyDataSetChanged();
+        ((WishlistItemAdapter) mAdapter).updateView(isViewAsList);
     }
 
 
@@ -79,5 +123,25 @@ public class WishlistActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save currently selected layout manager.
+        savedInstanceState.putSerializable(KEY_VIEW_AS_LIST, isViewAsList);
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+
+    private void initDataset() {
+        // TODO: replace by database data
+        mDataset = new ArrayList<ListItemIconName>();
+        mDataset.add(new ListItemIconName(R.mipmap.test_tshirt, "Clothes"));
+        mDataset.add(new ListItemIconName(R.mipmap.test_tshirt, "Accessoires"));
+        mDataset.add(new ListItemIconName(R.mipmap.test_tshirt, "Shoes"));
+        mDataset.add(new ListItemIconName(R.mipmap.test_tshirt, "Bags"));
+        mDataset.add(new ListItemIconName(R.mipmap.test_tshirt, "Others"));
+
+
     }
 }
