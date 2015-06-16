@@ -2,12 +2,13 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.gruppe1.pem.challengeme.CategoriesListFragment">
+    tools:context="com.gruppe1.pem.challengeme.CategoriesActivity">
 
-    <GridView android:id="@android:id/list"
+    <ListView android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:numColumns="3" />
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="1dp"/>
 
     <TextView android:id="@android:id/empty" android:layout_width="match_parent"
         android:layout_height="match_parent" android:gravity="center" />

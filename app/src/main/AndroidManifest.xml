@@ -5,7 +5,11 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-feature android:name="android.hardware.camera" android:required= "true" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
@@ -81,6 +85,22 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.gruppe1.pem.challengeme.TabsActivity" />
+        </activity>
+        <activity
+            android:name=".ItemsListActivity"
+            android:label="@string/title_activity_items_list"
+            android:parentActivityName=".CategoriesActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.gruppe1.pem.challengeme.CategoriesActivity" />
+        </activity>
+        <activity
+            android:name=".CategoriesItemDetailActivity"
+            android:label="@string/title_activity_categories_item_detail"
+            android:parentActivityName=".ItemsListActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.gruppe1.pem.challengeme.ItemsListActivity" />
         </activity>
     </application>
 

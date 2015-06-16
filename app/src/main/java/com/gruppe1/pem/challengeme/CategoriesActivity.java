@@ -1,23 +1,17 @@
 package com.gruppe1.pem.challengeme;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.ImageView;
+import android.view.View;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.ListAdapter;
 
 
-public class CategoriesActivity extends FragmentActivity implements CategoriesListFragment.OnFragmentInteractionListener, ItemsListFragment.OnFragmentInteractionListener {
-
-    private FragmentManager fragmentManager;
+public class CategoriesActivity extends Activity{
 
 
     // TODO: make only one Instance in another file, to be able to access it from everywhere
@@ -25,20 +19,19 @@ public class CategoriesActivity extends FragmentActivity implements CategoriesLi
     public SharedPreferences.Editor editor;
     public SharedPreferences sharedPreferences;
 
+    private AbsListView mListView;
+    private ListAdapter mAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_categories);
-
 
         sharedPreferences = getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
 
-        fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        CategoriesListFragment fragment = new CategoriesListFragment();
-        fragmentTransaction.add(R.id.fragment_container, fragment, "categories");
-        fragmentTransaction.commit();
+        if(sharedPreferences.getBoolean("gridView", true))
+            setContentView(R.layout.activity_categories_item_grid);
+        else
+            setContentView(R.layout.activity_categories_item_list);
 
         DataBaseHelper db_helper = new DataBaseHelper(getApplicationContext());
         db_helper.init();
@@ -57,31 +50,38 @@ public class CategoriesActivity extends FragmentActivity implements CategoriesLi
         testCategory3.setName("cat3");
         testCategory3.save();
     */
+        // TODO: replace by database categories
+        ListItemIconName[] dummyCategoryItems = {
+                new ListItemIconName(R.mipmap.test_tshirt, "Clothes"),
+                new ListItemIconName(R.mipmap.test_tshirt, "Accessoires"),
+                new ListItemIconName(R.mipmap.test_tshirt, "Shoes"),
+                new ListItemIconName(R.mipmap.test_tshirt, "Bags"),
+                new ListItemIconName(R.mipmap.test_tshirt, "Others")
+        };
+
+        if(sharedPreferences.getBoolean("gridView", true))
+            mAdapter = new CategoriesItemAdapter(this, R.layout.grid_item_categories, dummyCategoryItems);
+        else
+            mAdapter = new CategoriesItemAdapter(this, R.layout.list_item_categories, dummyCategoryItems);
+
+        // Set the adapter
+        mListView = (AbsListView) findViewById(android.R.id.list);
+        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
+
+        // Set OnItemClickListener so we can be notified on item clicks
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectCategory(position);
+            }
+        });
 
     }
 
-
-
-    @Override
     public void selectCategory(int id) {
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        ItemsListFragment fragment = new ItemsListFragment();
-        fragmentTransaction.replace(R.id.fragment_container, fragment, "categories_items");
-        fragmentTransaction.commit();
-    }
-
-    @Override
-    public void selectItem(int id) {
-        System.out.println("Item " + id + " ausgewählt.");
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        CategoriesItemDetailFragment fragment = new CategoriesItemDetailFragment();
-        fragmentTransaction.replace(R.id.fragment_container, fragment, "categories_items_detail");
-        fragmentTransaction.commit();
-    }
-
-    public void callActivityMethod(Intent intent, ImageView vw, int requestCode){
-        TabsActivity tabsActivity = (TabsActivity) getParent();
-        tabsActivity.callAction(intent, vw, requestCode);
+        Intent intent = new Intent();
+        intent.setClassName(getPackageName(), getPackageName() + ".ItemsListActivity");
+        startActivity(intent);
     }
 
 }
