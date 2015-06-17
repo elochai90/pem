@@ -18,8 +18,8 @@ import java.util.List;
  */
 public class WishlistItemAdapter extends RecyclerView.Adapter<WishlistItemAdapter.ViewHolder> implements View.OnClickListener,
         View.OnLongClickListener{
-    private List<ListItemIconName> mDataset;
 
+    private List<ListItemIconName> mDataset;
     private Context context;
     private boolean isViewAsList;
 

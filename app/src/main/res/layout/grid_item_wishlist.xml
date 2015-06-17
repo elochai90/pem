@@ -13,7 +13,6 @@
         android:layout_height="wrap_content"
         card_view:cardUseCompatPadding="true"
         card_view:cardCornerRadius="4dp"
-        card_view:contentPadding="10dp"
         card_view:cardElevation="4dp" >
        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
@@ -26,19 +25,22 @@
 
             <ImageView
                 android:id="@+id/wishlistImageView"
-                android:layout_width="100dp"
+                android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_centerHorizontal="true"
-                android:layout_alignParentTop="true"
-                android:paddingBottom="5dp"/>
+                android:layout_alignParentTop="true"/>
 
-            <TextView
-                android:id="@+id/wishlistTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@+id/wishlistImageView"
-                android:textAppearance="?android:attr/textAppearanceListItemSmall"/>
+
+           <TextView
+               android:id="@+id/wishlistTextView"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:padding="5dp"
+               android:layout_centerHorizontal="true"
+               android:layout_alignBottom="@id/wishlistImageView"
+               android:background="@color/grey_transparent"
+               android:textAppearance="?android:attr/textAppearanceListItemSmall"/>
+
 
         </RelativeLayout>
 

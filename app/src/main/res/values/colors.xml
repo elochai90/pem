@@ -4,4 +4,7 @@
     <color name="primary">#ff1d4064</color>
     <color name="primary_dark">#ff12283e</color>
     <color name="accent">#ff3e88d4</color>
+
+
+    <color name="grey_transparent">#6fcfd1d4</color>
 </resources>

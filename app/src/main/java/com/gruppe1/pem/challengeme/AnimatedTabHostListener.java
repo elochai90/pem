@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
+import android.widget.FrameLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -40,7 +41,7 @@ public class AnimatedTabHostListener implements TabHost.OnTabChangeListener
     {
         this.context = context;
         this.tabHost = tabHost;
-        this.previousView = tabHost.getCurrentView();
+        this.previousView =  tabHost.getCurrentView();
         gestureDetector = new GestureDetector(context, new MyGestureDetector());
         tabHost.setOnTouchListener(new View.OnTouchListener()
         {
@@ -66,6 +67,8 @@ public class AnimatedTabHostListener implements TabHost.OnTabChangeListener
     public void onTabChanged(String tabId)
     {
         context.setSelectedNavigationDrawerItem();
+        System.out.println("before animation");
+
         for (int i = 0; i < tabHost.getTabWidget().getChildCount(); i++) {
             TextView tv = (TextView) tabHost.getTabWidget().getChildAt(i).findViewById(android.R.id.title); //Unselected Tabs
             tv.setTextColor(Color.parseColor("#A4A4A4"));
@@ -74,16 +77,20 @@ public class AnimatedTabHostListener implements TabHost.OnTabChangeListener
         TextView tv = (TextView) tabHost.getCurrentTabView().findViewById(android.R.id.title); //for Selected Tab
         tv.setTextColor(Color.parseColor("#ffffff"));
 
-        currentView = tabHost.getCurrentView();
+        currentView =  tabHost.getCurrentView();
         if (tabHost.getCurrentTab() >= currentTab)
         {
             previousView.setAnimation(outToLeftAnimation());
             currentView.setAnimation(inFromRightAnimation());
+            //previousView.startAnimation(outToLeftAnimation());
+            //currentView.startAnimation(inFromRightAnimation());
         }
         else
         {
             previousView.setAnimation(outToRightAnimation());
             currentView.setAnimation(inFromLeftAnimation());
+            //previousView.startAnimation(outToRightAnimation());
+            //currentView.startAnimation(inFromLeftAnimation());
         }
         previousView = currentView;
         currentTab = tabHost.getCurrentTab();
@@ -110,7 +117,7 @@ public class AnimatedTabHostListener implements TabHost.OnTabChangeListener
      */
     private Animation outToRightAnimation()
     {
-        Animation outToRight = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT,
+        TranslateAnimation outToRight = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT,
                 1.0f, Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f);
         return setProperties(outToRight);
     }

@@ -62,26 +62,6 @@ public class WishlistFragment extends Fragment {
         mAdapter = new WishlistItemAdapter(getActivity(),mDataset,isViewAsList);
         mRecyclerView.setAdapter(mAdapter);
 
-/*
-
-        RadioButton mLinearLayoutRadioButton = (RadioButton) rootView.findViewById(R.id.linear_layout_rb);
-        mLinearLayoutRadioButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //setRecyclerViewLayoutManager(LayoutManagerType.LINEAR_LAYOUT_MANAGER);
-                setRecyclerViewLayoutManager(true);
-            }
-        });
-
-        RadioButton mGridLayoutRadioButton = (RadioButton) rootView.findViewById(R.id.grid_layout_rb);
-        mGridLayoutRadioButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setRecyclerViewLayoutManager(false);
-            }
-        });
-*/
-
         return rootView;
     }
 
@@ -132,9 +112,6 @@ public class WishlistFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement

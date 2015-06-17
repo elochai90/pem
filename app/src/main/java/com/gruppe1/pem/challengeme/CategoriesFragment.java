@@ -4,6 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,8 +19,11 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 
+import java.util.ArrayList;
+import java.util.List;
 
-public class CategoriesFragment extends android.support.v4.app.Fragment {
+
+public class CategoriesFragment extends Fragment {
 
 
     // TODO: make only one Instance in another file, to be able to access it from everywhere
@@ -23,8 +31,14 @@ public class CategoriesFragment extends android.support.v4.app.Fragment {
     public SharedPreferences.Editor editor;
     public SharedPreferences sharedPreferences;
 
-    private AbsListView mListView;
-    private ListAdapter mAdapter;
+
+    private static final String KEY_VIEW_AS_LIST = "ViewAsList";
+
+    private boolean isViewAsList;
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private List<ListItemIconName> mDataset;
 
     private View rootView;
 
@@ -38,37 +52,30 @@ public class CategoriesFragment extends android.support.v4.app.Fragment {
         editor = sharedPreferences.edit();
 
 
-        if(sharedPreferences.getBoolean("gridView", true))
-            rootView = inflater.inflate(R.layout.fragment_categories_item_grid, container, false);
-        else
-            rootView = inflater.inflate(R.layout.fragment_categories_item_list, container, false);
+        rootView = inflater.inflate(R.layout.fragment_categories, container, false);
 
 
-        // TODO: replace by database categories
-        ListItemIconName[] dummyCategoryItems = {
-                new ListItemIconName(R.mipmap.test_tshirt, "Clothes"),
-                new ListItemIconName(R.mipmap.test_tshirt, "Accessoires"),
-                new ListItemIconName(R.mipmap.test_tshirt, "Shoes"),
-                new ListItemIconName(R.mipmap.test_tshirt, "Bags"),
-                new ListItemIconName(R.mipmap.test_tshirt, "Others")
-        };
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recycler_view);
+        //mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
 
-        if(sharedPreferences.getBoolean("gridView", true))
-            mAdapter = new CategoriesItemAdapter(getActivity(), R.layout.grid_item_categories, dummyCategoryItems);
-        else
-            mAdapter = new CategoriesItemAdapter(getActivity(), R.layout.list_item_categories, dummyCategoryItems);
+        // use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView
+        mRecyclerView.setHasFixedSize(true);
 
-        // Set the adapter
-        mListView = (AbsListView) rootView.findViewById(android.R.id.list);
-        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
+        // use a linear layout manager
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        isViewAsList = true;
 
-        // Set OnItemClickListener so we can be notified on item clicks
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectCategory(position);
-            }
-        });
+        if (savedInstanceState != null) {
+            // Restore saved layout manager type.
+            isViewAsList = savedInstanceState.getBoolean(KEY_VIEW_AS_LIST, true);
+        }
+
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        mAdapter = new CategoriesItemAdapter(getActivity(),mDataset,isViewAsList);
+        mRecyclerView.setAdapter(mAdapter);
         return rootView;
     }
 
@@ -77,6 +84,7 @@ public class CategoriesFragment extends android.support.v4.app.Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        initDataset();
 
         DataBaseHelper db_helper = new DataBaseHelper(getActivity().getApplicationContext());
         db_helper.init();
@@ -100,6 +108,35 @@ public class CategoriesFragment extends android.support.v4.app.Fragment {
 
     }
 
+    /**
+     * Set RecyclerView's LayoutManager to the one given.
+     *
+     * @param shouldBeViewAsList if the view should be shown as list or as grid
+     */
+    public void setRecyclerViewLayoutManager(boolean shouldBeViewAsList) {
+        int scrollPosition = 0;
+
+        isViewAsList = shouldBeViewAsList;
+
+        // If a layout manager has already been set, get current scroll position.
+        if (mRecyclerView.getLayoutManager() != null) {
+            scrollPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager())
+                    .findFirstCompletelyVisibleItemPosition();
+        }
+
+        if(!isViewAsList) {
+            mLayoutManager = new GridLayoutManager(getActivity(), 3);
+        } else {
+            mLayoutManager = new LinearLayoutManager(getActivity());
+        }
+
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.scrollToPosition(scrollPosition);
+        mAdapter.notifyDataSetChanged();
+        ((CategoriesItemAdapter) mAdapter).updateView(isViewAsList);
+    }
+
+
     public void selectCategory(int id) {
         Intent intent = new Intent();
         intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".ItemsListActivity");
@@ -115,17 +152,35 @@ public class CategoriesFragment extends android.support.v4.app.Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_switchView) {
+            setRecyclerViewLayoutManager(!isViewAsList);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save currently selected layout manager.
+        savedInstanceState.putSerializable(KEY_VIEW_AS_LIST, isViewAsList);
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+
+    private void initDataset() {
+        // TODO: replace by database data
+        mDataset = new ArrayList<ListItemIconName>();
+        mDataset.add(new ListItemIconName(R.mipmap.test_tshirt, "Clothes"));
+        mDataset.add(new ListItemIconName(R.mipmap.test_tshirt, "Accessoires"));
+        mDataset.add(new ListItemIconName(R.mipmap.test_tshirt, "Shoes"));
+        mDataset.add(new ListItemIconName(R.mipmap.test_tshirt, "Bags"));
+        mDataset.add(new ListItemIconName(R.mipmap.test_tshirt, "Others"));
+
+
     }
 
 }

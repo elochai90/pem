@@ -51,6 +51,11 @@
                         android:layout_height="match_parent"
                         android:orientation="vertical" />
                 </FrameLayout>
+                <FrameLayout
+                    android:id="@+id/previousTabContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                </FrameLayout>
             </LinearLayout>
         </android.support.v4.app.FragmentTabHost>
 

@@ -42,9 +42,9 @@ public class TabsFragmentActivity extends FragmentActivity {
 
     private String mTitle;
 
-    static String TAG_TAB_1 = "tag01";
-    static String TAG_TAB_2 = "tag02";
-    static String TAG_TAB_3 = "tag03";
+    public static String TAG_TAB_1 = "tag01";
+    public static String TAG_TAB_2 = "tag02";
+    public static String TAG_TAB_3 = "tag03";
     private String[] menuItems = {"Categories", "Compare", "Wishlist", "Settings"};
 
     public void setSelectedNavigationDrawerItem() {
@@ -246,7 +246,6 @@ public class TabsFragmentActivity extends FragmentActivity {
                 mDrawerList.setItemChecked(tabs.getCurrentTab(), true);
             }
         });*/
-
         tabs.setOnTabChangedListener(new AnimatedTabHostListener(this, tabs));
 
 
