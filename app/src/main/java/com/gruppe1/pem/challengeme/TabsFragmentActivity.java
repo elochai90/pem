@@ -9,10 +9,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
-import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTabHost;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,13 +28,13 @@ import android.widget.Toast;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
-public class TabsActivity extends Activity {
+public class TabsFragmentActivity extends FragmentActivity {
 
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
     private LocalActivityManager mlam;
     private ListView mDrawerList;
-    TabHost tabs;
+    private FragmentTabHost tabs;
     private ImageView imgPhoto;
 
     // TODO: make only one Instance in another file, to be able to access it from everywhere
@@ -84,8 +86,7 @@ public class TabsActivity extends Activity {
         super.onCreateOptionsMenu(menu);
         //menu.clear();
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_categories_items, menu);
-        return true;
+        return false;
     }
 
     @Override
@@ -224,27 +225,19 @@ public class TabsActivity extends Activity {
     public void setupTabHost(Bundle savedInstanceState) {
         mlam = new LocalActivityManager(this, false);
         mlam.dispatchCreate(savedInstanceState);
-        tabs = (TabHost) findViewById(R.id.tabHost);
+       // tabs = (FragmentTabHost) findViewById(R.id.tabHost);
 
-        tabs.setup(mlam);
+        //tabs.setup(mlam);
+        tabs = (FragmentTabHost) findViewById(R.id.tabHost);
+        tabs.setup(this, getSupportFragmentManager(), android.R.id.tabcontent);
 
-        TabHost.TabSpec spec = tabs.newTabSpec(TAG_TAB_1);
-        Intent intent1 = new Intent(getApplicationContext(), CategoriesActivity.class);
-        spec.setContent(intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-        spec.setIndicator(getString(R.string.title_activity_categories));
-        tabs.addTab(spec);
+        tabs.addTab(tabs.newTabSpec(TAG_TAB_1).setIndicator(getString(R.string.title_activity_categories)),
+                CategoriesFragment.class, null);
+        tabs.addTab(tabs.newTabSpec(TAG_TAB_2).setIndicator(getString(R.string.title_activity_compare)),
+                CompareFragment.class, null);
+        tabs.addTab(tabs.newTabSpec(TAG_TAB_3).setIndicator(getString(R.string.title_activity_wishlist)),
+                WishlistFragment.class, null);
 
-        spec = tabs.newTabSpec(TAG_TAB_2);
-        Intent intent2 = new Intent(getApplicationContext(), CompareActivity.class);
-        spec.setContent(intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-        spec.setIndicator(getString(R.string.title_activity_compare));
-        tabs.addTab(spec);
-
-        spec = tabs.newTabSpec(TAG_TAB_3);
-        Intent intent3 = new Intent(getApplicationContext(), WishlistActivity.class);
-        spec.setContent(intent3.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-        spec.setIndicator(getString(R.string.title_activity_wishlist));
-        tabs.addTab(spec);
 
         /*tabs.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override

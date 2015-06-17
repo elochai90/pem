@@ -18,7 +18,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".TabsActivity"
+            android:name=".TabsFragmentActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,32 +27,20 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".CategoriesActivity"
-            android:label="@string/title_activity_categories" >
-        </activity>
-        <activity
-            android:name=".CompareActivity"
-            android:label="@string/title_activity_compare" >
-        </activity>
-        <activity
-            android:name=".WishlistActivity"
-            android:label="@string/title_activity_wishlist" >
-        </activity>
-        <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".TabsActivity" >
+            android:parentActivityName=".TabsFragmentActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.gruppe1.pem.challengeme.TabsActivity" />
+                android:value="com.gruppe1.pem.challengeme.TabsFragmentActivity" />
         </activity>
         <activity
             android:name=".SavedComparesActivity"
             android:label="@string/title_activity_saved_compares"
-            android:parentActivityName=".TabsActivity" >
+            android:parentActivityName=".TabsFragmentActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.gruppe1.pem.challengeme.TabsActivity" />
+                android:value="com.gruppe1.pem.challengeme.TabsFragmentActivity" />
         </activity>
         <activity
             android:name=".SavedComparesDetailActivity"
@@ -65,26 +53,26 @@
         <activity
             android:name=".NewItemActivity"
             android:label="@string/title_activity_new_item"
-            android:parentActivityName=".TabsActivity" >
+            android:parentActivityName=".TabsFragmentActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.gruppe1.pem.challengeme.TabsActivity" />
+                android:value="com.gruppe1.pem.challengeme.TabsFragmentActivity" />
         </activity>
         <activity
             android:name=".NewCategoryActivity"
             android:label="@string/title_activity_new_category"
-            android:parentActivityName=".TabsActivity" >
+            android:parentActivityName=".TabsFragmentActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.gruppe1.pem.challengeme.TabsActivity" />
+                android:value="com.gruppe1.pem.challengeme.TabsFragmentActivity" />
         </activity>
         <activity
             android:name=".ItemsListActivity"
             android:label="@string/title_activity_items_list"
-            android:parentActivityName=".CategoriesActivity" >
+            android:parentActivityName=".TabsFragmentActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.gruppe1.pem.challengeme.CategoriesActivity" />
+                android:value="com.gruppe1.pem.challengeme.TabsFragmentActivity" />
         </activity>
         <activity
             android:name=".CategoriesItemDetailActivity"

@@ -56,9 +56,9 @@ public class ItemsListActivity extends Activity implements AbsListView.OnItemCli
         editor = sharedPreferences.edit();
 
         if(sharedPreferences.getBoolean("gridView", true))
-           setContentView(R.layout.activity_categories_item_grid);
+           setContentView(R.layout.fragment_categories_item_grid);
         else
-            setContentView(R.layout.activity_categories_item_list);
+            setContentView(R.layout.fragment_categories_item_list);
 
 
         // TODO: replace by database categories

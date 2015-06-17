@@ -24,7 +24,7 @@ public class AnimatedTabHostListener implements TabHost.OnTabChangeListener
 
     private static final int ANIMATION_TIME = 240;
     private TabHost tabHost;
-    private TabsActivity context;
+    private TabsFragmentActivity context;
     private View previousView;
     private View currentView;
     private GestureDetector gestureDetector;
@@ -36,7 +36,7 @@ public class AnimatedTabHostListener implements TabHost.OnTabChangeListener
      * @param context
      * @param tabHost
      */
-    public AnimatedTabHostListener(TabsActivity context, TabHost tabHost)
+    public AnimatedTabHostListener(TabsFragmentActivity context, TabHost tabHost)
     {
         this.context = context;
         this.tabHost = tabHost;

@@ -2,20 +2,24 @@ package com.gruppe1.pem.challengeme;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RadioButton;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class WishlistActivity extends Activity {
+public class WishlistFragment extends Fragment {
 
     private static final String KEY_VIEW_AS_LIST = "ViewAsList";
 
@@ -25,14 +29,18 @@ public class WishlistActivity extends Activity {
     private RecyclerView.LayoutManager mLayoutManager;
     private List<ListItemIconName> mDataset;
 
+    private View rootView;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_wishlist);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
 
-        initDataset();
+        rootView = inflater.inflate(R.layout.fragment_wishlist, container, false);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+
+
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recycler_view);
         //mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
 
         // use this setting to improve performance if you know that changes
@@ -40,7 +48,7 @@ public class WishlistActivity extends Activity {
         mRecyclerView.setHasFixedSize(true);
 
         // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager = new LinearLayoutManager(getActivity());
         isViewAsList = true;
 
         if (savedInstanceState != null) {
@@ -51,11 +59,12 @@ public class WishlistActivity extends Activity {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        mAdapter = new WishlistItemAdapter(this,mDataset,isViewAsList);
+        mAdapter = new WishlistItemAdapter(getActivity(),mDataset,isViewAsList);
         mRecyclerView.setAdapter(mAdapter);
 
+/*
 
-        RadioButton mLinearLayoutRadioButton = (RadioButton) findViewById(R.id.linear_layout_rb);
+        RadioButton mLinearLayoutRadioButton = (RadioButton) rootView.findViewById(R.id.linear_layout_rb);
         mLinearLayoutRadioButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,13 +73,24 @@ public class WishlistActivity extends Activity {
             }
         });
 
-        RadioButton mGridLayoutRadioButton = (RadioButton) findViewById(R.id.grid_layout_rb);
+        RadioButton mGridLayoutRadioButton = (RadioButton) rootView.findViewById(R.id.grid_layout_rb);
         mGridLayoutRadioButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setRecyclerViewLayoutManager(false);
             }
         });
+*/
+
+        return rootView;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        initDataset();
+        setHasOptionsMenu(true);
 
     }
 
@@ -91,9 +111,9 @@ public class WishlistActivity extends Activity {
         }
 
         if(!isViewAsList) {
-            mLayoutManager = new GridLayoutManager(this, 3);
+            mLayoutManager = new GridLayoutManager(getActivity(), 3);
         } else {
-            mLayoutManager = new LinearLayoutManager(this);
+            mLayoutManager = new LinearLayoutManager(getActivity());
         }
 
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -104,10 +124,10 @@ public class WishlistActivity extends Activity {
 
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_wishlist_activity, menu);
-        return true;
+        menu.clear();
+        inflater.inflate(R.menu.menu_wishlist_fragment, menu);
     }
 
     @Override
