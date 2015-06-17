@@ -8,4 +8,11 @@
     <dimen name="list_card_padding_right">0dp</dimen>
     <dimen name="list_card_padding_bottom">0dp</dimen>
     <dimen name="list_card_padding_top">0dp</dimen>
+
+    <!-- for the floating action button -->
+    <dimen name="fab_elevation">8dp</dimen>
+    <dimen name="fab_press_translation_z">9dp</dimen>
+    <dimen name="fab_size">56dp</dimen>
+    <dimen name="fab_size_small">40dp</dimen>
+    <dimen name="fab_icon_size">24dp</dimen>
 </resources>

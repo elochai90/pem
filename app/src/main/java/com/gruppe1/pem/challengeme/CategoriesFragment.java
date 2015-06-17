@@ -9,6 +9,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class CategoriesFragment extends Fragment implements View.OnClickListener, View.OnLongClickListener{
+public class CategoriesFragment extends Fragment implements View.OnClickListener, View.OnLongClickListener, FloatingActionButton.OnCheckedChangeListener{
 
 
     // TODO: make only one Instance in another file, to be able to access it from everywhere
@@ -31,6 +32,7 @@ public class CategoriesFragment extends Fragment implements View.OnClickListener
     public SharedPreferences.Editor editor;
     public SharedPreferences sharedPreferences;
 
+    private final static String TAG = "FloatingActionButton";
 
     private static final String KEY_VIEW_AS_LIST = "ViewAsList";
 
@@ -48,11 +50,14 @@ public class CategoriesFragment extends Fragment implements View.OnClickListener
 
         super.onCreateView(inflater, container, savedInstanceState);
 
+        rootView = inflater.inflate(R.layout.default_recycler_view, container, false);
+
+        FloatingActionButton floating_action_button = (FloatingActionButton) rootView.findViewById(R.id.floating_action_button);
+        floating_action_button.setOnCheckedChangeListener(this);
+
+
         sharedPreferences = getActivity().getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
-
-
-        rootView = inflater.inflate(R.layout.default_recycler_view, container, false);
 
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recycler_view);
@@ -191,4 +196,15 @@ public class CategoriesFragment extends Fragment implements View.OnClickListener
         return false;
     }
 
+    @Override
+    public void onCheckedChanged(FloatingActionButton fabView, boolean isChecked) {
+        switch (fabView.getId()){
+            case R.id.floating_action_button:
+                Log.d(TAG, String.format("Floating action button was %s.", isChecked ? "checked" : "unchecked"));
+                break;
+            default:
+                break;
+        }
+
+    }
 }
