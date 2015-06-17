@@ -5,6 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,22 +17,11 @@ import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
 
-public class ItemsListActivity extends Activity implements AbsListView.OnItemClickListener{
-/*
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-    */
-
-    private AbsListView mListView;
-
-    private ListAdapter mAdapter;
+public class ItemsListActivity extends Activity implements View.OnClickListener, View.OnLongClickListener{
 
 
     // TODO: make only one Instance in another file, to be able to access it from everywhere
@@ -36,58 +29,76 @@ public class ItemsListActivity extends Activity implements AbsListView.OnItemCli
     public SharedPreferences.Editor editor;
     public SharedPreferences sharedPreferences;
 
+    private static final String KEY_VIEW_AS_LIST = "ViewAsList";
 
-    /*// TODO: Rename and change types of parameters
-    public static ItemsListActivity newInstance(String param1, String param2) {
-        ItemsListActivity fragment = new ItemsListActivity();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }*/
+    private boolean isViewAsList;
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private List<ListItemIconName> mDataset;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_items_list);
+        setContentView(R.layout.default_recycler_view);
 
         sharedPreferences = getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
 
-        if(sharedPreferences.getBoolean("gridView", true))
-           setContentView(R.layout.fragment_categories_item_grid);
-        else
-            setContentView(R.layout.fragment_categories_item_list);
+        initDataset();
 
+        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        //mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
 
-        // TODO: replace by database categories
-        ListItemIconName[] dummyItemItems = {
-                new ListItemIconName(R.mipmap.test_tshirt, "T-Shirt rose"),
-                new ListItemIconName(R.mipmap.test_tshirt, "T-Shirt rose"),
-                new ListItemIconName(R.mipmap.test_tshirt, "T-Shirt rose"),
-                new ListItemIconName(R.mipmap.test_tshirt, "T-Shirt rose"),
-                new ListItemIconName(R.mipmap.test_tshirt, "T-Shirt rose")
-        };
+        // use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView
+        mRecyclerView.setHasFixedSize(true);
 
-        if(sharedPreferences.getBoolean("gridView", true))
-            mAdapter = new ItemItemAdapter(this, R.layout.grid_item_item, dummyItemItems);
-        else
-            mAdapter = new ItemItemAdapter(this, R.layout.list_item_item, dummyItemItems);
+        // use a linear layout manager
+        mLayoutManager = new LinearLayoutManager(this);
+        isViewAsList = true;
 
-        // Set the adapter
-        mListView = (AbsListView) findViewById(android.R.id.list);
-        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
+        if (savedInstanceState != null) {
+            // Restore saved layout manager type.
+            isViewAsList = savedInstanceState.getBoolean(KEY_VIEW_AS_LIST, true);
+        }
 
-        // Set OnItemClickListener so we can be notified on item clicks
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectItem(position);
-            }
-        });
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        mAdapter = new DefaultItemAdapter(this,mDataset,isViewAsList, this, this);
+        mRecyclerView.setAdapter(mAdapter);
 
     }
+
+    /**
+     * Set RecyclerView's LayoutManager to the one given.
+     *
+     * @param shouldBeViewAsList if the view should be shown as list or as grid
+     */
+    public void setRecyclerViewLayoutManager(boolean shouldBeViewAsList) {
+        int scrollPosition = 0;
+
+        isViewAsList = shouldBeViewAsList;
+
+        // If a layout manager has already been set, get current scroll position.
+        if (mRecyclerView.getLayoutManager() != null) {
+            scrollPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager())
+                    .findFirstCompletelyVisibleItemPosition();
+        }
+
+        if(!isViewAsList) {
+            mLayoutManager = new GridLayoutManager(this, 3);
+        } else {
+            mLayoutManager = new LinearLayoutManager(this);
+        }
+
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.scrollToPosition(scrollPosition);
+        mAdapter.notifyDataSetChanged();
+        ((DefaultItemAdapter) mAdapter).updateView(isViewAsList);
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -104,31 +115,49 @@ public class ItemsListActivity extends Activity implements AbsListView.OnItemCli
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_switchView) {
+            setRecyclerViewLayoutManager(!isViewAsList);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            selectItem(position);
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save currently selected layout manager.
+        savedInstanceState.putSerializable(KEY_VIEW_AS_LIST, isViewAsList);
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+
+    private void initDataset() {
+        // TODO: replace by database data
+        mDataset = new ArrayList<ListItemIconName>();
+        mDataset.add(new ListItemIconName(R.mipmap.test_tshirt, "T-Shirt rose"));
+        mDataset.add(new ListItemIconName(R.mipmap.test_tshirt, "T-Shirt rose"));
+        mDataset.add(new ListItemIconName(R.mipmap.test_tshirt, "T-Shirt rose"));
+        mDataset.add(new ListItemIconName(R.mipmap.test_tshirt, "T-Shirt rose"));
+        mDataset.add(new ListItemIconName(R.mipmap.test_tshirt, "T-Shirt rose"));
+
+
     }
 
    // @Override
-    public void selectItem(int id) {
+    public void selectItem(View view) {
         Intent intent = new Intent();
         intent.setClassName(getPackageName(), getPackageName() + ".CategoriesItemDetailActivity");
         startActivity(intent);
     }
 
-    public void setEmptyText(CharSequence emptyText) {
-        View emptyView = mListView.getEmptyView();
-
-        if (emptyView instanceof TextView) {
-            ((TextView) emptyView).setText(emptyText);
-        }
+    @Override
+    public void onClick(View v) {
+        selectItem(v);
     }
 
+    @Override
+    public boolean onLongClick(View v) {
+        return false;
+    }
 }

@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class CategoriesFragment extends Fragment {
+public class CategoriesFragment extends Fragment implements View.OnClickListener, View.OnLongClickListener{
 
 
     // TODO: make only one Instance in another file, to be able to access it from everywhere
@@ -52,7 +52,7 @@ public class CategoriesFragment extends Fragment {
         editor = sharedPreferences.edit();
 
 
-        rootView = inflater.inflate(R.layout.fragment_categories, container, false);
+        rootView = inflater.inflate(R.layout.default_recycler_view, container, false);
 
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recycler_view);
@@ -74,7 +74,7 @@ public class CategoriesFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        mAdapter = new CategoriesItemAdapter(getActivity(),mDataset,isViewAsList);
+        mAdapter = new DefaultItemAdapter(getActivity(),mDataset,isViewAsList, this, this);
         mRecyclerView.setAdapter(mAdapter);
         return rootView;
     }
@@ -133,11 +133,11 @@ public class CategoriesFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.scrollToPosition(scrollPosition);
         mAdapter.notifyDataSetChanged();
-        ((CategoriesItemAdapter) mAdapter).updateView(isViewAsList);
+        ((DefaultItemAdapter) mAdapter).updateView(isViewAsList);
     }
 
 
-    public void selectCategory(int id) {
+    public void selectCategory(View view) {
         Intent intent = new Intent();
         intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".ItemsListActivity");
         startActivity(intent);
@@ -179,8 +179,16 @@ public class CategoriesFragment extends Fragment {
         mDataset.add(new ListItemIconName(R.mipmap.test_tshirt, "Shoes"));
         mDataset.add(new ListItemIconName(R.mipmap.test_tshirt, "Bags"));
         mDataset.add(new ListItemIconName(R.mipmap.test_tshirt, "Others"));
+    }
 
+    @Override
+    public void onClick(View v) {
+        selectCategory(v);
+    }
 
+    @Override
+    public boolean onLongClick(View v) {
+        return false;
     }
 
 }
