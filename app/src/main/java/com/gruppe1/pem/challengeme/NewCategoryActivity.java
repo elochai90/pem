@@ -1,12 +1,13 @@
 package com.gruppe1.pem.challengeme;
 
+import android.app.Activity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class NewCategoryActivity extends ActionBarActivity {
+public class NewCategoryActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

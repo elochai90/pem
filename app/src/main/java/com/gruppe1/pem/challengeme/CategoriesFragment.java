@@ -20,11 +20,14 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 
+import com.github.clans.fab.*;
+import com.github.clans.fab.FloatingActionButton;
+
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class CategoriesFragment extends Fragment implements View.OnClickListener, View.OnLongClickListener, FloatingActionButton.OnCheckedChangeListener{
+public class CategoriesFragment extends Fragment implements View.OnClickListener, View.OnLongClickListener{
 
 
     // TODO: make only one Instance in another file, to be able to access it from everywhere
@@ -52,8 +55,38 @@ public class CategoriesFragment extends Fragment implements View.OnClickListener
 
         rootView = inflater.inflate(R.layout.default_recycler_view, container, false);
 
-        FloatingActionButton floating_action_button = (FloatingActionButton) rootView.findViewById(R.id.floating_action_button);
-        floating_action_button.setOnCheckedChangeListener(this);
+        com.github.clans.fab.FloatingActionButton fab_add_wishlist_item = (FloatingActionButton) rootView.findViewById(R.id.add_wishlist_item);
+        com.github.clans.fab.FloatingActionButton fab_add_category = (FloatingActionButton) rootView.findViewById(R.id.add_category);
+        com.github.clans.fab.FloatingActionButton fab_add_item = (FloatingActionButton) rootView.findViewById(R.id.add_item);
+        fab_add_wishlist_item.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".NewItemActivity");
+                startActivity(intent);
+
+            }
+        });
+        fab_add_category.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".NewCategoryActivity");
+                startActivity(intent);
+
+            }
+        });
+
+        fab_add_item.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".NewItemActivity");
+                startActivity(intent);
+
+            }
+        });
+
 
 
         sharedPreferences = getActivity().getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
@@ -194,17 +227,5 @@ public class CategoriesFragment extends Fragment implements View.OnClickListener
     @Override
     public boolean onLongClick(View v) {
         return false;
-    }
-
-    @Override
-    public void onCheckedChanged(FloatingActionButton fabView, boolean isChecked) {
-        switch (fabView.getId()){
-            case R.id.floating_action_button:
-                Log.d(TAG, String.format("Floating action button was %s.", isChecked ? "checked" : "unchecked"));
-                break;
-            default:
-                break;
-        }
-
     }
 }
