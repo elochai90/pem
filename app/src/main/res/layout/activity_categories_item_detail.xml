@@ -12,32 +12,23 @@
         android:layout_height="200dp"
         android:src="@mipmap/addcamera2"
         android:scaleType="centerCrop" />
-    <LinearLayout
-        android:id="@+id/itemDetailNameLine"
-        android:layout_below="@id/itemDetailImage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="10dp">
-        <TextView
-            android:id="@+id/itemDetailNameLabel"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:textSize="18dp"
-            android:text="Name:" />
         <TextView
             android:id="@+id/itemDetailNameValue"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18dp"
-            android:text="Test Name" />
-    </LinearLayout>
-    <View
-        android:id="@+id/divider1"
-        android:layout_below="@id/itemDetailNameLine"
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray"/>
+            android:layout_below="@id/itemDetailImage"
+            android:padding="10dp"
+            android:textSize="20dp"
+            android:text="Test Name"
+            android:textColor="@android:color/white"
+            android:background="@color/background_floating_material_dark" />
+
+    <!--<View-->
+        <!--android:id="@+id/divider1"-->
+        <!--android:layout_below="@id/itemDetailNameValue"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="1dp"-->
+        <!--android:background="@android:color/darker_gray"/>-->
 
 
 
@@ -48,24 +39,45 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:orientation="vertical">
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/darker_gray"/>
-        <TextView
+        <!--<View-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="1dp"-->
+            <!--android:background="@android:color/darker_gray"/>-->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:paddingTop="10dp"
-            android:textSize="18dp"
-            android:text="Stars"/>
+            android:layout_gravity="center_horizontal"
+            android:background="@color/background_floating_material_dark">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/abc_btn_rating_star_off_mtrl_alpha"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/abc_btn_rating_star_off_mtrl_alpha"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/abc_btn_rating_star_off_mtrl_alpha"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/abc_btn_rating_star_off_mtrl_alpha"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/abc_btn_rating_star_off_mtrl_alpha"/>
+        </LinearLayout>
     </LinearLayout>
 
 
 
     <ScrollView
         android:id="@+id/itemDetailAttributes"
-        android:layout_below="@id/divider1"
+        android:layout_below="@id/itemDetailNameValue"
         android:layout_above="@id/itemDetailRating"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -137,6 +149,54 @@
                     android:layout_height="wrap_content"
                     android:textSize="18dp"
                     android:text="36" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp">
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="18dp"
+                    android:text="Size:" />
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="18dp"
+                    android:text="36" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp">
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="18dp"
+                    android:text="Size:" />
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="18dp"
+                    android:text="36" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp">
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:hint="name"
+                    android:textSize="18dp"/>
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="attribute value"
+                    android:textSize="18dp" />
             </LinearLayout>
         </LinearLayout>
 
