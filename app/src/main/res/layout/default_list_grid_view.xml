@@ -1,17 +1,31 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:id="@+id/frameLayout"
-    tools:context="com.gruppe1.pem.challengeme.TabsFragmentActivity">
+    android:background="#f0f0f0">
 
-    <!-- A RecyclerView with some commonly used attributes -->
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/my_recycler_view"
-        android:scrollbars="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+    <ListView
+        android:id="@+id/listView"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:drawSelectorOnTop="true"
+        android:focusable="true"
+        android:clickable="true"
+        >
+    </ListView>
+    <GridView
+        android:id="@+id/gridView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:columnWidth="150dp"
+        android:drawSelectorOnTop="true"
+        android:gravity="center"
+        android:numColumns="auto_fit"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="5dp"
+        android:horizontalSpacing="5dp"
+        android:focusable="true"
+        android:clickable="true"/>
     <com.github.clans.fab.FloatingActionMenu
         xmlns:fab="http://schemas.android.com/apk/res-auto"
         android:id="@+id/menu"
@@ -59,7 +73,7 @@
             android:id="@+id/add_wishlist_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_add"
+            android:src="@drawable/fab_add"
             fab:fab_size="mini"
             fab:fab_label="New Wishlist Item" />
 
@@ -67,7 +81,7 @@
             android:id="@+id/add_category"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_add"
+            android:src="@drawable/fab_add"
             fab:fab_size="mini"
             fab:fab_label="New Category" />
 
@@ -75,32 +89,10 @@
             android:id="@+id/add_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_add"
+            android:src="@drawable/fab_add"
             fab:fab_size="mini"
             fab:fab_label="New Item" />
 
     </com.github.clans.fab.FloatingActionMenu>
-
-    <!--<com.gruppe1.pem.challengeme.FloatingActionButton-->
-        <!--android:id="@+id/floating_action_button"-->
-        <!--android:layout_width="@dimen/fab_size"-->
-        <!--android:layout_height="@dimen/fab_size"-->
-        <!--android:layout_alignBottom="@id/my_recycler_view"-->
-        <!--android:layout_alignEnd="@id/my_recycler_view"-->
-        <!--android:layout_marginEnd="16dp"-->
-        <!--android:layout_marginBottom="16dp"-->
-        <!--android:elevation="@dimen/fab_elevation"-->
-        <!--android:background="@drawable/fab_background"-->
-        <!--android:stateListAnimator="@animator/fab_anim"-->
-        <!--android:layout_gravity="center_horizontal">-->
-
-        <!--<ImageView-->
-            <!--android:layout_width="@dimen/fab_icon_size"-->
-            <!--android:layout_height="@dimen/fab_icon_size"-->
-            <!--android:src="@drawable/fab_icons"-->
-            <!--android:layout_gravity="center"-->
-            <!--android:duplicateParentState="true"/>-->
-
-    <!--</com.gruppe1.pem.challengeme.FloatingActionButton>-->
 
 </RelativeLayout>

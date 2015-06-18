@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.internal.widget.AdapterViewCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,7 +19,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ListAdapter;
+import android.widget.ListView;
 
 import com.github.clans.fab.*;
 import com.github.clans.fab.FloatingActionButton;
@@ -27,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class CategoriesFragment extends Fragment implements View.OnClickListener, View.OnLongClickListener{
+public class CategoriesFragment extends Fragment implements AdapterView.OnItemClickListener, View.OnLongClickListener{
 
 
     // TODO: make only one Instance in another file, to be able to access it from everywhere
@@ -35,17 +38,18 @@ public class CategoriesFragment extends Fragment implements View.OnClickListener
     public SharedPreferences.Editor editor;
     public SharedPreferences sharedPreferences;
 
-    private final static String TAG = "FloatingActionButton";
 
     private static final String KEY_VIEW_AS_LIST = "ViewAsList";
 
-    private boolean isViewAsList;
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
     private List<ListItemIconName> mDataset;
 
     private View rootView;
+
+    private GridView gridView;
+    private DefaultGridAdapter gridAdapter;
+    private ListView listView;
+    private DefaultListAdapter listAdapter;
+    private Boolean list;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,7 +57,24 @@ public class CategoriesFragment extends Fragment implements View.OnClickListener
 
         super.onCreateView(inflater, container, savedInstanceState);
 
-        rootView = inflater.inflate(R.layout.default_recycler_view, container, false);
+        initDataset();
+
+        if (savedInstanceState != null) {
+            list = savedInstanceState.getBoolean(KEY_VIEW_AS_LIST, true);
+        } else {
+            list = true;
+        }
+
+        rootView = getActivity().getLayoutInflater().inflate(R.layout.default_list_grid_view, container, false);
+        listView = (ListView) rootView.findViewById(R.id.listView);
+        listAdapter = new DefaultListAdapter(getActivity(), R.layout.list_item_default, mDataset);
+        listView.setAdapter(listAdapter);
+        listView.setOnItemClickListener(this);
+        gridView = (GridView) rootView.findViewById(R.id.gridView);
+        gridAdapter = new DefaultGridAdapter(getActivity(), R.layout.grid_item_default, mDataset);
+        gridView.setAdapter(gridAdapter);
+        gridView.setVisibility(View.INVISIBLE);
+        gridView.setOnItemClickListener(this);
 
         com.github.clans.fab.FloatingActionButton fab_add_wishlist_item = (FloatingActionButton) rootView.findViewById(R.id.add_wishlist_item);
         com.github.clans.fab.FloatingActionButton fab_add_category = (FloatingActionButton) rootView.findViewById(R.id.add_category);
@@ -92,28 +113,6 @@ public class CategoriesFragment extends Fragment implements View.OnClickListener
         sharedPreferences = getActivity().getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
 
-
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recycler_view);
-        //mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
-
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-        mRecyclerView.setHasFixedSize(true);
-
-        // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        isViewAsList = true;
-
-        if (savedInstanceState != null) {
-            // Restore saved layout manager type.
-            isViewAsList = savedInstanceState.getBoolean(KEY_VIEW_AS_LIST, true);
-        }
-
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-
-        mAdapter = new DefaultItemAdapter(getActivity(),mDataset,isViewAsList, this, this);
-        mRecyclerView.setAdapter(mAdapter);
         return rootView;
     }
 
@@ -123,6 +122,11 @@ public class CategoriesFragment extends Fragment implements View.OnClickListener
         super.onCreate(savedInstanceState);
 
         initDataset();
+        if (savedInstanceState != null) {
+            list = savedInstanceState.getBoolean(KEY_VIEW_AS_LIST, true);
+        } else {
+            list = true;
+        }
 
         DataBaseHelper db_helper = new DataBaseHelper(getActivity().getApplicationContext());
         db_helper.init();
@@ -146,35 +150,6 @@ public class CategoriesFragment extends Fragment implements View.OnClickListener
 
     }
 
-    /**
-     * Set RecyclerView's LayoutManager to the one given.
-     *
-     * @param shouldBeViewAsList if the view should be shown as list or as grid
-     */
-    public void setRecyclerViewLayoutManager(boolean shouldBeViewAsList) {
-        int scrollPosition = 0;
-
-        isViewAsList = shouldBeViewAsList;
-
-        // If a layout manager has already been set, get current scroll position.
-        if (mRecyclerView.getLayoutManager() != null) {
-            scrollPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager())
-                    .findFirstCompletelyVisibleItemPosition();
-        }
-
-        if(!isViewAsList) {
-            mLayoutManager = new GridLayoutManager(getActivity(), 3);
-        } else {
-            mLayoutManager = new LinearLayoutManager(getActivity());
-        }
-
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.scrollToPosition(scrollPosition);
-        mAdapter.notifyDataSetChanged();
-        ((DefaultItemAdapter) mAdapter).updateView(isViewAsList);
-    }
-
-
     public void selectCategory(View view) {
         Intent intent = new Intent();
         intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".ItemsListActivity");
@@ -188,13 +163,26 @@ public class CategoriesFragment extends Fragment implements View.OnClickListener
         inflater.inflate(R.menu.menu_categories_fragment, menu);
     }
 
+    private void switchListGridView(boolean shouldBeListView) {
+        if(shouldBeListView) {
+            gridView.setVisibility(View.INVISIBLE);
+            listView.setVisibility(View.VISIBLE);
+        } else {
+            listView.setVisibility(View.INVISIBLE);
+            gridView.setVisibility(View.VISIBLE);
+        }
+
+        list = shouldBeListView;
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_switchView) {
-            setRecyclerViewLayoutManager(!isViewAsList);
+            switchListGridView(!list);
+//            setRecyclerViewLayoutManager(!isViewAsList);
             return true;
         }
 
@@ -204,7 +192,7 @@ public class CategoriesFragment extends Fragment implements View.OnClickListener
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         // Save currently selected layout manager.
-        savedInstanceState.putSerializable(KEY_VIEW_AS_LIST, isViewAsList);
+        savedInstanceState.putSerializable(KEY_VIEW_AS_LIST, list);
         super.onSaveInstanceState(savedInstanceState);
     }
 
@@ -220,12 +208,13 @@ public class CategoriesFragment extends Fragment implements View.OnClickListener
     }
 
     @Override
-    public void onClick(View v) {
-        selectCategory(v);
+    public boolean onLongClick(View v) {
+        return false;
     }
 
     @Override
-    public boolean onLongClick(View v) {
-        return false;
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        selectCategory(view);
     }
 }

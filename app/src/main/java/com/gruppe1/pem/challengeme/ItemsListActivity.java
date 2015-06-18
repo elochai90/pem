@@ -14,14 +14,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import com.github.clans.fab.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class ItemsListActivity extends Activity implements View.OnClickListener, View.OnLongClickListener{
+public class ItemsListActivity extends Activity implements AdapterView.OnItemClickListener, View.OnLongClickListener{
 
 
     // TODO: make only one Instance in another file, to be able to access it from everywhere
@@ -31,74 +35,75 @@ public class ItemsListActivity extends Activity implements View.OnClickListener,
 
     private static final String KEY_VIEW_AS_LIST = "ViewAsList";
 
-    private boolean isViewAsList;
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
     private List<ListItemIconName> mDataset;
+
+    private GridView gridView;
+    private DefaultGridAdapter gridAdapter;
+    private ListView listView;
+    private DefaultListAdapter listAdapter;
+    private Boolean list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.default_recycler_view);
 
         sharedPreferences = getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
 
         initDataset();
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
-        //mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
-
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-        mRecyclerView.setHasFixedSize(true);
-
-        // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(this);
-        isViewAsList = true;
 
         if (savedInstanceState != null) {
-            // Restore saved layout manager type.
-            isViewAsList = savedInstanceState.getBoolean(KEY_VIEW_AS_LIST, true);
-        }
-
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-
-        mAdapter = new DefaultItemAdapter(this,mDataset,isViewAsList, this, this);
-        mRecyclerView.setAdapter(mAdapter);
-
-    }
-
-    /**
-     * Set RecyclerView's LayoutManager to the one given.
-     *
-     * @param shouldBeViewAsList if the view should be shown as list or as grid
-     */
-    public void setRecyclerViewLayoutManager(boolean shouldBeViewAsList) {
-        int scrollPosition = 0;
-
-        isViewAsList = shouldBeViewAsList;
-
-        // If a layout manager has already been set, get current scroll position.
-        if (mRecyclerView.getLayoutManager() != null) {
-            scrollPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager())
-                    .findFirstCompletelyVisibleItemPosition();
-        }
-
-        if(!isViewAsList) {
-            mLayoutManager = new GridLayoutManager(this, 3);
+            list = savedInstanceState.getBoolean(KEY_VIEW_AS_LIST, true);
         } else {
-            mLayoutManager = new LinearLayoutManager(this);
+            list = true;
         }
 
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.scrollToPosition(scrollPosition);
-        mAdapter.notifyDataSetChanged();
-        ((DefaultItemAdapter) mAdapter).updateView(isViewAsList);
-    }
 
+        setContentView(R.layout.default_list_grid_view);
+        listView = (ListView) findViewById(R.id.listView);
+        listAdapter = new DefaultListAdapter(this, R.layout.list_item_default, mDataset);
+        listView.setAdapter(listAdapter);
+        listView.setOnItemClickListener(this);
+        gridView = (GridView) findViewById(R.id.gridView);
+        gridAdapter = new DefaultGridAdapter(this, R.layout.grid_item_default, mDataset);
+        gridView.setAdapter(gridAdapter);
+        gridView.setOnItemClickListener(this);
+        gridView.setVisibility(View.INVISIBLE);
+
+        com.github.clans.fab.FloatingActionButton fab_add_wishlist_item = (FloatingActionButton) findViewById(R.id.add_wishlist_item);
+        com.github.clans.fab.FloatingActionButton fab_add_category = (FloatingActionButton) findViewById(R.id.add_category);
+        com.github.clans.fab.FloatingActionButton fab_add_item = (FloatingActionButton) findViewById(R.id.add_item);
+        fab_add_wishlist_item.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClassName(getPackageName(), getPackageName() + ".NewItemActivity");
+                startActivity(intent);
+
+            }
+        });
+        fab_add_category.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClassName(getPackageName(), getPackageName() + ".NewCategoryActivity");
+                startActivity(intent);
+
+            }
+        });
+
+        fab_add_item.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClassName(getPackageName(), getPackageName() + ".NewItemActivity");
+                startActivity(intent);
+
+            }
+        });
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -107,16 +112,24 @@ public class ItemsListActivity extends Activity implements View.OnClickListener,
         return true;
     }
 
+    private void switchListGridView(boolean shouldBeListView) {
+        if(shouldBeListView) {
+            gridView.setVisibility(View.INVISIBLE);
+            listView.setVisibility(View.VISIBLE);
+        } else {
+            listView.setVisibility(View.INVISIBLE);
+            gridView.setVisibility(View.VISIBLE);
+        }
+
+        list = shouldBeListView;
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_switchView) {
-            setRecyclerViewLayoutManager(!isViewAsList);
+            switchListGridView(!list);
             return true;
         }
 
@@ -127,7 +140,7 @@ public class ItemsListActivity extends Activity implements View.OnClickListener,
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         // Save currently selected layout manager.
-        savedInstanceState.putSerializable(KEY_VIEW_AS_LIST, isViewAsList);
+        savedInstanceState.putSerializable(KEY_VIEW_AS_LIST, list);
         super.onSaveInstanceState(savedInstanceState);
     }
 
@@ -152,12 +165,13 @@ public class ItemsListActivity extends Activity implements View.OnClickListener,
     }
 
     @Override
-    public void onClick(View v) {
-        selectItem(v);
+    public boolean onLongClick(View v) {
+        return false;
     }
 
     @Override
-    public boolean onLongClick(View v) {
-        return false;
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        selectItem(view);
     }
 }

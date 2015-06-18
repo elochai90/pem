@@ -6,7 +6,7 @@
     <color name="accent">#ff3e88d4</color>
 
     <!-- for the grid cards -->
-    <color name="grey_transparent">#6fcfd1d4</color>
+    <color name="grey_transparent">#55000000</color>
 
     <!-- for the floating action button -->
     <color name="fab_color_1">#ff5252</color>
