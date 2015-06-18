@@ -34,25 +34,36 @@ public class DefaultGridAdapter extends ArrayAdapter {
         View row = convertView;
         ViewHolder holder = null;
 
-        if (row == null) {
-            LayoutInflater inflater = ((Activity) context).getLayoutInflater();
-            row = inflater.inflate(layoutResourceId, parent, false);
-            holder = new ViewHolder();
-            holder.imageTitle = (TextView) row.findViewById(R.id.textView);
-            holder.image = (ImageView) row.findViewById(R.id.imageView);
-            row.setTag(holder);
-        } else {
-            holder = (ViewHolder) row.getTag();
-        }
-
         ListItemIconName item = data.get(position);
-        holder.imageTitle.setText(item.name);
-        holder.image.setImageResource(item.icon);
+
+
+        if(position == 0) {
+            LayoutInflater inflater = ((Activity) context).getLayoutInflater();
+            row = inflater.inflate(R.layout.grid_item_add, parent, false);
+            ((TextView) row.findViewById(R.id.addText)).setText(item.name);
+        } else {
+            if (row == null || row.getTag() == null) {
+                LayoutInflater inflater = ((Activity) context).getLayoutInflater();
+                row = inflater.inflate(layoutResourceId, parent, false);
+                holder = new ViewHolder();
+                holder.imageTitle = (TextView) row.findViewById(R.id.textView);
+                holder.rightTextView = (TextView) row.findViewById(R.id.rightTextView);
+                holder.image = (ImageView) row.findViewById(R.id.imageView);
+                row.setTag(holder);
+            } else {
+                holder = (ViewHolder) row.getTag();
+            }
+
+            holder.imageTitle.setText(item.name);
+            holder.rightTextView.setText("9");
+            holder.image.setImageResource(item.icon);
+        }
         return row;
     }
 
     static class ViewHolder {
         TextView imageTitle;
+        TextView rightTextView;
         ImageView image;
     }
 }

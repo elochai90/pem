@@ -67,7 +67,7 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
 
         rootView = getActivity().getLayoutInflater().inflate(R.layout.default_list_grid_view, container, false);
         listView = (ListView) rootView.findViewById(R.id.listView);
-        listAdapter = new DefaultListAdapter(getActivity(), R.layout.list_item_default, mDataset);
+        listAdapter = new DefaultListAdapter(getActivity(), R.layout.list_item_default, mDataset, false);
         listView.setAdapter(listAdapter);
         listView.setOnItemClickListener(this);
         gridView = (GridView) rootView.findViewById(R.id.gridView);
@@ -200,6 +200,7 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
     private void initDataset() {
         // TODO: replace by database data
         mDataset = new ArrayList<ListItemIconName>();
+        mDataset.add(new ListItemIconName(0, "add new category"));
         mDataset.add(new ListItemIconName(R.mipmap.test_tshirt, "Clothes"));
         mDataset.add(new ListItemIconName(R.mipmap.test_tshirt, "Accessoires"));
         mDataset.add(new ListItemIconName(R.mipmap.test_tshirt, "Shoes"));
@@ -214,7 +215,12 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-        selectCategory(view);
+        if(position == 0) {
+            Intent intent = new Intent();
+            intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".NewCategoryActivity");
+            startActivity(intent);
+        } else {
+            selectCategory(view);
+        }
     }
 }

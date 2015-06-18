@@ -62,7 +62,7 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
 
         setContentView(R.layout.default_list_grid_view);
         listView = (ListView) findViewById(R.id.listView);
-        listAdapter = new DefaultListAdapter(this, R.layout.list_item_default, mDataset);
+        listAdapter = new DefaultListAdapter(this, R.layout.list_item_default, mDataset, false);
         listView.setAdapter(listAdapter);
         listView.setOnItemClickListener(this);
         gridView = (GridView) findViewById(R.id.gridView);
@@ -148,6 +148,7 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
     private void initDataset() {
         // TODO: replace by database data
         mDataset = new ArrayList<ListItemIconName>();
+        mDataset.add(new ListItemIconName(0, "add new item"));
         mDataset.add(new ListItemIconName(R.mipmap.test_tshirt, "T-Shirt rose"));
         mDataset.add(new ListItemIconName(R.mipmap.test_tshirt, "T-Shirt rose"));
         mDataset.add(new ListItemIconName(R.mipmap.test_tshirt, "T-Shirt rose"));
@@ -172,6 +173,12 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        selectItem(view);
+        if(position == 0) {
+            Intent intent = new Intent();
+            intent.setClassName(getPackageName(), getPackageName() + ".NewItemActivity");
+            startActivity(intent);
+        } else {
+            selectItem(view);
+        }
     }
 }
