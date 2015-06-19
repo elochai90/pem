@@ -201,11 +201,12 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
         // TODO: replace by database data
         mDataset = new ArrayList<ListItemIconName>();
         mDataset.add(new ListItemIconName(0, "add new category"));
-        mDataset.add(new ListItemIconName(R.mipmap.test_tshirt, "Clothes"));
-        mDataset.add(new ListItemIconName(R.mipmap.test_tshirt, "Accessoires"));
-        mDataset.add(new ListItemIconName(R.mipmap.test_tshirt, "Shoes"));
-        mDataset.add(new ListItemIconName(R.mipmap.test_tshirt, "Bags"));
-        mDataset.add(new ListItemIconName(R.mipmap.test_tshirt, "Others"));
+        mDataset.add(new ListItemIconName(R.drawable.hose, "Trousers"));
+        mDataset.add(new ListItemIconName(R.drawable.mantel, "Coats"));
+        mDataset.add(new ListItemIconName(R.drawable.schuh, "Shoes"));
+        mDataset.add(new ListItemIconName(R.drawable.kleid, "Dresses"));
+        mDataset.add(new ListItemIconName(R.drawable.tshirt, "T-Shirts"));
+        mDataset.add(new ListItemIconName(R.drawable.cardigan, "Cardigans"));
     }
 
     @Override

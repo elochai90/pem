@@ -149,11 +149,11 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
         // TODO: replace by database data
         mDataset = new ArrayList<ListItemIconName>();
         mDataset.add(new ListItemIconName(0, "add new item"));
-        mDataset.add(new ListItemIconName(R.mipmap.test_tshirt, "T-Shirt rose"));
-        mDataset.add(new ListItemIconName(R.mipmap.test_tshirt, "T-Shirt rose"));
-        mDataset.add(new ListItemIconName(R.mipmap.test_tshirt, "T-Shirt rose"));
-        mDataset.add(new ListItemIconName(R.mipmap.test_tshirt, "T-Shirt rose"));
-        mDataset.add(new ListItemIconName(R.mipmap.test_tshirt, "T-Shirt rose"));
+        mDataset.add(new ListItemIconName(R.drawable.tshirt, "T-Shirt rose"));
+        mDataset.add(new ListItemIconName(R.drawable.tshirt, "T-Shirt rose"));
+        mDataset.add(new ListItemIconName(R.drawable.tshirt, "T-Shirt rose"));
+        mDataset.add(new ListItemIconName(R.drawable.tshirt, "T-Shirt rose"));
+        mDataset.add(new ListItemIconName(R.drawable.tshirt, "T-Shirt rose"));
 
 
     }
