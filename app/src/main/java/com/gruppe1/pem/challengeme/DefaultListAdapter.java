@@ -12,21 +12,20 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by bianka on 18.06.2015.
- */
 public class DefaultListAdapter extends ArrayAdapter {
     private Context context;
     private int layoutResourceId;
     private List<ListItemIconName> data = new ArrayList();
     private boolean wishlist;
+    private boolean compare;
 
-    public DefaultListAdapter(Context context, int layoutResourceId, List<ListItemIconName> data, boolean wishlist) {
+    public DefaultListAdapter(Context context, int layoutResourceId, List<ListItemIconName> data, boolean wishlist, boolean compare) {
         super(context, layoutResourceId, data);
         this.layoutResourceId = layoutResourceId;
         this.context = context;
         this.data = data;
         this.wishlist = wishlist;
+        this.compare = compare;
     }
 
     @Override
@@ -74,6 +73,8 @@ public class DefaultListAdapter extends ArrayAdapter {
                         // TODO: save and put to categories; if click again change icon back
                     }
                 });
+            }else if(compare){
+                holder.rightTextView.setVisibility(View.INVISIBLE);
             }
         }
 

@@ -5,25 +5,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.internal.widget.AdapterViewCompat;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 
-import com.github.clans.fab.*;
 import com.github.clans.fab.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -67,7 +58,7 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
 
         rootView = getActivity().getLayoutInflater().inflate(R.layout.default_list_grid_view, container, false);
         listView = (ListView) rootView.findViewById(R.id.listView);
-        listAdapter = new DefaultListAdapter(getActivity(), R.layout.list_item_default, mDataset, false);
+        listAdapter = new DefaultListAdapter(getActivity(), R.layout.list_item_default, mDataset, false, false);
         listView.setAdapter(listAdapter);
         listView.setOnItemClickListener(this);
         gridView = (GridView) rootView.findViewById(R.id.gridView);

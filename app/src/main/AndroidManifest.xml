@@ -35,7 +35,7 @@
                 android:value="com.gruppe1.pem.challengeme.TabsFragmentActivity" />
         </activity>
         <activity
-            android:name=".SavedComparesActivity"
+            android:name=".NewCompareActivity"
             android:label="@string/title_activity_saved_compares"
             android:parentActivityName=".TabsFragmentActivity" >
             <meta-data
@@ -45,10 +45,10 @@
         <activity
             android:name=".SavedComparesDetailActivity"
             android:label="@string/title_activity_saved_compares_detail"
-            android:parentActivityName=".SavedComparesActivity" >
+            android:parentActivityName=".NewCompareActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.gruppe1.pem.challengeme.SavedComparesActivity" />
+                android:value=".NewCompareActivity" />
         </activity>
         <activity
             android:name=".NewItemActivity"

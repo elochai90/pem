@@ -62,7 +62,7 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
 
         setContentView(R.layout.default_list_grid_view);
         listView = (ListView) findViewById(R.id.listView);
-        listAdapter = new DefaultListAdapter(this, R.layout.list_item_default, mDataset, false);
+        listAdapter = new DefaultListAdapter(this, R.layout.list_item_default, mDataset, false, false);
         listView.setAdapter(listAdapter);
         listView.setOnItemClickListener(this);
         gridView = (GridView) findViewById(R.id.gridView);
