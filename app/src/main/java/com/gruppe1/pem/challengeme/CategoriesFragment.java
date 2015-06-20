@@ -58,7 +58,7 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
 
         rootView = getActivity().getLayoutInflater().inflate(R.layout.default_list_grid_view, container, false);
         listView = (ListView) rootView.findViewById(R.id.listView);
-        listAdapter = new DefaultListAdapter(getActivity(), R.layout.list_item_default, mDataset, false, false);
+        listAdapter = new DefaultListAdapter(getActivity(), R.layout.list_item_default, mDataset, false);
         listView.setAdapter(listAdapter);
         listView.setOnItemClickListener(this);
         gridView = (GridView) rootView.findViewById(R.id.gridView);

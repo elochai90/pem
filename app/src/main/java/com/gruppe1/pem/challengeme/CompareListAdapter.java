@@ -9,21 +9,21 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DefaultListAdapter extends ArrayAdapter {
+public class CompareListAdapter extends ArrayAdapter {
     private Context context;
     private int layoutResourceId;
-    private List<ListItemIconName> data = new ArrayList();
-    private boolean wishlist;
+    private List<CompareItem> data = new ArrayList();
 
-    public DefaultListAdapter(Context context, int layoutResourceId, List<ListItemIconName> data, boolean wishlist) {
+    public CompareListAdapter(Context context, int layoutResourceId, List<CompareItem> data) {
         super(context, layoutResourceId, data);
         this.layoutResourceId = layoutResourceId;
         this.context = context;
         this.data = data;
-        this.wishlist = wishlist;
     }
 
     @Override
@@ -31,7 +31,7 @@ public class DefaultListAdapter extends ArrayAdapter {
         View row = convertView;
         ViewHolder holder = null;
 
-        ListItemIconName item = data.get(position);
+        CompareItem item = data.get(position);
 
 
         if(position == 0) {
@@ -40,48 +40,42 @@ public class DefaultListAdapter extends ArrayAdapter {
             ((TextView) row.findViewById(R.id.addText)).setText(item.name);
         } else {
             if (row == null || row.getTag() == null) {
-                System.out.println("row is null");
                 LayoutInflater inflater = ((Activity) context).getLayoutInflater();
                 row = inflater.inflate(layoutResourceId, parent, false);
                 holder = new ViewHolder();
-                holder.firstLine = (TextView) row.findViewById(R.id.firstLine);
-                holder.secondLine = (TextView) row.findViewById(R.id.secondLine);
+                holder.itemName1 = (TextView) row.findViewById(R.id.item1Name);
+                holder.itemName2 = (TextView) row.findViewById(R.id.item2Name);
+                holder.compareName = (TextView) row.findViewById(R.id.compareName);
+                holder.imageItem1 = (ImageView) row.findViewById(R.id.imageItem1);
+                holder.imageItem2 = (ImageView) row.findViewById(R.id.imageItem2);
                 holder.rightTextView = (TextView) row.findViewById(R.id.rightTextView);
-                holder.image = (ImageView) row.findViewById(R.id.imageView);
                 holder.itemActionButton = (ImageView) row.findViewById(R.id.itemActionButton);
                 row.setTag(holder);
                 System.out.println("holder: " + holder);
             } else {
-                System.out.println("row is not null");
                 holder = (ViewHolder) row.getTag();
                 System.out.println("holder: " + holder);
             }
 
-            holder.firstLine.setText(item.name);
-            holder.secondLine.setText("z.B. Item-Attribute");
-            holder.rightTextView.setText("9");
-            holder.image.setImageResource(item.icon);
-            if(wishlist) {
-                holder.itemActionButton.setVisibility(View.VISIBLE);
-                holder.rightTextView.setVisibility(View.INVISIBLE);
-                holder.itemActionButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ((ImageView) v).setImageResource(R.drawable.abc_btn_check_to_on_mtrl_015);
-                        // TODO: save and put to categories; if click again change icon back
-                    }
-                });
-            }
+            holder.compareName.setText(item.name);
+            holder.itemName1.setText(item.nameItem1);
+            holder.itemName2.setText(item.nameItem2);
+            DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+            holder.rightTextView.setText(dateFormat.format(item.createdAt));
+            holder.imageItem1.setImageResource(item.iconItem1);
+            holder.imageItem2.setImageResource(item.iconItem2);
         }
 
         return row;
     }
 
     static class ViewHolder {
-        TextView firstLine;
-        TextView secondLine;
+        TextView itemName1;
+        TextView itemName2;
+        TextView compareName;
+        ImageView imageItem1;
+        ImageView imageItem2;
         TextView rightTextView;
-        ImageView image;
         ImageView itemActionButton;
     }
 }

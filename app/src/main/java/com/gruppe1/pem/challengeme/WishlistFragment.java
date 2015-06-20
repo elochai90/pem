@@ -47,7 +47,7 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
         rootView = inflater.inflate(R.layout.default_list_grid_view, container, false);
 
         listView = (ListView) rootView.findViewById(R.id.listView);
-        listAdapter = new DefaultListAdapter(getActivity(), R.layout.list_item_default, mDataset, true, false);
+        listAdapter = new DefaultListAdapter(getActivity(), R.layout.list_item_default, mDataset, true);
         listView.setAdapter(listAdapter);
         listView.setOnItemClickListener(this);
         gridView = (GridView) rootView.findViewById(R.id.gridView);

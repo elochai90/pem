@@ -22,14 +22,17 @@ import java.util.List;
 
 public class CompareFragment extends Fragment  implements AdapterView.OnItemClickListener{
 
-    private List<ListItemIconName> mDataset;
+    private static final String KEY_VIEW_AS_LIST = "ViewAsList";
+    private List<CompareItem> mDataset;
 
     private View rootView;
 
     private GridView gridView;
-    private DefaultGridAdapter gridAdapter;
+    private CompareGridAdapter gridAdapter;
     private ListView listView;
-    private DefaultListAdapter listAdapter;
+    private CompareListAdapter listAdapter;
+    private Boolean list;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,12 +42,13 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
         rootView = inflater.inflate(R.layout.default_list_grid_view, container, false);
 
         listView = (ListView) rootView.findViewById(R.id.listView);
-        listAdapter = new DefaultListAdapter(getActivity(), R.layout.list_item_default, mDataset, false, true);
+        listAdapter = new CompareListAdapter(getActivity(), R.layout.list_item_compare, mDataset);
         listView.setAdapter(listAdapter);
         listView.setOnItemClickListener(this);
         gridView = (GridView) rootView.findViewById(R.id.gridView);
+        gridAdapter = new CompareGridAdapter(getActivity(), R.layout.grid_item_default, mDataset);
+        gridView.setAdapter(gridAdapter);
         gridView.setVisibility(View.INVISIBLE);
-
 
         com.github.clans.fab.FloatingActionButton fab_add_wishlist_item = (FloatingActionButton) rootView.findViewById(R.id.add_wishlist_item);
         com.github.clans.fab.FloatingActionButton fab_add_category = (FloatingActionButton) rootView.findViewById(R.id.add_category);
@@ -88,6 +92,12 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
         super.onCreate(savedInstanceState);
 
         initDataset();
+        if (savedInstanceState != null) {
+            list = savedInstanceState.getBoolean(KEY_VIEW_AS_LIST, true);
+        } else {
+            list = true;
+        }
+
         setHasOptionsMenu(true);
 
     }
@@ -99,6 +109,19 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
         inflater.inflate(R.menu.menu_compare_fragment, menu);
     }
 
+    private void switchListGridView(boolean shouldBeListView) {
+        if(shouldBeListView) {
+            gridView.setVisibility(View.INVISIBLE);
+            listView.setVisibility(View.VISIBLE);
+        } else {
+            listView.setVisibility(View.INVISIBLE);
+            gridView.setVisibility(View.VISIBLE);
+        }
+
+        list = shouldBeListView;
+    }
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -106,8 +129,9 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_switchView) {
+            switchListGridView(!list);
+//            setRecyclerViewLayoutManager(!isViewAsList);
             return true;
         }
 
@@ -116,19 +140,23 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
 
     private void initDataset() {
         // TODO: replace by database data
-        mDataset = new ArrayList<ListItemIconName>();
-        mDataset.add(new ListItemIconName(0, "add new compare"));
-        mDataset.add(new ListItemIconName(R.drawable.kleiderbuegel, "T-Shirt in rosa", new Date()));
-        mDataset.add(new ListItemIconName(R.drawable.kleiderbuegel, "T-Shirt in rosa", new Date()));
-        mDataset.add(new ListItemIconName(R.drawable.kleiderbuegel, "T-Shirt in rosa", new Date()));
-        mDataset.add(new ListItemIconName(R.drawable.kleiderbuegel, "T-Shirt in rosa", new Date()));
-        mDataset.add(new ListItemIconName(R.drawable.kleiderbuegel, "T-Shirt in rosa", new Date()));
-        mDataset.add(new ListItemIconName(R.drawable.kleiderbuegel, "T-Shirt in rosa", new Date()));
-        mDataset.add(new ListItemIconName(R.drawable.kleiderbuegel, "T-Shirt in rosa", new Date()));
-        mDataset.add(new ListItemIconName(R.drawable.kleiderbuegel, "T-Shirt in rosa", new Date()));
-        mDataset.add(new ListItemIconName(R.drawable.kleiderbuegel, "T-Shirt in rosa", new Date()));
+        mDataset = new ArrayList<CompareItem>();
+        mDataset.add(new CompareItem(0,0, "add new compare", "", "", null));
+        mDataset.add(new CompareItem(R.drawable.tshirt, R.drawable.hose, "Legere", "Tshirt normal", "Jeans",  new Date()));
+        mDataset.add(new CompareItem(R.drawable.kleid, R.drawable.schuh, "Paaarty!", "Kleid pink kurz", "Pinke Schleifen-High-Heels", new Date()));
+        mDataset.add(new CompareItem(R.drawable.mantel, R.drawable.schuh, "Aussen", "Mantel", "Pinke Schleifen-High-Heels", new Date()));
+        mDataset.add(new CompareItem(R.drawable.cardigan, R.drawable.hose, "morgen", "Cardigan", "Jeans", new Date()));
+        mDataset.add(new CompareItem(R.drawable.tshirt, R.drawable.hose, "Legere", "Tshirt normal", "Jeans",  new Date()));
+        mDataset.add(new CompareItem(R.drawable.kleid, R.drawable.schuh, "Paaarty!", "Kleid pink kurz", "Pinke Schleifen-High-Heels", new Date()));
+        mDataset.add(new CompareItem(R.drawable.mantel, R.drawable.schuh, "Aussen", "Mantel", "Pinke Schleifen-High-Heels", new Date()));
+        mDataset.add(new CompareItem(R.drawable.cardigan, R.drawable.hose, "morgen", "Cardigan", "Jeans", new Date()));
 
-
+    }
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save currently selected layout manager.
+        savedInstanceState.putSerializable(KEY_VIEW_AS_LIST, list);
+        super.onSaveInstanceState(savedInstanceState);
     }
 
     @Override

@@ -26,7 +26,7 @@ public class NewCategoryActivity extends Activity {
             @Override
             public void onClick(View v){
                 ListItemIconName newCategory = new ListItemIconName(R.drawable.kleiderbuegel, newCategory_name.getText().toString());
-                //TODO Werte übergeben
+                //TODO Werte uebergeben
             }
         });
     }
