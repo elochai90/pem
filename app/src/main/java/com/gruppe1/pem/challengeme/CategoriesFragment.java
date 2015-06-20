@@ -99,7 +99,8 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
             }
         });
 
-
+        //DefaultSetup defaultSetup = new DefaultSetup(getActivity().getApplicationContext());
+        //defaultSetup.setup("setup_values.xml");
 
         sharedPreferences = getActivity().getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();

@@ -50,6 +50,7 @@ public class MyLocationListener implements LocationListener {
 
         /* Loop over the array backwards, and if you get an accurate location, then break out the loop*/
         Location l = null;
+
         for (int i=providers.size()-1; i>=0; i--) {
             l = locationManager.getLastKnownLocation(providers.get(i));
             if (l != null) break;

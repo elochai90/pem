@@ -1,12 +1,9 @@
 package com.gruppe1.pem.challengeme;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Simon on 13.06.2015.
@@ -16,8 +13,9 @@ public class Category {
 
     private int m_id;
     private String m_name;
-    private int m_parent_cat_id;
-    private ArrayList<Attribute> m_defaultAttributes;
+    private int m_parent_category_id = Constants.DEFAULT_CATEGORY_ID;
+    // TODO add default size to sql init
+    private int m_defaultAttributeType;
     private DataBaseHelper m_dbHelper;
 
     // used for output resource strings
@@ -37,7 +35,7 @@ public class Category {
                 Log.e("###Category Id:###", "" + categoryData.getInt(0));
                 this.m_id = categoryData.getInt(0);
                 this.m_name = categoryData.getString(1);
-                this.m_parent_cat_id = categoryData.getInt(2);
+                this.m_parent_category_id = categoryData.getInt(2);
             } else {
                 Log.e("###NO_SUCH_CATEGORY_ID", "" + m_id);
             }
@@ -77,20 +75,20 @@ public class Category {
         this.m_name = m_name;
     }
 
-    public int getParentCatId() {
-        return m_parent_cat_id;
+    public int getParentCategoryId() {
+        return m_parent_category_id;
     }
 
-    public void setParentCatId(int m_parent_cat_id) {
-        this.m_parent_cat_id = m_parent_cat_id;
+    public void setParentCategoryId(int m_parent_cat_id) {
+        this.m_parent_category_id = m_parent_cat_id;
     }
 
-    public ArrayList<Attribute> getDefaultAttributes() {
-        return m_defaultAttributes;
+    public int getDefaultAttributeType() {
+        return m_defaultAttributeType;
     }
 
-    public void setDefaultAttributes(ArrayList<Attribute> m_defaultAttributes) {
-        this.m_defaultAttributes = m_defaultAttributes;
+    public void setDefaultAttributeType(int m_defaultAttributeType) {
+        this.m_defaultAttributeType = m_defaultAttributeType;
     }
 
     /**
@@ -108,6 +106,8 @@ public class Category {
         if(this.m_id == 0) {
             // insert as new categoy
             this.m_dbHelper.setStringValue("name", this.m_name);
+            this.m_dbHelper.setIntegerValue("parent_category_id", this.m_parent_category_id);
+
             int id = this.m_dbHelper.insert();
 
             if (id > -1) {
