@@ -200,6 +200,10 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
         mDataset.add(new ListItemIconName(R.drawable.cardigan, "Cardigans"));
     }
 
+    private void addNewCategory(ListItemIconName newCat) {
+        mDataset.add(newCat);
+    }
+
     @Override
     public boolean onLongClick(View v) {
         return false;

@@ -48,28 +48,14 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:layout_gravity="center_horizontal"
-            android:background="@color/background_floating_material_dark">
+            android:background="@color/background_floating_material_dark"
+            android:weightSum="1">
 
-            <ImageView
+            <RatingBar
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/abc_btn_rating_star_off_mtrl_alpha"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/abc_btn_rating_star_off_mtrl_alpha"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/abc_btn_rating_star_off_mtrl_alpha"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/abc_btn_rating_star_off_mtrl_alpha"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/abc_btn_rating_star_off_mtrl_alpha"/>
+                android:id="@+id/ratingBar" />
+
         </LinearLayout>
     </LinearLayout>
 
