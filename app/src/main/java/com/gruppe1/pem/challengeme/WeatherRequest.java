@@ -2,6 +2,7 @@ package com.gruppe1.pem.challengeme;
 
 import android.app.DownloadManager;
 import android.content.Context;
+import android.graphics.Color;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
@@ -134,10 +135,69 @@ public class WeatherRequest {
             return false;
     }
 
-    public int getImage() {
+    public int getImage(String code) {
         // TODO: take codes from here: http://openweathermap.org/wiki/API/Weather_Condition_Codes
         // TODO: and switch images
-        return R.mipmap.weather_example;
+
+        switch(code){
+            case "200":
+            case "201":
+            case "202":
+            case "210":
+            case "211":
+            case "212":
+            case "221":
+            case "230":
+            case "231":
+            case "232":
+                weatherImageView.setBackgroundColor(Color.parseColor("#A4A4A4"));
+                return R.mipmap.weather_thunderstorm;
+            case "500":
+            case "501":
+                weatherImageView.setBackgroundColor(Color.parseColor("#E0F2F7"));
+                return R.mipmap.weather_lightsunrain;
+            case "502":
+            case "503":
+            case "504":
+                weatherImageView.setBackgroundColor(Color.parseColor("#E0F2F7"));
+                return R.mipmap.weather_heavysunrain;
+            case "511":
+                weatherImageView.setBackgroundColor(Color.parseColor("#A4A4A4"));
+                return R.mipmap.weather_freezingrain;
+            case "520":
+            case "521":
+                weatherImageView.setBackgroundColor(Color.parseColor("#A4A4A4"));
+                return R.mipmap.weather_lightrain;
+            case "522":
+                weatherImageView.setBackgroundColor(Color.parseColor("#A4A4A4"));
+                return R.mipmap.weather_heavyrain;
+            case "600":
+            case "601":
+            case "602":
+            case "611":
+            case "621":
+                weatherImageView.setBackgroundColor(Color.parseColor("#A4A4A4"));
+                return R.mipmap.weather_snow;
+            case "701":
+            case "711":
+            case "721":
+            case "731":
+            case "741":
+                weatherImageView.setBackgroundColor(Color.parseColor("#E0F2F7"));
+                return R.mipmap.weather_fog;
+            case "800":
+                weatherImageView.setBackgroundColor(Color.parseColor("#E0F2F7"));
+                return R.mipmap.weather_sun;
+            case "801":
+                weatherImageView.setBackgroundColor(Color.parseColor("#E0F2F7"));
+                return R.mipmap.weather_sunclouds;
+            case "802":
+            case "803":
+            case "804":
+            default:
+                weatherImageView.setBackgroundColor(Color.parseColor("#E0F2F7"));
+                return R.mipmap.weather_clouds;
+        }
     }
 
     private class HttpAsyncTask extends AsyncTask<String, Void, String> {
@@ -157,8 +217,9 @@ public class WeatherRequest {
                 String weather_main = weather.getJSONObject(0).getString("main");
                 String desc = weather.getJSONObject(0).getString("description");
                 String temp = Math.round(json.getJSONObject("main").getDouble("temp") - 273.15) + "°C";
+                String code = weather.getJSONObject(0).getString("id");
 
-                weatherImageView.setImageResource(getImage());
+                weatherImageView.setImageResource(getImage(code));
                 weatherDescView.setText(weather_main);
                 weatherTempView.setText(temp);
 

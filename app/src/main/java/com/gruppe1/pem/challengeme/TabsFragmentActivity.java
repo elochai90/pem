@@ -1,16 +1,11 @@
 package com.gruppe1.pem.challengeme;
 
-import android.app.Activity;
 import android.app.LocalActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v4.widget.DrawerLayout;
@@ -21,12 +16,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 
 public class TabsFragmentActivity extends FragmentActivity {
 
@@ -255,40 +246,5 @@ public class TabsFragmentActivity extends FragmentActivity {
         }
     }
 
-    public void callAction(Intent intent, ImageView vw, int requestCode) {
-        imgPhoto = vw;
-        startActivityForResult(intent, requestCode);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == RESULT_OK) {
-
-            if (requestCode == 1) {
-                try {
-                    Bitmap photo = (Bitmap) data.getExtras().get("data");
-                    imgPhoto.setImageBitmap(photo);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }else if (requestCode == 2) {
-                Uri selectedImage = data.getData();
-
-                try {
-                    InputStream imageStream = getContentResolver().openInputStream(selectedImage);
-                    Bitmap yourSelectedImage = BitmapFactory.decodeStream(imageStream);
-                    imgPhoto.setImageBitmap(yourSelectedImage);
-
-                }catch(FileNotFoundException e){
-                    e.printStackTrace();
-                }
-
-            }
-        }
-    }
 }
 
