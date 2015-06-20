@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <categories>
+
+        <categorie>
+            <name>T-Shirts</name>
+            <parent_categorie_id>0</parent_categorie_id>
+            <default_attribute_type>0</default_attribute_type>
+        </categorie>
+
+        <categorie>
+            <name>Trousers</name>
+            <parent_categorie_id>0</parent_categorie_id>
+            <default_attribute_type>1</default_attribute_type>
+        </categorie>
+
+        <categorie>
+            <name>Skirts</name>
+            <parent_categorie_id>0</parent_categorie_id>
+            <default_attribute_type>1</default_attribute_type>
+        </categorie>
+
+        <categorie>
+            <name>Accessoires</name>
+            <parent_categorie_id>0</parent_categorie_id>
+            <default_attribute_type>-1</default_attribute_type>
+        </categorie>
+
+    </categories>
+
+    <items>
+
+        <item>
+            <name></name>
+            <category_id></category_id>
+            <buy_date></buy_date>
+            <store></store>
+            <wish></wish>
+            <primary_color></primary_color>
+            <secondary_color></secondary_color>
+            <image></image>
+            <rating></rating>
+            <pattern></pattern>
+        </item>
+
+    </items>
+
+</resources>

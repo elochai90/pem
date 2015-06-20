@@ -1,7 +1,8 @@
 CREATE TABLE `orga_nice_categories` (
     `_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     `name` VARCHAR(50) NOT NULL DEFAULT "MyCategory",
-    `parent_category_id` INT(5) NOT NULL DEFAULT 0
+    `parent_category_id` INT(5) NOT NULL DEFAULT 0,
+    `default_attribute_type` INT (3) NOT NULL DEFAULT 0
 );
 
 CREATE TABLE `orga_nice_items` (
@@ -9,6 +10,8 @@ CREATE TABLE `orga_nice_items` (
     `name` VARCHAR(50) NOT  NULL DEFAULT "",
     `image_file` VARCHAR(255),
     `category_id` INT(5) NOT NULL,
+    `buy_date` VARCHAR (10) NOT NULL DEFAULT "",
+    `store` VARCHAR(100) NOT NULL DEFAULT "",
     `is_wish` INT(1)  DEFAULT 0,
     `primary_color` INT(3),
     `secondary_color` INT(3),
