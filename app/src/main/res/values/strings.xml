@@ -21,4 +21,7 @@
     <string name="title_activity_categories_list">Categories</string>
     <string name="title_activity_items_list">Items</string>
     <string name="title_activity_categories_item_detail">Item</string>
+
+
+    <string name="chooseCountry">Choose a category</string>
 </resources>

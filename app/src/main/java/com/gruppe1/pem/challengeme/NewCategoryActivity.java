@@ -62,7 +62,7 @@ public class NewCategoryActivity extends Activity {
         for(Category cat : allCategories) {
             upperCategoriesList.add(cat.getName());
         }
-        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(getApplicationContext(), android.R.layout.simple_spinner_item,
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(getBaseContext(), android.R.layout.simple_spinner_item,
                 upperCategoriesList);
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
