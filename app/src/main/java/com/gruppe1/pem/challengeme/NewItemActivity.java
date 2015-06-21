@@ -20,6 +20,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -89,16 +91,44 @@ public class NewItemActivity extends Activity {
             int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, getResources().getDisplayMetrics());
             ViewGroup.LayoutParams attibuteNameLayoutParams = new ViewGroup.LayoutParams(width, height);
             attributeName.setLayoutParams(attibuteNameLayoutParams);
-
-            EditText attributeValue = new EditText(this);
-            attributeValue.setTextSize(18);
-            ViewGroup.LayoutParams attibuteValueLayoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
-            attributeValue.setLayoutParams(attibuteValueLayoutParams);
-
             // TODO: real attr names and values
             attributeName.setText("attr" + ":");
-//            if(value is set) TODO: check if value was already set
-            attributeValue.setText("37 test value");
+
+            View attributeValue;
+//            if(attribute is boolean)
+            if(i == 0) {
+                RadioGroup attrValueRadioGroup = new RadioGroup(this);
+                ViewGroup.LayoutParams attibuteValueLayoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
+                attrValueRadioGroup.setLayoutParams(attibuteValueLayoutParams);
+                attrValueRadioGroup.setOrientation(LinearLayout.HORIZONTAL);
+
+                ViewGroup.LayoutParams boolButtonLayoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+                RadioButton boolTrueButton = new RadioButton(this);
+                boolTrueButton.setLayoutParams(boolButtonLayoutParams);
+                boolTrueButton.setText("yes");
+                boolTrueButton.setTextSize(18);
+
+                RadioButton boolFalseButton = new RadioButton(this);
+                boolFalseButton.setLayoutParams(boolButtonLayoutParams);
+                boolFalseButton.setText("no");
+                boolFalseButton.setTextSize(18);
+
+                attrValueRadioGroup.addView(boolTrueButton);
+                attrValueRadioGroup.addView(boolFalseButton);
+
+                attributeValue = attrValueRadioGroup;
+
+            } else {
+                EditText textAttributeValue = new EditText(this);
+                textAttributeValue.setTextSize(18);
+                ViewGroup.LayoutParams attibuteValueLayoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
+//              if(value is set) TODO: check if value was already set
+                textAttributeValue.setText("37 test value");
+                textAttributeValue.setLayoutParams(attibuteValueLayoutParams);
+                attributeValue = textAttributeValue;
+            }
+
 
             attributeLayout.addView(attributeName);
             attributeLayout.addView(attributeValue);
