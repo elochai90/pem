@@ -3,6 +3,7 @@ package com.gruppe1.pem.challengeme;
 import android.database.Cursor;
 import android.util.Log;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**

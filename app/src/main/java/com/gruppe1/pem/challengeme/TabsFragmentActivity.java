@@ -149,10 +149,10 @@ public class TabsFragmentActivity extends FragmentActivity {
         mDrawerList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         mDrawerList.setTextFilterEnabled(true);
         ListItemIconName[] navigationDrawerItems = {
-                new ListItemIconName(android.R.drawable.ic_menu_agenda, menuItems[0]),
-                new ListItemIconName(android.R.drawable.ic_menu_info_details, menuItems[1]),
-                new ListItemIconName(android.R.drawable.ic_menu_sort_by_size, menuItems[2]),
-                new ListItemIconName(android.R.drawable.ic_menu_preferences, menuItems[3])
+                new ListItemIconName(0, android.R.drawable.ic_menu_agenda, menuItems[0]),
+                new ListItemIconName(0, android.R.drawable.ic_menu_info_details, menuItems[1]),
+                new ListItemIconName(0, android.R.drawable.ic_menu_sort_by_size, menuItems[2]),
+                new ListItemIconName(0, android.R.drawable.ic_menu_preferences, menuItems[3])
         };
         mDrawerList.setAdapter(new NavigationDrawerItemAdapter(this, R.layout.list_item_navigation_drawer, navigationDrawerItems));
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {

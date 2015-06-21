@@ -43,6 +43,8 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
     private DefaultListAdapter listAdapter;
     private Boolean list;
 
+    private int categoryId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +60,20 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
         } else {
             list = true;
         }
-
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if(extras == null) {
+                categoryId = -1;
+            } else {
+                categoryId = extras.getInt(Constants.EXTRA_CATEGORY_ID);
+            }
+        } else {
+            categoryId = -1;
+        }
+        DataBaseHelper db_helper = new DataBaseHelper(this);
+        db_helper.init();
+        Category category = new Category(categoryId, db_helper);
+        setTitle(category.getName());
 
         setContentView(R.layout.default_list_grid_view);
         listView = (ListView) findViewById(R.id.listView);
@@ -148,12 +163,12 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
     private void initDataset() {
         // TODO: replace by database data
         mDataset = new ArrayList<ListItemIconName>();
-        mDataset.add(new ListItemIconName(0, "add new item"));
-        mDataset.add(new ListItemIconName(R.drawable.tshirt, "T-Shirt rose"));
-        mDataset.add(new ListItemIconName(R.drawable.tshirt, "T-Shirt rose"));
-        mDataset.add(new ListItemIconName(R.drawable.tshirt, "T-Shirt rose"));
-        mDataset.add(new ListItemIconName(R.drawable.tshirt, "T-Shirt rose"));
-        mDataset.add(new ListItemIconName(R.drawable.tshirt, "T-Shirt rose"));
+        mDataset.add(new ListItemIconName(0,0, "add new item"));
+        mDataset.add(new ListItemIconName(0,R.drawable.tshirt, "T-Shirt rose"));
+        mDataset.add(new ListItemIconName(0,R.drawable.tshirt, "T-Shirt rose"));
+        mDataset.add(new ListItemIconName(0,R.drawable.tshirt, "T-Shirt rose"));
+        mDataset.add(new ListItemIconName(0,R.drawable.tshirt, "T-Shirt rose"));
+        mDataset.add(new ListItemIconName(0,R.drawable.tshirt, "T-Shirt rose"));
 
 
     }

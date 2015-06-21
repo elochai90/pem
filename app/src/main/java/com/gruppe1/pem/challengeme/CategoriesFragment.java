@@ -120,31 +120,18 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
             list = true;
         }
 
-        DataBaseHelper db_helper = new DataBaseHelper(getActivity().getApplicationContext());
-        db_helper.init();
 
         setHasOptionsMenu(true);
 
-        // TEST
-    /*
-        Category testCategory1 = new Category(0, db_helper);
-        testCategory1.setName("cat1");
-        testCategory1.save();
-
-        Category testCategory2 = new Category(0, db_helper);
-        testCategory2.setName("cat2");
-        testCategory2.save();
-
-        Category testCategory3 = new Category(0, db_helper);
-        testCategory3.setName("cat3");
-        testCategory3.save();
-    */
 
     }
 
-    public void selectCategory(View view) {
+    public void selectCategory(int categoryId) {
         Intent intent = new Intent();
         intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".ItemsListActivity");
+        Bundle b = new Bundle();
+        b.putInt(Constants.EXTRA_CATEGORY_ID, categoryId);
+        intent.putExtras(b);
         startActivity(intent);
     }
 
@@ -191,14 +178,41 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
 
     private void initDataset() {
         // TODO: replace by database data
+        // TEST
+        DataBaseHelper db_helper = new DataBaseHelper(getActivity().getApplicationContext());
+        db_helper.init();
+        Category testCategory1 = new Category(0, db_helper);
+        testCategory1.setName("Trousers");
+        testCategory1.save();
+
+        Category testCategory2 = new Category(0, db_helper);
+        testCategory2.setName("Coats");
+        testCategory2.save();
+
+        Category testCategory3 = new Category(0, db_helper);
+        testCategory3.setName("Shoes");
+        testCategory3.save();
+
+        Category testCategory4 = new Category(0, db_helper);
+        testCategory4.setName("Dresses");
+        testCategory4.save();
+
+        Category testCategory5 = new Category(0, db_helper);
+        testCategory5.setName("T-Shirts");
+        testCategory5.save();
+
+        Category testCategory6 = new Category(0, db_helper);
+        testCategory6.setName("Cardigans");
+        testCategory6.save();
+
         mDataset = new ArrayList<ListItemIconName>();
-        mDataset.add(new ListItemIconName(0, "add new category"));
-        mDataset.add(new ListItemIconName(R.drawable.hose, "Trousers"));
-        mDataset.add(new ListItemIconName(R.drawable.mantel, "Coats"));
-        mDataset.add(new ListItemIconName(R.drawable.schuh, "Shoes"));
-        mDataset.add(new ListItemIconName(R.drawable.kleid, "Dresses"));
-        mDataset.add(new ListItemIconName(R.drawable.tshirt, "T-Shirts"));
-        mDataset.add(new ListItemIconName(R.drawable.cardigan, "Cardigans"));
+        mDataset.add(new ListItemIconName(0, 0, "add new category"));
+        mDataset.add(new ListItemIconName( testCategory1.getId(), R.drawable.hose, testCategory1.getName()));
+        mDataset.add(new ListItemIconName( testCategory2.getId(), R.drawable.mantel, testCategory2.getName()));
+        mDataset.add(new ListItemIconName( testCategory3.getId(), R.drawable.schuh, testCategory3.getName()));
+        mDataset.add(new ListItemIconName(testCategory4.getId(), R.drawable.kleid, testCategory4.getName()));
+        mDataset.add(new ListItemIconName(testCategory5.getId(), R.drawable.tshirt, testCategory5.getName()));
+        mDataset.add(new ListItemIconName(testCategory6.getId(), R.drawable.cardigan, testCategory6.getName()));
     }
 
     private void addNewCategory(ListItemIconName newCat) {
@@ -217,7 +231,7 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
             intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".NewCategoryActivity");
             startActivity(intent);
         } else {
-            selectCategory(view);
+            selectCategory(mDataset.get(position).elementId);
         }
     }
 }

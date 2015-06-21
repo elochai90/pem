@@ -128,16 +128,16 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
     private void initDataset() {
         // TODO: replace by database data
         mDataset = new ArrayList<ListItemIconName>();
-        mDataset.add(new ListItemIconName(0, "add new wishlist item"));
-        mDataset.add(new ListItemIconName(R.drawable.kleiderbuegel, "T-Shirt in rosa"));
-        mDataset.add(new ListItemIconName(R.drawable.kleiderbuegel, "T-Shirt in rosa"));
-        mDataset.add(new ListItemIconName(R.drawable.kleiderbuegel, "T-Shirt in rosa"));
-        mDataset.add(new ListItemIconName(R.drawable.kleiderbuegel, "T-Shirt in rosa"));
-        mDataset.add(new ListItemIconName(R.drawable.kleiderbuegel, "T-Shirt in rosa"));
-        mDataset.add(new ListItemIconName(R.drawable.kleiderbuegel, "T-Shirt in rosa"));
-        mDataset.add(new ListItemIconName(R.drawable.kleiderbuegel, "T-Shirt in rosa"));
-        mDataset.add(new ListItemIconName(R.drawable.kleiderbuegel, "T-Shirt in rosa"));
-        mDataset.add(new ListItemIconName(R.drawable.kleiderbuegel, "T-Shirt in rosa"));
+        mDataset.add(new ListItemIconName(0,0, "add new wishlist item"));
+        mDataset.add(new ListItemIconName(0,R.drawable.kleiderbuegel, "T-Shirt in rosa"));
+        mDataset.add(new ListItemIconName(0,R.drawable.kleiderbuegel, "T-Shirt in rosa"));
+        mDataset.add(new ListItemIconName(0,R.drawable.kleiderbuegel, "T-Shirt in rosa"));
+        mDataset.add(new ListItemIconName(0,R.drawable.kleiderbuegel, "T-Shirt in rosa"));
+        mDataset.add(new ListItemIconName(0,R.drawable.kleiderbuegel, "T-Shirt in rosa"));
+        mDataset.add(new ListItemIconName(0,R.drawable.kleiderbuegel, "T-Shirt in rosa"));
+        mDataset.add(new ListItemIconName(0,R.drawable.kleiderbuegel, "T-Shirt in rosa"));
+        mDataset.add(new ListItemIconName(0,R.drawable.kleiderbuegel, "T-Shirt in rosa"));
+        mDataset.add(new ListItemIconName(0,R.drawable.kleiderbuegel, "T-Shirt in rosa"));
 
 
     }

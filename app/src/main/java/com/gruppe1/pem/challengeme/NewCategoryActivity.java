@@ -25,8 +25,12 @@ public class NewCategoryActivity extends Activity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
-                ListItemIconName newCategory = new ListItemIconName(R.drawable.kleiderbuegel, newCategory_name.getText().toString());
-                //TODO Werte uebergeben
+
+                DataBaseHelper db_helper = new DataBaseHelper(getApplicationContext());
+                db_helper.init();
+                Category testCategory = new Category(0, db_helper);
+                testCategory.setName(newCategory_name.getText().toString());
+                testCategory.save();
             }
         });
     }

@@ -46,9 +46,11 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
         listView.setAdapter(listAdapter);
         listView.setOnItemClickListener(this);
         gridView = (GridView) rootView.findViewById(R.id.gridView);
-        gridAdapter = new CompareGridAdapter(getActivity(), R.layout.grid_item_default, mDataset);
+        gridView.setNumColumns(3);
+        gridAdapter = new CompareGridAdapter(getActivity(), R.layout.grid_item_compare, mDataset);
         gridView.setAdapter(gridAdapter);
         gridView.setVisibility(View.INVISIBLE);
+        gridView.setOnItemClickListener(this);
 
         com.github.clans.fab.FloatingActionButton fab_add_wishlist_item = (FloatingActionButton) rootView.findViewById(R.id.add_wishlist_item);
         com.github.clans.fab.FloatingActionButton fab_add_category = (FloatingActionButton) rootView.findViewById(R.id.add_category);
