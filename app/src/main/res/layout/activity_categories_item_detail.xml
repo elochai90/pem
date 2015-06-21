@@ -12,178 +12,63 @@
         android:layout_height="200dp"
         android:src="@mipmap/addcamera2"
         android:scaleType="centerCrop" />
-        <TextView
-            android:id="@+id/itemDetailNameValue"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/itemDetailImage"
-            android:padding="10dp"
-            android:textSize="20dp"
-            android:text="Test Name"
-            android:textColor="@android:color/white"
-            android:background="@color/background_floating_material_dark" />
-
-    <!--<View-->
-        <!--android:id="@+id/divider1"-->
-        <!--android:layout_below="@id/itemDetailNameValue"-->
-        <!--android:layout_width="fill_parent"-->
-        <!--android:layout_height="1dp"-->
-        <!--android:background="@android:color/darker_gray"/>-->
+    <TextView
+        android:id="@+id/itemDetailNameValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/itemDetailImage"
+        android:padding="10dp"
+        android:textSize="20dp"
+        android:text="Test Name"
+        android:textColor="@android:color/white"
+        android:background="@color/background_floating_material_dark" />
 
 
+    <com.github.clans.fab.FloatingActionButton
+        xmlns:fab="http://schemas.android.com/apk/res-auto"
+        android:layout_alignParentRight="true"
+        android:id="@+id/edit_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="-35dp"
+        android:layout_marginEnd="10dp"
+        android:src="@drawable/ic_edit"
+        android:layout_above="@id/itemDetailNameValue"
+        android:layout_gravity="bottom|right"/>
 
 
     <LinearLayout
         android:id="@+id/itemDetailRating"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:orientation="vertical">
-        <!--<View-->
-            <!--android:layout_width="fill_parent"-->
-            <!--android:layout_height="1dp"-->
-            <!--android:background="@android:color/darker_gray"/>-->
-        <LinearLayout
-            android:layout_width="match_parent"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/background_floating_material_dark"
+        android:weightSum="1">
+
+        <RatingBar
+            style = "?android:attr/ratingBarStyle"
+            android:isIndicator="true"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:layout_gravity="center_horizontal"
-            android:background="@color/background_floating_material_dark"
-            android:weightSum="1">
+            android:id="@+id/ratingBar" />
 
-            <RatingBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/ratingBar" />
-
-        </LinearLayout>
     </LinearLayout>
 
 
 
     <ScrollView
-        android:id="@+id/itemDetailAttributes"
         android:layout_below="@id/itemDetailNameValue"
         android:layout_above="@id/itemDetailRating"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:fillViewport="true">
         <LinearLayout
+            android:id="@+id/itemDetailAttributes"
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:orientation="vertical">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="10dp">
-                <TextView
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:textSize="18dp"
-                    android:text="Color:" />
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="18dp"
-                    android:text="pink" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="10dp">
-                <TextView
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:textSize="18dp"
-                    android:text="Color:" />
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="18dp"
-                    android:text="pink" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="10dp">
-                <TextView
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:textSize="18dp"
-                    android:text="Color:" />
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="18dp"
-                    android:text="pink" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="10dp">
-                <TextView
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:textSize="18dp"
-                    android:text="Size:" />
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="18dp"
-                    android:text="36" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="10dp">
-                <TextView
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:textSize="18dp"
-                    android:text="Size:" />
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="18dp"
-                    android:text="36" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="10dp">
-                <TextView
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:textSize="18dp"
-                    android:text="Size:" />
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="18dp"
-                    android:text="36" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="10dp">
-                <EditText
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:hint="name"
-                    android:textSize="18dp"/>
-                <EditText
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="attribute value"
-                    android:textSize="18dp" />
-            </LinearLayout>
         </LinearLayout>
 
     </ScrollView>

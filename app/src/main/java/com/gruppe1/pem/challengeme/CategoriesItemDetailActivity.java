@@ -12,11 +12,18 @@ import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
+import android.widget.ScrollView;
+import android.widget.TextView;
+
+import com.github.clans.fab.FloatingActionButton;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -33,19 +40,55 @@ public class CategoriesItemDetailActivity extends Activity {
         setContentView(R.layout.activity_categories_item_detail);
 
         ImgPhoto = (ImageView) findViewById(R.id.itemDetailImage);
-
-        ImgPhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                selectImage();
-            }
-        });
+//        ImgPhoto.setImageResource(); TODO: set Item Image if available
 
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
         LayerDrawable stars = (LayerDrawable) ratingBar.getProgressDrawable();
         stars.getDrawable(2).setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
         stars.getDrawable(1).setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
         stars.getDrawable(0).setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+
+        LinearLayout attributesView = (LinearLayout) findViewById(R.id.itemDetailAttributes);
+
+        // TODO: get all attributes with values for this Item
+        for(int i = 0; i<= 5; i++) {
+            LinearLayout attributeLayout = new LinearLayout(this);
+            attributeLayout.setOrientation(LinearLayout.HORIZONTAL);
+            int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
+            attributeLayout.setPadding(padding, padding, padding, padding);
+            LinearLayout.LayoutParams attributeLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            attributeLayout.setLayoutParams(attributeLayoutParams);
+
+            TextView attributeName = new TextView(this);
+            attributeName.setTextSize(18);
+            int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics());
+            ViewGroup.LayoutParams attibuteNameLayoutParams = new ViewGroup.LayoutParams(width, ViewGroup.LayoutParams.WRAP_CONTENT);
+            attributeName.setLayoutParams(attibuteNameLayoutParams);
+
+            TextView attributeValue = new TextView(this);
+            attributeValue.setTextSize(18);
+            ViewGroup.LayoutParams attibuteValueLayoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            attributeValue.setLayoutParams(attibuteValueLayoutParams);
+
+            // TODO: real attr names and values
+            attributeName.setText("attr" + ":");
+            attributeValue.setText("37 test value");
+
+            attributeLayout.addView(attributeName);
+            attributeLayout.addView(attributeValue);
+
+            attributesView.addView(attributeLayout);
+        }
+
+        FloatingActionButton editItemFAB = (FloatingActionButton) findViewById(R.id.edit_item);
+        editItemFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClassName(getPackageName(), getPackageName() + ".NewItemActivity");
+                startActivity(intent);
+            }
+        });
     }
 
     private void selectImage() {
