@@ -44,24 +44,23 @@
             android:textSize="18dp"
             android:text="Upper categorie:" />
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <Spinner
             android:id="@+id/editUpperCategory"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="0.66"
             android:layout_marginLeft="5dp"
-            android:paddingBottom="5dp" />
+            android:paddingBottom="5dp"/>
     </LinearLayout>
 
-    <Button
-        style="?android:attr/buttonStyleSmall"
+    <com.github.clans.fab.FloatingActionButton
+        xmlns:fab="http://schemas.android.com/apk/res-auto"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:id="@+id/save_new_category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Save"
-        android:id="@+id/save_new_category"
-        android:padding="15dp"
-        android:layout_below="@+id/linearLayout2"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp" />
+        android:src="@drawable/ic_save_white"
+        android:layout_gravity="bottom|right"/>
 
 </RelativeLayout>

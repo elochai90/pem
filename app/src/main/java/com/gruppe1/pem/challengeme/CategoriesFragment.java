@@ -1,8 +1,10 @@
 package com.gruppe1.pem.challengeme;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Interpolator;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 
@@ -23,7 +26,7 @@ import java.util.List;
 
 
 public class CategoriesFragment extends Fragment implements AdapterView.OnItemClickListener, View.OnLongClickListener{
-
+    public static final int REQUEST_CODE = 1;
 
     // TODO: make only one Instance in another file, to be able to access it from everywhere
     public static final String MY_PREFERENCES = "Preferences_File";
@@ -101,7 +104,6 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
         });
 
 
-
         sharedPreferences = getActivity().getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
 
@@ -175,12 +177,11 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
         super.onSaveInstanceState(savedInstanceState);
     }
 
-
     private void initDataset() {
         // TODO: replace by database data
+        // TEST
         DataBaseHelper db_helper = new DataBaseHelper(getActivity().getApplicationContext());
         db_helper.init();
-
         Category testCategory1 = new Category(0, db_helper);
         testCategory1.setName("Trousers");
         testCategory1.save();
@@ -204,13 +205,13 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
         Category testCategory6 = new Category(0, db_helper);
         testCategory6.setName("Cardigans");
         testCategory6.save();
-        
+
         mDataset = new ArrayList<ListItemIconName>();
         mDataset.add(new ListItemIconName(0, 0, "add new category"));
 
         DefaultSetup defaultSetup = new DefaultSetup(getActivity().getApplicationContext());
         defaultSetup.setup("setup_values.xml");
-        ArrayList<Category> allCategories = Category.getAllCategories(getActivity().getApplicationContext());
+         ArrayList<Category> allCategories = Category.getAllCategories(getActivity().getApplicationContext());
 
         Iterator catIt = allCategories.iterator();
 
@@ -240,9 +241,38 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
         if(position == 0) {
             Intent intent = new Intent();
             intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".NewCategoryActivity");
-            startActivity(intent);
+            startActivityForResult(intent, REQUEST_CODE);
         } else {
             selectCategory(mDataset.get(position).elementId);
         }
+    }
+
+    // for actualizing the categories list on coming back from new category
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        try {
+            super.onActivityResult(requestCode, resultCode, data);
+
+            if (requestCode == REQUEST_CODE) {
+                if(resultCode == Activity.RESULT_OK) {
+                    System.out.println("Result ok");
+                    String categoryName = data.getStringExtra("categoryName");
+                    int categoryId = data.getIntExtra("categoryId", -1);
+                    int categoryParentId = data.getIntExtra("categoryParentId", -1);
+//                    if (categoryParentId == this.category) TODO: check if category is the same like parentCategory of new Category
+                    mDataset.add(new ListItemIconName(categoryId, R.drawable.kleiderbuegel, categoryName));
+                    listAdapter = new DefaultListAdapter(getActivity(), R.layout.list_item_default, mDataset, false);
+                    listView.setAdapter(listAdapter);
+                    listAdapter.notifyDataSetChanged();
+                    gridAdapter = new DefaultGridAdapter(getActivity(), R.layout.grid_item_default, mDataset);
+                    gridView.setAdapter(gridAdapter);
+                    gridAdapter.notifyDataSetChanged();
+                }
+            }
+        } catch (Exception ex) {
+            Toast.makeText(getActivity(), ex.toString(),
+                    Toast.LENGTH_SHORT).show();
+        }
+
     }
 }

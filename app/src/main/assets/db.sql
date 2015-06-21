@@ -37,6 +37,13 @@ CREATE TABLE `orga_nice_item_attribute_types` (
 );
 
 
+CREATE TABLE `orga_nice_categories_attribute_types` (
+    `_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    `category_id` INT NOT NULL,
+    `attribute_type_id` INT NOT NULL,
+    `attribute_value` VARCHAR(255)
+);
+
 CREATE TABLE `orga_nice_compares` (
     `_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     `name` VARCHAR(50) NOT NULL DEFAULT "MyCompare",
