@@ -1,16 +1,27 @@
 package com.gruppe1.pem.challengeme;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * Created by Simon on 13.06.2015.
  */
 public class Category {
     private static final String DB_TABLE = Constants.DB_TABLE_PREFIX + "categories";
+    //0 = String, 1 = Integer
+    public static final HashMap<String, Integer> dbColumns = new HashMap<String, Integer>() {{
+        put("name", 0);
+        put("parent_categorie_id", 1);
+        put("default_attribute_type", 1);
+    }};
+
 
     private int m_id;
     private String m_name;
@@ -18,9 +29,6 @@ public class Category {
     // TODO add default size to sql init
     private int m_defaultAttributeType;
     private DataBaseHelper m_dbHelper;
-
-    // used for output resource strings
-    private static final String[] databaseColumnsIdentifiers = {"id", "category_name", "parent_category_id"};
 
     public Category(int m_id, DataBaseHelper p_dbHelper) {
         this.m_dbHelper = p_dbHelper;
@@ -96,8 +104,59 @@ public class Category {
      * get all categories from database
      * @return ArrayList<Category> all categories
      */
-    public static ArrayList<Category> getAllCategories() {
-        return null;
+    public static ArrayList<Category> getAllCategories(Context p_context) {
+        DataBaseHelper helper = new DataBaseHelper(p_context);
+        helper.init();
+        helper.setTable(DB_TABLE);
+        helper.setColumns(new String[]{"*"});
+        ArrayList<Category> allCategories = new ArrayList<Category>();
+
+        Cursor allCategoriesIterator = helper.select();
+        allCategoriesIterator.moveToFirst();
+        Log.e("###All Cat count###", "" + allCategoriesIterator.getCount());
+
+        while (!allCategoriesIterator.isAfterLast()) {
+            Category category = new Category(allCategoriesIterator.getInt(0), helper);
+            category.setName(allCategoriesIterator.getString(1));
+            category.setParentCategoryId(allCategoriesIterator.getInt(2));
+            category.setDefaultAttributeType(allCategoriesIterator.getInt(3));
+            //Log.e("###All Cat call###", "name: " + allCategories.getString(1));
+            allCategories.add(category);
+            allCategoriesIterator.moveToNext();
+        }
+
+        return allCategories;
+    }
+
+    public void edit(HashMap<String, String> p_values) {
+        Set<String> keys = p_values.keySet();
+        Iterator iterator = keys.iterator();
+
+        while (iterator.hasNext()) {
+            String dbColumnName = iterator.next().toString();
+            String dbColumnValue = p_values.get(dbColumnName);
+
+            switch (dbColumnName) {
+                case "name":
+                    this.setName(dbColumnValue);
+                    //Log.e("###CAT EDIT###", "name is: " + dbColumnValue);
+                    break;
+
+                case "parent_categorie_id":
+                    this.setParentCategoryId(Integer.parseInt(dbColumnValue));
+                    //Log.e("###CAT EDIT###", "parent_cat_id is: " + dbColumnValue);
+                    break;
+
+                case "default_attribute_type":
+                    //Log.e("###CAT EDIT###", "default_attribute_type is: " + dbColumnValue);
+                    this.setDefaultAttributeType(Integer.parseInt(dbColumnValue));
+                    break;
+
+                default:
+                    Log.e("###CAT EDIT###", dbColumnName + " is not declared as columns in " + DB_TABLE);
+                    break;
+            }
+        }
     }
 
     /**
@@ -106,16 +165,34 @@ public class Category {
     public void save() {
         if(this.m_id == 0) {
             // insert as new categoy
-            this.m_dbHelper.setStringValue("name", this.m_name);
-            this.m_dbHelper.setIntegerValue("parent_category_id", this.m_parent_category_id);
+            this.m_dbHelper.setWhere("", new String[]{"name='" + this.m_name + "'"});
+            Cursor existingRowCursor = this.m_dbHelper.select();
+            existingRowCursor.moveToFirst();
+            int rowId;
 
-            int id = this.m_dbHelper.insert();
-
-            if (id > -1) {
-                this.m_id = id;
-            } else {
-                Log.e("Category-Error", "save failed");
+            try {
+                rowId = existingRowCursor.getInt(0);
+            } catch (Exception e) {
+                rowId = 0;
             }
+
+            if(rowId == 0) {
+                this.m_dbHelper.setStringValue("name", this.m_name);
+                this.m_dbHelper.setIntegerValue("parent_category_id", this.m_parent_category_id);
+                this.m_dbHelper.setIntegerValue("default_attribute_type", this.m_defaultAttributeType);
+
+                int id = this.m_dbHelper.insert();
+
+                if (id > -1) {
+                    this.m_id = id;
+                    Log.e("###CAT INSERTED","id:" + id);
+                } else {
+                    Log.e("Category-Error", "save failed");
+                }
+            } else {
+                Log.e("###CAT EXISTS", this.m_name + " - " + rowId);
+            }
+
         } else {
             //save changes to existing category
         }

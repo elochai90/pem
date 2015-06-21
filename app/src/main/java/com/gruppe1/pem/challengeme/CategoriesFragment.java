@@ -18,6 +18,7 @@ import android.widget.ListView;
 import com.github.clans.fab.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 
@@ -99,8 +100,7 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
             }
         });
 
-        //DefaultSetup defaultSetup = new DefaultSetup(getActivity().getApplicationContext());
-        //defaultSetup.setup("setup_values.xml");
+
 
         sharedPreferences = getActivity().getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
@@ -178,9 +178,9 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
 
     private void initDataset() {
         // TODO: replace by database data
-        // TEST
         DataBaseHelper db_helper = new DataBaseHelper(getActivity().getApplicationContext());
         db_helper.init();
+
         Category testCategory1 = new Category(0, db_helper);
         testCategory1.setName("Trousers");
         testCategory1.save();
@@ -204,9 +204,20 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
         Category testCategory6 = new Category(0, db_helper);
         testCategory6.setName("Cardigans");
         testCategory6.save();
-
+        
         mDataset = new ArrayList<ListItemIconName>();
         mDataset.add(new ListItemIconName(0, 0, "add new category"));
+
+        DefaultSetup defaultSetup = new DefaultSetup(getActivity().getApplicationContext());
+        defaultSetup.setup("setup_values.xml");
+        ArrayList<Category> allCategories = Category.getAllCategories(getActivity().getApplicationContext());
+
+        Iterator catIt = allCategories.iterator();
+
+        while (catIt.hasNext()) {
+            Category tmpCat = (Category)catIt.next();
+            mDataset.add(new ListItemIconName(tmpCat.getId(), R.drawable.kleiderbuegel, tmpCat.getName()));
+        }
         mDataset.add(new ListItemIconName( testCategory1.getId(), R.drawable.hose, testCategory1.getName()));
         mDataset.add(new ListItemIconName( testCategory2.getId(), R.drawable.mantel, testCategory2.getName()));
         mDataset.add(new ListItemIconName( testCategory3.getId(), R.drawable.schuh, testCategory3.getName()));
