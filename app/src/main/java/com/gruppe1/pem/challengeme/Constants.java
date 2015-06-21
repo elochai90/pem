@@ -7,4 +7,5 @@ public class Constants {
     public static final int DEFAULT_CATEGORY_ID = 0;
     public static String DB_TABLE_PREFIX = "orga_nice_";
     public static String XML_ELEMENT_EMPTY = "###empty###";
+    public static int DEFAULT_CATEGORY_THUMBNAIL = R.drawable.hose;
 }

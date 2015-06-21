@@ -18,10 +18,13 @@ import java.util.Set;
  */
 public class DefaultSetup {
     private Context m_context;
+    private DataBaseHelper m_dbHelper;
     HashMap<String, ArrayList<HashMap<String, String>>> m_setupList;
 
     public DefaultSetup(Context p_context) {
         this.m_context = p_context;
+        this.m_dbHelper = new DataBaseHelper(this.m_context);
+        this.m_dbHelper.init();
     }
 
     public void setup(String p_xml_file) {
@@ -35,14 +38,14 @@ public class DefaultSetup {
 
                 //no category -> no items!
                 if (this.m_setupList.containsKey("categories")) {
-                    setupCategories(this.m_setupList.get(this.m_setupList.get("categories")));
+                    setupCategories(this.m_setupList.get(("categories")));
 
                     if (this.m_setupList.containsKey("attribute_types")) {
-                        setupAttributeTypes(this.m_setupList.get(this.m_setupList.get("attribute_types")));
+                        setupAttributeTypes(this.m_setupList.get("attribute_types"));
                     }
 
                     if (this.m_setupList.containsKey("items")) {
-                        setupItems(this.m_setupList.get(this.m_setupList.get("items")));
+                        setupItems(this.m_setupList.get("items"));
                     }
                 }
 
@@ -57,6 +60,17 @@ public class DefaultSetup {
 
     private void setupCategories(ArrayList<HashMap<String, String>> p_elements) {
         Log.e("###SETUP##", "categories called");
+
+        Iterator iterator = p_elements.iterator();
+        Log.e("###CAT INSERT COUNT###", "" + p_elements.size());
+
+        while (iterator.hasNext()) {
+            HashMap<String, String> categoryAttributes = (HashMap<String, String>)iterator.next();
+            Category defaultCategory = new Category(0, this.m_dbHelper);
+            defaultCategory.edit(categoryAttributes);
+            defaultCategory.save();
+        }
+
     }
 
     private void setupAttributeTypes(ArrayList<HashMap<String, String>> p_elements) {
@@ -64,7 +78,7 @@ public class DefaultSetup {
 
     }
 
-    private void setupItems(ArrayList<HashMap<String, String>> p_elements){
+    private void setupItems(ArrayList<HashMap<String, String>> p_elements) {
         Log.e("###SETUP##", "items called");
 
     }

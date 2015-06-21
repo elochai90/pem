@@ -27,6 +27,12 @@
             <default_attribute_type>-1</default_attribute_type>
         </categorie>
 
+        <categorie>
+            <name>Belts</name>
+            <parent_categorie_id>0</parent_categorie_id>
+            <default_attribute_type>-1</default_attribute_type>
+        </categorie>
+
     </categories>
 
     <items>

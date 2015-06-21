@@ -18,6 +18,7 @@ import android.widget.ListView;
 import com.github.clans.fab.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 
@@ -99,8 +100,7 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
             }
         });
 
-        //DefaultSetup defaultSetup = new DefaultSetup(getActivity().getApplicationContext());
-        //defaultSetup.setup("setup_values.xml");
+
 
         sharedPreferences = getActivity().getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
@@ -119,9 +119,6 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
         } else {
             list = true;
         }
-
-        DataBaseHelper db_helper = new DataBaseHelper(getActivity().getApplicationContext());
-        db_helper.init();
 
         setHasOptionsMenu(true);
 
@@ -190,9 +187,21 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
 
 
     private void initDataset() {
-        // TODO: replace by database data
         mDataset = new ArrayList<ListItemIconName>();
         mDataset.add(new ListItemIconName(0, "add new category"));
+
+        DefaultSetup defaultSetup = new DefaultSetup(getActivity().getApplicationContext());
+        defaultSetup.setup("setup_values.xml");
+        ArrayList<Category> allCategories = Category.getAllCategories(getActivity().getApplicationContext());
+
+        Iterator catIt = allCategories.iterator();
+
+        while (catIt.hasNext()) {
+            Category tmpCat = (Category)catIt.next();
+            mDataset.add(new ListItemIconName(0, tmpCat.getName()));
+        }
+
+        // TODO: replace by database data
         mDataset.add(new ListItemIconName(R.drawable.hose, "Trousers"));
         mDataset.add(new ListItemIconName(R.drawable.mantel, "Coats"));
         mDataset.add(new ListItemIconName(R.drawable.schuh, "Shoes"));
