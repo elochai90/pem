@@ -28,13 +28,8 @@ import java.util.List;
 public class CategoriesFragment extends Fragment implements AdapterView.OnItemClickListener, View.OnLongClickListener{
     public static final int REQUEST_CODE = 1;
 
-    // TODO: make only one Instance in another file, to be able to access it from everywhere
-    public static final String MY_PREFERENCES = "Preferences_File";
     public SharedPreferences.Editor editor;
     public SharedPreferences sharedPreferences;
-
-
-    private static final String KEY_VIEW_AS_LIST = "ViewAsList";
 
     private List<ListItemIconName> mDataset;
 
@@ -55,7 +50,7 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
         initDataset();
 
         if (savedInstanceState != null) {
-            list = savedInstanceState.getBoolean(KEY_VIEW_AS_LIST, true);
+            list = savedInstanceState.getBoolean(Constants.KEY_VIEW_CATEGORIES_AS_LIST, true);
         } else {
             list = true;
         }
@@ -104,7 +99,7 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
         });
 
 
-        sharedPreferences = getActivity().getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
+        sharedPreferences = getActivity().getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
 
         return rootView;
@@ -117,7 +112,7 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
 
         initDataset();
         if (savedInstanceState != null) {
-            list = savedInstanceState.getBoolean(KEY_VIEW_AS_LIST, true);
+            list = savedInstanceState.getBoolean(Constants.KEY_VIEW_CATEGORIES_AS_LIST, true);
         } else {
             list = true;
         }
@@ -138,6 +133,20 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        list = sharedPreferences.getBoolean(Constants.KEY_VIEW_CATEGORIES_AS_LIST, true);
+        switchListGridView(list);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        list = sharedPreferences.getBoolean(Constants.KEY_VIEW_CATEGORIES_AS_LIST, true);
+        menu.getItem(0).setIcon(list ? R.drawable.ic_view_grid : R.drawable.ic_view_list);
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
         menu.clear();
@@ -154,6 +163,8 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
         }
 
         list = shouldBeListView;
+        editor.putBoolean(Constants.KEY_VIEW_CATEGORIES_AS_LIST, list);
+        editor.commit();
     }
 
     @Override
@@ -163,7 +174,11 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_switchView) {
             switchListGridView(!list);
-//            setRecyclerViewLayoutManager(!isViewAsList);
+            if(list) {
+                item.setIcon(R.drawable.ic_view_grid);
+            } else {
+                item.setIcon(R.drawable.ic_view_list);
+            }
             return true;
         }
 
@@ -173,7 +188,7 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         // Save currently selected layout manager.
-        savedInstanceState.putSerializable(KEY_VIEW_AS_LIST, list);
+        savedInstanceState.putSerializable(Constants.KEY_VIEW_CATEGORIES_AS_LIST, list);
         super.onSaveInstanceState(savedInstanceState);
     }
 

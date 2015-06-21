@@ -1,6 +1,8 @@
 package com.gruppe1.pem.challengeme;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -22,7 +24,6 @@ import java.util.List;
 
 public class CompareFragment extends Fragment  implements AdapterView.OnItemClickListener{
 
-    private static final String KEY_VIEW_AS_LIST = "ViewAsList";
     private List<CompareItem> mDataset;
 
     private View rootView;
@@ -32,6 +33,9 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
     private ListView listView;
     private CompareListAdapter listAdapter;
     private Boolean list;
+
+    public SharedPreferences.Editor editor;
+    public SharedPreferences sharedPreferences;
 
 
     @Override
@@ -95,13 +99,31 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
 
         initDataset();
         if (savedInstanceState != null) {
-            list = savedInstanceState.getBoolean(KEY_VIEW_AS_LIST, true);
+            list = savedInstanceState.getBoolean(Constants.KEY_VIEW_COMPARE_AS_LIST, true);
         } else {
             list = true;
         }
 
         setHasOptionsMenu(true);
 
+        sharedPreferences = getActivity().getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        list = sharedPreferences.getBoolean(Constants.KEY_VIEW_COMPARE_AS_LIST, true);
+        switchListGridView(list);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        list = sharedPreferences.getBoolean(Constants.KEY_VIEW_COMPARE_AS_LIST, true);
+        menu.getItem(0).setIcon(list ? R.drawable.ic_view_grid : R.drawable.ic_view_list);
     }
 
     @Override
@@ -121,6 +143,8 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
         }
 
         list = shouldBeListView;
+        editor.putBoolean(Constants.KEY_VIEW_COMPARE_AS_LIST, list);
+        editor.commit();
     }
 
 
@@ -133,7 +157,11 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
 
         if (id == R.id.action_switchView) {
             switchListGridView(!list);
-//            setRecyclerViewLayoutManager(!isViewAsList);
+            if(list) {
+                item.setIcon(R.drawable.ic_view_grid);
+            } else {
+                item.setIcon(R.drawable.ic_view_list);
+            }
             return true;
         }
 
@@ -157,7 +185,7 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         // Save currently selected layout manager.
-        savedInstanceState.putSerializable(KEY_VIEW_AS_LIST, list);
+        savedInstanceState.putSerializable(Constants.KEY_VIEW_COMPARE_AS_LIST, list);
         super.onSaveInstanceState(savedInstanceState);
     }
 

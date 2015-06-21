@@ -1,5 +1,8 @@
 package com.gruppe1.pem.challengeme;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 /**
  * Created by Simon on 13.06.2015.
  */
@@ -10,4 +13,12 @@ public class Constants {
     public static int DEFAULT_CATEGORY_THUMBNAIL = R.drawable.hose;
 
     public static String EXTRA_CATEGORY_ID = "extra_category_id";
+
+    // Shared Preferences File
+    public static final String MY_PREFERENCES = "Preferences_File";
+
+    // Shared Preferences Keys
+    public static final String KEY_VIEW_CATEGORIES_AS_LIST = "CategoriesViewAsList";
+    public static final String KEY_VIEW_ITEMS_AS_LIST = "ItemsViewAsList";
+    public static final String KEY_VIEW_COMPARE_AS_LIST = "CompareViewAsList";
 }

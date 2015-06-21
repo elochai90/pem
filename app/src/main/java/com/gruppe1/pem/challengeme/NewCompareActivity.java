@@ -53,7 +53,7 @@ public class NewCompareActivity extends Activity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position != 0) {
-                    CompareImageAdapter adapter = new CompareImageAdapter(getApplicationContext(), 0); // TODO: richtige Id übergeben
+                    CompareImageAdapter adapter = new CompareImageAdapter(getApplicationContext(), 0); // TODO: richtige Id uebergeben
                     viewPager1.setAdapter(adapter);
                     view_pager1_spinner.setVisibility(View.INVISIBLE);
                     viewPager1.setVisibility(View.VISIBLE);
@@ -69,7 +69,7 @@ public class NewCompareActivity extends Activity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if(position != 0) {
-                    CompareImageAdapter adapter = new CompareImageAdapter(getApplicationContext(), 0); // TODO: richtige Id übergeben
+                    CompareImageAdapter adapter = new CompareImageAdapter(getApplicationContext(), 0); // TODO: richtige Id uebergeben
                     viewPager2.setAdapter(adapter);
                     view_pager2_spinner.setVisibility(View.INVISIBLE);
                     viewPager2.setVisibility(View.VISIBLE);
@@ -87,7 +87,7 @@ public class NewCompareActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_saved_compares, menu);
+        getMenuInflater().inflate(R.menu.menu_new_compare, menu);
         return true;
     }
 
@@ -99,9 +99,9 @@ public class NewCompareActivity extends Activity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
 
         return super.onOptionsItemSelected(item);
     }

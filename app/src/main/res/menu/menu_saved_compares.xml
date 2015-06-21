@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.gruppe1.pem.challengeme.NewCompareActivity">
     <item android:id="@+id/action_switchView"
-        android:icon="@mipmap/ic_add_circle_outline_white_24dp"
+        android:icon="@drawable/ic_view_grid"
         android:title="List/Grid View"
         app:showAsAction="always"/>
 </menu>

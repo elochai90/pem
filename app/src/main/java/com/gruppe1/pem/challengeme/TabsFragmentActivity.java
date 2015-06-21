@@ -85,32 +85,9 @@ public class TabsFragmentActivity extends FragmentActivity {
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                // TODO: openSettings();
-                return true;
-            case R.id.action_add:
-                Toast.makeText(this, "Add gedrückt!", Toast.LENGTH_LONG).show();
-                // TODO: not add, but change list/grid view
-                System.out.println("Change grid view ");
-                changeListGridView();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+        return super.onOptionsItemSelected(item);
     }
 
-
-    // TODO: move global? or to preferences?
-    private void changeListGridView() {
-        SharedPreferences sharedPreferences = getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        boolean gridView = sharedPreferences.getBoolean("gridView", true);
-        gridView = !gridView;
-        editor.putBoolean("gridView", gridView);
-        editor.commit();
-        System.out.println("GridView: " + gridView);
-    }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -149,10 +126,10 @@ public class TabsFragmentActivity extends FragmentActivity {
         mDrawerList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         mDrawerList.setTextFilterEnabled(true);
         ListItemIconName[] navigationDrawerItems = {
-                new ListItemIconName(0, android.R.drawable.ic_menu_agenda, menuItems[0]),
-                new ListItemIconName(0, android.R.drawable.ic_menu_info_details, menuItems[1]),
-                new ListItemIconName(0, android.R.drawable.ic_menu_sort_by_size, menuItems[2]),
-                new ListItemIconName(0, android.R.drawable.ic_menu_preferences, menuItems[3])
+                new ListItemIconName(0, R.drawable.ic_categories, menuItems[0]),
+                new ListItemIconName(0, R.drawable.ic_compare, menuItems[1]),
+                new ListItemIconName(0, R.drawable.ic_wishlist, menuItems[2]),
+                new ListItemIconName(0, R.drawable.ic_settings, menuItems[3])
         };
         mDrawerList.setAdapter(new NavigationDrawerItemAdapter(this, R.layout.list_item_navigation_drawer, navigationDrawerItems));
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -163,7 +140,6 @@ public class TabsFragmentActivity extends FragmentActivity {
                                     int position, long id) {
                 // Getting an array of rivers
                 //String[] menuItems = getResources().getStringArray(R.array.menus);
-                Toast.makeText(getApplicationContext(), "Inside ClickListener...", Toast.LENGTH_SHORT).show();
                 // Currently selected river
                 if (position != 0)
                     mTitle = menuItems[position - 1];
