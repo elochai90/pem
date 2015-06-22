@@ -75,6 +75,15 @@ public class DefaultSetup {
     private void setupAttributeTypes(ArrayList<HashMap<String, String>> p_elements) {
         Log.e("###SETUP##", "attributes called");
 
+        Iterator iterator = p_elements.iterator();
+
+        while (iterator.hasNext()) {
+            HashMap<String, String> attributeTypeAttributes = (HashMap<String, String>)iterator.next();
+            AttributeType defaultAttributeType = new AttributeType(m_context, 0, this.m_dbHelper);
+            defaultAttributeType.edit(attributeTypeAttributes);
+            defaultAttributeType.save();
+        }
+
     }
 
     private void setupItems(ArrayList<HashMap<String, String>> p_elements) {

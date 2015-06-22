@@ -103,6 +103,22 @@
 
     </categories>
 
+    <attribute_types>
+
+        <attribute_type>
+            <name>Size</name>
+            <value_type>1</value_type>
+            <is_unique>1</is_unique>
+        </attribute_type>
+
+        <attribute_type>
+            <name>Color</name>
+            <value_type>0</value_type>
+            <is_unique>1</is_unique>
+        </attribute_type>
+
+    </attribute_types>
+
     <items>
 
         <item>

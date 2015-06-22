@@ -59,9 +59,11 @@ public class NewCategoryActivity extends Activity {
         ArrayList<Category> allCategories = Category.getAllCategories(this);
         System.out.println(allCategories.toString());
         upperCategoriesList.add("None");
+
         for(Category cat : allCategories) {
             upperCategoriesList.add(cat.getName());
         }
+
         ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(getBaseContext(), android.R.layout.simple_spinner_item,
                 upperCategoriesList);
         // Specify the layout to use when the list of choices appears

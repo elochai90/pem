@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.graphics.Interpolator;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -110,7 +111,7 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        initDataset();
+        //initDataset();
         if (savedInstanceState != null) {
             list = savedInstanceState.getBoolean(Constants.KEY_VIEW_CATEGORIES_AS_LIST, true);
         } else {
@@ -270,7 +271,7 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
 
         DefaultSetup defaultSetup = new DefaultSetup(getActivity().getApplicationContext());
         defaultSetup.setup("setup_values.xml");
-         ArrayList<Category> allCategories = Category.getAllCategories(getActivity().getApplicationContext());
+        ArrayList<Category> allCategories = Category.getAllCategories(getActivity().getApplicationContext());
 
         Iterator catIt = allCategories.iterator();
 
@@ -295,6 +296,8 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
 //        mDataset.add(new ListItemIconName(testCategory15.getId(), R.drawable.cardigan, testCategory15.getName()));
 //        mDataset.add(new ListItemIconName(testCategory16.getId(), R.drawable.kleid, testCategory16.getName()));
 //        mDataset.add(new ListItemIconName(testCategory17.getId(), R.drawable.tshirt, testCategory17.getName()));
+
+        ArrayList<AttributeType> attributeTypes = AttributeType.getAttributeTypes(getActivity().getApplicationContext());
     }
 
     private void addNewCategory(ListItemIconName newCat) {
