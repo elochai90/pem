@@ -197,29 +197,73 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
         // TEST
         DataBaseHelper db_helper = new DataBaseHelper(getActivity().getApplicationContext());
         db_helper.init();
-        Category testCategory1 = new Category(0, db_helper);
-        testCategory1.setName("Trousers");
-        testCategory1.save();
-
-        Category testCategory2 = new Category(0, db_helper);
-        testCategory2.setName("Coats");
-        testCategory2.save();
-
-        Category testCategory3 = new Category(0, db_helper);
-        testCategory3.setName("Shoes");
-        testCategory3.save();
-
-        Category testCategory4 = new Category(0, db_helper);
-        testCategory4.setName("Dresses");
-        testCategory4.save();
-
-        Category testCategory5 = new Category(0, db_helper);
-        testCategory5.setName("T-Shirts");
-        testCategory5.save();
-
-        Category testCategory6 = new Category(0, db_helper);
-        testCategory6.setName("Cardigans");
-        testCategory6.save();
+//        Category testCategory1 = new Category(0, db_helper);
+//        testCategory1.setName("Trousers");
+//        testCategory1.save();
+//
+//        Category testCategory2 = new Category(0, db_helper);
+//        testCategory2.setName("Coats");
+//        testCategory2.save();
+//
+//        Category testCategory3 = new Category(0, db_helper);
+//        testCategory3.setName("Shoes");
+//        testCategory3.save();
+//
+//        Category testCategory4 = new Category(0, db_helper);
+//        testCategory4.setName("Dresses");
+//        testCategory4.save();
+//
+//        Category testCategory5 = new Category(0, db_helper);
+//        testCategory5.setName("T-Shirts");
+//        testCategory5.save();
+//
+//        Category testCategory6 = new Category(0, db_helper);
+//        testCategory6.setName("Cardigans");
+//        testCategory6.save();
+//
+//        Category testCategory7 = new Category(0, db_helper);
+//        testCategory7.setName("Anzug");
+//        testCategory7.save();
+//
+//        Category testCategory8 = new Category(0, db_helper);
+//        testCategory8.setName("Bademode");
+//        testCategory8.save();
+//
+//        Category testCategory9 = new Category(0, db_helper);
+//        testCategory9.setName("Jacke");
+//        testCategory9.save();
+//
+//        Category testCategory10 = new Category(0, db_helper);
+//        testCategory10.setName("Rock");
+//        testCategory10.save();
+//
+//        Category testCategory11 = new Category(0, db_helper);
+//        testCategory11.setName("Pulli");
+//        testCategory11.save();
+//
+//        Category testCategory12 = new Category(0, db_helper);
+//        testCategory12.setName("Shorts");
+//        testCategory12.save();
+//
+//        Category testCategory13 = new Category(0, db_helper);
+//        testCategory13.setName("Sneaker");
+//        testCategory13.save();
+//
+//        Category testCategory14 = new Category(0, db_helper);
+//        testCategory14.setName("Socken");
+//        testCategory14.save();
+//
+//        Category testCategory15 = new Category(0, db_helper);
+//        testCategory15.setName("Stiefel");
+//        testCategory15.save();
+//
+//        Category testCategory16 = new Category(0, db_helper);
+//        testCategory16.setName("Unterwaesche");
+//        testCategory16.save();
+//
+//        Category testCategory17 = new Category(0, db_helper);
+//        testCategory17.setName("Tops");
+//        testCategory17.save();
 
         mDataset = new ArrayList<ListItemIconName>();
         mDataset.add(new ListItemIconName(0, 0, "add new category"));
@@ -232,14 +276,25 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
 
         while (catIt.hasNext()) {
             Category tmpCat = (Category)catIt.next();
-            mDataset.add(new ListItemIconName(tmpCat.getId(), R.drawable.kleiderbuegel, tmpCat.getName()));
+            mDataset.add(new ListItemIconName(tmpCat.getId(), getResources().getIdentifier(tmpCat.getIcon(), "drawable", "com.gruppe1.pem.challengeme"), tmpCat.getName()));
         }
-        mDataset.add(new ListItemIconName( testCategory1.getId(), R.drawable.hose, testCategory1.getName()));
-        mDataset.add(new ListItemIconName( testCategory2.getId(), R.drawable.mantel, testCategory2.getName()));
-        mDataset.add(new ListItemIconName( testCategory3.getId(), R.drawable.schuh, testCategory3.getName()));
-        mDataset.add(new ListItemIconName(testCategory4.getId(), R.drawable.kleid, testCategory4.getName()));
-        mDataset.add(new ListItemIconName(testCategory5.getId(), R.drawable.tshirt, testCategory5.getName()));
-        mDataset.add(new ListItemIconName(testCategory6.getId(), R.drawable.cardigan, testCategory6.getName()));
+//        mDataset.add(new ListItemIconName( testCategory1.getId(), R.drawable.hose, testCategory1.getName()));
+//        mDataset.add(new ListItemIconName( testCategory2.getId(), R.drawable.mantel, testCategory2.getName()));
+//        mDataset.add(new ListItemIconName( testCategory3.getId(), R.drawable.schuh, testCategory3.getName()));
+//        mDataset.add(new ListItemIconName(testCategory4.getId(), R.drawable.kleid, testCategory4.getName()));
+//        mDataset.add(new ListItemIconName(testCategory5.getId(), R.drawable.tshirt, testCategory5.getName()));
+//        mDataset.add(new ListItemIconName(testCategory6.getId(), R.drawable.cardigan, testCategory6.getName()));
+//        mDataset.add(new ListItemIconName( testCategory7.getId(), R.drawable.hose, testCategory1.getName()));
+//        mDataset.add(new ListItemIconName( testCategory8.getId(), R.drawable.mantel, testCategory2.getName()));
+//        mDataset.add(new ListItemIconName( testCategory9.getId(), R.drawable.schuh, testCategory3.getName()));
+//        mDataset.add(new ListItemIconName(testCategory10.getId(), R.drawable.kleid, testCategory4.getName()));
+//        mDataset.add(new ListItemIconName(testCategory11.getId(), R.drawable.tshirt, testCategory5.getName()));
+//        mDataset.add(new ListItemIconName(testCategory12.getId(), R.drawable.cardigan, testCategory6.getName()));
+//        mDataset.add(new ListItemIconName(testCategory13.getId(), R.drawable.kleid, testCategory4.getName()));
+//        mDataset.add(new ListItemIconName(testCategory14.getId(), R.drawable.tshirt, testCategory14.getName()));
+//        mDataset.add(new ListItemIconName(testCategory15.getId(), R.drawable.cardigan, testCategory15.getName()));
+//        mDataset.add(new ListItemIconName(testCategory16.getId(), R.drawable.kleid, testCategory16.getName()));
+//        mDataset.add(new ListItemIconName(testCategory17.getId(), R.drawable.tshirt, testCategory17.getName()));
     }
 
     private void addNewCategory(ListItemIconName newCat) {

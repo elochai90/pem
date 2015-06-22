@@ -69,7 +69,7 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
         }
         DataBaseHelper db_helper = new DataBaseHelper(this);
         db_helper.init();
-        Category category = new Category(categoryId, db_helper);
+        Category category = new Category(this, categoryId, db_helper);
         setTitle(category.getName());
 
         setContentView(R.layout.default_list_grid_view);

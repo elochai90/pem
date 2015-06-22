@@ -39,7 +39,7 @@ public class NewCategoryActivity extends Activity {
             public void onClick(View v) {
                 DataBaseHelper db_helper = new DataBaseHelper(getApplicationContext());
                 db_helper.init();
-                Category testCategory = new Category(0, db_helper);
+                Category testCategory = new Category(thisActivity, 0, db_helper);
                 testCategory.setName(newCategory_name.getText().toString());
                 testCategory.setParentCategoryId(0); // TODO: real ParentCatId
                 testCategory.save();

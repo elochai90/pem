@@ -1,5 +1,6 @@
 package com.gruppe1.pem.challengeme;
 
+import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
@@ -19,15 +20,20 @@ public class Category {
         put("name", 0);
         put("parent_categorie_id", 1);
         put("default_attribute_type", 1);
+        put("icon", 1);
     }};
     private int m_id;
     private String m_name;
     private int m_parent_category_id = Constants.DEFAULT_CATEGORY_ID;
+    private String m_icon;
     // TODO add default size to sql init
     private int m_defaultAttributeType;
     private DataBaseHelper m_dbHelper;
+    private Context context;
 
-    public Category(int m_id, DataBaseHelper p_dbHelper) {
+
+    public Category(Context context, int m_id, DataBaseHelper p_dbHelper) {
+        this.context = context;
         this.m_dbHelper = p_dbHelper;
         this.m_dbHelper.setTable(DB_TABLE);
 
@@ -42,6 +48,7 @@ public class Category {
                 this.m_id = categoryData.getInt(0);
                 this.m_name = categoryData.getString(1);
                 this.m_parent_category_id = categoryData.getInt(2);
+                this.m_icon = categoryData.getString(4); // TODO: check if 4 is right
             } else {
                 Log.e("###NO_SUCH_CATEGORY_ID", "" + m_id);
             }
@@ -97,6 +104,14 @@ public class Category {
         this.m_defaultAttributeType = m_defaultAttributeType;
     }
 
+    public String getIcon() {
+        return m_icon;
+    }
+
+    public void setIcon(String m_icon) {
+        this.m_icon = m_icon;
+    }
+
     /**
      * get all categories from database
      * @return ArrayList<Category> all categories
@@ -113,10 +128,11 @@ public class Category {
         Log.e("###All Cat count###", "" + allCategoriesIterator.getCount());
 
         while (!allCategoriesIterator.isAfterLast()) {
-            Category category = new Category(allCategoriesIterator.getInt(0), helper);
+            Category category = new Category(p_context, allCategoriesIterator.getInt(0), helper);
             category.setName(allCategoriesIterator.getString(1));
             category.setParentCategoryId(allCategoriesIterator.getInt(2));
             category.setDefaultAttributeType(allCategoriesIterator.getInt(3));
+            category.setIcon(allCategoriesIterator.getString(4));
             //Log.e("###All Cat call###", "name: " + allCategories.getString(1));
             allCategories.add(category);
             allCategoriesIterator.moveToNext();
@@ -129,9 +145,13 @@ public class Category {
         Set<String> keys = p_values.keySet();
         Iterator iterator = keys.iterator();
 
+        Log.e("KEYS", keys.toString());
+
         while (iterator.hasNext()) {
             String dbColumnName = iterator.next().toString();
             String dbColumnValue = p_values.get(dbColumnName);
+
+            Log.e("DBCOLUMNS", dbColumnName.toString());
 
             switch (dbColumnName) {
                 case "name":
@@ -147,6 +167,12 @@ public class Category {
                 case "default_attribute_type":
                     //Log.e("###CAT EDIT###", "default_attribute_type is: " + dbColumnValue);
                     this.setDefaultAttributeType(Integer.parseInt(dbColumnValue));
+                    break;
+
+                case "icon":
+
+                    Log.e("###CAT EDIT ICON###", "icon is: " + dbColumnValue);
+                    this.setIcon(dbColumnValue);
                     break;
 
                 default:
@@ -176,6 +202,7 @@ public class Category {
                 this.m_dbHelper.setStringValue("name", this.m_name);
                 this.m_dbHelper.setIntegerValue("parent_category_id", this.m_parent_category_id);
                 this.m_dbHelper.setIntegerValue("default_attribute_type", this.m_defaultAttributeType);
+                this.m_dbHelper.setStringValue("icon", this.m_icon);
 
                 int id = this.m_dbHelper.insert();
 

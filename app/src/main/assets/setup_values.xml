@@ -7,30 +7,98 @@
             <name>T-Shirts</name>
             <parent_categorie_id>0</parent_categorie_id>
             <default_attribute_type>0</default_attribute_type>
+            <icon>tshirt</icon>
         </categorie>
 
         <categorie>
             <name>Trousers</name>
             <parent_categorie_id>0</parent_categorie_id>
             <default_attribute_type>1</default_attribute_type>
+            <icon>hose</icon>
         </categorie>
 
         <categorie>
             <name>Skirts</name>
             <parent_categorie_id>0</parent_categorie_id>
             <default_attribute_type>1</default_attribute_type>
+            <icon>rock</icon>
+        </categorie>
+
+        <categorie>
+            <name>Tops</name>
+            <parent_categorie_id>0</parent_categorie_id>
+            <default_attribute_type>1</default_attribute_type>
+            <icon>top</icon>
+        </categorie>
+
+        <categorie>
+            <name>Socks</name>
+            <parent_categorie_id>0</parent_categorie_id>
+            <default_attribute_type>1</default_attribute_type>
+            <icon>socken</icon>
+        </categorie>
+
+        <categorie>
+            <name>Pants</name>
+            <parent_categorie_id>0</parent_categorie_id>
+            <default_attribute_type>1</default_attribute_type>
+            <icon>shorts</icon>
+        </categorie>
+
+        <categorie>
+            <name>Swimwear</name>
+            <parent_categorie_id>0</parent_categorie_id>
+            <default_attribute_type>1</default_attribute_type>
+            <icon>bademode</icon>
+        </categorie>
+
+        <categorie>
+            <name>Underwear</name>
+            <parent_categorie_id>0</parent_categorie_id>
+            <default_attribute_type>1</default_attribute_type>
+            <icon>unterwaesche</icon>
+        </categorie>
+
+        <categorie>
+            <name>Suits</name>
+            <parent_categorie_id>0</parent_categorie_id>
+            <default_attribute_type>1</default_attribute_type>
+            <icon>anzug</icon>
+        </categorie>
+
+        <categorie>
+            <name>Sneaker</name>
+            <parent_categorie_id>0</parent_categorie_id>
+            <default_attribute_type>1</default_attribute_type>
+            <icon>sneaker</icon>
+        </categorie>
+
+        <categorie>
+            <name>Boots</name>
+            <parent_categorie_id>0</parent_categorie_id>
+            <default_attribute_type>1</default_attribute_type>
+            <icon>stiefel</icon>
+        </categorie>
+
+        <categorie>
+            <name>Heels</name>
+            <parent_categorie_id>0</parent_categorie_id>
+            <default_attribute_type>1</default_attribute_type>
+            <icon>schuh</icon>
         </categorie>
 
         <categorie>
             <name>Accessoires</name>
             <parent_categorie_id>0</parent_categorie_id>
             <default_attribute_type>-1</default_attribute_type>
+            <icon>kleiderbuegel</icon>
         </categorie>
 
         <categorie>
             <name>Belts</name>
             <parent_categorie_id>0</parent_categorie_id>
             <default_attribute_type>-1</default_attribute_type>
+            <icon>kleiderbuegel</icon>
         </categorie>
 
     </categories>

@@ -62,11 +62,10 @@ public class DefaultSetup {
         Log.e("###SETUP##", "categories called");
 
         Iterator iterator = p_elements.iterator();
-        Log.e("###CAT INSERT COUNT###", "" + p_elements.size());
 
         while (iterator.hasNext()) {
             HashMap<String, String> categoryAttributes = (HashMap<String, String>)iterator.next();
-            Category defaultCategory = new Category(0, this.m_dbHelper);
+            Category defaultCategory = new Category(m_context, 0, this.m_dbHelper);
             defaultCategory.edit(categoryAttributes);
             defaultCategory.save();
         }
