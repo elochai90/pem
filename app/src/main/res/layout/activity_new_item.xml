@@ -1,90 +1,101 @@
+
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.gruppe1.pem.challengeme.CategoriesItemDetailFragment"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
-    <ImageView
-        android:background="@android:color/darker_gray"
-        android:id="@+id/itemDetailImage"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:src="@mipmap/addcamera2"
-        android:scaleType="centerCrop" />
     <EditText
         android:id="@+id/itemName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/itemDetailImage"
         android:padding="10dp"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:hint="Add Item Name"
+        android:layout_alignParentStart="true"
         android:textColor="@android:color/white"
         android:background="@color/background_floating_material_dark" />
 
-    <com.github.clans.fab.FloatingActionButton
-        xmlns:fab="http://schemas.android.com/apk/res-auto"
-        android:layout_alignParentRight="true"
-        android:id="@+id/save_item"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="-35dp"
-        android:layout_marginEnd="10dp"
-        android:layout_above="@id/itemName"
-        android:src="@drawable/ic_save_white"
-        android:layout_gravity="bottom|right"/>
-
-
-
-    <LinearLayout
-        android:id="@+id/itemDetailRating"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:gravity="center_horizontal"
-        android:layout_gravity="center_horizontal"
-        android:background="@color/background_floating_material_dark"
-        android:weightSum="1">
-
-        <RatingBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/ratingBar" />
-
-    </LinearLayout>
-
-
-
     <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_below="@id/itemName"
-        android:layout_above="@id/itemDetailRating"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:fillViewport="true">
-        <LinearLayout
-            android:id="@+id/itemDetailAttributes"
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
+            <ImageView
+                android:background="@android:color/darker_gray"
+                android:id="@+id/itemDetailImage"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:src="@mipmap/addcamera2"
+                android:scaleType="centerCrop" />
+
+
+                <LinearLayout
+                    android:id="@+id/itemDetailRating"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:layout_below="@id/itemDetailImage"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@color/background_floating_material_dark"
+                    android:weightSum="1">
+
+                    <RatingBar
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/ratingBar" />
+
+                </LinearLayout>
+
+            <com.github.clans.fab.FloatingActionButton
+                xmlns:fab="http://schemas.android.com/apk/res-auto"
+                android:layout_alignParentRight="true"
+                android:id="@+id/save_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="-35dp"
+                android:layout_marginEnd="10dp"
+                android:layout_above="@id/itemDetailRating"
+                android:src="@drawable/ic_save_white"
+                android:layout_gravity="bottom|right"/>
+
+
+
+
+
+
             <LinearLayout
+                android:id="@+id/itemDetailAttributes"
+                android:layout_below="@id/itemDetailRating"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="10dp">
-                <EditText
-                    android:layout_width="100dp"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="name"
-                    android:textSize="18dp"/>
-                <EditText
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="attribute value"
-                    android:textSize="18dp" />
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+                    <EditText
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:hint="name"
+                        android:textSize="18dp"/>
+                    <EditText
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="attribute value"
+                        android:textSize="18dp" />
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
 
+        </RelativeLayout>
     </ScrollView>
-
 </RelativeLayout>

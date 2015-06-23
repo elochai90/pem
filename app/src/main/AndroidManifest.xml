@@ -53,6 +53,7 @@
         <activity
             android:name=".NewItemActivity"
             android:label="@string/title_activity_new_item"
+            android:windowSoftInputMode="adjustResize"
             android:parentActivityName=".TabsFragmentActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -77,6 +78,7 @@
         <activity
             android:name=".CategoriesItemDetailActivity"
             android:label="@string/title_activity_categories_item_detail"
+            android:windowSoftInputMode="adjustResize"
             android:parentActivityName=".ItemsListActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
