@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,7 +40,7 @@ public class NewCategoryActivity extends Activity {
             public void onClick(View v) {
                 DataBaseHelper db_helper = new DataBaseHelper(getApplicationContext());
                 db_helper.init();
-                Category testCategory = new Category(thisActivity, 0, db_helper);
+                Category testCategory = new Category(thisActivity.getApplicationContext(), 0, db_helper);
                 testCategory.setName(newCategory_name.getText().toString());
                 testCategory.setParentCategoryId(0); // TODO: real ParentCatId
                 testCategory.save();

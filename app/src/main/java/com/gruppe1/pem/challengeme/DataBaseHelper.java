@@ -220,6 +220,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         this.mColumns = new String[]{"MAX(_id)"};
         Cursor cursor = this.select();
 
+        Log.e("###DB###", this.mValues.toString());
+
         //return _id of (new) insert
         if (cursor != null) {
             cursor.moveToFirst();

@@ -48,7 +48,7 @@ public class Category {
                 this.m_id = categoryData.getInt(0);
                 this.m_name = categoryData.getString(1);
                 this.m_parent_category_id = categoryData.getInt(2);
-                this.m_icon = categoryData.getString(4); // TODO: check if 4 is right
+                this.m_icon = categoryData.getString(4);
             } else {
                 Log.e("###NO_SUCH_CATEGORY_ID", "" + m_id);
             }
@@ -132,6 +132,7 @@ public class Category {
             category.setName(allCategoriesIterator.getString(1));
             category.setParentCategoryId(allCategoriesIterator.getInt(2));
             category.setDefaultAttributeType(allCategoriesIterator.getInt(3));
+
             category.setIcon(allCategoriesIterator.getString(4));
             //Log.e("###All Cat call###", "name: " + allCategories.getString(1));
             allCategories.add(category);
@@ -202,7 +203,11 @@ public class Category {
                 this.m_dbHelper.setStringValue("name", this.m_name);
                 this.m_dbHelper.setIntegerValue("parent_category_id", this.m_parent_category_id);
                 this.m_dbHelper.setIntegerValue("default_attribute_type", this.m_defaultAttributeType);
-                this.m_dbHelper.setStringValue("icon", this.m_icon);
+                String iconValue = (this.m_icon != null) ? this.m_icon : Constants.DEFAULT_CAT_ICON;
+
+                this.m_dbHelper.setStringValue("icon", iconValue);
+
+                Log.e("###DB###", this.toString());
 
                 int id = this.m_dbHelper.insert();
 

@@ -1,5 +1,7 @@
 package com.gruppe1.pem.challengeme;
 
+import android.util.Log;
+
 import java.util.Date;
 
 /**
@@ -18,6 +20,8 @@ public class ListItemIconName {
         this.elementId = elementId;
         this.icon = icon;
         this.name = name;
+
+        Log.e("###LIST", this.name);
     }
 
     public ListItemIconName(int elementId, int icon, String name, Date date)

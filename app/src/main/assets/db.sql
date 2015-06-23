@@ -3,7 +3,7 @@ CREATE TABLE `orga_nice_categories` (
     `name` VARCHAR(50) NOT NULL DEFAULT "MyCategory",
     `parent_category_id` INT(5) NOT NULL DEFAULT 0,
     `default_attribute_type` INT (3) NOT NULL DEFAULT 0,
-    `icon` VARCHAR(50) NOT NULL DEFAULT "R.drawable.kleiderbuegel"
+    `icon` VARCHAR(50) DEFAULT "kleiderbuegel"
 );
 
 CREATE TABLE `orga_nice_items` (
