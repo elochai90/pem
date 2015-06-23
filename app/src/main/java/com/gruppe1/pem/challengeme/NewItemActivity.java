@@ -29,6 +29,8 @@ import com.github.clans.fab.FloatingActionButton;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 
 public class NewItemActivity extends Activity {
@@ -76,8 +78,14 @@ public class NewItemActivity extends Activity {
 
         attributesView = (LinearLayout) findViewById(R.id.itemDetailAttributes);
 
+        ArrayList<AttributeType> allAttributeTypes = AttributeType.getAttributeTypes(getApplicationContext());
+
+        Iterator allAttrTypesIterator =  allAttributeTypes.iterator();
+
         // TODO: get all attributes with values for this Item
-        for(int i = 0; i<= 5; i++) {
+        while(allAttrTypesIterator.hasNext()) {
+            AttributeType tmpAttrType = (AttributeType) allAttrTypesIterator.next();
+
             LinearLayout attributeLayout = new LinearLayout(this);
             attributeLayout.setOrientation(LinearLayout.HORIZONTAL);
             int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
@@ -92,11 +100,12 @@ public class NewItemActivity extends Activity {
             ViewGroup.LayoutParams attibuteNameLayoutParams = new ViewGroup.LayoutParams(width, height);
             attributeName.setLayoutParams(attibuteNameLayoutParams);
             // TODO: real attr names and values
-            attributeName.setText("attr" + ":");
+            attributeName.setText(tmpAttrType.getName() + ":");
 
             View attributeValue;
-//            if(attribute is boolean)
-            if(i == 0) {
+
+            // attribute is boolean
+            if(tmpAttrType.getValueType() == 2) {
                 RadioGroup attrValueRadioGroup = new RadioGroup(this);
                 ViewGroup.LayoutParams attibuteValueLayoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
                 attrValueRadioGroup.setLayoutParams(attibuteValueLayoutParams);
@@ -124,7 +133,7 @@ public class NewItemActivity extends Activity {
                 textAttributeValue.setTextSize(18);
                 ViewGroup.LayoutParams attibuteValueLayoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
 //              if(value is set) TODO: check if value was already set
-                textAttributeValue.setText("37 test value");
+                textAttributeValue.setText("");
                 textAttributeValue.setLayoutParams(attibuteValueLayoutParams);
                 attributeValue = textAttributeValue;
             }

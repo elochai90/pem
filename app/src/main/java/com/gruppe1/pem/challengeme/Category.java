@@ -121,6 +121,7 @@ public class Category {
         helper.init();
         helper.setTable(DB_TABLE);
         helper.setColumns(new String[]{"*"});
+        helper.setOrderBy("name ASC");
         ArrayList<Category> allCategories = new ArrayList<Category>();
 
         Cursor allCategoriesIterator = helper.select();

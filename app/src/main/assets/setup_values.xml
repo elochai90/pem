@@ -117,6 +117,12 @@
             <is_unique>1</is_unique>
         </attribute_type>
 
+        <attribute_type>
+            <name>On wishlist</name>
+            <value_type>2</value_type>
+            <is_unique>1</is_unique>
+        </attribute_type>
+
     </attribute_types>
 
     <items>
