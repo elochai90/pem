@@ -1,7 +1,9 @@
 package com.gruppe1.pem.challengeme;
 
+import android.app.AlertDialog;
 import android.app.LocalActivityManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -220,6 +222,20 @@ public class TabsFragmentActivity extends FragmentActivity {
             TextView tv = (TextView) tabs.getTabWidget().getChildAt(i).findViewById(android.R.id.title);
             tv.setTextColor(Color.parseColor("#FFFFFF"));
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        new AlertDialog.Builder(this)
+                .setTitle("Do you really want to exit '" + getResources().getString(R.string.app_name) + "'?")
+                .setNegativeButton(android.R.string.no, null)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        TabsFragmentActivity.super.onBackPressed();
+                    }
+                }).create().show();
     }
 
 }
