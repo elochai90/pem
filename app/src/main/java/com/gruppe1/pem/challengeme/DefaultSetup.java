@@ -89,6 +89,13 @@ public class DefaultSetup {
     private void setupItems(ArrayList<HashMap<String, String>> p_elements) {
         Log.e("###SETUP##", "items called");
 
-    }
+        Iterator iterator = p_elements.iterator();
 
+        while (iterator.hasNext()) {
+            HashMap<String, String> itemAttributes = (HashMap<String, String>)iterator.next();
+            Item defaultItem= new Item(m_context, 0, this.m_dbHelper);
+            defaultItem.edit(itemAttributes);
+            defaultItem.save();
+        }
+    }
 }

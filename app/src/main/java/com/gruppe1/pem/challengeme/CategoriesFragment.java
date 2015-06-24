@@ -277,8 +277,8 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
 
         while (catIt.hasNext()) {
             Category tmpCat = (Category)catIt.next();
+            Log.e("###ITEM CAT###", tmpCat.getName() + " - " + tmpCat.getId());
             int iconId = getResources().getIdentifier(tmpCat.getIcon(), "drawable", "com.gruppe1.pem.challengeme");
-            Log.e("###ICON###", tmpCat.getName() + " - iconId: " + iconId);
             mDataset.add(new ListItemIconName(tmpCat.getId(), iconId , tmpCat.getName()));
         }
 
@@ -301,6 +301,7 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
 //        mDataset.add(new ListItemIconName(testCategory17.getId(), R.drawable.tshirt, testCategory17.getName()));
 
         ArrayList<AttributeType> attributeTypes = AttributeType.getAttributeTypes(getActivity().getApplicationContext());
+        Item.getItemsByCategoryId(getActivity().getApplicationContext(), 1);
     }
 
     private void addNewCategory(ListItemIconName newCat) {
