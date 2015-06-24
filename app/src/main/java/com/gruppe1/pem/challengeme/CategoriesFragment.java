@@ -1,32 +1,42 @@
 package com.gruppe1.pem.challengeme;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Interpolator;
+import android.graphics.Paint;
+import android.graphics.drawable.ShapeDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 
-public class CategoriesFragment extends Fragment implements AdapterView.OnItemClickListener, View.OnLongClickListener{
+public class CategoriesFragment extends Fragment implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
     public static final int REQUEST_CODE = 1;
 
     public SharedPreferences.Editor editor;
@@ -42,11 +52,15 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
     private DefaultListAdapter listAdapter;
     private Boolean list;
 
+    private Object[] selectedItem;
+    ActionMode actionMode;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         super.onCreateView(inflater, container, savedInstanceState);
+
 
         initDataset();
 
@@ -61,11 +75,13 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
         listAdapter = new DefaultListAdapter(getActivity(), R.layout.list_item_default, mDataset, false);
         listView.setAdapter(listAdapter);
         listView.setOnItemClickListener(this);
+        listView.setOnItemLongClickListener(this);
         gridView = (GridView) rootView.findViewById(R.id.gridView);
         gridAdapter = new DefaultGridAdapter(getActivity(), R.layout.grid_item_default, mDataset);
         gridView.setAdapter(gridAdapter);
         gridView.setVisibility(View.INVISIBLE);
         gridView.setOnItemClickListener(this);
+        gridView.setOnItemLongClickListener(this);
 
         com.github.clans.fab.FloatingActionButton fab_add_wishlist_item = (FloatingActionButton) rootView.findViewById(R.id.add_wishlist_item);
         com.github.clans.fab.FloatingActionButton fab_add_category = (FloatingActionButton) rootView.findViewById(R.id.add_category);
@@ -138,6 +154,13 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
         super.onResume();
         list = sharedPreferences.getBoolean(Constants.KEY_VIEW_CATEGORIES_AS_LIST, true);
         switchListGridView(list);
+        if(actionMode != null) {
+            actionMode.finish();
+            if(selectedItem != null) {
+                ((View)selectedItem[1]).setSelected(false);
+                selectedItem = null;
+            }
+        }
     }
 
     @Override
@@ -198,73 +221,6 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
         // TEST
         DataBaseHelper db_helper = new DataBaseHelper(getActivity().getApplicationContext());
         db_helper.init();
-//        Category testCategory1 = new Category(0, db_helper);
-//        testCategory1.setName("Trousers");
-//        testCategory1.save();
-//
-//        Category testCategory2 = new Category(0, db_helper);
-//        testCategory2.setName("Coats");
-//        testCategory2.save();
-//
-//        Category testCategory3 = new Category(0, db_helper);
-//        testCategory3.setName("Shoes");
-//        testCategory3.save();
-//
-//        Category testCategory4 = new Category(0, db_helper);
-//        testCategory4.setName("Dresses");
-//        testCategory4.save();
-//
-//        Category testCategory5 = new Category(0, db_helper);
-//        testCategory5.setName("T-Shirts");
-//        testCategory5.save();
-//
-//        Category testCategory6 = new Category(0, db_helper);
-//        testCategory6.setName("Cardigans");
-//        testCategory6.save();
-//
-//        Category testCategory7 = new Category(0, db_helper);
-//        testCategory7.setName("Anzug");
-//        testCategory7.save();
-//
-//        Category testCategory8 = new Category(0, db_helper);
-//        testCategory8.setName("Bademode");
-//        testCategory8.save();
-//
-//        Category testCategory9 = new Category(0, db_helper);
-//        testCategory9.setName("Jacke");
-//        testCategory9.save();
-//
-//        Category testCategory10 = new Category(0, db_helper);
-//        testCategory10.setName("Rock");
-//        testCategory10.save();
-//
-//        Category testCategory11 = new Category(0, db_helper);
-//        testCategory11.setName("Pulli");
-//        testCategory11.save();
-//
-//        Category testCategory12 = new Category(0, db_helper);
-//        testCategory12.setName("Shorts");
-//        testCategory12.save();
-//
-//        Category testCategory13 = new Category(0, db_helper);
-//        testCategory13.setName("Sneaker");
-//        testCategory13.save();
-//
-//        Category testCategory14 = new Category(0, db_helper);
-//        testCategory14.setName("Socken");
-//        testCategory14.save();
-//
-//        Category testCategory15 = new Category(0, db_helper);
-//        testCategory15.setName("Stiefel");
-//        testCategory15.save();
-//
-//        Category testCategory16 = new Category(0, db_helper);
-//        testCategory16.setName("Unterwaesche");
-//        testCategory16.save();
-//
-//        Category testCategory17 = new Category(0, db_helper);
-//        testCategory17.setName("Tops");
-//        testCategory17.save();
 
         mDataset = new ArrayList<ListItemIconName>();
         mDataset.add(new ListItemIconName(0, 0, "add new category"));
@@ -281,25 +237,6 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
             Log.e("###ICON###", tmpCat.getName() + " - iconId: " + iconId);
             mDataset.add(new ListItemIconName(tmpCat.getId(), iconId , tmpCat.getName()));
         }
-
-//        mDataset.add(new ListItemIconName( testCategory1.getId(), R.drawable.hose, testCategory1.getName()));
-//        mDataset.add(new ListItemIconName( testCategory2.getId(), R.drawable.mantel, testCategory2.getName()));
-//        mDataset.add(new ListItemIconName( testCategory3.getId(), R.drawable.schuh, testCategory3.getName()));
-//        mDataset.add(new ListItemIconName(testCategory4.getId(), R.drawable.kleid, testCategory4.getName()));
-//        mDataset.add(new ListItemIconName(testCategory5.getId(), R.drawable.tshirt, testCategory5.getName()));
-//        mDataset.add(new ListItemIconName(testCategory6.getId(), R.drawable.cardigan, testCategory6.getName()));
-//        mDataset.add(new ListItemIconName( testCategory7.getId(), R.drawable.hose, testCategory1.getName()));
-//        mDataset.add(new ListItemIconName( testCategory8.getId(), R.drawable.mantel, testCategory2.getName()));
-//        mDataset.add(new ListItemIconName( testCategory9.getId(), R.drawable.schuh, testCategory3.getName()));
-//        mDataset.add(new ListItemIconName(testCategory10.getId(), R.drawable.kleid, testCategory4.getName()));
-//        mDataset.add(new ListItemIconName(testCategory11.getId(), R.drawable.tshirt, testCategory5.getName()));
-//        mDataset.add(new ListItemIconName(testCategory12.getId(), R.drawable.cardigan, testCategory6.getName()));
-//        mDataset.add(new ListItemIconName(testCategory13.getId(), R.drawable.kleid, testCategory4.getName()));
-//        mDataset.add(new ListItemIconName(testCategory14.getId(), R.drawable.tshirt, testCategory14.getName()));
-//        mDataset.add(new ListItemIconName(testCategory15.getId(), R.drawable.cardigan, testCategory15.getName()));
-//        mDataset.add(new ListItemIconName(testCategory16.getId(), R.drawable.kleid, testCategory16.getName()));
-//        mDataset.add(new ListItemIconName(testCategory17.getId(), R.drawable.tshirt, testCategory17.getName()));
-
         ArrayList<AttributeType> attributeTypes = AttributeType.getAttributeTypes(getActivity().getApplicationContext());
     }
 
@@ -308,12 +245,8 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
     }
 
     @Override
-    public boolean onLongClick(View v) {
-        return false;
-    }
-
-    @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        actionMode.finish();
         if(position == 0) {
             Intent intent = new Intent();
             intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".NewCategoryActivity");
@@ -350,5 +283,77 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
                     Toast.LENGTH_SHORT).show();
         }
 
+    }
+    private ActionMode.Callback modeCallBack = new ActionMode.Callback() {
+
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        public void onDestroyActionMode(ActionMode mode) {
+            if(selectedItem != null) {
+                int position = (int) selectedItem[0];
+                View view = (View) selectedItem[1];
+                view.setSelected(false);
+                selectedItem = null;
+            }
+            mode = null;
+        }
+
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            mode.setTitle("Options");
+            mode.getMenuInflater().inflate(R.menu.menu_categories_list_action_mode, menu);
+            return true;
+        }
+
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            int id = item.getItemId();
+            switch (id) {
+                case R.id.delete: {
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle("Do you really want to delete '" + listAdapter.getItem((int)selectedItem[0]).name + "' and all items in it?")
+                            .setNegativeButton(android.R.string.no, null)
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                                public void onClick(DialogInterface arg0, int arg1) {
+                                    // TODO: delete persistent in db
+                                    listAdapter.remove(listAdapter.getItem((int)selectedItem[0] -1));
+//                    gridAdapter.remove(gridAdapter.getItem((int)selectedItem[0] -1));
+                                    listAdapter.notifyDataSetChanged();
+                                    gridAdapter.notifyDataSetChanged();
+                                    System.out.println("selectedItemDelete: " + selectedItem[0].toString());
+                                    actionMode.finish();
+                                }
+                            }).create().show();
+                    break;
+                }
+                case R.id.edit: {
+                    // TODO: overgive category data
+                    Intent intent = new Intent();
+                    intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".NewCategoryActivity");
+                    startActivityForResult(intent, REQUEST_CODE);
+                    break;
+                }
+                default:
+                    return false;
+            }
+            return true;
+        }
+    };
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        System.out.println("Long click");
+        if(actionMode != null)
+            actionMode.finish();
+        if(position != 0) {
+            actionMode = getActivity().startActionMode(modeCallBack);
+            view.setSelected(true);
+
+            selectedItem = new Object[2];
+            selectedItem[0] = position;
+            selectedItem[1] = view;
+        }
+        return true;
     }
 }

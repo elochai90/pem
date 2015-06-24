@@ -51,10 +51,8 @@ public class CompareListAdapter extends ArrayAdapter {
                 holder.rightTextView = (TextView) row.findViewById(R.id.rightTextView);
                 holder.itemActionButton = (ImageView) row.findViewById(R.id.itemActionButton);
                 row.setTag(holder);
-                System.out.println("holder: " + holder);
             } else {
                 holder = (ViewHolder) row.getTag();
-                System.out.println("holder: " + holder);
             }
 
             holder.compareName.setText(item.name);

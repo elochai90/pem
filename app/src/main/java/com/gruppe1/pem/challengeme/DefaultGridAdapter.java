@@ -17,10 +17,12 @@ import java.util.List;
 /**
  * Created by bianka on 18.06.2015.
  */
-public class DefaultGridAdapter extends ArrayAdapter {
+public class DefaultGridAdapter extends ArrayAdapter<ListItemIconName> {
     private Context context;
     private int layoutResourceId;
     private List<ListItemIconName> data = new ArrayList();
+
+    public int currentSelection;
 
     public DefaultGridAdapter(Context context, int layoutResourceId, List<ListItemIconName> data) {
         super(context, layoutResourceId, data);

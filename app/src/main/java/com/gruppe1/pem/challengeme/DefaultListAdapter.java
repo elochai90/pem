@@ -1,6 +1,7 @@
 package com.gruppe1.pem.challengeme;
 
 import android.app.Activity;
+import android.app.LauncherActivity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,11 +13,13 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DefaultListAdapter extends ArrayAdapter {
+public class DefaultListAdapter extends ArrayAdapter<ListItemIconName> {
     private Context context;
     private int layoutResourceId;
     private List<ListItemIconName> data = new ArrayList();
     private boolean wishlist;
+
+    public int currentSelection;
 
     public DefaultListAdapter(Context context, int layoutResourceId, List<ListItemIconName> data, boolean wishlist) {
         super(context, layoutResourceId, data);
@@ -40,7 +43,6 @@ public class DefaultListAdapter extends ArrayAdapter {
             ((TextView) row.findViewById(R.id.addText)).setText(item.name);
         } else {
             if (row == null || row.getTag() == null) {
-                System.out.println("row is null");
                 LayoutInflater inflater = ((Activity) context).getLayoutInflater();
                 row = inflater.inflate(layoutResourceId, parent, false);
                 holder = new ViewHolder();
@@ -50,11 +52,8 @@ public class DefaultListAdapter extends ArrayAdapter {
                 holder.image = (ImageView) row.findViewById(R.id.imageView);
                 holder.itemActionButton = (ImageView) row.findViewById(R.id.itemActionButton);
                 row.setTag(holder);
-                System.out.println("holder: " + holder);
             } else {
-                System.out.println("row is not null");
                 holder = (ViewHolder) row.getTag();
-                System.out.println("holder: " + holder);
             }
 
             holder.firstLine.setText(item.name);
