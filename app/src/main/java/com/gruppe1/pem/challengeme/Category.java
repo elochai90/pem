@@ -14,7 +14,6 @@ import java.util.Set;
  * Created by Simon on 13.06.2015.
  */
 public class Category {
-    private static final String DB_TABLE = Constants.DB_TABLE_PREFIX + "categories";
     //0 = String, 1 = Integer
     public static final HashMap<String, Integer> dbColumns = new HashMap<String, Integer>() {{
         put("name", 0);
@@ -35,7 +34,7 @@ public class Category {
     public Category(Context context, int m_id, DataBaseHelper p_dbHelper) {
         this.context = context;
         this.m_dbHelper = p_dbHelper;
-        this.m_dbHelper.setTable(DB_TABLE);
+        this.m_dbHelper.setTable(Constants.CATEGORIES_DB_TABLE);
 
         if(m_id > 0) {
             // get data from existing category
@@ -119,7 +118,7 @@ public class Category {
     public static ArrayList<Category> getAllCategories(Context p_context) {
         DataBaseHelper helper = new DataBaseHelper(p_context);
         helper.init();
-        helper.setTable(DB_TABLE);
+        helper.setTable(Constants.CATEGORIES_DB_TABLE);
         helper.setColumns(new String[]{"*"});
         helper.setOrderBy("name ASC");
         ArrayList<Category> allCategories = new ArrayList<Category>();
@@ -178,7 +177,7 @@ public class Category {
                     break;
 
                 default:
-                    Log.e("###CAT EDIT###", dbColumnName + " is not declared as columns in " + DB_TABLE);
+                    Log.e("###CAT EDIT###", dbColumnName + " is not declared as columns in " + Constants.CATEGORIES_DB_TABLE);
                     break;
             }
         }

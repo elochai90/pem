@@ -8,13 +8,13 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 /**
  * Created by Simon on 24.06.2015.
  */
 public class Item {
-    private static final String DB_TABLE = Constants.DB_TABLE_PREFIX + "items";
     //0 = String, 1 = Integer
     public static final HashMap<String, Integer> dbColumns = new HashMap<String, Integer>() {{
         put("name", 0);
@@ -38,10 +38,12 @@ public class Item {
     private int m_isWish;
     private String m_primaryColor;
     private String m_secondaryColor;
-    private int m_rating;
+    private float m_rating;
     private int m_pattern;
 
-    private ArrayList<HashMap<String, String>> m_customAttributes;
+//    private HashMap<AttributeType, Object> attributes;
+
+    private ArrayList<HashMap<AttributeType, String>> m_customAttributes;
 
     private Context m_context;
     private DataBaseHelper m_dbHelper;
@@ -51,7 +53,9 @@ public class Item {
         this.m_id = p_id;
         this.m_context = p_context;
         this.m_dbHelper = p_dbHelper;
-        this.m_dbHelper.setTable(DB_TABLE);
+        this.m_dbHelper.setTable(Constants.ITEMS_DB_TABLE);
+
+//        attributes = new HashMap<AttributeType, Object>();
 
         if(p_id > 0) {
             // get data from existing item
@@ -63,14 +67,24 @@ public class Item {
                 Log.e("###Item Id:###", "" + itemData.getInt(0));
                 this.m_id = itemData.getInt(0);
                 this.m_name = itemData.getString(1);
-                this.m_imageFile = itemData.getString(2);
+                this.m_imageFile = ""; //itemData.getString(2);
+
+//                attributes.put(AttributeType.getAttributeTypeByName(p_context,"Category"), itemData.getInt(3));
+//                attributes.put(AttributeType.getAttributeTypeByName(p_context,"Buy Date"), itemData.getString(4));
+//                attributes.put(AttributeType.getAttributeTypeByName(p_context,"Store"), itemData.getString(5));
+//                attributes.put(AttributeType.getAttributeTypeByName(p_context,"In Wishlist"), itemData.getInt(6));
+//                attributes.put(AttributeType.getAttributeTypeByName(p_context,"Color"), itemData.getString(7));
+//                attributes.put(AttributeType.getAttributeTypeByName(p_context,"Exact Color"), itemData.getString(8));
+//                attributes.put(AttributeType.getAttributeTypeByName(p_context,"Rating"), itemData.getFloat(9));
+//                attributes.put(AttributeType.getAttributeTypeByName(p_context,"Has Pattern"), itemData.getInt(10));
+
                 this.m_categoryId = itemData.getInt(3);
                 this.m_buyDate = itemData.getString(4);
                 this.m_store = itemData.getString(5);
                 this.m_isWish = itemData.getInt(6);
                 this.m_primaryColor = itemData.getString(7);
                 this.m_secondaryColor= itemData.getString(8);
-                this.m_rating= itemData.getInt(8);
+                this.m_rating= itemData.getFloat(8);
                 this.m_pattern= itemData.getInt(8);
 
                 //TODO handle item_attribute_types table for m_customAttributes
@@ -165,11 +179,11 @@ public class Item {
         this.m_pattern = p_pattern;
     }
 
-    public int getRating() {
+    public float getRating() {
         return m_rating;
     }
 
-    public void setRating(int p_rating) {
+    public void setRating(float p_rating) {
         this.m_rating = p_rating;
     }
 
@@ -177,7 +191,7 @@ public class Item {
     public static ArrayList<Item> getItemsByCategoryId(Context p_context, int p_categoryId) {
         DataBaseHelper dbHelper = new DataBaseHelper(p_context);
         dbHelper.init();
-        dbHelper.setTable(DB_TABLE);
+        dbHelper.setTable(Constants.ITEMS_DB_TABLE);
         dbHelper.setColumns(new String[]{"*"});
         dbHelper.setWhere("", new String[]{"category_id='" + p_categoryId + "'"});
         dbHelper.setOrderBy("name ASC");
@@ -193,6 +207,37 @@ public class Item {
         }
 
         return itemList;
+    }
+
+//    public void putAttributeValue(AttributeType attributeType, Object attributeValue) {
+//        attributes.put(attributeType, attributeValue);
+//    }
+//
+//    public Object getAttributeValue(Context context, AttributeType attributeType) {
+//
+//        return attributes.get(attributeType.getName());
+////        ArrayList<AttributeType> allAttributeTypes = AttributeType.getAttributeTypes(context);
+//
+//    }
+
+    public static int getItemsCountByCategoryId(Context p_context, int p_categoryId) {
+        DataBaseHelper dbHelper = new DataBaseHelper(p_context);
+        dbHelper.init();
+        dbHelper.setTable(Constants.ITEMS_DB_TABLE);
+        dbHelper.setColumns(new String[]{"COUNT(*)"});
+        dbHelper.setWhere("", new String[]{"category_id='" + p_categoryId + "'"});
+        Cursor cursor = dbHelper.select();
+
+        int itemsCount = 0;
+
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            itemsCount = cursor.getInt(0);
+            cursor.moveToNext();
+        }
+
+        return itemsCount;
     }
 
     public void edit(HashMap<String, String> p_values) {
@@ -232,7 +277,7 @@ public class Item {
                     this.setPattern(Integer.parseInt(dbColumnValue));
                     break;
                 case "rating":
-                    this.setRating(Integer.parseInt(dbColumnValue));
+                    this.setRating(Float.parseFloat(dbColumnValue));
                     break;
             }
         }
@@ -261,7 +306,7 @@ public class Item {
                 this.m_dbHelper.setStringValue("primary_color", this.m_primaryColor);
                 this.m_dbHelper.setStringValue("secondary_color", this.m_secondaryColor);
                 this.m_dbHelper.setIntegerValue("pattern", this.m_pattern);
-                this.m_dbHelper.setIntegerValue("rating", this.m_rating);
+                this.m_dbHelper.setFloatValue("rating", this.m_rating);
 
                 int id = this.m_dbHelper.insert();
 

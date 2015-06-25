@@ -106,6 +106,27 @@
     <attribute_types>
 
         <attribute_type>
+            <name>Category</name>
+            <value_type>3</value_type>
+            <is_unique>1</is_unique>
+        </attribute_type>
+
+
+
+        <attribute_type>
+            <name>Buy Date</name>
+            <value_type>1</value_type>
+            <is_unique>1</is_unique>
+        </attribute_type>
+
+
+        <attribute_type>
+            <name>Store</name>
+            <value_type>1</value_type>
+            <is_unique>1</is_unique>
+        </attribute_type>
+
+        <attribute_type>
             <name>Size</name>
             <value_type>1</value_type>
             <is_unique>1</is_unique>
@@ -118,10 +139,29 @@
         </attribute_type>
 
         <attribute_type>
-            <name>On wishlist</name>
+            <name>Exact Color</name>
+            <value_type>0</value_type>
+            <is_unique>1</is_unique>
+        </attribute_type>
+
+        <attribute_type>
+            <name>In wishlist</name>
             <value_type>2</value_type>
             <is_unique>1</is_unique>
         </attribute_type>
+
+        <attribute_type>
+            <name>Rating</name>
+            <value_type>5</value_type>
+            <is_unique>1</is_unique>
+        </attribute_type>
+
+        <attribute_type>
+            <name>Has Pattern</name>
+            <value_type>2</value_type>
+            <is_unique>1</is_unique>
+        </attribute_type>
+
 
     </attribute_types>
 

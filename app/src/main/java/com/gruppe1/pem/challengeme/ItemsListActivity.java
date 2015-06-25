@@ -9,6 +9,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 import com.github.clans.fab.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 
@@ -49,8 +51,6 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
         sharedPreferences = getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
 
-        initDataset();
-
 
         if (savedInstanceState != null) {
             list = savedInstanceState.getBoolean(Constants.KEY_VIEW_ITEMS_AS_LIST, true);
@@ -70,15 +70,18 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
         DataBaseHelper db_helper = new DataBaseHelper(this);
         db_helper.init();
         Category category = new Category(this, categoryId, db_helper);
+        categoryId = category.getId();
         setTitle(category.getName());
+
+        initDataset();
 
         setContentView(R.layout.default_list_grid_view);
         listView = (ListView) findViewById(R.id.listView);
-        listAdapter = new DefaultListAdapter(this, R.layout.list_item_default, mDataset, false);
+        listAdapter = new DefaultListAdapter(this, R.layout.list_item_default, mDataset, false, false);
         listView.setAdapter(listAdapter);
         listView.setOnItemClickListener(this);
         gridView = (GridView) findViewById(R.id.gridView);
-        gridAdapter = new DefaultGridAdapter(this, R.layout.grid_item_default, mDataset);
+        gridAdapter = new DefaultGridAdapter(this, R.layout.grid_item_default, mDataset, false);
         gridView.setAdapter(gridAdapter);
         gridView.setOnItemClickListener(this);
         gridView.setVisibility(View.INVISIBLE);
@@ -115,6 +118,7 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
             }
         });
 
+
     }
 
     @Override
@@ -128,7 +132,7 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         list = sharedPreferences.getBoolean(Constants.KEY_VIEW_ITEMS_AS_LIST, true);
-        menu.getItem(0).setIcon(list ?  R.drawable.ic_view_grid : R.drawable.ic_view_list);
+        menu.getItem(0).setIcon(list ? R.drawable.ic_view_grid : R.drawable.ic_view_list);
         return true;
     }
 
@@ -183,22 +187,41 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
     private void initDataset() {
         // TODO: replace by database data
         mDataset = new ArrayList<ListItemIconName>();
-        mDataset.add(new ListItemIconName(0,0, "add new item"));
-        mDataset.add(new ListItemIconName(0,R.drawable.tshirt, "T-Shirt rose"));
-        mDataset.add(new ListItemIconName(0,R.drawable.tshirt, "T-Shirt rose"));
-        mDataset.add(new ListItemIconName(0,R.drawable.tshirt, "T-Shirt rose"));
-        mDataset.add(new ListItemIconName(0,R.drawable.tshirt, "T-Shirt rose"));
-        mDataset.add(new ListItemIconName(0,R.drawable.tshirt, "T-Shirt rose"));
 
+        DataBaseHelper db_helper = new DataBaseHelper(this);
+        db_helper.init();
+
+        mDataset = new ArrayList<ListItemIconName>();
+        mDataset.add(new ListItemIconName(0, 0, "add new category"));
+
+        System.out.println("Category Id before init: " + categoryId);
+        DefaultSetup defaultSetup = new DefaultSetup(this);
+        defaultSetup.setup("setup_values.xml");
+        ArrayList<Item> allCategoryItems = Item.getItemsByCategoryId(this, categoryId);
+
+        Iterator catIt = allCategoryItems.iterator();
+        System.out.println("cat items: " + allCategoryItems.size());
+
+        while (catIt.hasNext()) {
+            Item tmpItem = (Item)catIt.next();
+            Log.e("###ITEM###", tmpItem.getName() + " - " + tmpItem.getId());
+            int iconId = getResources().getIdentifier("kleiderbuegel", "drawable", "com.gruppe1.pem.challengeme"); // TODO: replace with image
+            mDataset.add(new ListItemIconName(tmpItem.getId(), iconId , tmpItem.getName()));
+        }
+//        ArrayList<AttributeType> attributeTypes = AttributeType.getAttributeTypes(this);
 
     }
 
    // @Override
-    public void selectItem(View view) {
+    public void selectItem(int itemid) {
         Intent intent = new Intent();
         intent.setClassName(getPackageName(), getPackageName() + ".CategoriesItemDetailActivity");
+        Bundle b = new Bundle();
+        b.putInt(Constants.EXTRA_ITEM_ID, itemid);
+        intent.putExtras(b);
         startActivity(intent);
     }
+
 
     @Override
     public boolean onLongClick(View v) {
@@ -213,7 +236,8 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
             intent.setClassName(getPackageName(), getPackageName() + ".NewItemActivity");
             startActivity(intent);
         } else {
-            selectItem(view);
+            int itemid = list ? listAdapter.getItem(position).elementId : gridAdapter.getItem(position).elementId;
+            selectItem(itemid);
         }
     }
 }

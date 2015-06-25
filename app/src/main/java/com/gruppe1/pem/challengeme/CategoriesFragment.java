@@ -72,12 +72,12 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
 
         rootView = getActivity().getLayoutInflater().inflate(R.layout.default_list_grid_view, container, false);
         listView = (ListView) rootView.findViewById(R.id.listView);
-        listAdapter = new DefaultListAdapter(getActivity(), R.layout.list_item_default, mDataset, false);
+        listAdapter = new DefaultListAdapter(getActivity(), R.layout.list_item_default, mDataset, true, false);
         listView.setAdapter(listAdapter);
         listView.setOnItemClickListener(this);
         listView.setOnItemLongClickListener(this);
         gridView = (GridView) rootView.findViewById(R.id.gridView);
-        gridAdapter = new DefaultGridAdapter(getActivity(), R.layout.grid_item_default, mDataset);
+        gridAdapter = new DefaultGridAdapter(getActivity(), R.layout.grid_item_default, mDataset, true);
         gridView.setAdapter(gridAdapter);
         gridView.setVisibility(View.INVISIBLE);
         gridView.setOnItemClickListener(this);
@@ -233,7 +233,6 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
 
         while (catIt.hasNext()) {
             Category tmpCat = (Category)catIt.next();
-            Log.e("###ITEM CAT###", tmpCat.getName() + " - " + tmpCat.getId());
             int iconId = getResources().getIdentifier(tmpCat.getIcon(), "drawable", "com.gruppe1.pem.challengeme");
             mDataset.add(new ListItemIconName(tmpCat.getId(), iconId , tmpCat.getName()));
         }
@@ -247,7 +246,9 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        actionMode.finish();
+        if(actionMode != null) {
+            actionMode.finish();
+        }
         if(position == 0) {
             Intent intent = new Intent();
             intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".NewCategoryActivity");
@@ -271,10 +272,10 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
                     int categoryParentId = data.getIntExtra("categoryParentId", -1);
 //                    if (categoryParentId == this.category) TODO: check if category is the same like parentCategory of new Category
                     mDataset.add(new ListItemIconName(categoryId, R.drawable.kleiderbuegel, categoryName));
-                    listAdapter = new DefaultListAdapter(getActivity(), R.layout.list_item_default, mDataset, false);
+                    listAdapter = new DefaultListAdapter(getActivity(), R.layout.list_item_default, mDataset, true, false);
                     listView.setAdapter(listAdapter);
                     listAdapter.notifyDataSetChanged();
-                    gridAdapter = new DefaultGridAdapter(getActivity(), R.layout.grid_item_default, mDataset);
+                    gridAdapter = new DefaultGridAdapter(getActivity(), R.layout.grid_item_default, mDataset, true);
                     gridView.setAdapter(gridAdapter);
                     gridAdapter.notifyDataSetChanged();
                 }

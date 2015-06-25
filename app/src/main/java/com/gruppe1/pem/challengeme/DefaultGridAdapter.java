@@ -21,14 +21,16 @@ public class DefaultGridAdapter extends ArrayAdapter<ListItemIconName> {
     private Context context;
     private int layoutResourceId;
     private List<ListItemIconName> data = new ArrayList();
+    private boolean isCategory;
 
     public int currentSelection;
 
-    public DefaultGridAdapter(Context context, int layoutResourceId, List<ListItemIconName> data) {
+    public DefaultGridAdapter(Context context, int layoutResourceId, List<ListItemIconName> data, boolean isCategory) {
         super(context, layoutResourceId, data);
         this.layoutResourceId = layoutResourceId;
         this.context = context;
         this.data = data;
+        this.isCategory = isCategory;
     }
 
     @Override
@@ -57,7 +59,9 @@ public class DefaultGridAdapter extends ArrayAdapter<ListItemIconName> {
             }
 
             holder.imageTitle.setText(item.name);
-            holder.rightTextView.setText("9");
+            if(isCategory) {
+                holder.rightTextView.setText(Item.getItemsCountByCategoryId(context, item.elementId) + "");
+            }
             holder.image.setImageResource(item.icon);
         }
         return row;

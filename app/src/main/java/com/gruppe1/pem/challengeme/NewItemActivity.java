@@ -17,19 +17,23 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RatingBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.github.clans.fab.FloatingActionButton;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.sql.DatabaseMetaData;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 
@@ -65,18 +69,61 @@ public class NewItemActivity extends Activity {
         saveItemFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                saveItem();
                 thisActivity.finish();
                 // TODO: save item
             }
         });
 
         itemNameExitText = (EditText) findViewById(R.id.itemName);
-//            if(value is set) TODO: check if value was already set
-        itemNameExitText.setText("Test Item Name");
+//            if(edit item) TODO: check if new or edit
+//        setItemData();
 
 
 
         attributesView = (LinearLayout) findViewById(R.id.itemDetailAttributes);
+
+        setupAttributeViews();
+    }
+
+    private void setItemData() {
+        // TODO: set Item Data from DB
+        itemNameExitText.setText("Test Item Name");
+    }
+
+    private void saveItem() {
+        DataBaseHelper m_dbHelper = new DataBaseHelper(this);
+        m_dbHelper.init();
+
+        String item_name = itemNameExitText.getText().toString();
+        String item_imageFile = ImgPhoto.getDrawable().toString();
+        String item_categoryId = "1";
+        String item_buyDate = "25.12.2014";
+        String item_store = "H&M";
+        String item_isWish = "0";
+        String item_primaryColor = "red";
+        String item_secondaryColor = "#ff0000";
+        String item_pattern = "0";
+        String item_rating = Float.toString(ratingBar.getRating());
+
+        HashMap<String, String> itemAttributes = new HashMap<String, String>();
+        itemAttributes.put("name", item_name);
+        itemAttributes.put("image_file", item_imageFile);
+        itemAttributes.put("category_id", item_categoryId);
+        itemAttributes.put("buy_date", item_buyDate);
+        itemAttributes.put("store", item_store);
+        itemAttributes.put("is_wish", item_isWish);
+        itemAttributes.put("primary_color", item_primaryColor);
+        itemAttributes.put("secondary_color", item_secondaryColor);
+        itemAttributes.put("pattern", item_pattern);
+        itemAttributes.put("rating", item_rating);
+
+        Item defaultItem = new Item(this, 0, m_dbHelper);
+        defaultItem.edit(itemAttributes);
+        defaultItem.save();
+    }
+
+    private void setupAttributeViews() {
 
         ArrayList<AttributeType> allAttributeTypes = AttributeType.getAttributeTypes(getApplicationContext());
 
@@ -104,8 +151,32 @@ public class NewItemActivity extends Activity {
 
             View attributeValue;
 
+            // attribute is CategoryId -> Dropdown
+            if(tmpAttrType.getValueType() == 3) {
+                Spinner categoryDropdown = new Spinner(this);
+                ViewGroup.LayoutParams attibuteValueLayoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                categoryDropdown.setLayoutParams(attibuteValueLayoutParams);
+
+                ArrayList<CharSequence> upperCategoriesList = new ArrayList<CharSequence>();
+                ArrayList<Category> allCategories = Category.getAllCategories(this);
+                System.out.println(allCategories.toString());
+                upperCategoriesList.add("None");
+
+                for(Category cat : allCategories) {
+                    upperCategoriesList.add(cat.getName());
+                }
+
+                ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(getBaseContext(), android.R.layout.simple_spinner_item,
+                        upperCategoriesList);
+                // Specify the layout to use when the list of choices appears
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                // Apply the adapter to the spinner
+                categoryDropdown.setAdapter(adapter);
+                attributeValue = categoryDropdown;
+
+            }
             // attribute is boolean
-            if(tmpAttrType.getValueType() == 2) {
+            else if(tmpAttrType.getValueType() == 2) {
                 RadioGroup attrValueRadioGroup = new RadioGroup(this);
                 ViewGroup.LayoutParams attibuteValueLayoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
                 attrValueRadioGroup.setLayoutParams(attibuteValueLayoutParams);
@@ -114,11 +185,13 @@ public class NewItemActivity extends Activity {
                 ViewGroup.LayoutParams boolButtonLayoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
                 RadioButton boolTrueButton = new RadioButton(this);
+                boolTrueButton.setId(R.id.boolAttrYes);
                 boolTrueButton.setLayoutParams(boolButtonLayoutParams);
                 boolTrueButton.setText("yes");
                 boolTrueButton.setTextSize(18);
 
                 RadioButton boolFalseButton = new RadioButton(this);
+                boolFalseButton.setId(R.id.boolAttrNo);
                 boolFalseButton.setLayoutParams(boolButtonLayoutParams);
                 boolFalseButton.setText("no");
                 boolFalseButton.setTextSize(18);
@@ -126,13 +199,14 @@ public class NewItemActivity extends Activity {
                 attrValueRadioGroup.addView(boolTrueButton);
                 attrValueRadioGroup.addView(boolFalseButton);
 
+                attrValueRadioGroup.check(R.id.boolAttrNo);
                 attributeValue = attrValueRadioGroup;
 
             } else {
                 EditText textAttributeValue = new EditText(this);
                 textAttributeValue.setTextSize(18);
                 ViewGroup.LayoutParams attibuteValueLayoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
-//              if(value is set) TODO: check if value was already set
+//              if(value is set) TODO: check if value was already set / if edit or new
                 textAttributeValue.setText("");
                 textAttributeValue.setLayoutParams(attibuteValueLayoutParams);
                 attributeValue = textAttributeValue;

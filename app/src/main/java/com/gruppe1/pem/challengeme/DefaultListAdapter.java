@@ -18,15 +18,17 @@ public class DefaultListAdapter extends ArrayAdapter<ListItemIconName> {
     private int layoutResourceId;
     private List<ListItemIconName> data = new ArrayList();
     private boolean wishlist;
+    private boolean isCategory;
 
     public int currentSelection;
 
-    public DefaultListAdapter(Context context, int layoutResourceId, List<ListItemIconName> data, boolean wishlist) {
+    public DefaultListAdapter(Context context, int layoutResourceId, List<ListItemIconName> data, boolean isCategory, boolean wishlist) {
         super(context, layoutResourceId, data);
         this.layoutResourceId = layoutResourceId;
         this.context = context;
         this.data = data;
         this.wishlist = wishlist;
+        this.isCategory = isCategory;
     }
 
     @Override
@@ -58,7 +60,9 @@ public class DefaultListAdapter extends ArrayAdapter<ListItemIconName> {
 
             holder.firstLine.setText(item.name);
             holder.secondLine.setText("z.B. Item-Attribute");
-            holder.rightTextView.setText("9");
+            if(isCategory) {
+                holder.rightTextView.setText(Item.getItemsCountByCategoryId(context, item.elementId) + "");
+            }
             holder.image.setImageResource(item.icon);
             if(wishlist) {
                 holder.itemActionButton.setVisibility(View.VISIBLE);

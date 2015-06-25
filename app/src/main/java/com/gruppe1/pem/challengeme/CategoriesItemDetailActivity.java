@@ -27,12 +27,19 @@ import com.github.clans.fab.FloatingActionButton;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 
 public class CategoriesItemDetailActivity extends Activity {
 
     private ImageView ImgPhoto;
     private RatingBar ratingBar;
+
+    private int itemId;
+    private Item item;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +57,31 @@ public class CategoriesItemDetailActivity extends Activity {
 
         LinearLayout attributesView = (LinearLayout) findViewById(R.id.itemDetailAttributes);
 
+
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if(extras == null) {
+                itemId = -1;
+            } else {
+                itemId = extras.getInt(Constants.EXTRA_ITEM_ID);
+            }
+        } else {
+            itemId = -1;
+        }
+        DataBaseHelper db_helper = new DataBaseHelper(this);
+        db_helper.init();
+        item = new Item(this, itemId, db_helper);
+        itemId = item.getId();
+        setTitle(item.getName());
+
+
+        ArrayList<AttributeType> allAttributeTypes = AttributeType.getAttributeTypes(getApplicationContext());
+
+        Iterator allAttrTypesIterator =  allAttributeTypes.iterator();
+
+
+        // TODO: get all attributes with values for this Item
+//        while(allAttrTypesIterator.hasNext()) {
         // TODO: get all attributes with values for this Item
         for(int i = 0; i<= 5; i++) {
             LinearLayout attributeLayout = new LinearLayout(this);
@@ -73,6 +105,11 @@ public class CategoriesItemDetailActivity extends Activity {
             // TODO: real attr names and values
             attributeName.setText("attr" + ":");
             attributeValue.setText("37 test value");
+
+//            AttributeType dbColumnName = (AttributeType) allAttrTypesIterator.next();
+//            String value = (String) item.getAttributeValue(this, dbColumnName);
+//            attributeName.setText(dbColumnName.getName() + ":");
+//            attributeValue.setText(value);
 
             attributeLayout.addView(attributeName);
             attributeLayout.addView(attributeValue);

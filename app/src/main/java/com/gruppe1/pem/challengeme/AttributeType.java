@@ -13,7 +13,6 @@ import java.util.Set;
  * Created by Simon on 13.06.2015.
  */
 public class AttributeType {
-    private static final String DB_TABLE = Constants.DB_TABLE_PREFIX + "attribute_types";
 
     //0 = String, 1 = Integer
     public static final HashMap<String, Integer> dbColumns = new HashMap<String, Integer>() {{
@@ -38,7 +37,7 @@ public class AttributeType {
     public AttributeType(Context context, int m_id, DataBaseHelper p_dbHelper) {
         this.m_context = context;
         this.m_dbHelper = p_dbHelper;
-        this.m_dbHelper.setTable(DB_TABLE);
+        this.m_dbHelper.setTable(Constants.ATTRIBUTE_TYPES_DB_TABLE);
 
         if(m_id > 0) {
             // get data from existing attribute
@@ -96,7 +95,7 @@ public class AttributeType {
     public static ArrayList<AttributeType> getAttributeTypes(Context p_context) {
         DataBaseHelper helper = new DataBaseHelper(p_context);
         helper.init();
-        helper.setTable(DB_TABLE);
+        helper.setTable(Constants.ATTRIBUTE_TYPES_DB_TABLE);
         helper.setColumns(new String[]{"*"});
         ArrayList<AttributeType> attributeTypes = new ArrayList<AttributeType>();
 
@@ -113,6 +112,24 @@ public class AttributeType {
         return attributeTypes;
     }
 
+    public static AttributeType getAttributeTypeByName(Context p_context, String attrName) {
+        DataBaseHelper helper = new DataBaseHelper(p_context);
+        helper.init();
+        helper.setTable(Constants.ATTRIBUTE_TYPES_DB_TABLE);
+        helper.setColumns(new String[]{"*"});
+        helper.setWhere("", new String[]{"name='" + attrName + "'"});
+        AttributeType attributeType = null;
+
+        Cursor allAttrTypesIterator = helper.select();
+        allAttrTypesIterator.moveToFirst();
+
+        if(allAttrTypesIterator.getCount() == 0) {
+            attributeType =  new AttributeType(p_context, 0, helper);
+        } else {
+            attributeType = new AttributeType(p_context, allAttrTypesIterator.getInt(0), helper);
+        }
+        return attributeType;
+    }
     public void edit(HashMap<String, String> p_values) {
         Set<String> keys = p_values.keySet();
         Iterator iterator = keys.iterator();
@@ -140,7 +157,7 @@ public class AttributeType {
                     break;
 
                 default:
-                    Log.e("###ATTR EDIT###", dbColumnName + " is not declared as columns in " + DB_TABLE);
+                    Log.e("###ATTR EDIT###", dbColumnName + " is not declared as columns in " + Constants.ATTRIBUTE_TYPES_DB_TABLE);
                     break;
             }
         }
