@@ -112,6 +112,25 @@ public class AttributeType {
         return attributeTypes;
     }
 
+    public static AttributeType getAttributeTypeById(Context p_context, int attrTypeId) {
+        DataBaseHelper helper = new DataBaseHelper(p_context);
+        helper.init();
+        helper.setTable(Constants.ATTRIBUTE_TYPES_DB_TABLE);
+        helper.setColumns(new String[]{"*"});
+        helper.setWhere("", new String[]{"_id='" + attrTypeId + "'"});
+        AttributeType attributeType = null;
+
+        Cursor allAttrTypesIterator = helper.select();
+        allAttrTypesIterator.moveToFirst();
+
+        if(allAttrTypesIterator.getCount() == 0) {
+            attributeType =  new AttributeType(p_context, 0, helper);
+        } else {
+            attributeType = new AttributeType(p_context, allAttrTypesIterator.getInt(0), helper);
+        }
+        return attributeType;
+    }
+
     public static AttributeType getAttributeTypeByName(Context p_context, String attrName) {
         DataBaseHelper helper = new DataBaseHelper(p_context);
         helper.init();

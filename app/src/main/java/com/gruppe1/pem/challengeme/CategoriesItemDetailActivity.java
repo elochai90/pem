@@ -38,6 +38,9 @@ public class CategoriesItemDetailActivity extends Activity {
     private ImageView ImgPhoto;
     private RatingBar ratingBar;
 
+    private TextView itemDetailNameValue;
+    private LinearLayout attributesView;
+
     private int itemId;
     private Item item;
 
@@ -55,7 +58,8 @@ public class CategoriesItemDetailActivity extends Activity {
         stars.getDrawable(1).setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
         stars.getDrawable(0).setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
 
-        LinearLayout attributesView = (LinearLayout) findViewById(R.id.itemDetailAttributes);
+        attributesView = (LinearLayout) findViewById(R.id.itemDetailAttributes);
+        itemDetailNameValue = (TextView) findViewById(R.id.itemDetailNameValue);
 
 
         if (savedInstanceState == null) {
@@ -72,8 +76,32 @@ public class CategoriesItemDetailActivity extends Activity {
         db_helper.init();
         item = new Item(this, itemId, db_helper);
         itemId = item.getId();
-        setTitle(item.getName());
 
+
+        setupAttributesLayout();
+        setContent();
+
+
+        FloatingActionButton editItemFAB = (FloatingActionButton) findViewById(R.id.edit_item);
+        editItemFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClassName(getPackageName(), getPackageName() + ".NewItemActivity");
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void setContent() {
+        setTitle(item.getName());
+        itemDetailNameValue.setText(item.getName());
+        ratingBar.setRating(item.getRating());
+        // TODO: all the attributes
+
+    }
+
+    private void setupAttributesLayout() {
 
         ArrayList<AttributeType> allAttributeTypes = AttributeType.getAttributeTypes(getApplicationContext());
 
@@ -81,9 +109,9 @@ public class CategoriesItemDetailActivity extends Activity {
 
 
         // TODO: get all attributes with values for this Item
-//        while(allAttrTypesIterator.hasNext()) {
+        while(allAttrTypesIterator.hasNext()) {
         // TODO: get all attributes with values for this Item
-        for(int i = 0; i<= 5; i++) {
+//        for(int i = 0; i<= 5; i++) {
             LinearLayout attributeLayout = new LinearLayout(this);
             attributeLayout.setOrientation(LinearLayout.HORIZONTAL);
             int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
@@ -102,14 +130,13 @@ public class CategoriesItemDetailActivity extends Activity {
             ViewGroup.LayoutParams attibuteValueLayoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             attributeValue.setLayoutParams(attibuteValueLayoutParams);
 
-            // TODO: real attr names and values
-            attributeName.setText("attr" + ":");
-            attributeValue.setText("37 test value");
+//            // TODO: real attr names and values
+//            attributeName.setText("attr" + ":");
+//            attributeValue.setText("37 test value");
 
-//            AttributeType dbColumnName = (AttributeType) allAttrTypesIterator.next();
-//            String value = (String) item.getAttributeValue(this, dbColumnName);
-//            attributeName.setText(dbColumnName.getName() + ":");
-//            attributeValue.setText(value);
+            AttributeType dbColumnName = (AttributeType) allAttrTypesIterator.next();
+            attributeName.setText(dbColumnName.getName() + ":");
+            attributeValue.setText("TODO");
 
             attributeLayout.addView(attributeName);
             attributeLayout.addView(attributeValue);
@@ -117,84 +144,8 @@ public class CategoriesItemDetailActivity extends Activity {
             attributesView.addView(attributeLayout);
         }
 
-        FloatingActionButton editItemFAB = (FloatingActionButton) findViewById(R.id.edit_item);
-        editItemFAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClassName(getPackageName(), getPackageName() + ".NewItemActivity");
-                startActivity(intent);
-            }
-        });
     }
 
-    private void selectImage() {
-
-        final CharSequence[] options = {"Take Photo", "Choose from Gallery", "Cancel"};
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setItems(options, new DialogInterface.OnClickListener() {
-
-            @Override
-
-            public void onClick(DialogInterface dialog, int item) {
-
-                if (options[item].equals("Take Photo")){
-                    Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(intent, 1);
-                } else if (options[item].equals("Choose from Gallery")) {
-                    Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(intent, 2);
-                } else if (options[item].equals("Cancel")) {
-                    dialog.dismiss();
-                }
-            }
-
-        });
-
-        builder.show();
-
-    }
-
-    @Override
-
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == RESULT_OK) {
-
-            if (requestCode == 1) {
-
-                try {
-
-                    Bitmap photo = (Bitmap) data.getExtras().get("data");
-                    ImgPhoto.setImageBitmap(photo);
-
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-
-                }
-
-            } else if (requestCode == 2) {
-
-                Uri selectedImage = data.getData();
-
-                try {
-                    InputStream imageStream = getContentResolver().openInputStream(selectedImage);
-                    Bitmap yourSelectedImage = BitmapFactory.decodeStream(imageStream);
-
-                    ImgPhoto.setImageBitmap(yourSelectedImage);
-                }catch(FileNotFoundException e){
-                    Log.w("FileNotFoundExeption: ", e.toString());
-                }
-
-            }
-
-
-        }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

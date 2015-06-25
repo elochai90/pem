@@ -285,7 +285,7 @@ public class Item {
 
     public void save() {
         if(this.m_id == 0) {
-            // insert as new categoy
+            // insert as new item
             this.m_dbHelper.setWhere("", new String[]{"name='" + this.m_name + "'"});
             Cursor existingRowCursor = this.m_dbHelper.select();
             existingRowCursor.moveToFirst();
