@@ -83,9 +83,20 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
         gridView.setOnItemClickListener(this);
         gridView.setOnItemLongClickListener(this);
 
+        com.github.clans.fab.FloatingActionButton fab_add_compare = (FloatingActionButton) rootView.findViewById(R.id.add_compare);
         com.github.clans.fab.FloatingActionButton fab_add_wishlist_item = (FloatingActionButton) rootView.findViewById(R.id.add_wishlist_item);
         com.github.clans.fab.FloatingActionButton fab_add_category = (FloatingActionButton) rootView.findViewById(R.id.add_category);
         com.github.clans.fab.FloatingActionButton fab_add_item = (FloatingActionButton) rootView.findViewById(R.id.add_item);
+        fab_add_compare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".NewCompareActivity");
+                startActivity(intent);
+
+            }
+        });
+
         fab_add_wishlist_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -223,7 +234,7 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
         db_helper.init();
 
         mDataset = new ArrayList<ListItemIconName>();
-        mDataset.add(new ListItemIconName(0, 0, "add new category"));
+        //mDataset.add(new ListItemIconName(0, 0, "add new category"));
 
         DefaultSetup defaultSetup = new DefaultSetup(getActivity().getApplicationContext());
         defaultSetup.setup("setup_values.xml");
@@ -250,13 +261,13 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
         if(actionMode != null) {
             actionMode.finish();
         }
-        if(position == 0) {
+        /*if(position == 0) {
             Intent intent = new Intent();
             intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".NewCategoryActivity");
             startActivityForResult(intent, REQUEST_CODE);
-        } else {
+        } else {*/
             selectCategory(mDataset.get(position).elementId);
-        }
+        //}
     }
 
     // for actualizing the categories list on coming back from new category
@@ -349,14 +360,14 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
         System.out.println("Long click");
         if(actionMode != null)
             actionMode.finish();
-        if(position != 0) {
+        //if(position != 0) {
             actionMode = getActivity().startActionMode(modeCallBack);
             view.setSelected(true);
 
             selectedItem = new Object[2];
             selectedItem[0] = position;
             selectedItem[1] = view;
-        }
+        //}
         return true;
     }
 }

@@ -53,10 +53,20 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
         gridView = (GridView) rootView.findViewById(R.id.gridView);
         gridView.setVisibility(View.INVISIBLE);
 
-
+        com.github.clans.fab.FloatingActionButton fab_add_compare = (FloatingActionButton) rootView.findViewById(R.id.add_compare);
         com.github.clans.fab.FloatingActionButton fab_add_wishlist_item = (FloatingActionButton) rootView.findViewById(R.id.add_wishlist_item);
         com.github.clans.fab.FloatingActionButton fab_add_category = (FloatingActionButton) rootView.findViewById(R.id.add_category);
         com.github.clans.fab.FloatingActionButton fab_add_item = (FloatingActionButton) rootView.findViewById(R.id.add_item);
+        fab_add_compare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".NewCompareActivity");
+                startActivity(intent);
+
+            }
+        });
+
         fab_add_wishlist_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,7 +138,7 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
     private void initDataset() {
         // TODO: replace by database data
         mDataset = new ArrayList<ListItemIconName>();
-        mDataset.add(new ListItemIconName(0,0, "add new wishlist item"));
+        //mDataset.add(new ListItemIconName(0,0, "add new wishlist item"));
         mDataset.add(new ListItemIconName(0,R.drawable.kleiderbuegel, "T-Shirt in rosa"));
         mDataset.add(new ListItemIconName(0,R.drawable.kleiderbuegel, "T-Shirt in rosa"));
         mDataset.add(new ListItemIconName(0,R.drawable.kleiderbuegel, "T-Shirt in rosa"));
@@ -144,11 +154,12 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if(position == 0) {
+        //TODO
+        /*if(position == 0) {
             Intent intent = new Intent();
             intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".NewItemActivity");
             startActivity(intent);
         } else {
-        }
+        }*/
     }
 }

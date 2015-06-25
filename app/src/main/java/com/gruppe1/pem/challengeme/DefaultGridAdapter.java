@@ -41,11 +41,11 @@ public class DefaultGridAdapter extends ArrayAdapter<ListItemIconName> {
         ListItemIconName item = data.get(position);
 
 
-        if(position == 0) {
+        /*if(position == 0) {
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
             row = inflater.inflate(R.layout.grid_item_add, parent, false);
             ((TextView) row.findViewById(R.id.addText)).setText(item.name);
-        } else {
+        } else {*/
             if (row == null || row.getTag() == null) {
                 LayoutInflater inflater = ((Activity) context).getLayoutInflater();
                 row = inflater.inflate(layoutResourceId, parent, false);
@@ -63,7 +63,7 @@ public class DefaultGridAdapter extends ArrayAdapter<ListItemIconName> {
                 holder.rightTextView.setText(Item.getItemsCountByCategoryId(context, item.elementId) + "");
             }
             holder.image.setImageResource(item.icon);
-        }
+        //}
         return row;
     }
 

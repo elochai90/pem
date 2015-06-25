@@ -39,11 +39,11 @@ public class DefaultListAdapter extends ArrayAdapter<ListItemIconName> {
         ListItemIconName item = data.get(position);
 
 
-        if(position == 0) {
+     /*   if(position == 0) {
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
             row = inflater.inflate(R.layout.list_item_add, parent, false);
             ((TextView) row.findViewById(R.id.addText)).setText(item.name);
-        } else {
+        } else {*/
             if (row == null || row.getTag() == null) {
                 LayoutInflater inflater = ((Activity) context).getLayoutInflater();
                 row = inflater.inflate(layoutResourceId, parent, false);
@@ -61,7 +61,7 @@ public class DefaultListAdapter extends ArrayAdapter<ListItemIconName> {
             holder.firstLine.setText(item.name);
             holder.secondLine.setText("z.B. Item-Attribute");
             if(isCategory) {
-                holder.rightTextView.setText(Item.getItemsCountByCategoryId(context, item.elementId) + "");
+               holder.rightTextView.setText(Item.getItemsCountByCategoryId(context, item.elementId) + "");
             }
             holder.image.setImageResource(item.icon);
             if(wishlist) {
@@ -75,7 +75,7 @@ public class DefaultListAdapter extends ArrayAdapter<ListItemIconName> {
                     }
                 });
             }
-        }
+        //}
 
         return row;
     }

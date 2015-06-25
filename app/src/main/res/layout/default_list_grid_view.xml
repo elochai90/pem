@@ -66,6 +66,14 @@
         fab:menu_backgroundColor="@android:color/transparent">
 
         <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/add_compare"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/fab_add"
+            fab:fab_size="mini"
+            fab:fab_label="New Compare" />
+
+        <com.github.clans.fab.FloatingActionButton
             android:id="@+id/add_wishlist_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -56,9 +56,20 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
         gridView.setVisibility(View.INVISIBLE);
         gridView.setOnItemClickListener(this);
 
+        com.github.clans.fab.FloatingActionButton fab_add_compare = (FloatingActionButton) rootView.findViewById(R.id.add_compare);
         com.github.clans.fab.FloatingActionButton fab_add_wishlist_item = (FloatingActionButton) rootView.findViewById(R.id.add_wishlist_item);
         com.github.clans.fab.FloatingActionButton fab_add_category = (FloatingActionButton) rootView.findViewById(R.id.add_category);
         com.github.clans.fab.FloatingActionButton fab_add_item = (FloatingActionButton) rootView.findViewById(R.id.add_item);
+        fab_add_compare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".NewCompareActivity");
+                startActivity(intent);
+
+            }
+        });
+
         fab_add_wishlist_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -171,7 +182,7 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
     private void initDataset() {
         // TODO: replace by database data
         mDataset = new ArrayList<CompareItem>();
-        mDataset.add(new CompareItem(0,0, "add new compare", "", "", null));
+        //mDataset.add(new CompareItem(0,0, "add new compare", "", "", null));
         mDataset.add(new CompareItem(R.drawable.tshirt, R.drawable.hose, "Legere", "Tshirt normal", "Jeans",  new Date()));
         mDataset.add(new CompareItem(R.drawable.kleid, R.drawable.schuh, "Paaarty!", "Kleid pink kurz", "Pinke Schleifen-High-Heels", new Date()));
         mDataset.add(new CompareItem(R.drawable.mantel, R.drawable.schuh, "Aussen", "Mantel", "Pinke Schleifen-High-Heels", new Date()));
@@ -191,14 +202,14 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if(position == 0) {
+        /*if(position == 0) {
             Intent intent = new Intent();
             intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".NewCompareActivity");
             startActivity(intent);
-        } else {
+        } else {*/
             Intent intent = new Intent();
             intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".SavedComparesDetailActivity");
             startActivity(intent);
-        }
+        //}
     }
 }
