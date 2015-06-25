@@ -209,6 +209,26 @@ public class Item {
         return itemList;
     }
 
+    public static ArrayList<Item> getAllItems(Context p_context) {
+        DataBaseHelper dbHelper = new DataBaseHelper(p_context);
+        dbHelper.init();
+        dbHelper.setTable(Constants.ITEMS_DB_TABLE);
+        dbHelper.setColumns(new String[]{"*"});
+        dbHelper.setOrderBy("name ASC");
+        Cursor cursor = dbHelper.select();
+
+        ArrayList<Item> itemList = new ArrayList<Item>();
+
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            itemList.add(new Item(p_context, cursor.getInt(0), dbHelper));
+            cursor.moveToNext();
+        }
+
+        return itemList;
+    }
+
 //    public void putAttributeValue(AttributeType attributeType, Object attributeValue) {
 //        attributes.put(attributeType, attributeValue);
 //    }

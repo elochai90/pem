@@ -88,6 +88,9 @@ public class CategoriesItemDetailActivity extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClassName(getPackageName(), getPackageName() + ".NewItemActivity");
+                Bundle b = new Bundle();
+                b.putInt(Constants.EXTRA_ITEM_ID, itemId);
+                intent.putExtras(b);
                 startActivity(intent);
             }
         });

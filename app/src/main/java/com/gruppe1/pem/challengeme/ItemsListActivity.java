@@ -195,9 +195,10 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
         mDataset.add(new ListItemIconName(0, 0, "add new category"));
 
         System.out.println("Category Id before init: " + categoryId);
-        DefaultSetup defaultSetup = new DefaultSetup(this);
-        defaultSetup.setup("setup_values.xml");
-        ArrayList<Item> allCategoryItems = Item.getItemsByCategoryId(this, categoryId);
+//        DefaultSetup defaultSetup = new DefaultSetup(this);
+//        defaultSetup.setup("setup_values.xml");
+//        ArrayList<Item> allCategoryItems = Item.getItemsByCategoryId(this, categoryId);
+        ArrayList<Item> allCategoryItems = Item.getAllItems(this);
 
         Iterator catIt = allCategoryItems.iterator();
         System.out.println("cat items: " + allCategoryItems.size());

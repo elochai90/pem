@@ -105,7 +105,6 @@ public class Attribute {
         dbHelper.setTable(Constants.ITEM_ATTR_DB_TABLE);
         dbHelper.setColumns(new String[]{"*"});
         dbHelper.setWhere("", new String[]{"item_id='" + p_itemId + "'"});
-        dbHelper.setOrderBy("name ASC");
         Cursor cursor = dbHelper.select();
 
         ArrayList<Attribute> attributeList = new ArrayList<Attribute>();

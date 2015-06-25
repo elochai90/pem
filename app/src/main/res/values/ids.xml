@@ -2,4 +2,5 @@
 <resources>
     <item name="boolAttrYes" type="id"/>
     <item name="boolAttrNo" type="id"/>
+    <item name="stringAttrField" type="id"/>
 </resources>
