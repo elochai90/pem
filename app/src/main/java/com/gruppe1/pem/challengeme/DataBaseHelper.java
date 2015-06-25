@@ -236,7 +236,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
     public void update(){
-
+        this.database.update(this.mTable, this.mValues, this.mWhere, null);
     }
 
     public void delete() {
