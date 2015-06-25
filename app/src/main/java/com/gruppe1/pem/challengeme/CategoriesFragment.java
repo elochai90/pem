@@ -248,7 +248,10 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        actionMode.finish();
+        if(actionMode != null) {
+            actionMode.finish();
+        }
+
         if(position == 0) {
             Intent intent = new Intent();
             intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".NewCategoryActivity");
