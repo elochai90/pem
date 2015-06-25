@@ -209,6 +209,7 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
         } else {*/
             Intent intent = new Intent();
             intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".SavedComparesDetailActivity");
+            intent.putExtra("item", mDataset.get(position));
             startActivity(intent);
         //}
     }

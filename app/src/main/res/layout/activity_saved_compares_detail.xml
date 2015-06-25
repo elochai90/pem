@@ -12,108 +12,137 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"><![CDATA[>
-        ]]></LinearLayout>
+        android:dividerPadding="20dp">
 
-    <ImageView
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="New Text"
+            android:id="@+id/comparetitle"
+            android:textStyle="bold"
+            android:gravity="center_vertical|center_horizontal"
+            android:textSize="35dp"
+            android:background="#ffffff" />
 
-        android:layout_width="150dp"
-        android:layout_height="180dp"
-        android:id="@+id/detail1oben"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-         />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="233dp"
+            android:layout_weight="0.5">
 
-    <ImageView
-        android:layout_width="150dp"
-        android:layout_height="180dp"
-        android:id="@+id/detail2unten"
-        android:layout_below="@+id/detail1oben"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="50dp" />
+            <ImageView
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Title TextView 1"
-        android:id="@+id/titleTextView1"
-        android:layout_alignTop="@+id/detail1oben"
-        android:layout_centerHorizontal="true"
-        android:layout_toEndOf="@+id/detail1oben"
-        android:layout_alignParentEnd="true" />
+                android:layout_width="175dp"
+                android:layout_height="210dp"
+                android:id="@+id/detail1oben"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:layout_gravity="center_vertical" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Title TextView 2"
-        android:id="@+id/titleTextView2"
-        android:layout_alignTop="@+id/detail2unten"
-        android:layout_centerHorizontal="true"
-        android:layout_toEndOf="@+id/detail2unten" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dp"
+                android:gravity="clip_horizontal|center_vertical|center_horizontal"
+                android:weightSum="1">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Name Item 1"
-        android:id="@+id/nameItem1"
-        android:layout_below="@+id/titleTextView1"
-        android:layout_toEndOf="@+id/detail1oben"
-        android:layout_alignParentEnd="true" />
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Name Item 1"
+                    android:id="@+id/nameItem1"
+                    android:layout_below="@+id/titleTextView1"
+                    android:layout_toEndOf="@+id/detail1oben"
+                    android:layout_alignParentEnd="true"
+                    android:layout_weight="0.06"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/nameItem1"
-        android:text="Category"
-        android:id="@+id/categorieTextView1"
-        android:layout_gravity="right"
-        android:layout_toEndOf="@+id/detail1oben" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/nameItem1"
+                    android:text="Category"
+                    android:id="@+id/categorieTextView1"
+                    android:layout_toEndOf="@+id/detail1oben" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Attribut1"
-        android:layout_toEndOf="@+id/detail1oben"
-        android:id="@+id/attributTextView11"
-        android:layout_below="@+id/categorieTextView1"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Attribut1"
+                    android:layout_toEndOf="@+id/detail1oben"
+                    android:id="@+id/attributTextView11"
+                    android:layout_below="@+id/categorieTextView1"/>
+            </LinearLayout>
+        </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Name Item 2"
-        android:id="@+id/nameItem2"
-        android:layout_below="@+id/titleTextView2"
-        android:layout_toEndOf="@+id/detail2unten"
-         />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Category"
-        android:layout_toEndOf="@+id/detail2unten"
-        android:id="@+id/categorieTextView2"
-        android:layout_below="@+id/nameItem2"/>
+            <ImageView
+                android:layout_width="175dp"
+                android:layout_height="210dp"
+                android:id="@+id/detail2unten"
+                android:layout_below="@+id/detail1oben"
+                android:layout_alignParentStart="true"
+                android:layout_gravity="center_vertical" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Attribut1"
-        android:layout_toEndOf="@+id/detail2unten"
-        android:id="@+id/attributTextView21"
-        android:layout_below="@+id/categorieTextView2"/>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dp"
+                android:gravity="center_vertical|center_horizontal"
+                android:weightSum="1">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Saved: TT:MM:JJJJ"
-        android:id="@+id/timeStampSavedCompare"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:textAlignment="center" />
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Name Item 2"
+                    android:id="@+id/nameItem2"
+                    android:layout_below="@+id/titleTextView2"
+                    android:layout_toEndOf="@+id/detail2unten"
+                    android:textStyle="bold"
+                    android:layout_weight="0.07"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Category"
+                    android:layout_toEndOf="@+id/detail2unten"
+                    android:id="@+id/categorieTextView2"
+                    android:layout_below="@+id/nameItem2"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Attribut1"
+                    android:layout_toEndOf="@+id/detail2unten"
+                    android:id="@+id/attributTextView21"
+                    android:layout_below="@+id/categorieTextView2"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Saved: TT:MM:JJJJ"
+            android:id="@+id/timeStampSavedCompare"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:textAlignment="center" />
+
+    </LinearLayout>
 
 
 </RelativeLayout>

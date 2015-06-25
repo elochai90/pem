@@ -1,11 +1,12 @@
 package com.gruppe1.pem.challengeme;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by bianka on 05.06.2015.
  */
-public class CompareItem {
+public class CompareItem implements Serializable{
 
     // TODO: not public, but method get...
     // TODO: besser waere zwei Item Objekte zu uebergeben mit namen und createdAt
@@ -24,5 +25,9 @@ public class CompareItem {
         this.nameItem1 = nameItem1;
         this.nameItem2 = nameItem2;
         this.createdAt  = createdAt;
+    }
+
+    public int getIconItem1(){
+        return iconItem1;
     }
 }

@@ -5,14 +5,35 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 
 public class SavedComparesDetailActivity extends Activity {
+
+    private ImageView detail1;
+    private ImageView detail2;
+    private TextView item1;
+    private TextView item2;
+    private TextView compareTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_saved_compares_detail);
+
+        detail1 = (ImageView) findViewById(R.id.detail1oben);
+        detail2 = (ImageView) findViewById(R.id.detail2unten);
+        item1 = (TextView) findViewById(R.id.nameItem1);
+        item2 = (TextView) findViewById(R.id.nameItem2);
+        compareTitle = (TextView) findViewById(R.id.comparetitle);
+
+        CompareItem clickedCompare = (CompareItem)getIntent().getSerializableExtra("item");
+        detail1.setImageResource(clickedCompare.iconItem1);
+        detail2.setImageResource(clickedCompare.iconItem2);
+        item1.setText(clickedCompare.nameItem1);
+        item2.setText(clickedCompare.nameItem2);
+        compareTitle.setText(clickedCompare.name);
     }
 
     @Override
