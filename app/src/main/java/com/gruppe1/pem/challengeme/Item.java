@@ -31,7 +31,7 @@ public class Item {
     private int m_categoryId;
     private int m_isWish;
     private String m_primaryColor;
-    private float m_rating;
+    private Float m_rating;
 
 //    private HashMap<AttributeType, Object> attributes;
 
@@ -125,11 +125,11 @@ public class Item {
         this.m_primaryColor = p_primaryColor;
     }
 
-    public float getRating() {
+    public Float getRating() {
         return m_rating;
     }
 
-    public void setRating(float p_rating) {
+    public void setRating(Float p_rating) {
         this.m_rating = p_rating;
     }
 

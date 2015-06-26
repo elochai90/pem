@@ -227,7 +227,8 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
    // @Override
     public void selectItem(int itemid) {
         Intent intent = new Intent();
-        intent.setClassName(getPackageName(), getPackageName() + ".CategoriesItemDetailActivity");
+//        intent.setClassName(getPackageName(), getPackageName() + ".CategoriesItemDetailActivity");
+        intent.setClassName(getPackageName(), getPackageName() + ".NewItemActivity");
         Bundle b = new Bundle();
         b.putInt(Constants.EXTRA_ITEM_ID, itemid);
         intent.putExtras(b);

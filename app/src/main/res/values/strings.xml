@@ -24,5 +24,9 @@
     <string name="title_activity_categories_item_detail">Item</string>
 
 
+    <string name="switch_true">&#10003;</string>
+    <string name="switch_false">&#10007;</string>
+
+
     <string name="chooseCountry">Choose a category</string>
 </resources>

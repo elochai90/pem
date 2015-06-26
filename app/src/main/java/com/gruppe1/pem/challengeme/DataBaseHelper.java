@@ -108,7 +108,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         this.mValues.put(p_key, p_value);
     }
 
-    public void setFloatValue(String p_key, float p_value) {
+    public void setFloatValue(String p_key, Float p_value) {
         this.mValues.put(p_key, p_value);
     }
 

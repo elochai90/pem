@@ -2,25 +2,14 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.gruppe1.pem.challengeme.CategoriesItemDetailFragment"
+    tools:context="com.gruppe1.pem.challengeme.NewItemActivity"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
-    <EditText
-        android:id="@+id/itemName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:textSize="20sp"
-        android:hint="Add Item Name"
-        android:layout_alignParentStart="true"
-        android:textColor="@android:color/white"
-        android:background="@color/background_floating_material_dark" />
 
     <ScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:layout_below="@id/itemName"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true">
@@ -38,22 +27,22 @@
                 android:scaleType="centerCrop" />
 
 
-                <LinearLayout
-                    android:id="@+id/itemDetailRating"
-                    android:layout_width="match_parent"
+            <LinearLayout
+                android:id="@+id/itemDetailRating"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_below="@id/itemDetailImage"
+                android:layout_gravity="center_horizontal"
+                android:background="@color/background_floating_material_dark"
+                android:weightSum="1">
+
+                <RatingBar
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:layout_below="@id/itemDetailImage"
-                    android:layout_gravity="center_horizontal"
-                    android:background="@color/background_floating_material_dark"
-                    android:weightSum="1">
+                    android:id="@+id/ratingBar" />
 
-                    <RatingBar
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/ratingBar" />
-
-                </LinearLayout>
+            </LinearLayout>
 
             <com.github.clans.fab.FloatingActionButton
                 xmlns:fab="http://schemas.android.com/apk/res-auto"
@@ -69,12 +58,39 @@
 
 
 
+            <LinearLayout
+                android:id="@+id/itemNameLayout"
+                android:layout_below="@id/itemDetailRating"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+                <TextView
+                    android:text="Name:"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"/>
+                <EditText
+                    android:id="@+id/itemName"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:textSize="18sp"
+                    android:hint="Add Item Name" />
+            </LinearLayout>
+
+            <View
+                android:id="@+id/itemNameDivider"
+                android:layout_below="@id/itemNameLayout"
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="#c0c0c0"/>
 
 
 
             <LinearLayout
                 android:id="@+id/itemDetailAttributes"
-                android:layout_below="@id/itemDetailRating"
+                android:layout_below="@id/itemNameDivider"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -82,7 +98,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="10dp">
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
                     <TextView
                         android:id="@+id/attrCategoryName"
                         android:layout_width="100dp"
@@ -98,7 +115,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="10dp">
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
                     <TextView
                         android:id="@+id/attrColorName"
                         android:layout_width="100dp"
@@ -114,37 +132,28 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="10dp">
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
                     <TextView
                         android:id="@+id/attrWishlistName"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:textSize="18sp"/>
-                    <RadioGroup
+                    <Switch
                         android:id="@+id/attrWishlistValue"
-                        android:layout_width="fill_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="40dp"
-                        android:orientation="horizontal">
-                        <RadioButton
-                            android:id="@+id/attrWishlistYes"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="18sp"
-                            android:text="yes" />
-                        <RadioButton
-                            android:id="@+id/attrWishlistNo"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="18sp"
-                            android:text="no" />
-
-                    </RadioGroup>
+                        android:textOff="@string/switch_false"
+                        android:showText="true"
+                        android:textOn="@string/switch_true"
+                        android:checked="false"/>
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="10dp">
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
                     <EditText
                         android:id="@+id/addNewAttributeName"
                         android:layout_width="100dp"

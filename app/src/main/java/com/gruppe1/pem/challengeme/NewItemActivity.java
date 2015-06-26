@@ -26,6 +26,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RatingBar;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.github.clans.fab.FloatingActionButton;
@@ -53,7 +54,7 @@ public class NewItemActivity extends Activity {
     private TextView attrColorName;
     private TextView attrColorValue;
     private TextView attrWishlistName;
-    private RadioGroup attrWishlistValue;
+    private Switch attrWishlistValue;
 
     private int editItemId;
     private Item editItem;
@@ -107,7 +108,7 @@ public class NewItemActivity extends Activity {
         attrColorName = (TextView) findViewById(R.id.attrColorName);
         attrColorValue = (TextView) findViewById(R.id.attrColorValue);
         attrWishlistName = (TextView) findViewById(R.id.attrWishlistName);
-        attrWishlistValue = (RadioGroup) findViewById(R.id.attrWishlistValue);
+        attrWishlistValue = (Switch) findViewById(R.id.attrWishlistValue);
 
         attrCategoryName.setText("Category:");
         attrColorName.setText("Color:");
@@ -159,9 +160,11 @@ public class NewItemActivity extends Activity {
         attrColorValue.setText(editItem.getPrimaryColor());
 
         if(editItem.getIsWish() == 0) {
-            attrWishlistValue.check(R.id.attrWishlistNo);
+            attrWishlistValue.setChecked(false);
+//            attrWishlistValue.check(R.id.attrWishlistNo);
         } else {
-            attrWishlistValue.check(R.id.attrWishlistYes);
+            attrWishlistValue.setChecked(true);
+//            attrWishlistValue.check(R.id.attrWishlistYes);
         }
 
 
@@ -183,7 +186,7 @@ public class NewItemActivity extends Activity {
         String item_categoryId = (attrCategorySelected.getId()) + "";
         String item_primaryColor = attrColorValue.getText().toString();
         String item_rating = Float.toString(ratingBar.getRating());
-        String item_isWish = (attrWishlistValue.getCheckedRadioButtonId() == R.id.attrWishlistYes) ? "1" : "0";
+        String item_isWish = attrWishlistValue.isChecked()  ? "1" : "0";
 
 //        String item_buyDate = "25.12.2014";
 //        String item_store = "H&M";
@@ -208,6 +211,21 @@ public class NewItemActivity extends Activity {
         db_helper.setTable(Constants.ITEMS_DB_TABLE);
         editItem.edit(itemAttributes);
         editItem.save();
+//        For testing what is stored in db
+//        System.out.println("Rating: " + editItem.getRating());
+//        System.out.println("ImageFile: " + editItem.getImageFile());
+//        System.out.println("Prim Color: " + editItem.getPrimaryColor());
+//        System.out.println("Wishlist: " + editItem.getIsWish());
+//        System.out.println("Name: " + editItem.getName());
+//        System.out.println("Id: " + editItem.getId());
+//        System.out.println("-----------------------------");
+//        Item testItem = new Item(this, editItem.getId(), db_helper);
+//        System.out.println("Rating: " + testItem.getRating());
+//        System.out.println("ImageFile: " + testItem.getImageFile());
+//        System.out.println("Prim Color: " + testItem.getPrimaryColor());
+//        System.out.println("Wishlist: " + testItem.getIsWish());
+//        System.out.println("Name: " + testItem.getName());
+//        System.out.println("Id: " + testItem.getId());
 
 
         Iterator allItemAttributesIterator = attributeTypesList.iterator();
@@ -221,7 +239,7 @@ public class NewItemActivity extends Activity {
             String attributeSaveValue = "";
             // boolean
             if(tmpItemAttrType.getValueType() == 2) {
-                attributeSaveValue  = ((RadioButton) attributeView.findViewById(R.id.boolAttrYes)).isChecked() ? "1" : "0";
+                attributeSaveValue  = ((Switch) attributeView.findViewById(R.id.boolAttrField)).isChecked() ? "1" : "0";
             } else {
                 attributeSaveValue = ((EditText) attributeView.findViewById(R.id.stringAttrField)).getText().toString();
             }
@@ -243,7 +261,7 @@ public class NewItemActivity extends Activity {
         LinearLayout attributeLayout = new LinearLayout(this);
         attributeLayout.setOrientation(LinearLayout.HORIZONTAL);
         int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
-        attributeLayout.setPadding(padding, padding, padding, padding);
+        attributeLayout.setPadding(padding, 0, padding, 0);
         LinearLayout.LayoutParams attributeLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         attributeLayout.setLayoutParams(attributeLayoutParams);
         // Set the attributeTypeId for saving
@@ -259,49 +277,43 @@ public class NewItemActivity extends Activity {
         attributeName.setText(attributeType.getName() + ":");
 
         View attributeValueView;
-//
-//        // attribute is CategoryId -> Dropdown
-//        if(attributeType.getValueType() == 3) {
-//            Spinner categoryDropdown = new Spinner(this);
-//            ViewGroup.LayoutParams attibuteValueLayoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//            categoryDropdown.setLayoutParams(attibuteValueLayoutParams);
-//
-//
-//            if(attributeValue != null) {
-//                categoryDropdown.setSelection((int)attributeValue-1);
-//            }
-//            attributeValueView = categoryDropdown;
-//
-//        }
         // attribute is boolean
         if(attributeType.getValueType() == 2) {
-            RadioGroup attrValueRadioGroup = new RadioGroup(this);
-            ViewGroup.LayoutParams attibuteValueLayoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
-            attrValueRadioGroup.setLayoutParams(attibuteValueLayoutParams);
-            attrValueRadioGroup.setOrientation(LinearLayout.HORIZONTAL);
+            Switch attrValueSwitch = new Switch(this);
+            ViewGroup.LayoutParams attibuteValueLayoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, height);
+            attrValueSwitch.setLayoutParams(attibuteValueLayoutParams);
+            attrValueSwitch.setShowText(true);
+            attrValueSwitch.setTextOn(getResources().getString(R.string.switch_true));
+            attrValueSwitch.setTextOff(getResources().getString(R.string.switch_false));
+            attrValueSwitch.setId(R.id.boolAttrField);
 
-            ViewGroup.LayoutParams boolButtonLayoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-            RadioButton boolTrueButton = new RadioButton(this);
-            boolTrueButton.setId(R.id.boolAttrYes);
-            boolTrueButton.setLayoutParams(boolButtonLayoutParams);
-            boolTrueButton.setText("yes");
-            boolTrueButton.setTextSize(18);
-
-            RadioButton boolFalseButton = new RadioButton(this);
-            boolFalseButton.setId(R.id.boolAttrNo);
-            boolFalseButton.setLayoutParams(boolButtonLayoutParams);
-            boolFalseButton.setText("no");
-            boolFalseButton.setTextSize(18);
-
-            attrValueRadioGroup.addView(boolTrueButton);
-            attrValueRadioGroup.addView(boolFalseButton);
+//            RadioGroup attrValueRadioGroup = new RadioGroup(this);
+//            ViewGroup.LayoutParams attibuteValueLayoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
+//            attrValueRadioGroup.setLayoutParams(attibuteValueLayoutParams);
+//            attrValueRadioGroup.setOrientation(LinearLayout.HORIZONTAL);
+//
+//            ViewGroup.LayoutParams boolButtonLayoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//
+//            RadioButton boolTrueButton = new RadioButton(this);
+//            boolTrueButton.setId(R.id.boolAttrYes);
+//            boolTrueButton.setLayoutParams(boolButtonLayoutParams);
+//            boolTrueButton.setText("yes");
+//            boolTrueButton.setTextSize(18);
+//
+//            RadioButton boolFalseButton = new RadioButton(this);
+//            boolFalseButton.setId(R.id.boolAttrNo);
+//            boolFalseButton.setLayoutParams(boolButtonLayoutParams);
+//            boolFalseButton.setText("no");
+//            boolFalseButton.setTextSize(18);
+//
+//            attrValueRadioGroup.addView(boolTrueButton);
+//            attrValueRadioGroup.addView(boolFalseButton);
 
             if(attributeValue != null) {
                 boolean bool = Boolean.parseBoolean(attributeValue.toString());
-                attrValueRadioGroup.check(bool ? R.id.boolAttrYes : R.id.boolAttrNo);
+                attrValueSwitch.setChecked(bool);
             }
-            attributeValueView = attrValueRadioGroup;
+            attributeValueView = attrValueSwitch;
 
         } else {
             EditText textAttributeValue = new EditText(this);
