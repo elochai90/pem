@@ -33,12 +33,6 @@ public class CompareListAdapter extends ArrayAdapter {
 
         CompareItem item = data.get(position);
 
-
-       /* if(position == 0) {
-            LayoutInflater inflater = ((Activity) context).getLayoutInflater();
-            row = inflater.inflate(R.layout.list_item_add, parent, false);
-            ((TextView) row.findViewById(R.id.addText)).setText(item.name);
-        } else {*/
             if (row == null || row.getTag() == null) {
                 LayoutInflater inflater = ((Activity) context).getLayoutInflater();
                 row = inflater.inflate(layoutResourceId, parent, false);
@@ -62,7 +56,6 @@ public class CompareListAdapter extends ArrayAdapter {
             holder.rightTextView.setText(dateFormat.format(item.createdAt));
             holder.imageItem1.setImageResource(item.iconItem1);
             holder.imageItem2.setImageResource(item.iconItem2);
-       // }
 
         return row;
     }

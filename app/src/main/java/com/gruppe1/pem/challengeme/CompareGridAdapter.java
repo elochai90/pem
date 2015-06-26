@@ -33,29 +33,21 @@ public class CompareGridAdapter extends ArrayAdapter {
         ViewHolder holder = null;
 
         CompareItem item = data.get(position);
-
-
-        if(position == 0) {
+        if (row == null || row.getTag() == null) {
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
-            row = inflater.inflate(R.layout.grid_item_add_compare, parent, false);
-            ((TextView) row.findViewById(R.id.addText)).setText(item.name);
+            row = inflater.inflate(layoutResourceId, parent, false);
+            holder = new ViewHolder();
+            holder.compareName = (TextView) row.findViewById(R.id.compareName);
+            holder.imageItem1 = (ImageView) row.findViewById(R.id.imageItem1);
+            holder.imageItem2 = (ImageView) row.findViewById(R.id.imageItem2);
+            row.setTag(holder);
         } else {
-            if (row == null || row.getTag() == null) {
-                LayoutInflater inflater = ((Activity) context).getLayoutInflater();
-                row = inflater.inflate(layoutResourceId, parent, false);
-                holder = new ViewHolder();
-                holder.compareName = (TextView) row.findViewById(R.id.compareName);
-                holder.imageItem1 = (ImageView) row.findViewById(R.id.imageItem1);
-                holder.imageItem2 = (ImageView) row.findViewById(R.id.imageItem2);
-                row.setTag(holder);
-            } else {
-                holder = (ViewHolder) row.getTag();
-            }
-
-            holder.compareName.setText(item.name);
-            holder.imageItem1.setImageResource(item.iconItem1);
-            holder.imageItem2.setImageResource(item.iconItem2);
+            holder = (ViewHolder) row.getTag();
         }
+
+        holder.compareName.setText(item.name);
+        holder.imageItem1.setImageResource(item.iconItem1);
+        holder.imageItem2.setImageResource(item.iconItem2);
         return row;
     }
 

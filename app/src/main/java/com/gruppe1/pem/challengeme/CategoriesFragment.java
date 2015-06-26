@@ -261,13 +261,7 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
         if(actionMode != null) {
             actionMode.finish();
         }
-        /*if(position == 0) {
-            Intent intent = new Intent();
-            intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".NewCategoryActivity");
-            startActivityForResult(intent, REQUEST_CODE);
-        } else {*/
             selectCategory(mDataset.get(position).elementId);
-        //}
     }
 
     // for actualizing the categories list on coming back from new category
@@ -360,14 +354,12 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
         System.out.println("Long click");
         if(actionMode != null)
             actionMode.finish();
-        //if(position != 0) {
             actionMode = getActivity().startActionMode(modeCallBack);
             view.setSelected(true);
 
             selectedItem = new Object[2];
             selectedItem[0] = position;
             selectedItem[1] = view;
-        //}
         return true;
     }
 }

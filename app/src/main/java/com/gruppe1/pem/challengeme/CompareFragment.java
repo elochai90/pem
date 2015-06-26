@@ -202,15 +202,9 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        /*if(position == 0) {
-            Intent intent = new Intent();
-            intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".NewCompareActivity");
-            startActivity(intent);
-        } else {*/
             Intent intent = new Intent();
             intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".SavedComparesDetailActivity");
             intent.putExtra("item", mDataset.get(position));
             startActivity(intent);
-        //}
     }
 }

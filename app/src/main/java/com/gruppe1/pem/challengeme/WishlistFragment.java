@@ -1,14 +1,8 @@
 package com.gruppe1.pem.challengeme;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListView;
-import android.widget.RadioButton;
 
 import com.github.clans.fab.FloatingActionButton;
 
@@ -138,7 +131,6 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
     private void initDataset() {
         // TODO: replace by database data
         mDataset = new ArrayList<ListItemIconName>();
-        //mDataset.add(new ListItemIconName(0,0, "add new wishlist item"));
         mDataset.add(new ListItemIconName(0,R.drawable.kleiderbuegel, "T-Shirt in rosa"));
         mDataset.add(new ListItemIconName(0,R.drawable.kleiderbuegel, "T-Shirt in rosa"));
         mDataset.add(new ListItemIconName(0,R.drawable.kleiderbuegel, "T-Shirt in rosa"));
@@ -155,11 +147,5 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         //TODO
-        /*if(position == 0) {
-            Intent intent = new Intent();
-            intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".NewItemActivity");
-            startActivity(intent);
-        } else {
-        }*/
     }
 }
