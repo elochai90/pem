@@ -21,7 +21,7 @@ public class ListItemIconName {
         this.icon = icon;
         this.name = name;
 
-        Log.e("###LIST", this.name);
+//        Log.e("###LIST", this.name);
     }
 
     public ListItemIconName(int elementId, int icon, String name, Date date)

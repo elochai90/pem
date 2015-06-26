@@ -46,7 +46,7 @@ public class AttributeType {
             Cursor attrTypeData = this.m_dbHelper.select();
 
             if(attrTypeData.moveToFirst()) {
-                Log.e("###AttrType Name:###", "" + attrTypeData.getInt(0));
+//                Log.e("###AttrType Name:###", "" + attrTypeData.getInt(0));
                 this.m_id = attrTypeData.getInt(0);
                 this.m_name = attrTypeData.getString(1);
                 this.m_valueType = attrTypeData.getInt(2);
@@ -153,7 +153,7 @@ public class AttributeType {
         Set<String> keys = p_values.keySet();
         Iterator iterator = keys.iterator();
 
-        Log.e("###ATTR KEYS###", keys.toString());
+//        Log.e("###ATTR KEYS###", keys.toString());
 
         while (iterator.hasNext()) {
             String dbColumnName = iterator.next().toString();
@@ -207,12 +207,12 @@ public class AttributeType {
 
                 if (id > -1) {
                     this.m_id = id;
-                    Log.e("###ATTR INSERTED","name: " + this.m_name);
+//                    Log.e("###ATTR INSERTED","name: " + this.m_name);
                 } else {
                     Log.e("Attribute-Type-Error", "save failed");
                 }
             } else {
-                Log.e("###ATTR TYPE EXISTS", this.m_name + " - " + rowId);
+//                Log.e("###ATTR TYPE EXISTS", this.m_name + " - " + rowId);
             }
         } else {
             //save changes to existing attribute type

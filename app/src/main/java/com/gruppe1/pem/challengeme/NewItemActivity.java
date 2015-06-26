@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -48,6 +49,7 @@ public class NewItemActivity extends Activity {
 
     private TextView attrCategoryName;
     private Spinner attrCategoryValue;
+    private Category attrCategorySelected;
     private TextView attrColorName;
     private TextView attrColorValue;
     private TextView attrWishlistName;
@@ -55,6 +57,8 @@ public class NewItemActivity extends Activity {
 
     private int editItemId;
     private Item editItem;
+
+    private boolean isEdit;
 
     private ArrayList<AttributeType> attributeTypesList;
 
@@ -124,15 +128,19 @@ public class NewItemActivity extends Activity {
         }
         // Not a new item, but editing an existing item
         if(editItemId > 0) {
+            isEdit = true;
             getActionBar().setTitle(R.string.title_activity_edit_item);
+            db_helper.setTable(Constants.ITEMS_DB_TABLE);
             editItem = new Item(this, editItemId, db_helper);
             editItem.save();
             editItemId = editItem.getId();
             setItemData();
         } else {
+            isEdit = false;
             getActionBar().setTitle(R.string.title_activity_new_item);
+            db_helper.setTable(Constants.ITEMS_DB_TABLE);
             editItem = new Item(this, 0, db_helper);
-            editItem.save();
+//            editItem.save();
             editItemId = editItem.getId();
         }
         setupAttributeViews();
@@ -145,7 +153,8 @@ public class NewItemActivity extends Activity {
 
         ratingBar.setRating(editItem.getRating());
 
-        attrCategoryValue.setSelection(editItem.getCategoryId() - 1);
+//        attrCategoryValue.setSelection(editItem.getCategoryId() - 1);
+        attrCategoryValue.setSelection(((CategoriesDropdownAdapter)attrCategoryValue.getAdapter()).findPositionOfCategoryId(editItem.getCategoryId()));
 
         attrColorValue.setText(editItem.getPrimaryColor());
 
@@ -171,7 +180,7 @@ public class NewItemActivity extends Activity {
 
         String item_name = itemNameExitText.getText().toString();
         String item_imageFile = ImgPhoto.getDrawable().toString();
-        String item_categoryId = (attrCategoryValue.getSelectedItemPosition()-1) + "";
+        String item_categoryId = (attrCategorySelected.getId()) + "";
         String item_primaryColor = attrColorValue.getText().toString();
         String item_rating = Float.toString(ratingBar.getRating());
         String item_isWish = (attrWishlistValue.getCheckedRadioButtonId() == R.id.attrWishlistYes) ? "1" : "0";
@@ -196,6 +205,7 @@ public class NewItemActivity extends Activity {
 
 
 //        Item defaultItem = new Item(this, 0, m_dbHelper);
+        db_helper.setTable(Constants.ITEMS_DB_TABLE);
         editItem.edit(itemAttributes);
         editItem.save();
 
@@ -220,6 +230,7 @@ public class NewItemActivity extends Activity {
             itemAttributeValue.put("attribute_type_id",tmpItemAttrType.getId() + "");
             itemAttributeValue.put("attribute_value",attributeSaveValue);
 
+            db_helper.setTable(Constants.ITEM_ATTR_DB_TABLE);
             Attribute itemAttribute = new Attribute(this, 0, db_helper);
             itemAttribute.edit(itemAttributeValue);
             itemAttribute.save();
@@ -422,20 +433,46 @@ public class NewItemActivity extends Activity {
 
     private void setupCategoryDropdown() {
 
-        ArrayList<CharSequence> upperCategoriesList = new ArrayList<CharSequence>();
-        ArrayList<Category> allCategories = Category.getAllCategories(this);
-        System.out.println(allCategories.toString());
-        upperCategoriesList.add("None");
+//        ArrayList<CharSequence> upperCategoriesList = new ArrayList<CharSequence>();
+        final ArrayList<Category> allCategories = Category.getAllCategories(this);
+//        System.out.println(allCategories.toString());
+//        allCategories.add(new Category(-1))
+//        upperCategoriesList.add("None");
+//
+//        for(Category cat : allCategories) {
+//            upperCategoriesList.add(cat.getName());
+//        }
 
-        for(Category cat : allCategories) {
-            upperCategoriesList.add(cat.getName());
-        }
-
-        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(getBaseContext(), android.R.layout.simple_spinner_item,
-                upperCategoriesList);
+        final CategoriesDropdownAdapter adapter = new CategoriesDropdownAdapter (getBaseContext(), android.R.layout.simple_spinner_item,
+                allCategories);
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         // Apply the adapter to the spinner
         attrCategoryValue.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+        attrCategoryValue.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
+                if (view != null) {
+                    System.out.println("item Selected");
+                    System.out.println(position);
+                    System.out.println(parent.getSelectedView());
+                    System.out.println(adapter.getItemId(position));
+                    db_helper.setTable(Constants.CATEGORIES_DB_TABLE);
+                    attrCategorySelected = new Category(getBaseContext(), (int) adapter.getItemId(position), db_helper);
+                    attrCategoryValue.setSelection(position);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+
+            }
+        });
     }
+
 }

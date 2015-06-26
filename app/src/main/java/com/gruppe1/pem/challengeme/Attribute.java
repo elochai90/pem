@@ -164,12 +164,12 @@ public class Attribute {
 
                 if (id > -1) {
                     this.m_id = id;
-                    Log.e("###ATTRIBUTE INSERTED","id:" + id);
+//                    Log.e("###ATTRIBUTE INSERTED","id:" + id);
                 } else {
                     Log.e("Item-Error", "save failed");
                 }
             } else {
-                Log.e("###ATTRIBUTE EXISTS", this.m_itemId + ":" + this.m_attributeType.getId() + " - " + rowId);
+//                Log.e("###ATTRIBUTE EXISTS", this.m_itemId + ":" + this.m_attributeType.getId() + " - " + rowId);
             }
         } else {
             //save changes to existing category

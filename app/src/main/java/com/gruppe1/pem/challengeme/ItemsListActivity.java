@@ -208,15 +208,15 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
         System.out.println("Category Id before init: " + categoryId);
 //        DefaultSetup defaultSetup = new DefaultSetup(this);
 //        defaultSetup.setup("setup_values.xml");
-//        ArrayList<Item> allCategoryItems = Item.getItemsByCategoryId(this, categoryId);
-        ArrayList<Item> allCategoryItems = Item.getAllItems(this);
+        ArrayList<Item> allCategoryItems = Item.getItemsByCategoryId(this, categoryId);
+//        ArrayList<Item> allCategoryItems = Item.getAllItems(this);
 
         Iterator catIt = allCategoryItems.iterator();
         System.out.println("cat items: " + allCategoryItems.size());
 
         while (catIt.hasNext()) {
             Item tmpItem = (Item)catIt.next();
-            Log.e("###ITEM###", tmpItem.getName() + " - " + tmpItem.getId());
+//            Log.e("###ITEM###", tmpItem.getName() + " - " + tmpItem.getId());
             int iconId = getResources().getIdentifier("kleiderbuegel", "drawable", "com.gruppe1.pem.challengeme"); // TODO: replace with image
             mDataset.add(new ListItemIconName(tmpItem.getId(), iconId , tmpItem.getName()));
         }

@@ -43,7 +43,7 @@ public class Category {
             Cursor categoryData = this.m_dbHelper.select();
 
             if(categoryData.moveToFirst()) {
-                Log.e("###Category Id:###", "" + categoryData.getInt(0));
+//                Log.e("###Category Id:###", "" + categoryData.getInt(0));
                 this.m_id = categoryData.getInt(0);
                 this.m_name = categoryData.getString(1);
                 this.m_parent_category_id = categoryData.getInt(2);
@@ -125,7 +125,7 @@ public class Category {
 
         Cursor allCategoriesIterator = helper.select();
         allCategoriesIterator.moveToFirst();
-        Log.e("###All Cat count###", "" + allCategoriesIterator.getCount());
+//        Log.e("###All Cat count###", "" + allCategoriesIterator.getCount());
 
         while (!allCategoriesIterator.isAfterLast()) {
             Category category = new Category(p_context, allCategoriesIterator.getInt(0), helper);
@@ -146,13 +146,13 @@ public class Category {
         Set<String> keys = p_values.keySet();
         Iterator iterator = keys.iterator();
 
-        Log.e("KEYS", keys.toString());
+//        Log.e("KEYS", keys.toString());
 
         while (iterator.hasNext()) {
             String dbColumnName = iterator.next().toString();
             String dbColumnValue = p_values.get(dbColumnName);
 
-            Log.e("DBCOLUMNS", dbColumnName.toString());
+//            Log.e("DBCOLUMNS", dbColumnName.toString());
 
             switch (dbColumnName) {
                 case "name":
@@ -172,7 +172,7 @@ public class Category {
 
                 case "icon":
 
-                    Log.e("###CAT EDIT ICON###", "icon is: " + dbColumnValue);
+//                    Log.e("###CAT EDIT ICON###", "icon is: " + dbColumnValue);
                     this.setIcon(dbColumnValue);
                     break;
 
@@ -207,21 +207,26 @@ public class Category {
 
                 this.m_dbHelper.setStringValue("icon", iconValue);
 
-                Log.e("###DB###", this.toString());
+//                Log.e("###DB###", this.toString());
 
                 int id = this.m_dbHelper.insert();
 
                     if (id > -1) {
                     this.m_id = id;
-                    Log.e("###CAT INSERTED","id:" + id);
+//                    Log.e("###CAT INSERTED","id:" + id);
                 } else {
                     Log.e("Category-Error", "save failed");
                 }
             } else {
-                Log.e("###CAT EXISTS", this.m_name + " - " + rowId);
+//                Log.e("###CAT EXISTS", this.m_name + " - " + rowId);
             }
         } else {
             //save changes to existing category
         }
+    }
+    @Override
+    public boolean equals(Object o) {
+        return (o instanceof Category && getId() == ((Category) o).getId());
+
     }
 }

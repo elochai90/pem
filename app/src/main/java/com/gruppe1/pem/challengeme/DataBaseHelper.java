@@ -220,11 +220,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     public int insert() {
         this.database.insert(this.mTable, null, this.mValues);
-        Log.e("###", "inserted");
+//        Log.e("###", "inserted");
         this.mColumns = new String[]{"MAX(_id)"};
         Cursor cursor = this.select();
 
-        Log.e("###DB###", this.mValues.toString());
+//        Log.e("###DB###", this.mValues.toString());
 
         //return _id of (new) insert
         if (cursor != null) {

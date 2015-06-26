@@ -20,12 +20,8 @@ public class Item {
         put("name", 0);
         put("image_file", 1);
         put("category_id", 1);
-        put("buy_date", 0);
-        put("store", 0);
         put("is_wish", 1);
         put("primary_color", 0);
-        put("secondary_color", 0);
-        put("pattern", 0);
         put("rating", 1);
     }};
 
@@ -33,13 +29,9 @@ public class Item {
     private String m_name;
     private String m_imageFile;
     private int m_categoryId;
-    private String m_buyDate;
-    private String m_store;
     private int m_isWish;
     private String m_primaryColor;
-    private String m_secondaryColor;
     private float m_rating;
-    private int m_pattern;
 
 //    private HashMap<AttributeType, Object> attributes;
 
@@ -64,28 +56,14 @@ public class Item {
             Cursor itemData = this.m_dbHelper.select();
 
             if(itemData.moveToFirst()) {
-                Log.e("###Item Id:###", "" + itemData.getInt(0));
+//                Log.e("###Item Id:###", "" + itemData.getInt(0));
                 this.m_id = itemData.getInt(0);
                 this.m_name = itemData.getString(1);
-                this.m_imageFile = ""; //itemData.getString(2);
-
-//                attributes.put(AttributeType.getAttributeTypeByName(p_context,"Category"), itemData.getInt(3));
-//                attributes.put(AttributeType.getAttributeTypeByName(p_context,"Buy Date"), itemData.getString(4));
-//                attributes.put(AttributeType.getAttributeTypeByName(p_context,"Store"), itemData.getString(5));
-//                attributes.put(AttributeType.getAttributeTypeByName(p_context,"In Wishlist"), itemData.getInt(6));
-//                attributes.put(AttributeType.getAttributeTypeByName(p_context,"Color"), itemData.getString(7));
-//                attributes.put(AttributeType.getAttributeTypeByName(p_context,"Exact Color"), itemData.getString(8));
-//                attributes.put(AttributeType.getAttributeTypeByName(p_context,"Rating"), itemData.getFloat(9));
-//                attributes.put(AttributeType.getAttributeTypeByName(p_context,"Has Pattern"), itemData.getInt(10));
-
+                this.m_imageFile = itemData.getString(2);
                 this.m_categoryId = itemData.getInt(3);
-                this.m_buyDate = itemData.getString(4);
-                this.m_store = itemData.getString(5);
-                this.m_isWish = itemData.getInt(6);
-                this.m_primaryColor = itemData.getString(7);
-                this.m_secondaryColor= itemData.getString(8);
-                this.m_rating= itemData.getFloat(8);
-                this.m_pattern= itemData.getInt(8);
+                this.m_isWish = itemData.getInt(4);
+                this.m_primaryColor = itemData.getString(5);
+                this.m_rating= itemData.getFloat(6);
 
                 //TODO handle item_attribute_types table for m_customAttributes
 
@@ -131,22 +109,6 @@ public class Item {
         this.m_categoryId = p_categoryId;
     }
 
-    public String getBuyDate() {
-        return m_buyDate;
-    }
-
-    public void setBuyDate(String p_buyDate) {
-        this.m_buyDate = p_buyDate;
-    }
-
-    public String getStore() {
-        return m_store;
-    }
-
-    public void setStore(String p_store) {
-        this.m_store = p_store;
-    }
-
     public int getIsWish() {
         return m_isWish;
     }
@@ -161,22 +123,6 @@ public class Item {
 
     public void setPrimaryColor(String p_primaryColor) {
         this.m_primaryColor = p_primaryColor;
-    }
-
-    public String getSecondaryColor() {
-        return m_secondaryColor;
-    }
-
-    public void setSecondaryColor(String p_secondaryColor) {
-        this.m_secondaryColor = p_secondaryColor;
-    }
-
-    public int getPattern() {
-        return m_pattern;
-    }
-
-    public void setPattern(int p_pattern) {
-        this.m_pattern = p_pattern;
     }
 
     public float getRating() {
@@ -228,18 +174,6 @@ public class Item {
 
         return itemList;
     }
-
-//    public void putAttributeValue(AttributeType attributeType, Object attributeValue) {
-//        attributes.put(attributeType, attributeValue);
-//    }
-//
-//    public Object getAttributeValue(Context context, AttributeType attributeType) {
-//
-//        return attributes.get(attributeType.getName());
-////        ArrayList<AttributeType> allAttributeTypes = AttributeType.getAttributeTypes(context);
-//
-//    }
-
     public static int getItemsCountByCategoryId(Context p_context, int p_categoryId) {
         DataBaseHelper dbHelper = new DataBaseHelper(p_context);
         dbHelper.init();
@@ -278,23 +212,11 @@ public class Item {
                 case "category_id":
                     this.setCategoryId(Integer.parseInt(dbColumnValue));
                     break;
-                case "buy_date":
-                    this.setBuyDate(dbColumnValue);
-                    break;
-                case "store":
-                    this.setStore(dbColumnValue);
-                    break;
                 case "is_wish":
                     this.setIsWish(Integer.parseInt(dbColumnValue));
                     break;
                 case "primary_color":
                     this.setPrimaryColor(dbColumnValue);
-                    break;
-                case "secondary_color":
-                    this.setSecondaryColor(dbColumnValue);
-                    break;
-                case "patter":
-                    this.setPattern(Integer.parseInt(dbColumnValue));
                     break;
                 case "rating":
                     this.setRating(Float.parseFloat(dbColumnValue));
@@ -320,24 +242,20 @@ public class Item {
                 this.m_dbHelper.setStringValue("name", this.m_name);
                 this.m_dbHelper.setStringValue("image_file", this.m_imageFile);
                 this.m_dbHelper.setIntegerValue("category_id", this.m_categoryId);
-                this.m_dbHelper.setStringValue("buy_date", this.m_buyDate);
-                this.m_dbHelper.setStringValue("store", this.m_store);
                 this.m_dbHelper.setIntegerValue("is_wish", this.m_isWish);
                 this.m_dbHelper.setStringValue("primary_color", this.m_primaryColor);
-                this.m_dbHelper.setStringValue("secondary_color", this.m_secondaryColor);
-                this.m_dbHelper.setIntegerValue("pattern", this.m_pattern);
                 this.m_dbHelper.setFloatValue("rating", this.m_rating);
 
                 int id = this.m_dbHelper.insert();
 
                 if (id > -1) {
                     this.m_id = id;
-                    Log.e("###ITEM INSERTED","id:" + id);
+//                    Log.e("###ITEM INSERTED","id:" + id);
                 } else {
                     Log.e("Item-Error", "save failed");
                 }
             } else {
-                Log.e("###ITEM EXISTS", this.m_name + " - " + rowId);
+//                Log.e("###ITEM EXISTS", this.m_name + " - " + rowId);
             }
         } else {
             //save changes to existing category

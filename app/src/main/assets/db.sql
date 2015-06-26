@@ -11,13 +11,9 @@ CREATE TABLE `orga_nice_items` (
     `name` VARCHAR(50) NOT  NULL DEFAULT "",
     `image_file` VARCHAR(255),
     `category_id` INT(5) NOT NULL,
-    `buy_date` VARCHAR (10) NOT NULL DEFAULT "",
-    `store` VARCHAR(100) NOT NULL DEFAULT "",
     `is_wish` INT(1)  DEFAULT 0,
     `primary_color` INT(3),
-    `secondary_color` INT(3),
-    `pattern` INT(3),
-    `rating` INT (2),
+    `rating` FLOAT (2),
     FOREIGN KEY(`category_id`) REFERENCES orga_nice_categories(id)
 );
 
@@ -33,7 +29,7 @@ CREATE TABLE `orga_nice_item_attribute_types` (
     `item_id` INT NOT NULL,
     `attribute_type_id` INT NOT NULL,
     `attribute_value` VARCHAR(255),
-    FOREIGN KEY(`attribute_type_id`) REFERENCES orga_nice_attribute_types(id),
+    FOREIGN KEY(`item_id`) REFERENCES orga_nice_items(id),
     FOREIGN KEY(`attribute_type_id`) REFERENCES orga_nice_attribute_types(id)
 );
 
