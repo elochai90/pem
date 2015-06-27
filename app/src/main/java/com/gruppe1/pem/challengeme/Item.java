@@ -239,13 +239,7 @@ public class Item {
                 rowId = 0;
             }
             if(rowId == 0) {
-                this.m_dbHelper.setStringValue("name", this.m_name);
-                this.m_dbHelper.setStringValue("image_file", this.m_imageFile);
-                this.m_dbHelper.setIntegerValue("category_id", this.m_categoryId);
-                this.m_dbHelper.setIntegerValue("is_wish", this.m_isWish);
-                this.m_dbHelper.setStringValue("primary_color", this.m_primaryColor);
-                this.m_dbHelper.setFloatValue("rating", this.m_rating);
-
+                this.setAllValuesToDbHelper();
                 int id = this.m_dbHelper.insert();
 
                 if (id > -1) {
@@ -258,7 +252,20 @@ public class Item {
 //                Log.e("###ITEM EXISTS", this.m_name + " - " + rowId);
             }
         } else {
-            //save changes to existing category
+            //save changes to existing item
+            this.m_dbHelper.setWhere("", new String[] {"_id=" + this.m_id});
+            this.setAllValuesToDbHelper();
+            this.m_dbHelper.update();
         }
     }
+
+    private void setAllValuesToDbHelper() {
+        this.m_dbHelper.setStringValue("name", this.m_name);
+        this.m_dbHelper.setStringValue("image_file", this.m_imageFile);
+        this.m_dbHelper.setIntegerValue("category_id", this.m_categoryId);
+        this.m_dbHelper.setIntegerValue("is_wish", this.m_isWish);
+        this.m_dbHelper.setStringValue("primary_color", this.m_primaryColor);
+        this.m_dbHelper.setFloatValue("rating", this.m_rating);
+    }
+
 }
