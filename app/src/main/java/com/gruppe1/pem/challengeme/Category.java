@@ -199,21 +199,14 @@ public class Category {
             } catch (Exception e) {
                 rowId = 0;
             }
+
             if(rowId == 0) {
-                this.m_dbHelper.setStringValue("name", this.m_name);
-                this.m_dbHelper.setIntegerValue("parent_category_id", this.m_parent_category_id);
-                this.m_dbHelper.setIntegerValue("default_attribute_type", this.m_defaultAttributeType);
-                String iconValue = (this.m_icon != null) ? this.m_icon : Constants.DEFAULT_CAT_ICON;
-
-                this.m_dbHelper.setStringValue("icon", iconValue);
-
-//                Log.e("###DB###", this.toString());
-
+                this.setAllValuesToDbHelper();
                 int id = this.m_dbHelper.insert();
 
-                    if (id > -1) {
+                if (id > -1) {
                     this.m_id = id;
-//                    Log.e("###CAT INSERTED","id:" + id);
+//                   Log.e("###CAT INSERTED","id:" + id);
                 } else {
                     Log.e("Category-Error", "save failed");
                 }
@@ -222,11 +215,23 @@ public class Category {
             }
         } else {
             //save changes to existing category
+            this.m_dbHelper.setWhere("", new String[] {"_id=" + this.m_id});
+            this.setAllValuesToDbHelper();
+            this.m_dbHelper.update();
         }
     }
+
     @Override
     public boolean equals(Object o) {
         return (o instanceof Category && getId() == ((Category) o).getId());
 
+    }
+
+    private void setAllValuesToDbHelper(){
+        this.m_dbHelper.setStringValue("name", this.m_name);
+        this.m_dbHelper.setIntegerValue("parent_category_id", this.m_parent_category_id);
+        this.m_dbHelper.setIntegerValue("default_attribute_type", this.m_defaultAttributeType);
+        String iconValue = (this.m_icon != null) ? this.m_icon : Constants.DEFAULT_CAT_ICON;
+        this.m_dbHelper.setStringValue("icon", iconValue);
     }
 }
