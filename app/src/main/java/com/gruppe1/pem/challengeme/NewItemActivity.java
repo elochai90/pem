@@ -133,7 +133,8 @@ public class NewItemActivity extends Activity {
             getActionBar().setTitle(R.string.title_activity_edit_item);
             db_helper.setTable(Constants.ITEMS_DB_TABLE);
             editItem = new Item(this, editItemId, db_helper);
-            editItem.save();
+            System.out.println("Wish in newItemActivity: " + editItem.getIsWish());
+//            editItem.save();
             editItemId = editItem.getId();
             setItemData();
         } else {
@@ -154,17 +155,15 @@ public class NewItemActivity extends Activity {
 
         ratingBar.setRating(editItem.getRating());
 
-//        attrCategoryValue.setSelection(editItem.getCategoryId() - 1);
-        attrCategoryValue.setSelection(((CategoriesDropdownAdapter)attrCategoryValue.getAdapter()).findPositionOfCategoryId(editItem.getCategoryId()));
+        attrCategoryValue.setSelection(((CategoriesDropdownAdapter) attrCategoryValue.getAdapter()).findPositionOfCategoryId(editItem.getCategoryId()));
 
         attrColorValue.setText(editItem.getPrimaryColor());
 
+        System.out.println("setItemData wish: " + editItem.getIsWish());
         if(editItem.getIsWish() == 0) {
             attrWishlistValue.setChecked(false);
-//            attrWishlistValue.check(R.id.attrWishlistNo);
         } else {
             attrWishlistValue.setChecked(true);
-//            attrWishlistValue.check(R.id.attrWishlistYes);
         }
 
 
@@ -188,11 +187,6 @@ public class NewItemActivity extends Activity {
         String item_rating = Float.toString(ratingBar.getRating());
         String item_isWish = attrWishlistValue.isChecked()  ? "1" : "0";
 
-//        String item_buyDate = "25.12.2014";
-//        String item_store = "H&M";
-//        String item_secondaryColor = "#ff0000";
-//        String item_pattern = "0";
-
         HashMap<String, String> itemAttributes = new HashMap<String, String>();
         itemAttributes.put("name", item_name);
         itemAttributes.put("image_file", item_imageFile);
@@ -200,12 +194,6 @@ public class NewItemActivity extends Activity {
         itemAttributes.put("primary_color", item_primaryColor);
         itemAttributes.put("rating", item_rating);
         itemAttributes.put("is_wish", item_isWish);
-
-//        itemAttributes.put("buy_date", item_buyDate);
-//        itemAttributes.put("store", item_store);
-//        itemAttributes.put("secondary_color", item_secondaryColor);
-//        itemAttributes.put("pattern", item_pattern);
-
 
 //        Item defaultItem = new Item(this, 0, m_dbHelper);
         db_helper.setTable(Constants.ITEMS_DB_TABLE);
@@ -286,28 +274,6 @@ public class NewItemActivity extends Activity {
             attrValueSwitch.setTextOn(getResources().getString(R.string.switch_true));
             attrValueSwitch.setTextOff(getResources().getString(R.string.switch_false));
             attrValueSwitch.setId(R.id.boolAttrField);
-
-//            RadioGroup attrValueRadioGroup = new RadioGroup(this);
-//            ViewGroup.LayoutParams attibuteValueLayoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
-//            attrValueRadioGroup.setLayoutParams(attibuteValueLayoutParams);
-//            attrValueRadioGroup.setOrientation(LinearLayout.HORIZONTAL);
-//
-//            ViewGroup.LayoutParams boolButtonLayoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//
-//            RadioButton boolTrueButton = new RadioButton(this);
-//            boolTrueButton.setId(R.id.boolAttrYes);
-//            boolTrueButton.setLayoutParams(boolButtonLayoutParams);
-//            boolTrueButton.setText("yes");
-//            boolTrueButton.setTextSize(18);
-//
-//            RadioButton boolFalseButton = new RadioButton(this);
-//            boolFalseButton.setId(R.id.boolAttrNo);
-//            boolFalseButton.setLayoutParams(boolButtonLayoutParams);
-//            boolFalseButton.setText("no");
-//            boolFalseButton.setTextSize(18);
-//
-//            attrValueRadioGroup.addView(boolTrueButton);
-//            attrValueRadioGroup.addView(boolFalseButton);
 
             if(attributeValue != null) {
                 boolean bool = Boolean.parseBoolean(attributeValue.toString());
@@ -396,9 +362,7 @@ public class NewItemActivity extends Activity {
                     ImgPhoto.setImageBitmap(photo);
 
                 } catch (Exception e) {
-
                     e.printStackTrace();
-
                 }
 
             } else if (requestCode == 2) {
@@ -413,10 +377,7 @@ public class NewItemActivity extends Activity {
                 }catch(FileNotFoundException e){
                     Log.w("FileNotFoundExeption: ", e.toString());
                 }
-
             }
-
-
         }
     }
 
@@ -429,9 +390,6 @@ public class NewItemActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -445,16 +403,7 @@ public class NewItemActivity extends Activity {
 
     private void setupCategoryDropdown() {
 
-//        ArrayList<CharSequence> upperCategoriesList = new ArrayList<CharSequence>();
         final ArrayList<Category> allCategories = Category.getAllCategories(this);
-//        System.out.println(allCategories.toString());
-//        allCategories.add(new Category(-1))
-//        upperCategoriesList.add("None");
-//
-//        for(Category cat : allCategories) {
-//            upperCategoriesList.add(cat.getName());
-//        }
-
         final CategoriesDropdownAdapter adapter = new CategoriesDropdownAdapter (getBaseContext(), android.R.layout.simple_spinner_item,
                 allCategories);
         // Specify the layout to use when the list of choices appears
@@ -469,10 +418,6 @@ public class NewItemActivity extends Activity {
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
                 if (view != null) {
-                    System.out.println("item Selected");
-                    System.out.println(position);
-                    System.out.println(parent.getSelectedView());
-                    System.out.println(adapter.getItemId(position));
                     db_helper.setTable(Constants.CATEGORIES_DB_TABLE);
                     attrCategorySelected = new Category(getBaseContext(), (int) adapter.getItemId(position), db_helper);
                     attrCategoryValue.setSelection(position);
