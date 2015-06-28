@@ -145,6 +145,7 @@ public class Attribute {
     public void save() {
         if(this.m_id == 0) {
             // insert as new attribute
+            m_dbHelper.deleteValues();
             this.m_dbHelper.setWhere("", new String[]{"item_id='" + this.m_itemId + "' AND attribute_type_id='" + this.m_attributeType.getId() + "'"});
             Cursor existingRowCursor = this.m_dbHelper.select();
             existingRowCursor.moveToFirst();

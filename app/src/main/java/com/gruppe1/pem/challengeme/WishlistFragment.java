@@ -89,10 +89,6 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
             }
         });
 
-        System.out.println("All Colors: " + Color.getAllColors(getActivity()).size());
-        System.out.println(Color.getAllColors(getActivity()).toString());
-
-
         return rootView;
     }
 

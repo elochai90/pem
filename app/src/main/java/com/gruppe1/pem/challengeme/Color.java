@@ -23,7 +23,7 @@ public class Color {
 
     private int m_id;
     private String m_name;
-    private int m_hex;
+    private String m_hex;
 
     private Context m_context;
     private DataBaseHelper m_dbHelper;
@@ -43,7 +43,7 @@ public class Color {
             if(itemData.moveToFirst()) {
                 this.m_id = itemData.getInt(0);
                 this.m_name = itemData.getString(1);
-                this.m_hex = android.graphics.Color.parseColor(itemData.getString(2));
+                this.m_hex = itemData.getString(2);
 
             } else {
                 Log.e("###NO_SUCH_ATTRIBUTE_ID", "" + m_id);
@@ -77,12 +77,12 @@ public class Color {
         this.m_name = m_name;
     }
 
-    public int getHexColor() {
+    public String getHexColor() {
         return m_hex;
     }
 
     public void setHexColor(String color) {
-        this.m_hex = android.graphics.Color.parseColor(color);
+        this.m_hex = color;
     }
 
 
@@ -96,7 +96,6 @@ public class Color {
 
         Cursor allColorsIterator = dbHelper.select();
         allColorsIterator.moveToFirst();
-
         while (!allColorsIterator.isAfterLast()) {
             Color color = new Color(p_context, allColorsIterator.getInt(0), dbHelper);
             color.setName(allColorsIterator.getString(1));
@@ -131,6 +130,8 @@ public class Color {
     public void save() {
         if(this.m_id == 0) {
             // insert as new color
+            m_dbHelper.setTable(Constants.COLORS_DB_TABLE);
+            m_dbHelper.deleteValues();
             this.m_dbHelper.setWhere("", new String[]{"name='" + this.m_name + "'"});
             Cursor existingRowCursor = this.m_dbHelper.select();
             existingRowCursor.moveToFirst();
@@ -143,13 +144,13 @@ public class Color {
             }
             if(rowId == 0) {
                 this.m_dbHelper.setStringValue("name", this.m_name);
-                this.m_dbHelper.setIntegerValue("hex", this.m_hex);
+                this.m_dbHelper.setStringValue("hex", this.m_hex);
 
                 int id = this.m_dbHelper.insert();
 
                 if (id > -1) {
                     this.m_id = id;
-//                    Log.e("###ATTRIBUTE INSERTED","id:" + id);
+                    Log.e("###COLOR INSERTED","id:" + id);
                 } else {
                     Log.e("Color-Error", "save failed");
                 }

@@ -121,6 +121,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return this.mValues;
     }
 
+    public void deleteValues() {
+        this.mValues.clear();
+    }
+
     @Override
     public synchronized void close() {
         if(database != null) {

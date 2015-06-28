@@ -47,3 +47,9 @@ CREATE TABLE `orga_nice_compares` (
     `item_ids` VARCHAR(50) NOT NULL DEFAULT "",
     `save_date` TIMESTAMP
 );
+
+CREATE TABLE `orga_nice_colors` (
+    `_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    `name` VARCHAR(50) NOT NULL DEFAULT "",
+    `hex` VARCHAR(50) NOT NULL DEFAULT ""
+);

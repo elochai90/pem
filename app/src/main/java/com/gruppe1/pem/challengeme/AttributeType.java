@@ -188,6 +188,7 @@ public class AttributeType {
     public void save() {
         if(this.m_id == 0) {
             // insert as new attribute type
+            m_dbHelper.deleteValues();
             this.m_dbHelper.setWhere("", new String[]{"name='" + this.m_name + "'"});
             Cursor existingRowCursor = this.m_dbHelper.select();
             existingRowCursor.moveToFirst();

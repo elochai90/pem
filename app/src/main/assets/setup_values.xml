@@ -153,8 +153,76 @@
 
     <colors>
         <color>
+            <name>Black</name>
+            <hex>#000000</hex>
+        </color>
+        <color>
+            <name>Grey</name>
+            <hex>#888888</hex>
+        </color>
+        <color>
+            <name>White</name>
+            <hex>#FFFFFF</hex>
+        </color>
+        <color>
+            <name>Beige</name>
+            <hex>#F5DEB3</hex>
+        </color>
+        <color>
+            <name>Brown</name>
+            <hex>#8B4513</hex>
+        </color>
+        <color>
+            <name>Gold</name>
+            <hex>#FFD700</hex>
+        </color>
+        <color>
+            <name>Silver</name>
+            <hex>#C0C0C0</hex>
+        </color>
+        <color>
+            <name>Bronze</name>
+            <hex>#904E3B</hex>
+        </color>
+        <color>
+            <name>Blue</name>
+            <hex>#0000FF</hex>
+        </color>
+        <color>
+            <name>Petrol</name>
+            <hex>#5F9EA0</hex>
+        </color>
+        <color>
+            <name>Turquoise</name>
+            <hex>#40E0D0</hex>
+        </color>
+        <color>
+            <name>Green</name>
+            <hex>#00FF00</hex>
+        </color>
+        <color>
+            <name>Olive</name>
+            <hex>#556B2F</hex>
+        </color>
+        <color>
+            <name>Purple</name>
+            <hex>#800080</hex>
+        </color>
+        <color>
             <name>Red</name>
             <hex>#FF0000</hex>
+        </color>
+        <color>
+            <name>Pink</name>
+            <hex>#FFC0CB</hex>
+        </color>
+        <color>
+            <name>Orange</name>
+            <hex>#FFA500</hex>
+        </color>
+        <color>
+            <name>Yellow</name>
+            <hex>#FFFF00</hex>
         </color>
     </colors>
 

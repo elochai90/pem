@@ -53,10 +53,10 @@ public class DefaultSetup {
                     if (this.m_setupList.containsKey("items")) {
                         setupItems(this.m_setupList.get("items"));
                     }
-                }
 
-                if (this.m_setupList.containsKey("colors")) {
-                    setupItems(this.m_setupList.get("colors"));
+                    if (this.m_setupList.containsKey("colors")) {
+                        setupColors(this.m_setupList.get("colors"));
+                    }
                 }
 
             } catch (XmlPullParserException e) {
