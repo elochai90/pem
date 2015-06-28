@@ -17,6 +17,7 @@ import java.util.Set;
  * Created by simon on 19.06.2015.
  */
 public class DefaultSetup {
+    private static boolean initated = false;
     private Context m_context;
     private DataBaseHelper m_dbHelper;
     HashMap<String, ArrayList<HashMap<String, String>>> m_setupList;
@@ -25,6 +26,11 @@ public class DefaultSetup {
         this.m_context = p_context;
         this.m_dbHelper = new DataBaseHelper(this.m_context);
         this.m_dbHelper.init();
+
+        if(!initated) {
+            this.setup("setup_values.xml");
+            initated = true;
+        }
     }
 
     public void setup(String p_xml_file) {

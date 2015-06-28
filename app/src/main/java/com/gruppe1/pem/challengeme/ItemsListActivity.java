@@ -30,7 +30,7 @@ import java.util.List;
 public class ItemsListActivity extends Activity implements AdapterView.OnItemClickListener, View.OnLongClickListener{
 
 
-    private List<ListItemIconName> mDataset;
+    private ArrayList<ListItemIconName> mDataset;
 
     private GridView gridView;
     private DefaultGridAdapter gridAdapter;
@@ -67,11 +67,13 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
         } else {
             categoryId = -1;
         }
+
+
         DataBaseHelper db_helper = new DataBaseHelper(this);
         db_helper.init();
         Category category = new Category(this, categoryId, db_helper);
-        categoryId = category.getId();
         setTitle(category.getName());
+        mDataset = new ArrayList<ListItemIconName>();
 
         initDataset();
 
@@ -124,8 +126,8 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClassName(getPackageName(), getPackageName() + ".NewItemActivity");
-                startActivity(intent);
-
+                intent.putExtra("category_id", categoryId);
+                startActivityForResult(intent, 1);
             }
         });
 
@@ -137,6 +139,18 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
         super.onResume();
         list = sharedPreferences.getBoolean(Constants.KEY_VIEW_ITEMS_AS_LIST, true);
         switchListGridView(list);
+    }
+
+    @Override
+    public void onActivityResult(int p_requestCode, int p_resultCode, Intent p_data) {
+        super.onActivityResult(p_requestCode, p_resultCode, p_data);
+
+        if(p_requestCode == 1) {
+            // item was updated
+            initDataset();
+            listAdapter.notifyDataSetChanged();
+            gridAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -196,32 +210,23 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
 
 
     private void initDataset() {
-        // TODO: replace by database data
-        mDataset = new ArrayList<ListItemIconName>();
+        mDataset.clear();
 
         DataBaseHelper db_helper = new DataBaseHelper(this);
         db_helper.init();
 
-        mDataset = new ArrayList<ListItemIconName>();
-        //mDataset.add(new ListItemIconName(0, 0, "add new category"));
-
         System.out.println("Category Id before init: " + categoryId);
-//        DefaultSetup defaultSetup = new DefaultSetup(this);
-//        defaultSetup.setup("setup_values.xml");
         ArrayList<Item> allCategoryItems = Item.getItemsByCategoryId(this, categoryId);
-//        ArrayList<Item> allCategoryItems = Item.getAllItems(this);
 
         Iterator catIt = allCategoryItems.iterator();
         System.out.println("cat items: " + allCategoryItems.size());
 
         while (catIt.hasNext()) {
             Item tmpItem = (Item)catIt.next();
-//            Log.e("###ITEM###", tmpItem.getName() + " - " + tmpItem.getId());
+            //Log.e("###ITEM###", tmpItem.getName() + " - " + tmpItem.getId());
             int iconId = getResources().getIdentifier("kleiderbuegel", "drawable", "com.gruppe1.pem.challengeme"); // TODO: replace with image
             mDataset.add(new ListItemIconName(tmpItem.getId(), iconId , tmpItem.getName()));
         }
-//        ArrayList<AttributeType> attributeTypes = AttributeType.getAttributeTypes(this);
-
     }
 
    // @Override
@@ -232,7 +237,7 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
         Bundle b = new Bundle();
         b.putInt(Constants.EXTRA_ITEM_ID, itemid);
         intent.putExtras(b);
-        startActivity(intent);
+        startActivityForResult(intent, 1);
     }
 
 

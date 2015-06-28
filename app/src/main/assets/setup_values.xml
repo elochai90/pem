@@ -124,7 +124,6 @@
             <is_unique>1</is_unique>
         </attribute_type>
 
-
         <attribute_type>
             <name>Exact Color</name>
             <value_type>0</value_type>
@@ -137,22 +136,17 @@
             <is_unique>1</is_unique>
         </attribute_type>
 
-
     </attribute_types>
 
     <items>
 
         <item>
             <name>my first item</name>
+            <image></image>
             <category_id>1</category_id>
-            <buy_date></buy_date>
-            <store>NY</store>
             <wish>0</wish>
             <primary_color>2</primary_color>
-            <secondary_color></secondary_color>
-            <image></image>
             <rating>3</rating>
-            <pattern></pattern>
         </item>
 
     </items>

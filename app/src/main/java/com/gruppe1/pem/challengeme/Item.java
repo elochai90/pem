@@ -156,11 +156,16 @@ public class Item {
         return itemList;
     }
 
-    public static ArrayList<Item> getAllItems(Context p_context) {
+    public static ArrayList<Item> getAllItems(Context p_context, boolean p_wishListItems) {
         DataBaseHelper dbHelper = new DataBaseHelper(p_context);
         dbHelper.init();
         dbHelper.setTable(Constants.ITEMS_DB_TABLE);
         dbHelper.setColumns(new String[]{"*"});
+
+        if(p_wishListItems) {
+            dbHelper.setWhere("", new String[]{"is_wish=1"});
+        }
+
         dbHelper.setOrderBy("name ASC");
         Cursor cursor = dbHelper.select();
 
