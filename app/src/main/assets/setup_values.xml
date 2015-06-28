@@ -157,4 +157,11 @@
 
     </items>
 
+    <colors>
+        <color>
+            <name>Red</name>
+            <hex>#FF0000</hex>
+        </color>
+    </colors>
+
 </resources>

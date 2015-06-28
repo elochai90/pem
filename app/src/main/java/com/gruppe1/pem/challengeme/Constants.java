@@ -17,6 +17,7 @@ public class Constants {
     public static final String CATEGORIES_DB_TABLE = DB_TABLE_PREFIX + "categories";
     public static final String ATTRIBUTE_TYPES_DB_TABLE = DB_TABLE_PREFIX + "attribute_types";
     public static final String ITEM_ATTR_DB_TABLE = DB_TABLE_PREFIX + "item_attribute_types";
+    public static final String COLORS_DB_TABLE = DB_TABLE_PREFIX + "orga_nice_colors";
 
     public static String EXTRA_CATEGORY_ID = "extra_category_id";
     public static String EXTRA_ITEM_ID = "extra_item_id";

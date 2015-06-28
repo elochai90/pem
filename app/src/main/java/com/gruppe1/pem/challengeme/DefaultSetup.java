@@ -49,6 +49,10 @@ public class DefaultSetup {
                     }
                 }
 
+                if (this.m_setupList.containsKey("colors")) {
+                    setupItems(this.m_setupList.get("colors"));
+                }
+
             } catch (XmlPullParserException e) {
                 e.printStackTrace();
             }
@@ -96,6 +100,19 @@ public class DefaultSetup {
             Item defaultItem= new Item(m_context, 0, this.m_dbHelper);
             defaultItem.edit(itemAttributes);
             defaultItem.save();
+        }
+    }
+
+    private void setupColors(ArrayList<HashMap<String, String>> p_elements) {
+        Log.e("###SETUP##", "colors called");
+
+        Iterator iterator = p_elements.iterator();
+
+        while (iterator.hasNext()) {
+            HashMap<String, String> colorAttributes = (HashMap<String, String>)iterator.next();
+            Color color = new Color(m_context, 0, this.m_dbHelper);
+            color.edit(colorAttributes);
+            color.save();
         }
     }
 }
