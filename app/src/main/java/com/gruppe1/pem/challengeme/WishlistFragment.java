@@ -23,7 +23,7 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
 
 
 
-    private List<ListItemIconName> mDataset;
+    private ArrayList<ListItemIconName> mDataset;
 
     private View rootView;
 

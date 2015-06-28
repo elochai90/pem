@@ -11,6 +11,7 @@ import android.graphics.Interpolator;
 import android.graphics.Paint;
 import android.graphics.drawable.ShapeDrawable;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.ActionMode;
@@ -25,6 +26,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
@@ -42,7 +44,7 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
     public SharedPreferences.Editor editor;
     public SharedPreferences sharedPreferences;
 
-    private List<ListItemIconName> mDataset;
+    private ArrayList<ListItemIconName> mDataset;
 
     private View rootView;
 
@@ -56,11 +58,12 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
     ActionMode actionMode;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         super.onCreateView(inflater, container, savedInstanceState);
-
+        mDataset = new ArrayList<ListItemIconName>();
+        sharedPreferences = getActivity().getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
 
         initDataset();
 
@@ -127,8 +130,6 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
         });
 
 
-        sharedPreferences = getActivity().getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
 
         return rootView;
     }
@@ -143,6 +144,14 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
             list = savedInstanceState.getBoolean(Constants.KEY_VIEW_CATEGORIES_AS_LIST, true);
         } else {
             list = true;
+        }
+
+        ArrayList<Item> items = Item.getAllItems(getActivity().getApplicationContext(), false);
+
+        Iterator i = items.iterator();
+
+        while (i.hasNext()) {
+            Log.e("###ITEM###", "" + ((Item) i.next()).getCategoryId());
         }
 
 
@@ -228,16 +237,19 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
     }
 
     private void initDataset() {
-        // TODO: replace by database data
-        // TEST
         DataBaseHelper db_helper = new DataBaseHelper(getActivity().getApplicationContext());
         db_helper.init();
 
-        mDataset = new ArrayList<ListItemIconName>();
-        //mDataset.add(new ListItemIconName(0, 0, "add new category"));
+        mDataset.clear();
 
-        DefaultSetup defaultSetup = new DefaultSetup(getActivity().getApplicationContext());
-        defaultSetup.setup("setup_values.xml");
+        boolean firstDbInit = sharedPreferences.getBoolean(Constants.KEY_FIRST_DB_INIT, true);
+
+        if(firstDbInit) {
+            DefaultSetup defaultSetup = new DefaultSetup(getActivity().getApplicationContext());
+            editor.putBoolean(Constants.KEY_FIRST_DB_INIT, false);
+            editor.commit();
+        }
+
         ArrayList<Category> allCategories = Category.getAllCategories(getActivity().getApplicationContext());
 
         Iterator catIt = allCategories.iterator();
@@ -247,9 +259,6 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
             int iconId = getResources().getIdentifier(tmpCat.getIcon(), "drawable", "com.gruppe1.pem.challengeme");
             mDataset.add(new ListItemIconName(tmpCat.getId(), iconId , tmpCat.getName()));
         }
-
-        ArrayList<AttributeType> attributeTypes = AttributeType.getAttributeTypes(getActivity().getApplicationContext());
-        Item.getItemsByCategoryId(getActivity().getApplicationContext(), 1);
     }
 
     private void addNewCategory(ListItemIconName newCat) {
@@ -272,26 +281,16 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
 
             if (requestCode == REQUEST_CODE) {
                 if(resultCode == Activity.RESULT_OK) {
-                    System.out.println("Result ok");
-                    String categoryName = data.getStringExtra("categoryName");
-                    int categoryId = data.getIntExtra("categoryId", -1);
-                    int categoryParentId = data.getIntExtra("categoryParentId", -1);
-//                    if (categoryParentId == this.category) TODO: check if category is the same like parentCategory of new Category
-                    mDataset.add(new ListItemIconName(categoryId, R.drawable.kleiderbuegel, categoryName));
-                    listAdapter = new DefaultListAdapter(getActivity(), R.layout.list_item_default, mDataset, true, false);
-                    listView.setAdapter(listAdapter);
+                    initDataset();
                     listAdapter.notifyDataSetChanged();
-                    gridAdapter = new DefaultGridAdapter(getActivity(), R.layout.grid_item_default, mDataset, true);
-                    gridView.setAdapter(gridAdapter);
                     gridAdapter.notifyDataSetChanged();
                 }
             }
         } catch (Exception ex) {
-            Toast.makeText(getActivity(), ex.toString(),
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), ex.toString(), Toast.LENGTH_SHORT).show();
         }
-
     }
+
     private ActionMode.Callback modeCallBack = new ActionMode.Callback() {
 
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
@@ -324,12 +323,18 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
                                 public void onClick(DialogInterface arg0, int arg1) {
-                                    // TODO: delete persistent in db
-                                    listAdapter.remove(listAdapter.getItem((int)selectedItem[0] -1));
-//                    gridAdapter.remove(gridAdapter.getItem((int)selectedItem[0] -1));
+
+                                    int categoryId = (int)listAdapter.getItemId((int)selectedItem[0]);
+
+                                    DataBaseHelper db_helper = new DataBaseHelper(getActivity().getApplicationContext());
+                                    db_helper.init();
+
+                                    Category deleteCategory = new Category(getActivity().getApplicationContext(), categoryId, db_helper );
+                                    deleteCategory.delete();
+
+                                    initDataset();
                                     listAdapter.notifyDataSetChanged();
                                     gridAdapter.notifyDataSetChanged();
-                                    System.out.println("selectedItemDelete: " + selectedItem[0].toString());
                                     actionMode.finish();
                                 }
                             }).create().show();
@@ -339,6 +344,9 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
                     // TODO: overgive category data
                     Intent intent = new Intent();
                     intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".NewCategoryActivity");
+                    int categoryId = (int)listAdapter.getItemId((int)selectedItem[0]);
+                    intent.putExtra("category_id", categoryId);
+
                     startActivityForResult(intent, REQUEST_CODE);
                     break;
                 }
@@ -360,6 +368,7 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
             selectedItem = new Object[2];
             selectedItem[0] = position;
             selectedItem[1] = view;
+
         return true;
     }
 }

@@ -10,11 +10,11 @@ CREATE TABLE `orga_nice_items` (
     `_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     `name` VARCHAR(50) NOT  NULL DEFAULT "",
     `image_file` VARCHAR(255),
-    `category_id` INT(5) NOT NULL,
+    `category_id` INTEGER(5) NOT NULL,
     `is_wish` INT(1)  DEFAULT 0,
     `primary_color` INT(3),
     `rating` FLOAT (2),
-    FOREIGN KEY(`category_id`) REFERENCES orga_nice_categories(id)
+    FOREIGN KEY(category_id) REFERENCES orga_nice_categories(_id) ON DELETE CASCADE
 );
 
 CREATE TABLE `orga_nice_attribute_types` (
@@ -29,8 +29,8 @@ CREATE TABLE `orga_nice_item_attribute_types` (
     `item_id` INT NOT NULL,
     `attribute_type_id` INT NOT NULL,
     `attribute_value` VARCHAR(255),
-    FOREIGN KEY(`item_id`) REFERENCES orga_nice_items(id),
-    FOREIGN KEY(`attribute_type_id`) REFERENCES orga_nice_attribute_types(id)
+    FOREIGN KEY(`item_id`) REFERENCES orga_nice_items(_id),
+    FOREIGN KEY(`attribute_type_id`) REFERENCES orga_nice_attribute_types(_id)
 );
 
 

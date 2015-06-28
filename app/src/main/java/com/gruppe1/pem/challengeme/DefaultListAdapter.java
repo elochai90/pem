@@ -16,13 +16,13 @@ import java.util.List;
 public class DefaultListAdapter extends ArrayAdapter<ListItemIconName> {
     private Context context;
     private int layoutResourceId;
-    private List<ListItemIconName> data = new ArrayList();
+    private ArrayList<ListItemIconName> data = new ArrayList();
     private boolean wishlist;
     private boolean isCategory;
 
     public int currentSelection;
 
-    public DefaultListAdapter(Context context, int layoutResourceId, List<ListItemIconName> data, boolean isCategory, boolean wishlist) {
+    public DefaultListAdapter(Context context, int layoutResourceId, ArrayList<ListItemIconName> data, boolean isCategory, boolean wishlist) {
         super(context, layoutResourceId, data);
         this.layoutResourceId = layoutResourceId;
         this.context = context;
@@ -59,11 +59,15 @@ public class DefaultListAdapter extends ArrayAdapter<ListItemIconName> {
             }
 
             holder.firstLine.setText(item.name);
-            holder.secondLine.setText("z.B. Item-Attribute");
+
             if(isCategory) {
-               holder.rightTextView.setText(Item.getItemsCountByCategoryId(context, item.elementId) + "");
+                holder.rightTextView.setText(Item.getItemsCountByCategoryId(context, item.elementId) + "");
+            } else {
+                holder.secondLine.setText("z.B. Item-Attribute");
             }
+
             holder.image.setImageResource(item.icon);
+
             if(wishlist) {
                 holder.itemActionButton.setVisibility(View.VISIBLE);
                 holder.rightTextView.setVisibility(View.INVISIBLE);
@@ -78,6 +82,11 @@ public class DefaultListAdapter extends ArrayAdapter<ListItemIconName> {
         //}
 
         return row;
+    }
+
+    @Override
+    public long getItemId(int p_position){
+        return this.data.get(p_position).elementId;
     }
 
     static class ViewHolder {

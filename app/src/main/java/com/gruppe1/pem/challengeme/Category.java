@@ -234,4 +234,13 @@ public class Category {
         String iconValue = (this.m_icon != null) ? this.m_icon : Constants.DEFAULT_CAT_ICON;
         this.m_dbHelper.setStringValue("icon", iconValue);
     }
+
+    public void delete() {
+        ArrayList<Item> items = Item.getAllItems(this.context, false);
+        Log.e("###BEFORE DELETE###", "" + items.size());
+        this.m_dbHelper.setWhere("", new String[]{"_id=" + this.m_id});
+        this.m_dbHelper.delete();
+        items = Item.getAllItems(this.context, false);
+        Log.e("###AFTER DELETE###", "" + items.size());
+    }
 }

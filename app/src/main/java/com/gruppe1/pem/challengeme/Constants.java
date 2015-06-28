@@ -29,6 +29,7 @@ public class Constants {
     public static final String KEY_VIEW_CATEGORIES_AS_LIST = "CategoriesViewAsList";
     public static final String KEY_VIEW_ITEMS_AS_LIST = "ItemsViewAsList";
     public static final String KEY_VIEW_COMPARE_AS_LIST = "CompareViewAsList";
+    public static final String KEY_FIRST_DB_INIT = "FirstDbInit";
 
     public static final String DEFAULT_CAT_ICON = "kleiderbuegel";
 

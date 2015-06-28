@@ -25,10 +25,12 @@ public class NewCategoryActivity extends Activity {
     private com.github.clans.fab.FloatingActionButton saveFAB;
     private EditText newCategory_name;
     private Spinner editUpperCategory;
+    private Bundle extras;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_category);
+        extras = getIntent().getExtras();
 
         final Activity thisActivity = this;
 
@@ -40,15 +42,23 @@ public class NewCategoryActivity extends Activity {
             public void onClick(View v) {
                 DataBaseHelper db_helper = new DataBaseHelper(getApplicationContext());
                 db_helper.init();
-                Category testCategory = new Category(thisActivity.getApplicationContext(), 0, db_helper);
-                testCategory.setName(newCategory_name.getText().toString());
-                testCategory.setParentCategoryId(0); // TODO: real ParentCatId
-                testCategory.save();
+                int categoryId = 0;
+
+                if(extras != null) {
+                    if(extras.getString("category_id") != null) {
+                          categoryId = Integer.parseInt(extras.getString("category_id"));
+                    }
+                }
+
+                Category editCategory = new Category(thisActivity.getApplicationContext(), categoryId, db_helper);
+                editCategory.setName(newCategory_name.getText().toString());
+                editCategory.setParentCategoryId(0); // TODO: real ParentCatId
+                editCategory.save();
 
                 // sending new Item back to CategoriesFragment for actualizing list view
                 Intent i = new Intent();
-                i.putExtra("categoryName", testCategory.getName()); // TODO: pass all data back to catFragment to show list item
-                i.putExtra("categoryId", testCategory.getId()); // TODO: pass real Id back
+                i.putExtra("categoryName", editCategory.getName()); // TODO: pass all data back to catFragment to show list item
+                i.putExtra("categoryId", editCategory.getId()); // TODO: pass real Id back
                 i.putExtra("categoryParentId", 0); // TODO: pass real parentId back
 
                 setResult(Activity.RESULT_OK, i);
@@ -71,6 +81,18 @@ public class NewCategoryActivity extends Activity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         editUpperCategory.setAdapter(adapter);
+
+        if(extras != null) {
+            //edit category
+            String categoryId = extras.getString("category_id");
+            DataBaseHelper dbHelper = new DataBaseHelper(getApplicationContext());
+            dbHelper.init();
+
+            Category editCategory = new Category(getApplicationContext(), Integer.parseInt(categoryId), dbHelper);
+
+            setTitle("Edit " + editCategory.getName());
+            newCategory_name.setText(editCategory.getName());
+        }
     }
 
     @Override

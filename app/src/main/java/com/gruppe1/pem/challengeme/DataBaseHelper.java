@@ -57,6 +57,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         try {
             this.openDataBase();
+            this.database.execSQL("PRAGMA foreign_keys=ON;");
         } catch (SQLException sqle){
             try {
                 throw sqle;
@@ -172,8 +173,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         checkDB.close();
         }
 
-    return checkDB != null;
-}
+        return checkDB != null;
+    }
 
     private void copyDataBase() throws IOException {
 
@@ -190,22 +191,15 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         myOutput.write(buffer, 0, length);
         }
 
-    //Close the streams
-    myOutput.flush();
-    myOutput.close();
-    myInput.close();
-}
+        //Close the streams
+        myOutput.flush();
+        myOutput.close();
+        myInput.close();
+    }
 
     public void openDataBase() throws SQLException {
-    //Open the database
-    this.database = SQLiteDatabase.openDatabase(DB_FULL_PATH, null, SQLiteDatabase.OPEN_READWRITE);
-
-    // test insert start
-
-    //this.database.execSQL("INSERT INTO orga_nice_categories (name) VALUES (\"cat1\")");
-
-    // test insert end
-
+        //Open the database
+        this.database = SQLiteDatabase.openDatabase(DB_FULL_PATH, null, SQLiteDatabase.OPEN_READWRITE);
     }
 
     /*
@@ -219,14 +213,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
     public int insert() {
+        Log.e("###INSERT###", this.mValues.toString());
         this.database.insert(this.mTable, null, this.mValues);
-//        Log.e("###", "inserted");
         this.mColumns = new String[]{"MAX(_id)"};
         Cursor cursor = this.select();
 
-//        Log.e("###DB###", this.mValues.toString());
-
-        //return _id of (new) insert
         if (cursor != null) {
             cursor.moveToFirst();
             return cursor.getInt(0);
@@ -240,6 +231,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
     public void delete() {
-
+        this.database.delete(this.mTable, this.mWhere, null);
     }
 }
