@@ -185,8 +185,7 @@ public class NewItemActivity extends Activity {
             File imgFile = new File(imgPath);
 
             if (imgFile.exists()) {
-                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                ImgPhoto.setImageBitmap(myBitmap);
+                setPic();
             }
         }catch(Exception e){
             e.printStackTrace();
@@ -230,30 +229,12 @@ public class NewItemActivity extends Activity {
         itemAttributes.put("rating", item_rating);
         itemAttributes.put("is_wish", item_isWish);
 
-//        Item defaultItem = new Item(this, 0, m_dbHelper);
         db_helper.setTable(Constants.ITEMS_DB_TABLE);
         editItem.edit(itemAttributes);
         editItem.save();
-//        For testing what is stored in db
-//        System.out.println("Rating: " + editItem.getRating());
-//        System.out.println("ImageFile: " + editItem.getImageFile());
-//        System.out.println("Prim Color: " + editItem.getPrimaryColor());
-//        System.out.println("Wishlist: " + editItem.getIsWish());
-//        System.out.println("Name: " + editItem.getName());
-//        System.out.println("Id: " + editItem.getId());
-//        System.out.println("-----------------------------");
-//        Item testItem = new Item(this, editItem.getId(), db_helper);
-//        System.out.println("Rating: " + testItem.getRating());
-//        System.out.println("ImageFile: " + testItem.getImageFile());
-//        System.out.println("Prim Color: " + testItem.getPrimaryColor());
-//        System.out.println("Wishlist: " + testItem.getIsWish());
-//        System.out.println("Name: " + testItem.getName());
-//        System.out.println("Id: " + testItem.getId());
-
 
         Iterator allItemAttributesIterator = attributeTypesList.iterator();
 
-        // TODO: get all attributes with values for this Item
         // TODO: get all attributes with values for this Item
         while (allItemAttributesIterator.hasNext()) {
             AttributeType tmpItemAttrType = (AttributeType) allItemAttributesIterator.next();
@@ -276,7 +257,6 @@ public class NewItemActivity extends Activity {
             itemAttribute.edit(itemAttributeValue);
             itemAttribute.save();
         }
-
     }
 
     private void setAttributeLayout(AttributeType attributeType, Object attributeValue) {
@@ -436,12 +416,37 @@ public class NewItemActivity extends Activity {
                     InputStream imageStream = getContentResolver().openInputStream(selectedImage);
                     Bitmap yourSelectedImage = BitmapFactory.decodeStream(imageStream);
 
-                    ImgPhoto.setImageBitmap(yourSelectedImage);
+                    setPic();
                 }catch(FileNotFoundException e){
                     Log.w("FileNotFoundExeption: ", e.toString());
                 }
             }
         }
+    }
+
+    private void setPic() {
+        // Get the dimensions of the View
+        int targetW = Math.max(ImgPhoto.getWidth(), 500);
+        int targetH = Math.max(ImgPhoto.getHeight(),500);
+
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(editItem.getImageFile(), bmOptions);
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(editItem.getImageFile(), bmOptions);
+        Log.e("BITMAP", bitmap.toString());
+        ImgPhoto.setImageBitmap(bitmap);
     }
 
     public Uri getImageUri(Context inContext, Bitmap inImage) {
