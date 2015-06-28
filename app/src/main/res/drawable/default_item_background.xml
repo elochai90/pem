@@ -3,6 +3,7 @@
     <item
         android:state_selected="true">
         <shape android:shape="rectangle" >
+            <solid android:color="@color/listItems" />
             <stroke
                 android:width="2dp"
                 android:color="@color/accent" />
@@ -17,7 +18,7 @@
 
     <item>
         <shape android:shape="rectangle" >
-            <solid android:color="@color/cardview_light_background" />
+            <solid android:color="@color/listItems" />
             <padding android:left="2dp"
                 android:right="2dp"
                 android:top="2dp"
