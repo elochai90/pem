@@ -54,7 +54,8 @@ public class NewItemActivity extends Activity {
     private Spinner attrCategoryValue;
     private Category attrCategorySelected;
     private TextView attrColorName;
-    private TextView attrColorValue;
+    private Spinner attrColorValue;
+    private com.gruppe1.pem.challengeme.Color attrColorSelected;
     private TextView attrWishlistName;
     private Switch attrWishlistValue;
     String item_imageFile;
@@ -62,12 +63,15 @@ public class NewItemActivity extends Activity {
     private int editItemId;
     private Item editItem;
     private int parentCategoryId;
+    private int savedColorId;
 
     private boolean isEdit;
 
     private ArrayList<AttributeType> attributeTypesList;
     private ArrayList<Category> allCategories;
-    private CategoriesDropdownAdapter adapter;
+    private CategoriesDropdownAdapter categoriesDropdownAdapter;
+    private ArrayList<com.gruppe1.pem.challengeme.Color> allColors;
+    private ColorsDropdownAdapter colorsDropdownAdapter;
 
     private Bundle extras;
 
@@ -115,7 +119,7 @@ public class NewItemActivity extends Activity {
         attrCategoryName = (TextView) findViewById(R.id.attrCategoryName);
         attrCategoryValue = (Spinner) findViewById(R.id.attrCategoryValue);
         attrColorName = (TextView) findViewById(R.id.attrColorName);
-        attrColorValue = (TextView) findViewById(R.id.attrColorValue);
+        attrColorValue = (Spinner) findViewById(R.id.attrColorValue);
         attrWishlistName = (TextView) findViewById(R.id.attrWishlistName);
         attrWishlistValue = (Switch) findViewById(R.id.attrWishlistValue);
 
@@ -127,7 +131,9 @@ public class NewItemActivity extends Activity {
         extras = getIntent().getExtras();
 
         allCategories = Category.getAllCategories(this);
-        adapter = new CategoriesDropdownAdapter (getBaseContext(), android.R.layout.simple_spinner_item, allCategories);
+        categoriesDropdownAdapter = new CategoriesDropdownAdapter (getBaseContext(), android.R.layout.simple_spinner_item, allCategories);
+        allColors = com.gruppe1.pem.challengeme.Color.getAllColors(this);
+        colorsDropdownAdapter = new ColorsDropdownAdapter(getBaseContext(), android.R.layout.simple_spinner_item, allColors);
 
 
 
@@ -148,12 +154,15 @@ public class NewItemActivity extends Activity {
             db_helper.setTable(Constants.ITEMS_DB_TABLE);
             editItem = new Item(this, editItemId, db_helper);
             parentCategoryId = editItem.getCategoryId();
+            savedColorId = editItem.getPrimaryColorId();
 
         } else {
             isEdit = false;
             getActionBar().setTitle(R.string.title_activity_new_item);
             db_helper.setTable(Constants.ITEMS_DB_TABLE);
             editItem = new Item(this, 0, db_helper);
+
+            savedColorId = -1;
 
                 if (extras != null && extras.getInt("category_id") != 0) {
                     parentCategoryId = extras.getInt("category_id");
@@ -163,6 +172,7 @@ public class NewItemActivity extends Activity {
         }
 
         setupCategoryDropdown();
+        setupColorsDropdown();
         setupAttributeViews();
 
         if(editItemId > 0) {
@@ -177,8 +187,9 @@ public class NewItemActivity extends Activity {
         ratingBar.setRating(editItem.getRating());
 
         attrCategoryValue.setSelection(((CategoriesDropdownAdapter) attrCategoryValue.getAdapter()).findPositionOfCategoryId(editItem.getCategoryId()));
+        attrColorValue.setSelection(((ColorsDropdownAdapter) attrColorValue.getAdapter()).findPositionOfColorId(editItem.getPrimaryColorId()));
 
-        attrColorValue.setText(editItem.getPrimaryColor());
+//        attrColorValue.setText(editItem.getPrimaryColor());
 
         try {
             String imgPath = editItem.getImageFile();
@@ -214,11 +225,12 @@ public class NewItemActivity extends Activity {
 
         String item_name = itemNameExitText.getText().toString();
 
-        Category newParentCatId = (attrCategorySelected != null) ? attrCategorySelected : new Category(getApplicationContext(), (int) adapter.getItemId(0),this.db_helper);
+        Category newParentCatId = (attrCategorySelected != null) ? attrCategorySelected : new Category(getApplicationContext(), (int) categoriesDropdownAdapter.getItemId(0),this.db_helper);
 
         String item_categoryId = "" + attrCategorySelected.getId();
 
-        String item_primaryColor = attrColorValue.getText().toString();
+        String item_primaryColor = "" + attrColorSelected.getId();
+
         String item_rating = Float.toString(ratingBar.getRating());
         String item_isWish = attrWishlistValue.isChecked()  ? "1" : "0";
 
@@ -480,10 +492,10 @@ public class NewItemActivity extends Activity {
 
     private void setupCategoryDropdown() {
         // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        categoriesDropdownAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         // Apply the adapter to the spinner
-        attrCategoryValue.setAdapter(adapter);
+        attrCategoryValue.setAdapter(categoriesDropdownAdapter);
 
         if(parentCategoryId != -1) {
             Log.e("###CAT###", "" + parentCategoryId);
@@ -491,19 +503,62 @@ public class NewItemActivity extends Activity {
             int activeIndex = this.getIndex(attrCategoryValue, parentCategoryId);
             attrCategoryValue.setSelection(activeIndex);
         } else {
-            attrCategorySelected = new Category(getApplicationContext(), (int)adapter.getItemId(0), db_helper);
+            attrCategorySelected = new Category(getApplicationContext(), (int)categoriesDropdownAdapter.getItemId(0), db_helper);
             Log.e("###ITEM_CAT###", "" + attrCategorySelected.getId());
         }
 
-        adapter.notifyDataSetChanged();
+        categoriesDropdownAdapter.notifyDataSetChanged();
         attrCategoryValue.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (view != null) {
                     db_helper.setTable(Constants.CATEGORIES_DB_TABLE);
-                    attrCategorySelected = new Category(getBaseContext(), (int) adapter.getItemId(position), db_helper);
+                    attrCategorySelected = new Category(getBaseContext(), (int) categoriesDropdownAdapter.getItemId(position), db_helper);
                     attrCategoryValue.setSelection(position);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+
+            }
+        });
+    }
+
+
+
+    private void setupColorsDropdown() {
+        // Specify the layout to use when the list of choices appears
+        colorsDropdownAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // Apply the adapter to the spinner
+        attrColorValue.setAdapter(colorsDropdownAdapter);
+
+        if(savedColorId != -1) {
+            Log.e("###COLOR###", "" + savedColorId);
+            attrColorSelected = new com.gruppe1.pem.challengeme.Color(getApplicationContext(), savedColorId, db_helper);
+            int activeIndex = this.getIndex(attrColorValue, savedColorId);
+            attrColorValue.setSelection(activeIndex);
+        } else {
+            attrColorSelected = new com.gruppe1.pem.challengeme.Color(getApplicationContext(), (int)colorsDropdownAdapter.getItemId(0), db_helper);
+            Log.e("###COLOR SELECTED###", "" + attrColorSelected.getId());
+        }
+
+        colorsDropdownAdapter.notifyDataSetChanged();
+        attrColorValue.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (view != null) {
+                    db_helper.setTable(Constants.COLORS_DB_TABLE);
+                    attrColorSelected = new com.gruppe1.pem.challengeme.Color(getBaseContext(), (int) colorsDropdownAdapter.getItemId(position), db_helper);
+                    attrColorValue.setSelection(position);
+                    attrColorValue.setBackgroundColor(Color.parseColor(colorsDropdownAdapter.getColorAtPosition(position).getHexColor()));
+                    if(!colorsDropdownAdapter.isColorLight(Color.parseColor(colorsDropdownAdapter.getColorAtPosition(position).getHexColor()))) {
+                        ((TextView) attrColorValue.findViewById(android.R.id.text1)).setTextColor(getResources().getColor(android.R.color.white));
+                    }
                 }
             }
 

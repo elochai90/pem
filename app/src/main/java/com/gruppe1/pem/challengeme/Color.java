@@ -162,4 +162,10 @@ public class Color {
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        return (o instanceof Color && getId() == ((Color) o).getId());
+
+    }
+
 }

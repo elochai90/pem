@@ -30,7 +30,7 @@ public class Item {
     private String m_imageFile;
     private int m_categoryId;
     private int m_isWish;
-    private String m_primaryColor;
+    private int m_primaryColorId;
     private Float m_rating;
 
 //    private HashMap<AttributeType, Object> attributes;
@@ -62,7 +62,7 @@ public class Item {
                 this.m_imageFile = itemData.getString(2);
                 this.m_categoryId = itemData.getInt(3);
                 this.m_isWish = itemData.getInt(4);
-                this.m_primaryColor = itemData.getString(5);
+                this.m_primaryColorId = itemData.getInt(5);
                 this.m_rating= itemData.getFloat(6);
 
                 //TODO handle item_attribute_types table for m_customAttributes
@@ -118,12 +118,12 @@ public class Item {
         this.m_isWish = p_isWish;
     }
 
-    public String getPrimaryColor() {
-        return m_primaryColor;
+    public int getPrimaryColorId() {
+        return m_primaryColorId;
     }
 
-    public void setPrimaryColor(String p_primaryColor) {
-        this.m_primaryColor = p_primaryColor;
+    public void setPrimaryColorId(int m_primaryColorId) {
+        this.m_primaryColorId = m_primaryColorId;
     }
 
     public Float getRating() {
@@ -222,7 +222,7 @@ public class Item {
                     this.setIsWish(Integer.parseInt(dbColumnValue));
                     break;
                 case "primary_color":
-                    this.setPrimaryColor(dbColumnValue);
+                    this.setPrimaryColorId(Integer.parseInt(dbColumnValue));
                     break;
                 case "rating":
                     this.setRating(Float.parseFloat(dbColumnValue));
@@ -271,7 +271,7 @@ public class Item {
         this.m_dbHelper.setStringValue("image_file", this.m_imageFile);
         this.m_dbHelper.setIntegerValue("category_id", this.m_categoryId);
         this.m_dbHelper.setIntegerValue("is_wish", this.m_isWish);
-        this.m_dbHelper.setStringValue("primary_color", this.m_primaryColor);
+        this.m_dbHelper.setIntegerValue("primary_color", this.m_primaryColorId);
         this.m_dbHelper.setFloatValue("rating", this.m_rating);
     }
 

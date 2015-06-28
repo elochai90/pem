@@ -13,13 +13,13 @@ import java.util.ArrayList;
 /**
  * Created by bianka on 26.06.2015.
  */
-public class CategoriesDropdownAdapter extends ArrayAdapter implements SpinnerAdapter {
+public class ColorsDropdownAdapter extends ArrayAdapter implements SpinnerAdapter {
 
     Context context;
     int textViewResourceId;
-    ArrayList<Category> arrayList;
+    ArrayList<Color> arrayList;
 
-    public CategoriesDropdownAdapter(Context context, int textViewResourceId,  ArrayList<Category> arrayList) {
+    public ColorsDropdownAdapter(Context context, int textViewResourceId, ArrayList<Color> arrayList) {
         super(context, textViewResourceId, arrayList);
 
         this.context = context;
@@ -38,12 +38,16 @@ public class CategoriesDropdownAdapter extends ArrayAdapter implements SpinnerAd
 
         if (position == getCount()) {
             ((TextView)v.findViewById(android.R.id.text1)).setText("");
-            ((TextView)v.findViewById(android.R.id.text1)).setHint(getItem(getCount()));
+            ((TextView)v.findViewById(android.R.id.text1)).setHint(getItem(getCount())); //"Hint to be displayed"
         } else {
             LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             v = vi.inflate(android.R.layout.simple_spinner_dropdown_item, null);
 
             TextView textView = (TextView) v.findViewById(android.R.id.text1);
+            textView.setBackgroundColor(android.graphics.Color.parseColor(arrayList.get(position).getHexColor()));
+            if(! isColorLight(android.graphics.Color.parseColor(arrayList.get(position).getHexColor()))) {
+                textView.setTextColor(context.getResources().getColor(android.R.color.white));
+            }
             textView.setText(arrayList.get(position).getName());
             textView.setTag(arrayList.get(position).getId());
             v.setTag(arrayList.get(position).getId());
@@ -69,13 +73,31 @@ public class CategoriesDropdownAdapter extends ArrayAdapter implements SpinnerAd
         return arrayList.size()-1;
     }
 
-    public int findPositionOfCategoryId(int catId) {
+    public int findPositionOfColorId(int colorId) {
         DataBaseHelper db_helper = new DataBaseHelper(context);
         db_helper.init();
-        Category category = new Category(context, catId, db_helper);
-        System.out.println(category.getName());
-        System.out.println(arrayList.indexOf(category));
-        return arrayList.indexOf(category);
+        db_helper.setTable(Constants.COLORS_DB_TABLE);
+        Color color = new Color(context, colorId, db_helper);
+        System.out.println(color.getName());
+        System.out.println(arrayList.indexOf(color));
+        return arrayList.indexOf(color);
+    }
+
+    public Color getColorAtPosition(int position) {
+        return arrayList.get(position);
+    }
+
+    public boolean isColorLight(int color) {
+        boolean isColorLight = false;
+        float[] pixelHSV = new float[3];
+         android.graphics.Color.colorToHSV(color, pixelHSV);
+
+        float brightness = pixelHSV[2];
+
+        if (brightness > 0.6) {
+            isColorLight = true;
+        }
+        return isColorLight;
     }
 
 }
