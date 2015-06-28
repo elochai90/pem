@@ -151,11 +151,11 @@ public class NewItemActivity extends Activity {
             db_helper.setTable(Constants.ITEMS_DB_TABLE);
             editItem = new Item(this, 0, db_helper);
 
-            if(extras.getInt("category_id") != 0) {
-                parentCategoryId = extras.getInt("category_id");
-            } else {
-                parentCategoryId = -1;
-            }
+                if (extras != null && extras.getInt("category_id") != 0) {
+                    parentCategoryId = extras.getInt("category_id");
+                } else {
+                    parentCategoryId = -1;
+                }
         }
 
         setupCategoryDropdown();
