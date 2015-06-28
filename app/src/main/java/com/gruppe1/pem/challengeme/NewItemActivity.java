@@ -2,8 +2,10 @@ package com.gruppe1.pem.challengeme;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -11,6 +13,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
@@ -18,12 +21,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -31,6 +31,8 @@ import android.widget.TextView;
 
 import com.github.clans.fab.FloatingActionButton;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.sql.DatabaseMetaData;
@@ -55,6 +57,7 @@ public class NewItemActivity extends Activity {
     private TextView attrColorValue;
     private TextView attrWishlistName;
     private Switch attrWishlistValue;
+    String item_imageFile;
 
     private int editItemId;
     private Item editItem;
@@ -68,6 +71,7 @@ public class NewItemActivity extends Activity {
 
     private Bundle extras;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,7 +82,6 @@ public class NewItemActivity extends Activity {
         db_helper.init();
 
         ImgPhoto = (ImageView) findViewById(R.id.itemDetailImage);
-
         ImgPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -145,6 +148,7 @@ public class NewItemActivity extends Activity {
             db_helper.setTable(Constants.ITEMS_DB_TABLE);
             editItem = new Item(this, editItemId, db_helper);
             parentCategoryId = editItem.getCategoryId();
+
         } else {
             isEdit = false;
             getActionBar().setTitle(R.string.title_activity_new_item);
@@ -176,6 +180,17 @@ public class NewItemActivity extends Activity {
 
         attrColorValue.setText(editItem.getPrimaryColor());
 
+        try {
+            String imgPath = editItem.getImageFile();
+            File imgFile = new File(imgPath);
+
+            if (imgFile.exists()) {
+                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                ImgPhoto.setImageBitmap(myBitmap);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
         System.out.println("setItemData wish: " + editItem.getIsWish());
         if(editItem.getIsWish() == 0) {
             attrWishlistValue.setChecked(false);
@@ -198,7 +213,6 @@ public class NewItemActivity extends Activity {
     private void saveItem() {
 
         String item_name = itemNameExitText.getText().toString();
-        String item_imageFile = ImgPhoto.getDrawable().toString();
 
         Category newParentCatId = (attrCategorySelected != null) ? attrCategorySelected : new Category(getApplicationContext(), (int) adapter.getItemId(0),this.db_helper);
 
@@ -210,7 +224,7 @@ public class NewItemActivity extends Activity {
 
         HashMap<String, String> itemAttributes = new HashMap<String, String>();
         itemAttributes.put("name", item_name);
-        itemAttributes.put("image_file", item_imageFile);
+        itemAttributes.put("image_file", editItem.getImageFile());
         itemAttributes.put("category_id", item_categoryId);
         itemAttributes.put("primary_color", item_primaryColor);
         itemAttributes.put("rating", item_rating);
@@ -382,13 +396,41 @@ public class NewItemActivity extends Activity {
                     Bitmap photo = (Bitmap) data.getExtras().get("data");
                     ImgPhoto.setImageBitmap(photo);
 
+                    // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
+                    Uri tempUri = getImageUri(getApplicationContext(), photo);
+
+                    // CALL THIS METHOD TO GET THE ACTUAL PATH
+                    File finalFile = new File(getRealPathFromURI(tempUri));
+                    Log.d("path: ", finalFile.getAbsolutePath());
+                    item_imageFile = finalFile.getAbsolutePath();
+                    editItem.setImageFile(item_imageFile);
+
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
+
+
             } else if (requestCode == 2) {
 
                 Uri selectedImage = data.getData();
+
+                String[] filePath = {MediaStore.Images.Media.DATA};
+                Log.d("path: ", filePath[0]);
+                Cursor c = getContentResolver().query(selectedImage, filePath, null, null, null);
+
+                c.moveToFirst();
+
+                int columnIndex = c.getColumnIndex(filePath[0]);
+
+                String picturePath = c.getString(columnIndex);
+
+                c.close();
+
+                item_imageFile = picturePath;
+                editItem.setImageFile(item_imageFile);
+                Log.w("path of image", item_imageFile + "");
 
                 try {
                     InputStream imageStream = getContentResolver().openInputStream(selectedImage);
@@ -400,6 +442,20 @@ public class NewItemActivity extends Activity {
                 }
             }
         }
+    }
+
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
+
+    public String getRealPathFromURI(Uri uri) {
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+        return cursor.getString(idx);
     }
 
     @Override
