@@ -427,7 +427,7 @@ public class NewItemActivity extends Activity {
     private void setPic() {
         // Get the dimensions of the View
         int targetW = Math.max(ImgPhoto.getWidth(), 500);
-        int targetH = Math.max(ImgPhoto.getHeight(),500);
+        int targetH = Math.max(ImgPhoto.getHeight(), 500);
 
         // Get the dimensions of the bitmap
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
@@ -445,7 +445,6 @@ public class NewItemActivity extends Activity {
         bmOptions.inPurgeable = true;
 
         Bitmap bitmap = BitmapFactory.decodeFile(editItem.getImageFile(), bmOptions);
-        Log.e("BITMAP", bitmap.toString());
         ImgPhoto.setImageBitmap(bitmap);
     }
 
