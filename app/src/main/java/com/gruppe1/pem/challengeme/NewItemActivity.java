@@ -196,7 +196,7 @@ public class NewItemActivity extends Activity {
             File imgFile = new File(imgPath);
 
             if (imgFile.exists()) {
-                setPic();
+                ImageLoader.setPic(ImgPhoto, editItem.getImageFile());
             }
         }catch(Exception e){
             e.printStackTrace();
@@ -427,36 +427,12 @@ public class NewItemActivity extends Activity {
                     InputStream imageStream = getContentResolver().openInputStream(selectedImage);
                     Bitmap yourSelectedImage = BitmapFactory.decodeStream(imageStream);
 
-                    setPic();
+                    ImageLoader.setPic(ImgPhoto, editItem.getImageFile());
                 }catch(FileNotFoundException e){
                     Log.w("FileNotFoundExeption: ", e.toString());
                 }
             }
         }
-    }
-
-    private void setPic() {
-        // Get the dimensions of the View
-        int targetW = Math.max(ImgPhoto.getWidth(), 500);
-        int targetH = Math.max(ImgPhoto.getHeight(), 500);
-
-        // Get the dimensions of the bitmap
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(editItem.getImageFile(), bmOptions);
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
-
-        // Determine how much to scale down the image
-        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
-
-        // Decode the image file into a Bitmap sized to fill the View
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-        bmOptions.inPurgeable = true;
-
-        Bitmap bitmap = BitmapFactory.decodeFile(editItem.getImageFile(), bmOptions);
-        ImgPhoto.setImageBitmap(bitmap);
     }
 
     public Uri getImageUri(Context inContext, Bitmap inImage) {
