@@ -52,7 +52,8 @@ public class ColorsDropdownAdapter extends ArrayAdapter implements SpinnerAdapte
             textView.setTag(arrayList.get(position).getId());
             v.setTag(arrayList.get(position).getId());
 
-            textView.setHeight(100);
+            textView.setHeight(130);
+            textView.setPadding(5,5,5,5);
         }
 
         return v;

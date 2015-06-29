@@ -29,4 +29,5 @@
 
 
     <string name="chooseCountry">Choose a category</string>
+    <string name="no_child_items">No items stored in this category</string>
 </resources>
