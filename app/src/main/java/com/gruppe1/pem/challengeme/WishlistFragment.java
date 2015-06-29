@@ -156,11 +156,8 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
 
 
     private Bitmap getPicFromFile(String imageFile) {
-        // Get the dimensions of the View
-        TypedValue value = new TypedValue();
-        (getActivity()).getTheme().resolveAttribute(android.R.attr.listPreferredItemHeightLarge, value, true);
-        int targetW = value.data;
-        int targetH = value.data;
+        int targetW = 500;
+        int targetH = 500;
 
         // Get the dimensions of the bitmap
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
@@ -178,7 +175,20 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
         bmOptions.inPurgeable = true;
 
         Bitmap bitmap = BitmapFactory.decodeFile(imageFile, bmOptions);
-        return bitmap;
+        Bitmap cropImg = bitmap;
+        if(bitmap != null) {
+            int width = bitmap.getWidth();
+            int height = bitmap.getHeight();
+            if (width > height) {
+                int crop = (width - height) / 2;
+                cropImg = Bitmap.createBitmap(bitmap, crop, 0, height, height);
+            } else {
+                int crop = (height - width) / 2;
+                cropImg = Bitmap.createBitmap(bitmap, 0, crop, width, width);
+            }
+        }
+
+        return cropImg;
     }
 
 
