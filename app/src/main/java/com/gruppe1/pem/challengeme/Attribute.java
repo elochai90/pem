@@ -47,7 +47,6 @@ public class Attribute {
                 this.m_id = itemData.getInt(0);
                 this.m_itemId = itemData.getInt(1);
                 this.m_attributeType = AttributeType.getAttributeTypeById(m_context, itemData.getInt(2));
-//                this.m_attrTypeId = itemData.getInt(2);
                 this.m_value = itemData.getString(3);
 
             } else {
@@ -56,6 +55,36 @@ public class Attribute {
 
         } else {
             // prepare new item
+        }
+
+    }
+    public Attribute(Context p_context, int p_itemId, int p_attributeTypeId, DataBaseHelper p_dbHelper) {
+        this.m_itemId = p_itemId;
+        this.m_attributeType = AttributeType.getAttributeTypeById(m_context, p_attributeTypeId);
+
+        this.m_context = p_context;
+        this.m_dbHelper = p_dbHelper;
+        this.m_dbHelper.setTable(Constants.ITEM_ATTR_DB_TABLE);
+
+        if(p_itemId > 0 && p_attributeTypeId > 0) {
+            // get data from existing item
+            this.m_dbHelper.setColumns(new String[]{"*"});
+            this.m_dbHelper.setWhere("", new String[]{"item_id=" + p_itemId + " AND attribute_type_id=" + p_attributeTypeId});
+            Cursor itemData = this.m_dbHelper.select();
+
+            if(itemData.moveToFirst()) {
+                this.m_id = itemData.getInt(0);
+                this.m_itemId = itemData.getInt(1);
+                this.m_attributeType = AttributeType.getAttributeTypeById(m_context, itemData.getInt(2));
+                this.m_value = itemData.getString(3);
+
+            } else {
+                Log.e("###NO_SUCH_ATTRIBUTE", "" + m_id);
+            }
+
+        } else {
+            // prepare new item
+            m_id = 0;
         }
 
     }
@@ -115,8 +144,36 @@ public class Attribute {
             attributeList.add(new Attribute(p_context, cursor.getInt(0), dbHelper));
             cursor.moveToNext();
         }
-
         return attributeList;
+    }
+
+    /**
+     * get all attributes from database
+     * @return ArrayList<Attribute> all attributes
+     */
+    public static ArrayList<Attribute> getAllAttributes(Context p_context) {
+        DataBaseHelper helper = new DataBaseHelper(p_context);
+        helper.init();
+        helper.setTable(Constants.ITEM_ATTR_DB_TABLE);
+        helper.setColumns(new String[]{"*"});
+        helper.setOrderBy("item_id ASC");
+        ArrayList<Attribute> allAttributes = new ArrayList<Attribute>();
+
+        Cursor allAttributesIterator = helper.select();
+        allAttributesIterator.moveToFirst();
+//        Log.e("###All Cat count###", "" + allCategoriesIterator.getCount());
+
+        while (!allAttributesIterator.isAfterLast()) {
+            Attribute attribute = new Attribute(p_context, allAttributesIterator.getInt(0), helper);
+            attribute.setItemId(allAttributesIterator.getInt(1));
+            attribute.setAttributeType((AttributeType.getAttributeTypeById(p_context,allAttributesIterator.getInt(2))));
+            attribute.setValue(allAttributesIterator.getString(3));
+
+            allAttributes.add(attribute);
+            allAttributesIterator.moveToNext();
+        }
+
+        return allAttributes;
     }
 
 
@@ -145,7 +202,6 @@ public class Attribute {
     public void save() {
         if(this.m_id == 0) {
             // insert as new attribute
-            m_dbHelper.deleteValues();
             this.m_dbHelper.setWhere("", new String[]{"item_id='" + this.m_itemId + "' AND attribute_type_id='" + this.m_attributeType.getId() + "'"});
             Cursor existingRowCursor = this.m_dbHelper.select();
             existingRowCursor.moveToFirst();
@@ -157,24 +213,45 @@ public class Attribute {
                 rowId = 0;
             }
             if(rowId == 0) {
-                this.m_dbHelper.setIntegerValue("item_id", this.m_itemId);
-                this.m_dbHelper.setIntegerValue("attribute_type_id", this.m_attributeType.getId());
-                this.m_dbHelper.setStringValue("attribute_value", this.m_value.toString());
-
+                this.setAllValuesToDbHelper();
                 int id = this.m_dbHelper.insert();
 
                 if (id > -1) {
                     this.m_id = id;
 //                    Log.e("###ATTRIBUTE INSERTED","id:" + id);
                 } else {
-                    Log.e("Item-Error", "save failed");
+                    Log.e("Attribute-Error", "save failed");
                 }
             } else {
-//                Log.e("###ATTRIBUTE EXISTS", this.m_itemId + ":" + this.m_attributeType.getId() + " - " + rowId);
+                Log.e("###ATTRIBUTE EXISTS", this.m_itemId + ":" + this.m_attributeType.getId() + " - " + rowId);
+                //save changes to existing attribute
+                this.m_dbHelper.setWhere("", new String[]{"_id=" + this.m_id});
+                this.setAllValuesToDbHelper();
+                this.m_dbHelper.update();
             }
         } else {
-            //save changes to existing category
+            //save changes to existing attribute
+            this.m_dbHelper.setWhere("", new String[] {"_id=" + this.m_id});
+            this.setAllValuesToDbHelper();
+            this.m_dbHelper.update();
+            Log.e("###ATTRIBUTE UPDATED", this.m_itemId + ":" + this.m_attributeType.getId() + " - " + this.m_value);
         }
+    }
+
+    private void setAllValuesToDbHelper(){
+        this.m_dbHelper.deleteValues();
+        this.m_dbHelper.setIntegerValue("item_id", this.m_itemId);
+        this.m_dbHelper.setIntegerValue("attribute_type_id", this.m_attributeType.getId());
+        this.m_dbHelper.setStringValue("attribute_value", this.m_value.toString());
+    }
+
+    public void delete() {
+        ArrayList<Attribute> attributes = Attribute.getAllAttributes(this.m_context);
+        Log.e("###BEFORE DEL ATTR###", "" + attributes.size());
+        this.m_dbHelper.setWhere("", new String[]{"_id=" + this.m_id});
+        this.m_dbHelper.delete();
+        attributes = Attribute.getAllAttributes(this.m_context);
+        Log.e("###AFTER DEL ATTR###", "" + attributes.size());
     }
 
 }

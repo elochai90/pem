@@ -219,4 +219,10 @@ public class AttributeType {
             //save changes to existing attribute type
         }
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return (o instanceof AttributeType && getId() == ((AttributeType) o).getId());
+
+    }
 }

@@ -189,7 +189,6 @@ public class Category {
     public void save() {
         if(this.m_id == 0) {
             // insert as new categoy
-            m_dbHelper.deleteValues();
             this.m_dbHelper.setWhere("", new String[]{"name='" + this.m_name + "'"});
             Cursor existingRowCursor = this.m_dbHelper.select();
             existingRowCursor.moveToFirst();
@@ -229,6 +228,7 @@ public class Category {
     }
 
     private void setAllValuesToDbHelper(){
+        this.m_dbHelper.deleteValues();
         this.m_dbHelper.setStringValue("name", this.m_name);
         this.m_dbHelper.setIntegerValue("parent_category_id", this.m_parent_category_id);
         this.m_dbHelper.setIntegerValue("default_attribute_type", this.m_defaultAttributeType);
