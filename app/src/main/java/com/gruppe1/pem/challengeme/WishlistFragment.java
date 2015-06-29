@@ -69,6 +69,7 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".NewItemActivity");
+                intent.putExtra("is_wishlist", true);
                 startActivity(intent);
 
             }
@@ -180,8 +181,19 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
         return bitmap;
     }
 
+
+    public void selectItem(int itemid) {
+        Intent intent = new Intent();
+        intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".NewItemActivity");
+        Bundle b = new Bundle();
+        b.putInt(Constants.EXTRA_ITEM_ID, itemid);
+        intent.putExtras(b);
+        startActivityForResult(intent, 1);
+    }
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        //TODO
+        int itemid = listAdapter.getItem(position).elementId;
+        selectItem(itemid);
     }
 }

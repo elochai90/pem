@@ -75,6 +75,7 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".NewItemActivity");
+                intent.putExtra("is_wishlist", true);
                 startActivity(intent);
 
             }

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -43,7 +44,7 @@ public class CompareListAdapter extends ArrayAdapter {
                 holder.imageItem1 = (ImageView) row.findViewById(R.id.imageItem1);
                 holder.imageItem2 = (ImageView) row.findViewById(R.id.imageItem2);
                 holder.rightTextView = (TextView) row.findViewById(R.id.rightTextView);
-                holder.itemActionButton = (ImageView) row.findViewById(R.id.itemActionButton);
+                holder.itemActionButton = (Button) row.findViewById(R.id.itemActionButton);
                 row.setTag(holder);
             } else {
                 holder = (ViewHolder) row.getTag();
@@ -67,6 +68,6 @@ public class CompareListAdapter extends ArrayAdapter {
         ImageView imageItem1;
         ImageView imageItem2;
         TextView rightTextView;
-        ImageView itemActionButton;
+        Button itemActionButton;
     }
 }

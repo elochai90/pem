@@ -10,17 +10,19 @@
         android:layout_height="?android:attr/listPreferredItemHeightLarge"
         android:layout_marginEnd="10dp"/>
 
-    <ImageView
+
+    <Button
         android:id="@+id/itemActionButton"
         android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginEnd="10dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:layout_alignParentEnd="true"
-        android:src="@drawable/abc_btn_check_to_on_mtrl_000"
+        android:focusable="false"
+        android:text="@string/wishlist_button_not_selected"
+        android:textColor="@color/accent"
         android:visibility="invisible"
-        android:contentDescription="TODO" />
+        style="?android:attr/borderlessButtonStyle"
+        android:contentDescription="TODO"/>
 
     <TextView
         android:id="@+id/secondLine"

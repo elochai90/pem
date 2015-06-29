@@ -110,6 +110,7 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClassName(getPackageName(), getPackageName() + ".NewItemActivity");
+                intent.putExtra("is_wishlist", true);
                 startActivity(intent);
 
             }

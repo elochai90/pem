@@ -105,6 +105,7 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".NewItemActivity");
+                intent.putExtra("is_wishlist", true);
                 startActivity(intent);
 
             }

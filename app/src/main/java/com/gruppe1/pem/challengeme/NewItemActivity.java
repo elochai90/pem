@@ -147,6 +147,11 @@ public class NewItemActivity extends Activity {
         } else {
             editItemId = -1;
         }
+
+
+        if (extras != null &&  extras.getBoolean("is_wishlist")) {
+            attrWishlistValue.setChecked(true);
+        }
         // Not a new item, but editing an existing item
         if(editItemId > 0) {
             isEdit = true;
@@ -164,11 +169,11 @@ public class NewItemActivity extends Activity {
 
             savedColorId = -1;
 
-                if (extras != null && extras.getInt("category_id") != 0) {
-                    parentCategoryId = extras.getInt("category_id");
-                } else {
-                    parentCategoryId = -1;
-                }
+            if (extras != null && extras.getInt("category_id") != 0) {
+                parentCategoryId = extras.getInt("category_id");
+            } else {
+                parentCategoryId = -1;
+            }
         }
 
         setupCategoryDropdown();

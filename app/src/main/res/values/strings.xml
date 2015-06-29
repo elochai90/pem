@@ -30,4 +30,7 @@
 
     <string name="chooseCountry">Choose a category</string>
     <string name="no_child_items">No items stored in this category</string>
+
+    <string name="wishlist_button_not_selected">Add to category</string>
+    <string name="wishlist_button_selected">Add to wishlist</string>
 </resources>

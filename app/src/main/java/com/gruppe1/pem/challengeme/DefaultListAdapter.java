@@ -7,10 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class DefaultListAdapter extends ArrayAdapter<ListItemIconName> {
@@ -19,6 +22,8 @@ public class DefaultListAdapter extends ArrayAdapter<ListItemIconName> {
     private ArrayList<ListItemIconName> data = new ArrayList();
     private boolean wishlist;
     private boolean isCategory;
+
+    private DataBaseHelper db_helper;
 
     public int currentSelection;
 
@@ -29,6 +34,9 @@ public class DefaultListAdapter extends ArrayAdapter<ListItemIconName> {
         this.data = data;
         this.wishlist = wishlist;
         this.isCategory = isCategory;
+
+        db_helper = new DataBaseHelper(context);
+        db_helper.init();
     }
 
     @Override
@@ -36,7 +44,7 @@ public class DefaultListAdapter extends ArrayAdapter<ListItemIconName> {
         View row = convertView;
         ViewHolder holder = null;
 
-        ListItemIconName item = data.get(position);
+        final ListItemIconName item = data.get(position);
 
 
      /*   if(position == 0) {
@@ -46,13 +54,13 @@ public class DefaultListAdapter extends ArrayAdapter<ListItemIconName> {
         } else {*/
             if (row == null || row.getTag() == null) {
                 LayoutInflater inflater = ((Activity) context).getLayoutInflater();
-                row = inflater.inflate(layoutResourceId, parent, false);
+               row = inflater.inflate(layoutResourceId, parent, false);
                 holder = new ViewHolder();
                 holder.firstLine = (TextView) row.findViewById(R.id.firstLine);
                 holder.secondLine = (TextView) row.findViewById(R.id.secondLine);
                 holder.rightTextView = (TextView) row.findViewById(R.id.rightTextView);
                 holder.image = (ImageView) row.findViewById(R.id.imageView);
-                holder.itemActionButton = (ImageView) row.findViewById(R.id.itemActionButton);
+                holder.itemActionButton = (Button) row.findViewById(R.id.itemActionButton);
                 row.setTag(holder);
             } else {
                 holder = (ViewHolder) row.getTag();
@@ -76,11 +84,51 @@ public class DefaultListAdapter extends ArrayAdapter<ListItemIconName> {
             if(wishlist) {
                 holder.itemActionButton.setVisibility(View.VISIBLE);
                 holder.rightTextView.setVisibility(View.INVISIBLE);
+
+                db_helper.setTable(Constants.ITEMS_DB_TABLE);
+
+                Item wishlistItem = new Item(context, item.elementId, db_helper);
+
+                if(wishlistItem.getIsWish() == 1) {
+                    holder.itemActionButton.setSelected(false);
+                    holder.itemActionButton.setTextColor(context.getResources().getColor(R.color.accent));
+                    holder.itemActionButton.setText(R.string.wishlist_button_not_selected);
+                } else {
+                    holder.itemActionButton.setSelected(true);
+                    holder.itemActionButton.setTextColor(context.getResources().getColor(R.color.primary_dark));
+                    holder.itemActionButton.setText(R.string.wishlist_button_selected);
+                }
+
                 holder.itemActionButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ((ImageView) v).setImageResource(R.drawable.abc_btn_check_to_on_mtrl_015);
-                        // TODO: save and put to categories; if click again change icon back
+                        System.out.println("on wishlist click button: " + ((Button) v).isSelected());
+
+                        db_helper.setTable(Constants.ITEMS_DB_TABLE);
+
+                        Item wishlistItem = new Item(context, item.elementId, db_helper);
+
+                        HashMap<String, String> itemAttributes = new HashMap<String, String>();
+                        itemAttributes.put("name", wishlistItem.getName());
+                        itemAttributes.put("image_file", wishlistItem.getImageFile());
+                        itemAttributes.put("category_id", wishlistItem.getCategoryId() + "");
+                        itemAttributes.put("primary_color", wishlistItem.getPrimaryColorId() + "");
+                        itemAttributes.put("rating", wishlistItem.getRating() + "");
+
+
+                        if(((Button)v).isSelected()) {
+                            ((Button) v).setSelected(false);
+                            ((Button) v).setTextColor(context.getResources().getColor(R.color.accent));
+                            ((Button) v).setText(R.string.wishlist_button_not_selected);
+                            itemAttributes.put("is_wish", "1");
+                        } else {
+                            ((Button) v).setSelected(true);
+                            ((Button) v).setTextColor(context.getResources().getColor(R.color.primary_dark));
+                            ((Button) v).setText(R.string.wishlist_button_selected);
+                            itemAttributes.put("is_wish", "0");
+                        }
+                        wishlistItem.edit(itemAttributes);
+                        wishlistItem.save();
                     }
                 });
             }
@@ -99,6 +147,6 @@ public class DefaultListAdapter extends ArrayAdapter<ListItemIconName> {
         TextView secondLine;
         TextView rightTextView;
         ImageView image;
-        ImageView itemActionButton;
+        Button itemActionButton;
     }
 }
