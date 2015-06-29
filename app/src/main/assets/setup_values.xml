@@ -126,7 +126,7 @@
 
         <attribute_type>
             <name>Exact Color</name>
-            <value_type>0</value_type>
+            <value_type>3</value_type>
             <is_unique>1</is_unique>
         </attribute_type>
 

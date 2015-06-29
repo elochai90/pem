@@ -52,7 +52,6 @@ public class CompareImageAdapter extends PagerAdapter {
 
         String imageFile = categoryItems.get(position).getImageFile();
         ImageLoader.setPic(imageView, imageFile);
-        Log.e("###COMP###", imageFile);
         container.addView(imageView, 0);
         return imageView;
     }

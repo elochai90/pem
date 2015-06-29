@@ -2,4 +2,6 @@
 <resources>
     <item name="boolAttrField" type="id"/>
     <item name="stringAttrField" type="id"/>
+    <item name="colorWheel" type="id"/>
+    <item name="colorSlider" type="id"/>
 </resources>

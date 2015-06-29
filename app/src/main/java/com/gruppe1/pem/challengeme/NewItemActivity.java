@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -64,6 +65,10 @@ public class NewItemActivity extends Activity {
     private Item editItem;
     private int parentCategoryId;
     private int savedColorId;
+
+    // Color Picker
+    private int exactColorId;
+    private TextView attrValueColorPicker;
 
     private boolean isEdit;
 
@@ -260,7 +265,12 @@ public class NewItemActivity extends Activity {
             // boolean
             if(tmpItemAttrType.getValueType() == 2) {
                 attributeSaveValue  = ((Switch) attributeView.findViewById(R.id.boolAttrField)).isChecked() ? "1" : "0";
-            } else {
+            }
+            // Color Picker
+            else if (tmpItemAttrType.getValueType() == 3) {
+                attributeSaveValue  = exactColorId + "";
+            }
+            else {
                 attributeSaveValue = ((EditText) attributeView.findViewById(R.id.stringAttrField)).getText().toString();
             }
             HashMap<String, String> itemAttributeValue = new HashMap<String, String>();
@@ -292,7 +302,6 @@ public class NewItemActivity extends Activity {
         int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, getResources().getDisplayMetrics());
         ViewGroup.LayoutParams attibuteNameLayoutParams = new ViewGroup.LayoutParams(width, height);
         attributeName.setLayoutParams(attibuteNameLayoutParams);
-        // TODO: real attr names and values
         attributeName.setText(attributeType.getName() + ":");
 
         View attributeValueView;
@@ -312,7 +321,44 @@ public class NewItemActivity extends Activity {
             }
             attributeValueView = attrValueSwitch;
 
-        } else {
+        }
+        // attribute is ColorPicker
+        else if(attributeType.getValueType() == 3) {
+            attrValueColorPicker = new TextView(this);
+            ViewGroup.LayoutParams attibuteValueLayoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
+            attrValueColorPicker.setLayoutParams(attibuteValueLayoutParams);
+            attrValueColorPicker.setTextColor(getResources().getColor(android.R.color.white));
+            attrValueColorPicker.setTextSize(18);
+            attrValueColorPicker.setGravity(Gravity.CENTER);
+
+            if(attributeValue != null) {
+                System.out.println("Color:" + attributeValue.toString());
+                exactColorId = Integer.parseInt(attributeValue.toString());
+            } else {
+                attrValueColorPicker.setText(R.string.no_exact_color_selected);
+                exactColorId = getResources().getColor(R.color.color_picker_initial);
+            }
+            attrValueColorPicker.setBackgroundColor(exactColorId);
+            // 0xFF4488CC
+            attrValueColorPicker.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final HSVColorPickerDialog cpd = new HSVColorPickerDialog( NewItemActivity.this, exactColorId, new HSVColorPickerDialog.OnColorSelectedListener() {
+                        @Override
+                        public void colorSelected(Integer color) {
+                            // Do something with the selected color
+                            exactColorId = color;
+                            attrValueColorPicker.setBackgroundColor(exactColorId);
+                            attrValueColorPicker.setText("");
+                        }
+                    });
+                    cpd.setTitle( "Pick a color" );
+                    cpd.show();
+                }
+            });
+            attributeValueView = attrValueColorPicker;
+        }
+        else {
             EditText textAttributeValue = new EditText(this);
             textAttributeValue.setTextSize(18);
             ViewGroup.LayoutParams attibuteValueLayoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);

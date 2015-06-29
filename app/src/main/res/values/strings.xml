@@ -38,4 +38,6 @@
     <string name="compare_name">name of compare</string>
     <string name="abort">Abort</string>
     <string name="save">Save</string>
+
+    <string name="no_exact_color_selected">Select a color</string>
 </resources>
