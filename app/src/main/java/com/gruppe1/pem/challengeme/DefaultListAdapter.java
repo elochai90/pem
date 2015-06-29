@@ -60,13 +60,18 @@ public class DefaultListAdapter extends ArrayAdapter<ListItemIconName> {
 
             holder.firstLine.setText(item.name);
 
+            if(isCategory || item.itemBitmap == null) {
+                holder.image.setImageResource(item.icon);
+            } else {
+                holder.image.setImageBitmap(item.itemBitmap);
+            }
+
             if(isCategory) {
                 holder.rightTextView.setText(Item.getItemsCountByCategoryId(context, item.elementId) + "");
             } else {
                 holder.secondLine.setText("z.B. Item-Attribute");
             }
 
-            holder.image.setImageResource(item.icon);
 
             if(wishlist) {
                 holder.itemActionButton.setVisibility(View.VISIBLE);

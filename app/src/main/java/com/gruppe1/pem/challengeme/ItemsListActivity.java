@@ -4,12 +4,15 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -223,16 +226,14 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
 
         while (catIt.hasNext()) {
             Item tmpItem = (Item)catIt.next();
-            //Log.e("###ITEM###", tmpItem.getName() + " - " + tmpItem.getId());
-            int iconId = getResources().getIdentifier("kleiderbuegel", "drawable", "com.gruppe1.pem.challengeme"); // TODO: replace with image
-            mDataset.add(new ListItemIconName(tmpItem.getId(), iconId , tmpItem.getName()));
+            int iconId = getResources().getIdentifier("kleiderbuegel", "drawable", "com.gruppe1.pem.challengeme");
+            mDataset.add(new ListItemIconName(tmpItem.getId(), iconId , tmpItem.getName(), getPicFromFile(tmpItem.getImageFile())));
         }
     }
 
    // @Override
     public void selectItem(int itemid) {
         Intent intent = new Intent();
-//        intent.setClassName(getPackageName(), getPackageName() + ".CategoriesItemDetailActivity");
         intent.setClassName(getPackageName(), getPackageName() + ".NewItemActivity");
         Bundle b = new Bundle();
         b.putInt(Constants.EXTRA_ITEM_ID, itemid);
@@ -257,5 +258,32 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
             int itemid = list ? listAdapter.getItem(position).elementId : gridAdapter.getItem(position).elementId;
             selectItem(itemid);
         //}
+    }
+
+
+    private Bitmap getPicFromFile(String imageFile) {
+        // Get the dimensions of the View
+        TypedValue value = new TypedValue();
+        getTheme().resolveAttribute(android.R.attr.listPreferredItemHeightLarge, value, true);
+        int targetW = value.data;
+        int targetH = value.data;
+
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(imageFile, bmOptions);
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(imageFile, bmOptions);
+        return bitmap;
     }
 }

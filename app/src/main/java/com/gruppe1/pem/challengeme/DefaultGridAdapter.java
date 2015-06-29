@@ -43,28 +43,31 @@ public class DefaultGridAdapter extends ArrayAdapter<ListItemIconName> {
         ListItemIconName item = data.get(position);
 
 
-        /*if(position == 0) {
+        if (row == null || row.getTag() == null) {
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
-            row = inflater.inflate(R.layout.grid_item_add, parent, false);
-            ((TextView) row.findViewById(R.id.addText)).setText(item.name);
-        } else {*/
-            if (row == null || row.getTag() == null) {
-                LayoutInflater inflater = ((Activity) context).getLayoutInflater();
-                row = inflater.inflate(layoutResourceId, parent, false);
-                holder = new ViewHolder();
-                holder.imageTitle = (TextView) row.findViewById(R.id.textView);
-                holder.rightTextView = (TextView) row.findViewById(R.id.rightTextView);
-                holder.image = (ImageView) row.findViewById(R.id.imageView);
-                row.setTag(holder);
-            } else {
-                holder = (ViewHolder) row.getTag();
-            }
+            row = inflater.inflate(layoutResourceId, parent, false);
+            holder = new ViewHolder();
+            holder.imageTitle = (TextView) row.findViewById(R.id.textView);
+            holder.rightTextView = (TextView) row.findViewById(R.id.rightTextView);
+            holder.image = (ImageView) row.findViewById(R.id.imageView);
+            row.setTag(holder);
+        } else {
+            holder = (ViewHolder) row.getTag();
+        }
 
-            holder.imageTitle.setText(item.name);
-            if(isCategory) {
-                holder.rightTextView.setText(Item.getItemsCountByCategoryId(context, item.elementId) + "");
-            }
+        holder.imageTitle.setText(item.name);
+
+
+        if(isCategory || item.itemBitmap ==  null) {
             holder.image.setImageResource(item.icon);
+        } else {
+            holder.image.setImageBitmap(item.itemBitmap);
+        }
+
+
+        if(isCategory) {
+            holder.rightTextView.setText(Item.getItemsCountByCategoryId(context, item.elementId) + "");
+        }
         //}
         return row;
     }

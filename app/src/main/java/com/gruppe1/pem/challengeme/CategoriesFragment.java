@@ -257,7 +257,7 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
         while (catIt.hasNext()) {
             Category tmpCat = (Category)catIt.next();
             int iconId = getResources().getIdentifier(tmpCat.getIcon(), "drawable", "com.gruppe1.pem.challengeme");
-            mDataset.add(new ListItemIconName(tmpCat.getId(), iconId , tmpCat.getName()));
+            mDataset.add(new ListItemIconName(tmpCat.getId(), iconId , tmpCat.getName(), null));
         }
     }
 

@@ -140,7 +140,7 @@ public class Item {
         dbHelper.init();
         dbHelper.setTable(Constants.ITEMS_DB_TABLE);
         dbHelper.setColumns(new String[]{"*"});
-        dbHelper.setWhere("", new String[]{"category_id='" + p_categoryId + "'"});
+        dbHelper.setWhere("", new String[]{"category_id='" + p_categoryId + "' AND is_wish=0"});
         dbHelper.setOrderBy("name ASC");
         Cursor cursor = dbHelper.select();
 
@@ -164,6 +164,8 @@ public class Item {
 
         if(p_wishListItems) {
             dbHelper.setWhere("", new String[]{"is_wish=1"});
+        } else {
+            dbHelper.setWhere("", new String[]{"is_wish=0"});
         }
 
         dbHelper.setOrderBy("name ASC");
@@ -185,7 +187,7 @@ public class Item {
         dbHelper.init();
         dbHelper.setTable(Constants.ITEMS_DB_TABLE);
         dbHelper.setColumns(new String[]{"COUNT(*)"});
-        dbHelper.setWhere("", new String[]{"category_id='" + p_categoryId + "'"});
+        dbHelper.setWhere("", new String[]{"category_id='" + p_categoryId + "' AND is_wish=0"});
         Cursor cursor = dbHelper.select();
 
         int itemsCount = 0;

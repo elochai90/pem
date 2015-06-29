@@ -128,10 +128,10 @@ public class TabsFragmentActivity extends FragmentActivity {
         mDrawerList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         mDrawerList.setTextFilterEnabled(true);
         ListItemIconName[] navigationDrawerItems = {
-                new ListItemIconName(0, R.drawable.ic_categories, menuItems[0]),
-                new ListItemIconName(0, R.drawable.ic_compare, menuItems[1]),
-                new ListItemIconName(0, R.drawable.ic_wishlist, menuItems[2]),
-                new ListItemIconName(0, R.drawable.ic_settings, menuItems[3])
+                new ListItemIconName(0, R.drawable.ic_categories, menuItems[0], null),
+                new ListItemIconName(0, R.drawable.ic_compare, menuItems[1], null),
+                new ListItemIconName(0, R.drawable.ic_wishlist, menuItems[2], null),
+                new ListItemIconName(0, R.drawable.ic_settings, menuItems[3], null)
         };
         mDrawerList.setAdapter(new NavigationDrawerItemAdapter(this, R.layout.list_item_navigation_drawer, navigationDrawerItems));
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {

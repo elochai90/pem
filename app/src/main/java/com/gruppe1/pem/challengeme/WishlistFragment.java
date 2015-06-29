@@ -1,8 +1,11 @@
 package com.gruppe1.pem.challengeme;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,6 +19,7 @@ import android.widget.ListView;
 import com.github.clans.fab.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 
@@ -129,17 +133,51 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
     private void initDataset() {
         // TODO: replace by database data
         mDataset = new ArrayList<ListItemIconName>();
-        mDataset.add(new ListItemIconName(0,R.drawable.kleiderbuegel, "T-Shirt in rosa"));
-        mDataset.add(new ListItemIconName(0,R.drawable.kleiderbuegel, "T-Shirt in rosa"));
-        mDataset.add(new ListItemIconName(0,R.drawable.kleiderbuegel, "T-Shirt in rosa"));
-        mDataset.add(new ListItemIconName(0,R.drawable.kleiderbuegel, "T-Shirt in rosa"));
-        mDataset.add(new ListItemIconName(0,R.drawable.kleiderbuegel, "T-Shirt in rosa"));
-        mDataset.add(new ListItemIconName(0,R.drawable.kleiderbuegel, "T-Shirt in rosa"));
-        mDataset.add(new ListItemIconName(0,R.drawable.kleiderbuegel, "T-Shirt in rosa"));
-        mDataset.add(new ListItemIconName(0,R.drawable.kleiderbuegel, "T-Shirt in rosa"));
-        mDataset.add(new ListItemIconName(0,R.drawable.kleiderbuegel, "T-Shirt in rosa"));
+
+        DataBaseHelper db_helper = new DataBaseHelper(getActivity().getApplicationContext());
+        db_helper.init();
+
+        mDataset.clear();
 
 
+        ArrayList<Item> allWishlistItems = Item.getAllItems(getActivity().getApplicationContext(), true);
+
+        Iterator wItemIt = allWishlistItems.iterator();
+
+        while (wItemIt.hasNext()) {
+            Item tmpItem = (Item)wItemIt.next();
+            int iconId = getResources().getIdentifier("kleiderbuegel", "drawable", "com.gruppe1.pem.challengeme");
+            mDataset.add(new ListItemIconName(tmpItem.getId(), iconId, tmpItem.getName(), getPicFromFile(tmpItem.getImageFile())));
+        }
+
+
+    }
+
+
+    private Bitmap getPicFromFile(String imageFile) {
+        // Get the dimensions of the View
+        TypedValue value = new TypedValue();
+        (getActivity()).getTheme().resolveAttribute(android.R.attr.listPreferredItemHeightLarge, value, true);
+        int targetW = value.data;
+        int targetH = value.data;
+
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(imageFile, bmOptions);
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(imageFile, bmOptions);
+        return bitmap;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.gruppe1.pem.challengeme;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import java.util.Date;
@@ -14,21 +15,24 @@ public class ListItemIconName {
     public int icon;
     public String name;
     public Date date;
+    public Bitmap itemBitmap;
 
-    public ListItemIconName(int elementId, int icon, String name)
+    public ListItemIconName(int elementId, int icon, String name, Bitmap itemBitmap)
     {
         this.elementId = elementId;
         this.icon = icon;
         this.name = name;
+        this.itemBitmap = itemBitmap;
 
 //        Log.e("###LIST", this.name);
     }
 
-    public ListItemIconName(int elementId, int icon, String name, Date date)
+    public ListItemIconName(int elementId, int icon, String name, Bitmap itemBitmap, Date date)
     {
         this.elementId = elementId;
         this.icon = icon;
         this.name = name;
+        this.itemBitmap = itemBitmap;
         this.date = date;
     }
 }
