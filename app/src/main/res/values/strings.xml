@@ -33,4 +33,9 @@
 
     <string name="wishlist_button_not_selected">Add to category</string>
     <string name="wishlist_button_selected">Add to wishlist</string>
+
+    <string name="save_compare">Save compare</string>
+    <string name="compare_name">name of compare</string>
+    <string name="abort">Abort</string>
+    <string name="save">Save</string>
 </resources>
