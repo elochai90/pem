@@ -26,6 +26,9 @@ public class NewCategoryActivity extends Activity {
     private EditText newCategory_name;
     private Spinner editUpperCategory;
     private Bundle extras;
+
+    int categoryId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +36,8 @@ public class NewCategoryActivity extends Activity {
         extras = getIntent().getExtras();
 
         final Activity thisActivity = this;
+
+        categoryId = 0;
 
         newCategory_name = (EditText) findViewById(R.id.editNameCategory);
         editUpperCategory = (Spinner) findViewById(R.id.editUpperCategory);
@@ -42,13 +47,6 @@ public class NewCategoryActivity extends Activity {
             public void onClick(View v) {
                 DataBaseHelper db_helper = new DataBaseHelper(getApplicationContext());
                 db_helper.init();
-                int categoryId = 0;
-
-                if(extras != null) {
-                    if(extras.getString("category_id") != null) {
-                          categoryId = Integer.parseInt(extras.getString("category_id"));
-                    }
-                }
 
                 Category editCategory = new Category(thisActivity.getApplicationContext(), categoryId, db_helper);
                 editCategory.setName(newCategory_name.getText().toString());
@@ -84,7 +82,7 @@ public class NewCategoryActivity extends Activity {
 
         if(extras != null) {
             //edit category
-            int categoryId = extras.getInt("category_id");
+            categoryId = extras.getInt("category_id");
             DataBaseHelper dbHelper = new DataBaseHelper(getApplicationContext());
             dbHelper.init();
 
