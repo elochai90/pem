@@ -352,7 +352,7 @@ public class NewItemActivity extends Activity {
                             attrValueColorPicker.setText("");
                         }
                     });
-                    cpd.setTitle( "Pick a color" );
+                    cpd.setTitle( "Pick the exact color" );
                     cpd.show();
                 }
             });
