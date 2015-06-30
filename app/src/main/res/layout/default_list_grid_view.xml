@@ -2,6 +2,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <RelativeLayout
+        android:id="@+id/noItemLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:padding="30dp">
+        <TextView
+            android:id="@+id/noItemText"
+            android:textSize="18sp"
+            android:gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:src="@drawable/arrow_no_items"
+            android:layout_below="@id/noItemText"/>
+    </RelativeLayout>
     <ListView
         android:id="@+id/listView"
         android:layout_height="wrap_content"

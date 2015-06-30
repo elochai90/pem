@@ -24,6 +24,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.github.clans.fab.FloatingActionButton;
@@ -45,6 +46,8 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
     private DefaultListAdapter listAdapter;
     private Boolean list;
 
+    private RelativeLayout noItemLayout;
+
     private int categoryId;
 
     public SharedPreferences.Editor editor;
@@ -56,6 +59,13 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.default_list_grid_view);
+
+
+        noItemLayout = (RelativeLayout) findViewById(R.id.noItemLayout);
+        TextView noItemText = (TextView) findViewById(R.id.noItemText);
+        noItemText.setText(R.string.no_items);
 
         sharedPreferences = getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
@@ -86,7 +96,6 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
 
         initDataset();
 
-        setContentView(R.layout.default_list_grid_view);
         listView = (ListView) findViewById(R.id.listView);
         listAdapter = new DefaultListAdapter(this, R.layout.list_item_default, mDataset, false, false);
         listView.setAdapter(listAdapter);
@@ -144,6 +153,14 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
         });
 
 
+    }
+
+    private void showNoItemLayout(boolean show) {
+        if(show) {
+            noItemLayout.setVisibility(View.VISIBLE);
+        } else {
+            noItemLayout.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
@@ -237,6 +254,11 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
             Item tmpItem = (Item)catIt.next();
             int iconId = getResources().getIdentifier("kleiderbuegel", "drawable", "com.gruppe1.pem.challengeme");
             mDataset.add(new ListItemIconName(tmpItem.getId(), iconId , tmpItem.getName(), getPicFromFile(tmpItem.getImageFile())));
+        }
+        if(mDataset.size() > 0) {
+            showNoItemLayout(false);
+        } else {
+            showNoItemLayout(true);
         }
     }
 

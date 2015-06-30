@@ -19,6 +19,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
@@ -42,6 +44,8 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
     private ListView listView;
     private DefaultListAdapter listAdapter;
 
+    private RelativeLayout noWishlistItemLayout;
+
     private Object[] selectedItem;
     ActionMode actionMode;
 
@@ -51,6 +55,13 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
         super.onCreateView(inflater, container, savedInstanceState);
 
         rootView = inflater.inflate(R.layout.default_list_grid_view, container, false);
+
+        noWishlistItemLayout = (RelativeLayout) rootView.findViewById(R.id.noItemLayout);
+        TextView noWishlistItemText = (TextView) rootView.findViewById(R.id.noItemText);
+        noWishlistItemText.setText(R.string.no_wishlist_items);
+
+        mDataset = new ArrayList<ListItemIconName>();
+        initDataset();
 
         listView = (ListView) rootView.findViewById(R.id.listView);
         listAdapter = new DefaultListAdapter(getActivity(), R.layout.list_item_default, mDataset, false, true);
@@ -111,10 +122,16 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mDataset = new ArrayList<ListItemIconName>();
-        initDataset();
         setHasOptionsMenu(true);
 
+    }
+
+    private void showNoWishlistItemLayout(boolean show) {
+        if(show) {
+            noWishlistItemLayout.setVisibility(View.VISIBLE);
+        } else {
+            noWishlistItemLayout.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
@@ -143,13 +160,10 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
 
 
     private void initDataset() {
-        // TODO: replace by database data
-
         DataBaseHelper db_helper = new DataBaseHelper(getActivity().getApplicationContext());
         db_helper.init();
 
         mDataset.clear();
-
 
         ArrayList<Item> allWishlistItems = Item.getAllItems(getActivity().getApplicationContext(), true);
 
@@ -160,8 +174,11 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
             int iconId = getResources().getIdentifier("kleiderbuegel", "drawable", "com.gruppe1.pem.challengeme");
             mDataset.add(new ListItemIconName(tmpItem.getId(), iconId, tmpItem.getName(), getPicFromFile(tmpItem.getImageFile())));
         }
-
-
+        if(mDataset.size() > 0) {
+            showNoWishlistItemLayout(false);
+        } else {
+            showNoWishlistItemLayout(true);
+        }
     }
 
 

@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.github.clans.fab.FloatingActionButton;
 
@@ -34,6 +36,8 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
     private CompareListAdapter listAdapter;
     private Boolean list;
 
+    private RelativeLayout noComparesLayout;
+
     public SharedPreferences.Editor editor;
     public SharedPreferences sharedPreferences;
 
@@ -44,6 +48,12 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
         super.onCreateView(inflater, container, savedInstanceState);
 
         rootView = inflater.inflate(R.layout.default_list_grid_view, container, false);
+
+        noComparesLayout = (RelativeLayout) rootView.findViewById(R.id.noItemLayout);
+        TextView noComparesText = (TextView) rootView.findViewById(R.id.noItemText);
+        noComparesText.setText(R.string.no_compares);
+
+        initDataset();
 
         listView = (ListView) rootView.findViewById(R.id.listView);
         listAdapter = new CompareListAdapter(getActivity(), R.layout.list_item_compare, mDataset);
@@ -109,7 +119,6 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        initDataset();
         if (savedInstanceState != null) {
             list = savedInstanceState.getBoolean(Constants.KEY_VIEW_COMPARE_AS_LIST, true);
         } else {
@@ -122,6 +131,14 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
         editor = sharedPreferences.edit();
 
 
+    }
+
+    private void showNoComparesLayout(boolean show) {
+        if(show) {
+            noComparesLayout.setVisibility(View.VISIBLE);
+        } else {
+            noComparesLayout.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
@@ -183,6 +200,11 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
     private void initDataset() {
         // TODO: replace by database data
         mDataset = Compare.geAllCompares(getActivity().getApplicationContext());
+        if(mDataset.size() > 0) {
+            showNoComparesLayout(false);
+        } else {
+            showNoComparesLayout(true);
+        }
 
     }
     @Override
