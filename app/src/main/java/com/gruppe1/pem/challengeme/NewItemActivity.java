@@ -375,7 +375,7 @@ public class NewItemActivity extends Activity {
         attributeLayout.addView(attributeName);
         attributeLayout.addView(attributeValueView);
 
-        attributesView.addView(attributeLayout, attributesView.getChildCount() - 1);
+        attributesView.addView(attributeLayout, attributesView.getChildCount());
     }
 
 

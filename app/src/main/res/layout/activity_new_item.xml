@@ -148,25 +148,6 @@
                         android:textOn="@string/switch_true"
                         android:checked="false"/>
                 </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
-                    <EditText
-                        android:id="@+id/addNewAttributeName"
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:hint="name"
-                        android:textSize="18dp"/>
-                    <EditText
-                        android:id="@+id/addNewAttributeValue"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="attribute value"
-                        android:textSize="18dp" />
-                </LinearLayout>
             </LinearLayout>
 
         </RelativeLayout>

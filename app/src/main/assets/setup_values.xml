@@ -112,11 +112,28 @@
         </attribute_type>
 
         <attribute_type>
-            <name>Buy Date</name>
+            <name>Exact Color</name>
+            <value_type>3</value_type>
+            <is_unique>1</is_unique>
+        </attribute_type>
+
+        <attribute_type>
+            <name>Brand</name>
             <value_type>1</value_type>
             <is_unique>1</is_unique>
         </attribute_type>
 
+        <attribute_type>
+            <name>Material</name>
+            <value_type>1</value_type>
+            <is_unique>1</is_unique>
+        </attribute_type>
+
+        <attribute_type>
+            <name>Price</name>
+            <value_type>1</value_type>
+            <is_unique>1</is_unique>
+        </attribute_type>
 
         <attribute_type>
             <name>Store</name>
@@ -125,14 +142,20 @@
         </attribute_type>
 
         <attribute_type>
-            <name>Exact Color</name>
-            <value_type>3</value_type>
+            <name>Buy Date</name>
+            <value_type>1</value_type>
             <is_unique>1</is_unique>
         </attribute_type>
 
         <attribute_type>
             <name>Has Pattern</name>
             <value_type>2</value_type>
+            <is_unique>1</is_unique>
+        </attribute_type>
+
+        <attribute_type>
+            <name>Other</name>
+            <value_type>1</value_type>
             <is_unique>1</is_unique>
         </attribute_type>
 
