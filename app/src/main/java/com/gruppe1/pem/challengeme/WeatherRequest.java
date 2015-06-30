@@ -74,6 +74,7 @@ public class WeatherRequest {
 
         // call AsynTask to perform network operation on separate thread
         new HttpAsyncTask().execute("http://api.openweathermap.org/data/2.5/weather?q=" + location[0] + "," + location[1]);
+        //new HttpAsyncTask().execute("http://api.openweathermap.org/data/2.5/forecast?q=" + location[0] + "," + location[1]);
     }
 
     private String[]  getGPS() {
@@ -227,6 +228,7 @@ public class WeatherRequest {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+
             etResponse = result;
         }
     }

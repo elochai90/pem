@@ -115,7 +115,7 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".NewCategoryActivity");
-                startActivity(intent);
+                startActivityForResult(intent,0);
 
             }
         });
@@ -280,7 +280,7 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
         try {
             super.onActivityResult(requestCode, resultCode, data);
 
-            if (requestCode == REQUEST_CODE) {
+            if (requestCode == 0) {
                 if(resultCode == Activity.RESULT_OK) {
                     initDataset();
                     listAdapter.notifyDataSetChanged();
@@ -372,4 +372,6 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
 
         return true;
     }
+
+
 }

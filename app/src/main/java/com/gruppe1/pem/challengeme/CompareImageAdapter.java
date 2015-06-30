@@ -31,7 +31,14 @@ public class CompareImageAdapter extends PagerAdapter {
     CompareImageAdapter(Context p_context, int p_position) {
         this.context = p_context;
         Category chosenCategory = Category.getAllCategories(context).get(p_position - 1);
+
         categoryItems = Item.getItemsByCategoryId(p_context, chosenCategory.getId());
+        for(int i = 0; i < categoryItems.size(); i++){
+            String imageFile = categoryItems.get(i).getImageFile();
+            if(imageFile == null){
+                categoryItems.remove(i);
+            }
+        }
     }
 
     @Override
@@ -53,6 +60,7 @@ public class CompareImageAdapter extends PagerAdapter {
         String imageFile = categoryItems.get(position).getImageFile();
         ImageLoader.setPic(imageView, imageFile);
         container.addView(imageView, 0);
+
         return imageView;
     }
 

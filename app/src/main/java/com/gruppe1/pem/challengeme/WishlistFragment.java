@@ -1,5 +1,6 @@
 package com.gruppe1.pem.challengeme;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 
@@ -70,7 +72,7 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
                 Intent intent = new Intent();
                 intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".NewItemActivity");
                 intent.putExtra("is_wishlist", true);
-                startActivity(intent);
+                startActivityForResult(intent, 0);
 
             }
         });
@@ -79,7 +81,7 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".NewCategoryActivity");
-                startActivity(intent);
+               startActivity(intent);
 
             }
         });
@@ -89,7 +91,7 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".NewItemActivity");
-                startActivity(intent);
+                startActivityForResult(intent, 0);
 
             }
         });
@@ -101,6 +103,7 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mDataset = new ArrayList<ListItemIconName>();
         initDataset();
         setHasOptionsMenu(true);
 
@@ -133,7 +136,6 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
 
     private void initDataset() {
         // TODO: replace by database data
-        mDataset = new ArrayList<ListItemIconName>();
 
         DataBaseHelper db_helper = new DataBaseHelper(getActivity().getApplicationContext());
         db_helper.init();
@@ -195,5 +197,22 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         int itemid = listAdapter.getItem(position).elementId;
         selectItem(itemid);
+    }
+
+    // for actualizing the categories list on coming back from new category
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        try {
+            super.onActivityResult(requestCode, resultCode, data);
+
+            if (requestCode == 0) {
+                if(resultCode == Activity.RESULT_OK) {
+                    initDataset();
+                    listAdapter.notifyDataSetChanged();
+                }
+            }
+        } catch(Exception e){
+            e.printStackTrace();
+        }
     }
 }
