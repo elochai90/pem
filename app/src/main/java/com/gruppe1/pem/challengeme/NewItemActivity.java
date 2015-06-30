@@ -360,6 +360,7 @@ public class NewItemActivity extends Activity {
         }
         else {
             EditText textAttributeValue = new EditText(this);
+            textAttributeValue.setSingleLine(true);
             textAttributeValue.setTextSize(18);
             ViewGroup.LayoutParams attibuteValueLayoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
 //              if(value is set) TODO: check if value was already set / if edit or new

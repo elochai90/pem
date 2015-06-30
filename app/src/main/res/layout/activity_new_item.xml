@@ -73,6 +73,7 @@
                     android:textSize="18sp"/>
                 <EditText
                     android:id="@+id/itemName"
+                    android:singleLine="true"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:textSize="18sp"
