@@ -75,15 +75,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.gruppe1.pem.challengeme.TabsFragmentActivity" />
         </activity>
-        <activity
-            android:name=".CategoriesItemDetailActivity"
-            android:label="@string/title_activity_categories_item_detail"
-            android:windowSoftInputMode="adjustResize"
-            android:parentActivityName=".ItemsListActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.gruppe1.pem.challengeme.ItemsListActivity" />
-        </activity>
     </application>
 
 </manifest>
