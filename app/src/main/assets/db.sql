@@ -29,7 +29,7 @@ CREATE TABLE `orga_nice_item_attribute_types` (
     `item_id` INT NOT NULL,
     `attribute_type_id` INT NOT NULL,
     `attribute_value` VARCHAR(255),
-    FOREIGN KEY(`item_id`) REFERENCES orga_nice_items(_id),
+    FOREIGN KEY(`item_id`) REFERENCES orga_nice_items(_id) ON DELETE CASCADE,
     FOREIGN KEY(`attribute_type_id`) REFERENCES orga_nice_attribute_types(_id)
 );
 

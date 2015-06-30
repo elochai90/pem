@@ -84,11 +84,11 @@ public class NewCategoryActivity extends Activity {
 
         if(extras != null) {
             //edit category
-            String categoryId = extras.getString("category_id");
+            int categoryId = extras.getInt("category_id");
             DataBaseHelper dbHelper = new DataBaseHelper(getApplicationContext());
             dbHelper.init();
 
-            Category editCategory = new Category(getApplicationContext(), Integer.parseInt(categoryId), dbHelper);
+            Category editCategory = new Category(getApplicationContext(), categoryId, dbHelper);
 
             setTitle("Edit " + editCategory.getName());
             newCategory_name.setText(editCategory.getName());

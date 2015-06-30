@@ -277,4 +277,9 @@ public class Item {
         this.m_dbHelper.setFloatValue("rating", this.m_rating);
     }
 
+    public void delete() {
+        this.m_dbHelper.setWhere("", new String[]{"_id=" + this.m_id});
+        this.m_dbHelper.delete();
+    }
+
 }

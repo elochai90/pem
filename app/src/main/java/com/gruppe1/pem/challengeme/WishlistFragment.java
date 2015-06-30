@@ -1,12 +1,15 @@
 package com.gruppe1.pem.challengeme;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.TypedValue;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,8 +28,9 @@ import java.util.Iterator;
 import java.util.List;
 
 
-public class WishlistFragment extends Fragment implements AdapterView.OnItemClickListener{
+public class WishlistFragment extends Fragment implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
+    public static final int REQUEST_CODE = 1;
 
 
     private ArrayList<ListItemIconName> mDataset;
@@ -37,6 +41,9 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
     private DefaultGridAdapter gridAdapter;
     private ListView listView;
     private DefaultListAdapter listAdapter;
+
+    private Object[] selectedItem;
+    ActionMode actionMode;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,6 +56,7 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
         listAdapter = new DefaultListAdapter(getActivity(), R.layout.list_item_default, mDataset, false, true);
         listView.setAdapter(listAdapter);
         listView.setOnItemClickListener(this);
+        listView.setOnItemLongClickListener(this);
         gridView = (GridView) rootView.findViewById(R.id.gridView);
         gridView.setVisibility(View.INVISIBLE);
 
@@ -224,5 +232,77 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
         } catch(Exception e){
             e.printStackTrace();
         }
+    }
+
+
+
+    private ActionMode.Callback modeCallBack = new ActionMode.Callback() {
+
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        public void onDestroyActionMode(ActionMode mode) {
+            if(selectedItem != null) {
+                int position = (int) selectedItem[0];
+                View view = (View) selectedItem[1];
+                view.setSelected(false);
+                selectedItem = null;
+            }
+            mode = null;
+        }
+
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            mode.setTitle("Options");
+            mode.getMenuInflater().inflate(R.menu.menu_wishlist_items_list_action_mode, menu);
+            return true;
+        }
+
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            int id = item.getItemId();
+            switch (id) {
+                case R.id.delete: {
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle("Do you really want to delete '" + listAdapter.getItem((int)selectedItem[0]).name + "'?")
+                            .setNegativeButton(android.R.string.no, null)
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                                public void onClick(DialogInterface arg0, int arg1) {
+
+                                    int itemId = (int)listAdapter.getItemId((int)selectedItem[0]);
+
+                                    DataBaseHelper db_helper = new DataBaseHelper(getActivity().getApplicationContext());
+                                    db_helper.init();
+
+                                    Item deleteItem = new Item(getActivity().getApplicationContext(), itemId, db_helper );
+                                    deleteItem.delete();
+
+                                    initDataset();
+                                    listAdapter.notifyDataSetChanged();
+                                    actionMode.finish();
+                                }
+                            }).create().show();
+                    break;
+                }
+                default:
+                    return false;
+            }
+            return true;
+        }
+    };
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        System.out.println("Long click");
+        if(actionMode != null)
+            actionMode.finish();
+        actionMode = getActivity().startActionMode(modeCallBack);
+        view.setSelected(true);
+
+        selectedItem = new Object[2];
+        selectedItem[0] = position;
+        selectedItem[1] = view;
+
+        return true;
     }
 }
