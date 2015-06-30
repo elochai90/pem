@@ -9,6 +9,7 @@ import java.lang.reflect.Array;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.regex.Pattern;
 
 /**
  * Created by Simon on 29.06.2015.
@@ -16,6 +17,7 @@ import java.util.Iterator;
 public class Compare {
     final static String DB_TABLE = Constants.DB_TABLE_PREFIX + "compares";
 
+    private int id;
     private ArrayList<Integer> itemIds;
     private String name;
     private String timestamp;
@@ -24,13 +26,12 @@ public class Compare {
     private DataBaseHelper dbHelper;
 
     public Compare(Context p_context, int p_id) {
+        this.id = p_id;
         this.context = p_context;
         this.dbHelper = new DataBaseHelper(this.context);
         dbHelper.init();
         this.dbHelper.setTable(DB_TABLE);
         itemIds = new ArrayList<Integer>();
-
-        this.timestamp = (System.currentTimeMillis()/1000) + "";
 
         if(p_id > -1) {
             this.dbHelper.setColumns(new String[]{"*"});
@@ -38,14 +39,32 @@ public class Compare {
             Cursor compareCursor = this.dbHelper.select();
 
             if(compareCursor.moveToFirst()) {
-                String[] idValues = compareCursor.getString(2).split("|");
+                this.name = compareCursor.getString(1);
+                this.timestamp = compareCursor.getString(3);
+                String[] idValues = compareCursor.getString(2).split(Pattern.quote("|"));
+
+                for(int i = 0; i < idValues.length; i++) {
+                    itemIds.add(Integer.parseInt(idValues[i]));
+                }
+
+
             } else {
                 Log.e("###NO_SUCH_COMPARE_ID", "" + p_id);
             }
 
             compareCursor.close();
+        } else {
+            this.timestamp = (System.currentTimeMillis()) + "";
         }
 
+    }
+
+    public void setId(int p_id) {
+        this.id = p_id;
+    }
+
+    public int getId(){
+        return this.id;
     }
 
     public void addItemId(int p_id) {
@@ -87,6 +106,26 @@ public class Compare {
 
         this.dbHelper.insert();
     }
+
+    public static ArrayList<Compare> geAllCompares(Context p_context) {
+        DataBaseHelper dbHelper = new DataBaseHelper(p_context);
+        dbHelper.init();
+        dbHelper.setTable(Constants.DB_TABLE_PREFIX + "compares");
+        dbHelper.setColumns(new String[]{"*"});
+        Cursor compareCursor = dbHelper.select();
+        compareCursor.moveToFirst();
+
+        ArrayList<Compare> allCompares = new ArrayList<Compare>();
+
+        while (!compareCursor.isAfterLast()) {
+            Compare tmpCompare = new Compare(p_context, compareCursor.getInt(0));
+            allCompares.add(tmpCompare);
+            compareCursor.moveToNext();
+        }
+
+        return allCompares;
+    }
+
 }
 
 

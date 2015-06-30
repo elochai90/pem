@@ -2,6 +2,7 @@ package com.gruppe1.pem.challengeme;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.media.Image;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -58,7 +59,8 @@ public class CompareImageAdapter extends PagerAdapter {
         imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 
         String imageFile = categoryItems.get(position).getImageFile();
-        ImageLoader.setPic(imageView, imageFile);
+        Bitmap tmpBitmap = ImageLoader.getPicFromFile(imageFile, 1000, 1000);
+        imageView.setImageBitmap(tmpBitmap);
         container.addView(imageView, 0);
 
         return imageView;

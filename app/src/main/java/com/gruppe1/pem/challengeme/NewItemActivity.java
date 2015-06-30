@@ -206,7 +206,7 @@ public class NewItemActivity extends Activity {
             File imgFile = new File(imgPath);
 
             if (imgFile.exists()) {
-                ImageLoader.setPic(ImgPhoto, editItem.getImageFile());
+                Bitmap tmpBitmap = ImageLoader.getPicFromFile(editItem.getImageFile(), 500, 500);
             }
         }catch(Exception e){
             e.printStackTrace();
@@ -474,14 +474,8 @@ public class NewItemActivity extends Activity {
                 editItem.setImageFile(item_imageFile);
                 Log.w("path of image", item_imageFile + "");
 
-                try {
-                    InputStream imageStream = getContentResolver().openInputStream(selectedImage);
-                    Bitmap yourSelectedImage = BitmapFactory.decodeStream(imageStream);
-
-                    ImageLoader.setPic(ImgPhoto, editItem.getImageFile());
-                }catch(FileNotFoundException e){
-                    Log.w("FileNotFoundExeption: ", e.toString());
-                }
+                Bitmap tmpBitmap = ImageLoader.getPicFromFile(editItem.getImageFile(), 500, 500);
+                ImgPhoto.setImageBitmap(tmpBitmap);
             }
         }
     }

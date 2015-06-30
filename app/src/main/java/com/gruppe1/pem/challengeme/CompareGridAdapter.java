@@ -18,13 +18,16 @@ import java.util.List;
 public class CompareGridAdapter extends ArrayAdapter {
     private Context context;
     private int layoutResourceId;
-    private List<CompareItem> data = new ArrayList();
+    private List<Compare> data = new ArrayList();
+    private DataBaseHelper dbHelper;
 
-    public CompareGridAdapter(Context context, int layoutResourceId, List<CompareItem> data) {
+    public CompareGridAdapter(Context context, int layoutResourceId, List<Compare> data) {
         super(context, layoutResourceId, data);
         this.layoutResourceId = layoutResourceId;
         this.context = context;
         this.data = data;
+        this.dbHelper = new DataBaseHelper(context);
+        this.dbHelper.init();
     }
 
     @Override
@@ -32,7 +35,7 @@ public class CompareGridAdapter extends ArrayAdapter {
         View row = convertView;
         ViewHolder holder = null;
 
-        CompareItem item = data.get(position);
+        Compare item = data.get(position);
         if (row == null || row.getTag() == null) {
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
             row = inflater.inflate(layoutResourceId, parent, false);
@@ -45,9 +48,14 @@ public class CompareGridAdapter extends ArrayAdapter {
             holder = (ViewHolder) row.getTag();
         }
 
-        holder.compareName.setText(item.name);
-        holder.imageItem1.setImageResource(item.iconItem1);
-        holder.imageItem2.setImageResource(item.iconItem2);
+        holder.compareName.setText(item.getName());
+
+        ArrayList<Integer> itemIds = item.getItemIds();
+        Item item1 = new Item(this.context, itemIds.get(0), this.dbHelper);
+        Item item2 = new Item(this.context, itemIds.get(1), this.dbHelper);
+
+        holder.imageItem1.setImageBitmap(ImageLoader.getPicFromFile(item1.getImageFile(), 1000, 1000));
+        holder.imageItem2.setImageBitmap(ImageLoader.getPicFromFile(item2.getImageFile(), 1000, 1000));
         return row;
     }
 

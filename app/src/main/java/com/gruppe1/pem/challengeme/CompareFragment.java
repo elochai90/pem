@@ -24,7 +24,7 @@ import java.util.List;
 
 public class CompareFragment extends Fragment  implements AdapterView.OnItemClickListener{
 
-    private List<CompareItem> mDataset;
+    private List<Compare> mDataset;
 
     private View rootView;
 
@@ -85,7 +85,7 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".NewCategoryActivity");
-                startActivityForResult(intent,0);
+                startActivityForResult(intent, 0);
 
             }
         });
@@ -182,16 +182,7 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
 
     private void initDataset() {
         // TODO: replace by database data
-        mDataset = new ArrayList<CompareItem>();
-        //mDataset.add(new CompareItem(0,0, "add new compare", "", "", null));
-        mDataset.add(new CompareItem(R.drawable.tshirt, R.drawable.hose, "Legere", "Tshirt normal", "Jeans",  new Date()));
-        mDataset.add(new CompareItem(R.drawable.kleid, R.drawable.schuh, "Paaarty!", "Kleid pink kurz", "Pinke Schleifen-High-Heels", new Date()));
-        mDataset.add(new CompareItem(R.drawable.mantel, R.drawable.schuh, "Aussen", "Mantel", "Pinke Schleifen-High-Heels", new Date()));
-        mDataset.add(new CompareItem(R.drawable.cardigan, R.drawable.hose, "morgen", "Cardigan", "Jeans", new Date()));
-        mDataset.add(new CompareItem(R.drawable.tshirt, R.drawable.hose, "Legere", "Tshirt normal", "Jeans",  new Date()));
-        mDataset.add(new CompareItem(R.drawable.kleid, R.drawable.schuh, "Paaarty!", "Kleid pink kurz", "Pinke Schleifen-High-Heels", new Date()));
-        mDataset.add(new CompareItem(R.drawable.mantel, R.drawable.schuh, "Aussen", "Mantel", "Pinke Schleifen-High-Heels", new Date()));
-        mDataset.add(new CompareItem(R.drawable.cardigan, R.drawable.hose, "morgen", "Cardigan", "Jeans", new Date()));
+        mDataset = Compare.geAllCompares(getActivity().getApplicationContext());
 
     }
     @Override
@@ -205,7 +196,7 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Intent intent = new Intent();
             intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".SavedComparesDetailActivity");
-            intent.putExtra("item", mDataset.get(position));
+            intent.putExtra("item", mDataset.get(position).getId());
             startActivity(intent);
     }
 }
