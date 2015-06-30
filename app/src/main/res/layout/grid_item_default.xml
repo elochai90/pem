@@ -33,10 +33,10 @@
         android:id="@+id/textView"
         android:layout_width="fill_parent"
         android:layout_height="50dp"
-        android:paddingLeft="10dp"
+        android:paddingStart="10dp"
         android:gravity="center_vertical"
         android:layout_alignBottom="@id/imageView"
-        android:layout_toLeftOf="@id/rightTextView"
+        android:layout_toStartOf="@id/rightTextView"
         android:textColor="@android:color/white"
         android:textSize="18sp"
         android:background="@color/grey_transparent"/>

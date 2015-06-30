@@ -30,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -86,6 +87,8 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
         gridView.setOnItemClickListener(this);
         gridView.setOnItemLongClickListener(this);
 
+        FloatingActionMenu menu = (FloatingActionMenu) rootView.findViewById(R.id.menu);
+        menu.setClosedOnTouchOutside(true);
         com.github.clans.fab.FloatingActionButton fab_add_compare = (FloatingActionButton) rootView.findViewById(R.id.add_compare);
         com.github.clans.fab.FloatingActionButton fab_add_wishlist_item = (FloatingActionButton) rootView.findViewById(R.id.add_wishlist_item);
         com.github.clans.fab.FloatingActionButton fab_add_category = (FloatingActionButton) rootView.findViewById(R.id.add_category);

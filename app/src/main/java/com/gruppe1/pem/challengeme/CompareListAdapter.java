@@ -21,7 +21,7 @@ import java.util.List;
 public class CompareListAdapter extends ArrayAdapter {
     private Context context;
     private int layoutResourceId;
-    private List<Compare> data = new ArrayList();
+    private List<Compare> data = new ArrayList<Compare>();
     private DataBaseHelper dbHelper;
 
     public CompareListAdapter(Context context, int layoutResourceId, List<Compare> data) {
@@ -51,7 +51,6 @@ public class CompareListAdapter extends ArrayAdapter {
             holder.imageItem1 = (ImageView) row.findViewById(R.id.imageItem1);
             holder.imageItem2 = (ImageView) row.findViewById(R.id.imageItem2);
             holder.rightTextView = (TextView) row.findViewById(R.id.rightTextView);
-            holder.itemActionButton = (Button) row.findViewById(R.id.itemActionButton);
             row.setTag(holder);
         } else {
             holder = (ViewHolder) row.getTag();
@@ -83,6 +82,5 @@ public class CompareListAdapter extends ArrayAdapter {
         ImageView imageItem1;
         ImageView imageItem2;
         TextView rightTextView;
-        Button itemActionButton;
     }
 }

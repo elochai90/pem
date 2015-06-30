@@ -8,7 +8,8 @@
         android:id="@+id/imageView"
         android:layout_width="?android:attr/listPreferredItemHeightLarge"
         android:layout_height="?android:attr/listPreferredItemHeightLarge"
-        android:layout_marginEnd="10dp"/>
+        android:layout_marginEnd="10dp"
+        android:contentDescription="Wishlist Item Image"/>
 
 
     <Button
@@ -22,14 +23,14 @@
         android:textColor="@color/accent"
         android:visibility="invisible"
         style="?android:attr/borderlessButtonStyle"
-        android:contentDescription="TODO"/>
+        android:contentDescription="Add Item to Category/Wishlist"/>
 
     <TextView
         android:id="@+id/secondLine"
         android:layout_width="fill_parent"
         android:layout_height="26dip"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_toEndOf="@id/imageView"
         android:ellipsize="marquee"
         android:singleLine="true"
@@ -42,7 +43,7 @@
         android:layout_above="@id/secondLine"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp"
         android:layout_alignWithParentIfMissing="true"
         android:gravity="center_vertical"
         android:textSize="18sp" />

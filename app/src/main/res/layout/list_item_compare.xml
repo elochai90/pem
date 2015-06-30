@@ -8,26 +8,15 @@
         android:id="@+id/imageItem1"
         android:layout_width="?android:attr/listPreferredItemHeightSmall"
         android:layout_height="?android:attr/listPreferredItemHeightSmall"
-        android:layout_marginEnd="10dp"/>
+        android:layout_marginEnd="10dp"
+        android:contentDescription="First Item Image"/>
     <ImageView
         android:id="@+id/imageItem2"
         android:layout_width="?android:attr/listPreferredItemHeightSmall"
         android:layout_height="?android:attr/listPreferredItemHeightSmall"
         android:layout_below="@id/imageItem1"
-        android:layout_marginEnd="10dp"/>
-
-    <Button
-        android:id="@+id/itemActionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:layout_alignParentEnd="true"
-        android:text="@string/wishlist_button_not_selected"
-        android:textColor="@color/accent"
-        android:focusable="false"
-        android:visibility="invisible"
-        style="?android:attr/borderlessButtonStyle"
-        android:contentDescription="TODO"/>
+        android:layout_marginEnd="10dp"
+        android:contentDescription="Second Item Image"/>
 
 
     <TextView
@@ -48,7 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/compareName"
         android:gravity="bottom"
-        android:layout_alignLeft="@id/compareName"
+        android:layout_alignStart="@id/compareName"
         android:ellipsize="marquee"
         android:singleLine="true"
         android:textSize="15sp" />
@@ -59,8 +48,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/item1Name"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignLeft="@id/compareName"
+        android:layout_alignParentEnd="true"
+        android:layout_alignStart="@id/compareName"
         android:ellipsize="marquee"
         android:paddingBottom="10dp"
         android:singleLine="true"
@@ -71,7 +60,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp"
         android:layout_alignTop="@id/compareName"
         android:layout_alignWithParentIfMissing="true"
         android:textSize="16sp" />

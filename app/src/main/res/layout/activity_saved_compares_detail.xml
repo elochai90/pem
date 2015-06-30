@@ -1,148 +1,115 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:padding="10dp"
+    android:dividerPadding="20dp"
     tools:context="com.gruppe1.pem.challengeme.SavedComparesDetailActivity">
 
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/comparetitle"
+        android:paddingTop="5dp"
+        android:paddingBottom="15dp"
+        android:gravity="center_vertical"
+        android:textSize="24sp"/>
+
     <LinearLayout
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:dividerPadding="20dp">
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5">
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="New Text"
-            android:id="@+id/comparetitle"
-            android:textStyle="bold"
-            android:gravity="center_vertical|center_horizontal"
-            android:textSize="35dp"
-            android:background="#ffffff" />
+        <ImageView
+            android:layout_width="175dp"
+            android:layout_height="175dp"
+            android:id="@+id/detail1oben"
+            android:contentDescription="First Item Image"/>
 
         <LinearLayout
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="233dp"
-            android:layout_weight="0.5">
+            android:layout_height="match_parent"
+            android:padding="10dp"
+            android:weightSum="1">
 
-            <ImageView
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/nameItem1"
+                android:layout_weight="0.06"
+                android:gravity="center_vertical"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
-                android:layout_width="175dp"
-                android:layout_height="210dp"
-                android:id="@+id/detail1oben"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentStart="true"
-                android:layout_gravity="center_vertical" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Category"
+                android:textSize="18sp"
+                android:id="@+id/categorieTextView1"/>
 
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingLeft="10dp"
-                android:gravity="clip_horizontal|center_vertical|center_horizontal"
-                android:weightSum="1">
-
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Name Item 1"
-                    android:id="@+id/nameItem1"
-                    android:layout_below="@+id/titleTextView1"
-                    android:layout_toEndOf="@+id/detail1oben"
-                    android:layout_alignParentEnd="true"
-                    android:layout_weight="0.06"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:layout_gravity="center_horizontal"
-                    android:textSize="15dp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/nameItem1"
-                    android:text="Category"
-                    android:id="@+id/categorieTextView1"
-                    android:layout_toEndOf="@+id/detail1oben" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Attribut1"
-                    android:layout_toEndOf="@+id/detail1oben"
-                    android:id="@+id/attributTextView11"
-                    android:layout_below="@+id/categorieTextView1"/>
-            </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Attribut1"
+                android:textSize="18sp"
+                android:id="@+id/attributTextView11"/>
         </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5">
-
-            <ImageView
-                android:layout_width="175dp"
-                android:layout_height="210dp"
-                android:id="@+id/detail2unten"
-                android:layout_below="@+id/detail1oben"
-                android:layout_alignParentStart="true"
-                android:layout_gravity="center_vertical" />
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingLeft="10dp"
-                android:gravity="center_vertical|center_horizontal"
-                android:weightSum="1">
-
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Name Item 2"
-                    android:id="@+id/nameItem2"
-                    android:layout_below="@+id/titleTextView2"
-                    android:layout_toEndOf="@+id/detail2unten"
-                    android:textStyle="bold"
-                    android:layout_weight="0.07"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:layout_gravity="center_horizontal"
-                    android:textSize="15dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Category"
-                    android:layout_toEndOf="@+id/detail2unten"
-                    android:id="@+id/categorieTextView2"
-                    android:layout_below="@+id/nameItem2"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Attribut1"
-                    android:layout_toEndOf="@+id/detail2unten"
-                    android:id="@+id/attributTextView21"
-                    android:layout_below="@+id/categorieTextView2"/>
-            </LinearLayout>
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Saved: TT:MM:JJJJ"
-            android:id="@+id/timeStampSavedCompare"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:textAlignment="center" />
-
     </LinearLayout>
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5">
 
-</RelativeLayout>
+        <ImageView
+            android:layout_width="175dp"
+            android:layout_height="175dp"
+            android:id="@+id/detail2unten"
+            android:contentDescription="Second Item Image" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp"
+            android:weightSum="1">
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/nameItem2"
+                android:textStyle="bold"
+                android:layout_weight="0.07"
+                android:gravity="center_vertical"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Category"
+                android:textSize="18sp"
+                android:id="@+id/categorieTextView2"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Attribut1"
+                android:textSize="18sp"
+                android:id="@+id/attributTextView21"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Saved: TT:MM:JJJJ"
+        android:textSize="18sp"
+        android:id="@+id/timeStampSavedCompare"
+        android:textAlignment="center" />
+
+</LinearLayout>

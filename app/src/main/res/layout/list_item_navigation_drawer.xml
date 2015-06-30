@@ -10,15 +10,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:paddingRight="10dp"/>
+        android:layout_marginEnd="10dp"
+        android:contentDescription="Icon"/>
 
     <TextView
         android:id="@+id/navDrawerTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/navDrawerImageView"
-        android:paddingRight="10dp"
+        android:layout_toEndOf="@+id/navDrawerImageView"
+        android:layout_marginEnd="10dp"
         android:textAppearance="?android:attr/textAppearanceListItemSmall"/>
 
 </RelativeLayout>

@@ -9,7 +9,8 @@
         android:layout_alignParentBottom="true"
         android:adjustViewBounds="true"
         android:background="#E0F2F7"
-        android:padding="10dp" />
+        android:padding="10dp"
+        android:contentDescription="Weather image"/>
 
     <LinearLayout
         android:orientation="vertical"
@@ -22,8 +23,7 @@
             android:textColor="@android:color/black"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Test"/>
+            android:textAppearance="?android:attr/textAppearanceLarge"/>
 
         <TextView
             android:id="@+id/navDrawerWeatherTemp"

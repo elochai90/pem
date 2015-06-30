@@ -28,6 +28,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -108,6 +109,8 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
         gridView.setOnItemLongClickListener(this);
         gridView.setVisibility(View.INVISIBLE);
 
+        FloatingActionMenu menu = (FloatingActionMenu) findViewById(R.id.menu);
+        menu.setClosedOnTouchOutside(true);
         com.github.clans.fab.FloatingActionButton fab_add_compare = (FloatingActionButton) findViewById(R.id.add_compare);
         com.github.clans.fab.FloatingActionButton fab_add_wishlist_item = (FloatingActionButton) findViewById(R.id.add_wishlist_item);
         com.github.clans.fab.FloatingActionButton fab_add_category = (FloatingActionButton) findViewById(R.id.add_category);
