@@ -6,7 +6,7 @@ import java.util.Date;
 /**
  * Created by bianka on 05.06.2015.
  */
-public class CompareItem implements Serializable{
+public class CompareItem{
 
     // TODO: not public, but method get...
     // TODO: besser waere zwei Item Objekte zu uebergeben mit namen und createdAt

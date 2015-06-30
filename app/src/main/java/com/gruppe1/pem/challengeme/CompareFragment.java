@@ -196,7 +196,7 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Intent intent = new Intent();
             intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".SavedComparesDetailActivity");
-            intent.putExtra("item", mDataset.get(position).getId());
+            intent.putExtra("item", mDataset.get(position));
             startActivity(intent);
     }
 }

@@ -8,14 +8,17 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 
 public class SavedComparesDetailActivity extends Activity {
 
     private ImageView detail1;
     private ImageView detail2;
-    private TextView item1;
-    private TextView item2;
+    private TextView nameitem1;
+    private TextView nameitem2;
     private TextView compareTitle;
+    private DataBaseHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,16 +27,23 @@ public class SavedComparesDetailActivity extends Activity {
 
         detail1 = (ImageView) findViewById(R.id.detail1oben);
         detail2 = (ImageView) findViewById(R.id.detail2unten);
-        item1 = (TextView) findViewById(R.id.nameItem1);
-        item2 = (TextView) findViewById(R.id.nameItem2);
+        nameitem1 = (TextView) findViewById(R.id.nameItem1);
+        nameitem2 = (TextView) findViewById(R.id.nameItem2);
         compareTitle = (TextView) findViewById(R.id.comparetitle);
 
-        CompareItem clickedCompare = (CompareItem)getIntent().getSerializableExtra("item");
-        detail1.setImageResource(clickedCompare.iconItem1);
-        detail2.setImageResource(clickedCompare.iconItem2);
-        item1.setText(clickedCompare.nameItem1);
-        item2.setText(clickedCompare.nameItem2);
-        compareTitle.setText(clickedCompare.name);
+        this.dbHelper = new DataBaseHelper(this);
+        this.dbHelper.init();
+
+        Compare item = (Compare)getIntent().getSerializableExtra("item");
+        ArrayList<Integer> itemIds = item.getItemIds();
+        Item item1 = new Item(this, itemIds.get(0), dbHelper);
+        Item item2 = new Item(this, itemIds.get(1), this.dbHelper);
+
+        detail1.setImageBitmap(ImageLoader.getPicFromFile(item1.getImageFile(), 100, 100));
+        detail2.setImageBitmap(ImageLoader.getPicFromFile(item2.getImageFile(), 100, 100));
+        nameitem1.setText(item1.getName());
+        nameitem2.setText(item2.getName());
+        compareTitle.setText(item.getName());
     }
 
     @Override

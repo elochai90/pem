@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.text.format.Time;
 import android.util.Log;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import java.util.regex.Pattern;
 /**
  * Created by Simon on 29.06.2015.
  */
-public class Compare {
+public class Compare implements Serializable{
     final static String DB_TABLE = Constants.DB_TABLE_PREFIX + "compares";
 
     private int id;
@@ -22,8 +23,8 @@ public class Compare {
     private String name;
     private String timestamp;
 
-    private Context context;
-    private DataBaseHelper dbHelper;
+    private transient Context context;
+    private transient DataBaseHelper dbHelper;
 
     public Compare(Context p_context, int p_id) {
         this.id = p_id;
