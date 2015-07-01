@@ -118,6 +118,14 @@ public class TabsFragmentActivity extends FragmentActivity {
         mlam.dispatchPause(isFinishing());
     }
 
+    public void hideTabHost() {
+        tabs.getTabWidget().setVisibility(View.GONE);
+    }
+
+    public void showTabHost() {
+        tabs.getTabWidget().setVisibility(View.VISIBLE);
+    }
+
 
     public void setupNavigationDrawer() {
         getActionBar().setDisplayHomeAsUpEnabled(true);

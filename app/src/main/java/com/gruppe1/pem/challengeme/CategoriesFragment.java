@@ -302,6 +302,7 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
         }
 
         public void onDestroyActionMode(ActionMode mode) {
+            ((TabsFragmentActivity)getActivity()).showTabHost();
             if(selectedItem != null) {
                 int position = (int) selectedItem[0];
                 View view = (View) selectedItem[1];
@@ -312,6 +313,7 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
         }
 
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            ((TabsFragmentActivity)getActivity()).hideTabHost();
             mode.setTitle("Options");
             mode.getMenuInflater().inflate(R.menu.menu_categories_list_action_mode, menu);
             return true;
@@ -345,7 +347,6 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
                     break;
                 }
                 case R.id.edit: {
-                    // TODO: overgive category data
                     Intent intent = new Intent();
                     intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".NewCategoryActivity");
                     int categoryId = (int)listAdapter.getItemId((int)selectedItem[0]);
@@ -363,7 +364,6 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-        System.out.println("Long click");
         if(actionMode != null)
             actionMode.finish();
             actionMode = getActivity().startActionMode(modeCallBack);

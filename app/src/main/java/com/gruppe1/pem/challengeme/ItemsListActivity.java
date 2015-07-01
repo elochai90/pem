@@ -388,7 +388,6 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-        System.out.println("Long click");
         if(actionMode != null)
             actionMode.finish();
         actionMode = startActionMode(modeCallBack);

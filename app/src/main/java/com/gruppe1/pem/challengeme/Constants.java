@@ -15,6 +15,7 @@ public class Constants {
     // DB Tables
     public static final String ITEMS_DB_TABLE = DB_TABLE_PREFIX + "items";
     public static final String CATEGORIES_DB_TABLE = DB_TABLE_PREFIX + "categories";
+    public static final String COMPARES_DB_TABLE = Constants.DB_TABLE_PREFIX + "compares";
     public static final String ATTRIBUTE_TYPES_DB_TABLE = DB_TABLE_PREFIX + "attribute_types";
     public static final String ITEM_ATTR_DB_TABLE = DB_TABLE_PREFIX + "item_attribute_types";
     public static final String COLORS_DB_TABLE = DB_TABLE_PREFIX + "colors";

@@ -263,6 +263,7 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
         }
 
         public void onDestroyActionMode(ActionMode mode) {
+            ((TabsFragmentActivity)getActivity()).showTabHost();
             if(selectedItem != null) {
                 int position = (int) selectedItem[0];
                 View view = (View) selectedItem[1];
@@ -273,6 +274,7 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
         }
 
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            ((TabsFragmentActivity)getActivity()).hideTabHost();
             mode.setTitle("Options");
             mode.getMenuInflater().inflate(R.menu.menu_wishlist_items_list_action_mode, menu);
             return true;
@@ -313,7 +315,6 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-        System.out.println("Long click");
         if(actionMode != null)
             actionMode.finish();
         actionMode = getActivity().startActionMode(modeCallBack);

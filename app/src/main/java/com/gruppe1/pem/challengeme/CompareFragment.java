@@ -1,10 +1,13 @@
 package com.gruppe1.pem.challengeme;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,7 +28,7 @@ import java.util.Date;
 import java.util.List;
 
 
-public class CompareFragment extends Fragment  implements AdapterView.OnItemClickListener{
+public class CompareFragment extends Fragment  implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener{
 
     private List<Compare> mDataset;
 
@@ -42,6 +45,8 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
     public SharedPreferences.Editor editor;
     public SharedPreferences sharedPreferences;
 
+    private Object[] selectedItem;
+    ActionMode actionMode;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,12 +65,14 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
         listAdapter = new CompareListAdapter(getActivity(), R.layout.list_item_compare, mDataset);
         listView.setAdapter(listAdapter);
         listView.setOnItemClickListener(this);
+        listView.setOnItemLongClickListener(this);
         gridView = (GridView) rootView.findViewById(R.id.gridView);
         gridView.setNumColumns(3);
         gridAdapter = new CompareGridAdapter(getActivity(), R.layout.grid_item_compare, mDataset);
         gridView.setAdapter(gridAdapter);
         gridView.setVisibility(View.INVISIBLE);
         gridView.setOnItemClickListener(this);
+        gridView.setOnItemLongClickListener(this);
 
         FloatingActionMenu menu = (FloatingActionMenu) rootView.findViewById(R.id.menu);
         menu.setClosedOnTouchOutside(true);
@@ -223,5 +230,74 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
             intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".SavedComparesDetailActivity");
             intent.putExtra("item", mDataset.get(position));
             startActivity(intent);
+    }
+
+    private ActionMode.Callback modeCallBack = new ActionMode.Callback() {
+
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        public void onDestroyActionMode(ActionMode mode) {
+            ((TabsFragmentActivity)getActivity()).showTabHost();
+            if(selectedItem != null) {
+                int position = (int) selectedItem[0];
+                View view = (View) selectedItem[1];
+                view.setSelected(false);
+                selectedItem = null;
+            }
+            mode = null;
+        }
+
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            ((TabsFragmentActivity)getActivity()).hideTabHost();
+            mode.setTitle("Options");
+            mode.getMenuInflater().inflate(R.menu.menu_saved_compares_list_action_mode, menu);
+            return true;
+        }
+
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            int id = item.getItemId();
+            switch (id) {
+                case R.id.delete: {
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle("Do you really want to delete '" + listAdapter.getItem((int)selectedItem[0]).getName() + "'?")
+                            .setNegativeButton(android.R.string.no, null)
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                                public void onClick(DialogInterface arg0, int arg1) {
+
+                                    int itemId = (int)listAdapter.getItemId((int)selectedItem[0]);
+
+                                    Compare deleteCompare = new Compare(getActivity().getApplicationContext(), itemId);
+                                    deleteCompare.delete();
+
+                                    initDataset();
+                                    listAdapter.notifyDataSetChanged();
+                                    gridAdapter.notifyDataSetChanged();
+                                    actionMode.finish();
+                                }
+                            }).create().show();
+                    break;
+                }
+                default:
+                    return false;
+            }
+            return true;
+        }
+    };
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        if(actionMode != null)
+            actionMode.finish();
+        actionMode = getActivity().startActionMode(modeCallBack);
+        view.setSelected(true);
+
+        selectedItem = new Object[2];
+        selectedItem[0] = position;
+        selectedItem[1] = view;
+
+        return true;
     }
 }

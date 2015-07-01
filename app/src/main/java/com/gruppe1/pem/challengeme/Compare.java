@@ -16,7 +16,6 @@ import java.util.regex.Pattern;
  * Created by Simon on 29.06.2015.
  */
 public class Compare implements Serializable{
-    final static String DB_TABLE = Constants.DB_TABLE_PREFIX + "compares";
 
     private int id;
     private ArrayList<Integer> itemIds;
@@ -31,7 +30,7 @@ public class Compare implements Serializable{
         this.context = p_context;
         this.dbHelper = new DataBaseHelper(this.context);
         dbHelper.init();
-        this.dbHelper.setTable(DB_TABLE);
+        this.dbHelper.setTable(Constants.COMPARES_DB_TABLE);
         itemIds = new ArrayList<Integer>();
 
         if(p_id > -1) {
@@ -44,8 +43,8 @@ public class Compare implements Serializable{
                 this.timestamp = compareCursor.getString(3);
                 String[] idValues = compareCursor.getString(2).split(Pattern.quote("|"));
 
-                for(int i = 0; i < idValues.length; i++) {
-                    itemIds.add(Integer.parseInt(idValues[i]));
+                for (String idValue : idValues) {
+                    itemIds.add(Integer.parseInt(idValue));
                 }
 
 
@@ -116,7 +115,7 @@ public class Compare implements Serializable{
         Cursor compareCursor = dbHelper.select();
         compareCursor.moveToFirst();
 
-        ArrayList<Compare> allCompares = new ArrayList<Compare>();
+        ArrayList<Compare> allCompares = new ArrayList<>();
 
         while (!compareCursor.isAfterLast()) {
             Compare tmpCompare = new Compare(p_context, compareCursor.getInt(0));
@@ -125,6 +124,12 @@ public class Compare implements Serializable{
         }
 
         return allCompares;
+    }
+
+
+    public void delete() {
+        this.dbHelper.setWhere("", new String[]{"_id=" + this.id});
+        this.dbHelper.delete();
     }
 
 }

@@ -18,10 +18,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class CompareListAdapter extends ArrayAdapter {
+public class CompareListAdapter extends ArrayAdapter<Compare> {
     private Context context;
     private int layoutResourceId;
-    private List<Compare> data = new ArrayList<Compare>();
+    private List<Compare> data = new ArrayList<>();
     private DataBaseHelper dbHelper;
 
     public CompareListAdapter(Context context, int layoutResourceId, List<Compare> data) {
@@ -73,6 +73,11 @@ public class CompareListAdapter extends ArrayAdapter {
         holder.imageItem2.setImageBitmap(ImageLoader.getPicFromFile(item2.getImageFile(), 100, 100));
 
         return row;
+    }
+
+    @Override
+    public long getItemId(int p_position){
+        return this.data.get(p_position).getId();
     }
 
     static class ViewHolder {

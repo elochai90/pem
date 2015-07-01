@@ -59,6 +59,11 @@ public class CompareGridAdapter extends ArrayAdapter {
         return row;
     }
 
+    @Override
+    public long getItemId(int p_position){
+        return this.data.get(p_position).getId();
+    }
+
     static class ViewHolder {
         TextView compareName;
         ImageView imageItem1;
