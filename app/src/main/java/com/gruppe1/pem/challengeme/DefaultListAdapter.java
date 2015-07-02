@@ -84,13 +84,21 @@ public class DefaultListAdapter extends ArrayAdapter<ListItemIconName> {
                 Item listItem = new Item(context, item.elementId, db_helper);
                 db_helper.setTable(Constants.COLORS_DB_TABLE);
                 Color attributeColor = new Color(context, listItem.getPrimaryColorId(), db_helper);
-                Attribute attributeSize = Attribute.getAttributeOfItem(context, item.elementId, "Size");
+                ArrayList<Attribute> allAttributes = Attribute.getAttributesByItemId(context, item.elementId);
                 String secondLineText = "";
+                int attributesToShowCount = 0;
                 if(!attributeColor.getName().equals("")) {
-                    secondLineText += "Color: " + attributeColor.getName() + "    ";
+                    secondLineText += "Color: " + attributeColor.getName() + "   ";
+                    attributesToShowCount++;
                 }
-                if(!attributeSize.getValue().toString().equals("")) {
-                    secondLineText += attributeSize.getAttributeType().getName() + ": " + attributeSize.getValue().toString();
+                for(int i = 0; i < allAttributes.size(); i++) {
+                    // show only three, not empty attributes of type String
+                    if(attributesToShowCount < 3
+                            && !allAttributes.get(i).getValue().toString().equals("")
+                            && allAttributes.get(i).getAttributeType().getValueType() == 1) {
+                        secondLineText += allAttributes.get(i).getAttributeType().getName() + ": " + allAttributes.get(i).getValue().toString() + "   ";
+                        attributesToShowCount++;
+                    }
                 }
                 holder.secondLine.setText(secondLineText);
 
