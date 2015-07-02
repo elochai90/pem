@@ -147,6 +147,23 @@ public class Attribute {
         return attributeList;
     }
 
+    public static Attribute getAttributeOfItem(Context p_context, int p_itemId, String attributeTypeName) {
+        DataBaseHelper dbHelper = new DataBaseHelper(p_context);
+        dbHelper.init();
+        dbHelper.setTable(Constants.ATTRIBUTE_TYPES_DB_TABLE);
+        AttributeType attributeType = AttributeType.getAttributeTypeByName(p_context, attributeTypeName);
+        dbHelper.setTable(Constants.ITEM_ATTR_DB_TABLE);
+        dbHelper.setColumns(new String[]{"*"});
+        dbHelper.setWhere("", new String[]{"item_id='" + p_itemId + "' AND attribute_type_id='" + attributeType.getId() + "'"});
+        Cursor cursor = dbHelper.select();
+
+        cursor.moveToFirst();
+
+        Attribute result = new Attribute(p_context, cursor.getInt(0), dbHelper);
+        return result;
+    }
+
+
     /**
      * get all attributes from database
      * @return ArrayList<Attribute> all attributes

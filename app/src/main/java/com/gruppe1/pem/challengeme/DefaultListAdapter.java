@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -61,6 +62,7 @@ public class DefaultListAdapter extends ArrayAdapter<ListItemIconName> {
                 holder.rightTextView = (TextView) row.findViewById(R.id.rightTextView);
                 holder.image = (ImageView) row.findViewById(R.id.imageView);
                 holder.itemActionButton = (Button) row.findViewById(R.id.itemActionButton);
+                holder.listItemRatingBar = (RatingBar) row.findViewById(R.id.listItemRatingBar);
                 row.setTag(holder);
             } else {
                 holder = (ViewHolder) row.getTag();
@@ -76,14 +78,30 @@ public class DefaultListAdapter extends ArrayAdapter<ListItemIconName> {
 
             if(isCategory) {
                 holder.rightTextView.setText(Item.getItemsCountByCategoryId(context, item.elementId) + "");
+                holder.listItemRatingBar.setVisibility(View.INVISIBLE);
             } else {
-                holder.secondLine.setText("z.B. Item-Attribute");
+                db_helper.setTable(Constants.ITEMS_DB_TABLE);
+                Item listItem = new Item(context, item.elementId, db_helper);
+                db_helper.setTable(Constants.COLORS_DB_TABLE);
+                Color attributeColor = new Color(context, listItem.getPrimaryColorId(), db_helper);
+                Attribute attributeSize = Attribute.getAttributeOfItem(context, item.elementId, "Size");
+                String secondLineText = "";
+                if(!attributeColor.getName().equals("")) {
+                    secondLineText += "Color: " + attributeColor.getName() + "    ";
+                }
+                if(!attributeSize.getValue().toString().equals("")) {
+                    secondLineText += attributeSize.getAttributeType().getName() + ": " + attributeSize.getValue().toString();
+                }
+                holder.secondLine.setText(secondLineText);
+
+                holder.listItemRatingBar.setRating(listItem.getRating());
             }
 
 
             if(wishlist) {
                 holder.itemActionButton.setVisibility(View.VISIBLE);
                 holder.rightTextView.setVisibility(View.INVISIBLE);
+                holder.listItemRatingBar.setVisibility(View.INVISIBLE);
 
                 db_helper.setTable(Constants.ITEMS_DB_TABLE);
 
@@ -148,5 +166,6 @@ public class DefaultListAdapter extends ArrayAdapter<ListItemIconName> {
         TextView rightTextView;
         ImageView image;
         Button itemActionButton;
+        RatingBar listItemRatingBar;
     }
 }
