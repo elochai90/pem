@@ -92,6 +92,7 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
         DataBaseHelper db_helper = new DataBaseHelper(this);
         db_helper.init();
         Category category = new Category(this, categoryId, db_helper);
+        db_helper.close(); // TODO: functioning or do we have to delete it?
         setTitle(category.getName());
         mDataset = new ArrayList<ListItemIconName>();
 
@@ -247,11 +248,9 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
         DataBaseHelper db_helper = new DataBaseHelper(this);
         db_helper.init();
 
-        System.out.println("Category Id before init: " + categoryId);
         ArrayList<Item> allCategoryItems = Item.getItemsByCategoryId(this, categoryId);
 
         Iterator catIt = allCategoryItems.iterator();
-        System.out.println("cat items: " + allCategoryItems.size());
 
         while (catIt.hasNext()) {
             Item tmpItem = (Item)catIt.next();
@@ -263,6 +262,7 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
         } else {
             showNoItemLayout(true);
         }
+        db_helper.close();
     }
 
    // @Override
@@ -370,6 +370,7 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
 
                                     Item deleteItem = new Item(getApplicationContext(), itemId, db_helper );
                                     deleteItem.delete();
+                                    db_helper.close();
 
                                     initDataset();
                                     listAdapter.notifyDataSetChanged();

@@ -73,8 +73,7 @@ public class CategoriesDropdownAdapter extends ArrayAdapter implements SpinnerAd
         DataBaseHelper db_helper = new DataBaseHelper(context);
         db_helper.init();
         Category category = new Category(context, catId, db_helper);
-        System.out.println(category.getName());
-        System.out.println(arrayList.indexOf(category));
+        db_helper.close();
         return arrayList.indexOf(category);
     }
 

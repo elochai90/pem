@@ -80,10 +80,10 @@ public class DefaultListAdapter extends ArrayAdapter<ListItemIconName> {
                 holder.rightTextView.setText(Item.getItemsCountByCategoryId(context, item.elementId) + "");
                 holder.listItemRatingBar.setVisibility(View.INVISIBLE);
             } else {
-                db_helper.setTable(Constants.ITEMS_DB_TABLE);
-                Item listItem = new Item(context, item.elementId, db_helper);
-                db_helper.setTable(Constants.COLORS_DB_TABLE);
-                Color attributeColor = new Color(context, listItem.getPrimaryColorId(), db_helper);
+                getDb_helper().setTable(Constants.ITEMS_DB_TABLE);
+                Item listItem = new Item(context, item.elementId, getDb_helper());
+                getDb_helper().setTable(Constants.COLORS_DB_TABLE);
+                Color attributeColor = new Color(context, listItem.getPrimaryColorId(), getDb_helper());
                 ArrayList<Attribute> allAttributes = Attribute.getAttributesByItemId(context, item.elementId);
                 String secondLineText = "";
                 int attributesToShowCount = 0;
@@ -111,9 +111,9 @@ public class DefaultListAdapter extends ArrayAdapter<ListItemIconName> {
                 holder.rightTextView.setVisibility(View.INVISIBLE);
                 holder.listItemRatingBar.setVisibility(View.INVISIBLE);
 
-                db_helper.setTable(Constants.ITEMS_DB_TABLE);
+                getDb_helper().setTable(Constants.ITEMS_DB_TABLE);
 
-                Item wishlistItem = new Item(context, item.elementId, db_helper);
+                Item wishlistItem = new Item(context, item.elementId, getDb_helper());
 
                 if(wishlistItem.getIsWish() == 1) {
                     holder.itemActionButton.setSelected(false);
@@ -128,11 +128,10 @@ public class DefaultListAdapter extends ArrayAdapter<ListItemIconName> {
                 holder.itemActionButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        System.out.println("on wishlist click button: " + ((Button) v).isSelected());
 
-                        db_helper.setTable(Constants.ITEMS_DB_TABLE);
+                        getDb_helper().setTable(Constants.ITEMS_DB_TABLE);
 
-                        Item wishlistItem = new Item(context, item.elementId, db_helper);
+                        Item wishlistItem = new Item(context, item.elementId, getDb_helper());
 
                         HashMap<String, String> itemAttributes = new HashMap<String, String>();
                         itemAttributes.put("name", wishlistItem.getName());
@@ -175,5 +174,14 @@ public class DefaultListAdapter extends ArrayAdapter<ListItemIconName> {
         ImageView image;
         Button itemActionButton;
         RatingBar listItemRatingBar;
+    }
+
+    private DataBaseHelper getDb_helper() {
+        if(!db_helper.isOpen()) {
+            System.out.println("db helper was closed");
+            db_helper = new DataBaseHelper(context);
+            db_helper.init();
+        }
+        return db_helper;
     }
 }

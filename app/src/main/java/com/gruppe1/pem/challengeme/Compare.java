@@ -105,6 +105,7 @@ public class Compare implements Serializable{
         this.dbHelper.setStringValue("save_date", timestamp);
 
         this.dbHelper.insert();
+        // TODO: close dbHelper?
     }
 
     public static ArrayList<Compare> geAllCompares(Context p_context) {
@@ -122,7 +123,8 @@ public class Compare implements Serializable{
             allCompares.add(tmpCompare);
             compareCursor.moveToNext();
         }
-
+        compareCursor.close();
+        dbHelper.close();
         return allCompares;
     }
 
@@ -130,6 +132,7 @@ public class Compare implements Serializable{
     public void delete() {
         this.dbHelper.setWhere("", new String[]{"_id=" + this.id});
         this.dbHelper.delete();
+        this.dbHelper.close();
     }
 
 }

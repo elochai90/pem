@@ -161,16 +161,16 @@ public class NewItemActivity extends Activity {
         if(editItemId > 0) {
             isEdit = true;
             getActionBar().setTitle(R.string.title_activity_edit_item);
-            db_helper.setTable(Constants.ITEMS_DB_TABLE);
-            editItem = new Item(this, editItemId, db_helper);
+            getDb_helper().setTable(Constants.ITEMS_DB_TABLE);
+            editItem = new Item(this, editItemId, getDb_helper());
             parentCategoryId = editItem.getCategoryId();
             savedColorId = editItem.getPrimaryColorId();
 
         } else {
             isEdit = false;
             getActionBar().setTitle(R.string.title_activity_new_item);
-            db_helper.setTable(Constants.ITEMS_DB_TABLE);
-            editItem = new Item(this, 0, db_helper);
+            getDb_helper().setTable(Constants.ITEMS_DB_TABLE);
+            editItem = new Item(this, 0, getDb_helper());
 
             savedColorId = -1;
 
@@ -233,7 +233,7 @@ public class NewItemActivity extends Activity {
 
         String item_name = itemNameExitText.getText().toString();
 
-        Category newParentCatId = (attrCategorySelected != null) ? attrCategorySelected : new Category(getApplicationContext(), (int) categoriesDropdownAdapter.getItemId(0),this.db_helper);
+        Category newParentCatId = (attrCategorySelected != null) ? attrCategorySelected : new Category(getApplicationContext(), (int) categoriesDropdownAdapter.getItemId(0),getDb_helper());
 
         String item_categoryId = "" + attrCategorySelected.getId();
 
@@ -250,11 +250,12 @@ public class NewItemActivity extends Activity {
         itemAttributes.put("rating", item_rating);
         itemAttributes.put("is_wish", item_isWish);
 
-        db_helper.setTable(Constants.ITEMS_DB_TABLE);
+        getDb_helper().setTable(Constants.ITEMS_DB_TABLE);
         editItem.edit(itemAttributes);
         editItem.save();
 
         Iterator allItemAttributesIterator = attributeTypesList.iterator();
+
 
         // TODO: get all attributes with values for this Item
         while (allItemAttributesIterator.hasNext()) {
@@ -278,8 +279,8 @@ public class NewItemActivity extends Activity {
             itemAttributeValue.put("attribute_type_id",tmpItemAttrType.getId() + "");
             itemAttributeValue.put("attribute_value",attributeSaveValue);
 
-            db_helper.setTable(Constants.ITEM_ATTR_DB_TABLE);
-            Attribute itemAttribute = new Attribute(this, editItem.getId(), tmpItemAttrType.getId(), db_helper);
+            getDb_helper().setTable(Constants.ITEM_ATTR_DB_TABLE);
+            Attribute itemAttribute = new Attribute(this, editItem.getId(), tmpItemAttrType.getId(), getDb_helper());
             itemAttribute.edit(itemAttributeValue);
             itemAttribute.save();
         }
@@ -332,7 +333,6 @@ public class NewItemActivity extends Activity {
             attrValueColorPicker.setGravity(Gravity.CENTER);
 
             if(attributeValue != null) {
-                System.out.println("Color:" + attributeValue.toString());
                 exactColorId = Integer.parseInt(attributeValue.toString());
             } else {
                 attrValueColorPicker.setText(R.string.no_exact_color_selected);
@@ -492,7 +492,9 @@ public class NewItemActivity extends Activity {
         Cursor cursor = getContentResolver().query(uri, null, null, null, null);
         cursor.moveToFirst();
         int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-        return cursor.getString(idx);
+        String idxString = cursor.getString(idx);
+        cursor.close();
+        return idxString;
     }
 
     @Override
@@ -523,11 +525,11 @@ public class NewItemActivity extends Activity {
         attrCategoryValue.setAdapter(categoriesDropdownAdapter);
 
         if(parentCategoryId != -1) {
-            attrCategorySelected = new Category(getApplicationContext(), parentCategoryId, db_helper);
+            attrCategorySelected = new Category(getApplicationContext(), parentCategoryId, getDb_helper());
             int activeIndex = this.getIndex(attrCategoryValue, parentCategoryId);
             attrCategoryValue.setSelection(activeIndex);
         } else {
-            attrCategorySelected = new Category(getApplicationContext(), (int)categoriesDropdownAdapter.getItemId(0), db_helper);
+            attrCategorySelected = new Category(getApplicationContext(), (int)categoriesDropdownAdapter.getItemId(0), getDb_helper());
         }
 
         categoriesDropdownAdapter.notifyDataSetChanged();
@@ -536,8 +538,8 @@ public class NewItemActivity extends Activity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (view != null) {
-                    db_helper.setTable(Constants.CATEGORIES_DB_TABLE);
-                    attrCategorySelected = new Category(getBaseContext(), (int) categoriesDropdownAdapter.getItemId(position), db_helper);
+                    getDb_helper().setTable(Constants.CATEGORIES_DB_TABLE);
+                    attrCategorySelected = new Category(getBaseContext(), (int) categoriesDropdownAdapter.getItemId(position), getDb_helper());
                     attrCategoryValue.setSelection(position);
                 }
             }
@@ -560,11 +562,11 @@ public class NewItemActivity extends Activity {
         attrColorValue.setAdapter(colorsDropdownAdapter);
 
         if(savedColorId != -1) {
-            attrColorSelected = new com.gruppe1.pem.challengeme.Color(getApplicationContext(), savedColorId, db_helper);
+            attrColorSelected = new com.gruppe1.pem.challengeme.Color(getApplicationContext(), savedColorId, getDb_helper());
             int activeIndex = this.getIndex(attrColorValue, savedColorId);
             attrColorValue.setSelection(activeIndex);
         } else {
-            attrColorSelected = new com.gruppe1.pem.challengeme.Color(getApplicationContext(), (int)colorsDropdownAdapter.getItemId(0), db_helper);
+            attrColorSelected = new com.gruppe1.pem.challengeme.Color(getApplicationContext(), (int)colorsDropdownAdapter.getItemId(0), getDb_helper());
         }
 
         colorsDropdownAdapter.notifyDataSetChanged();
@@ -573,8 +575,8 @@ public class NewItemActivity extends Activity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (view != null) {
-                    db_helper.setTable(Constants.COLORS_DB_TABLE);
-                    attrColorSelected = new com.gruppe1.pem.challengeme.Color(getBaseContext(), (int) colorsDropdownAdapter.getItemId(position), db_helper);
+                    getDb_helper().setTable(Constants.COLORS_DB_TABLE);
+                    attrColorSelected = new com.gruppe1.pem.challengeme.Color(getBaseContext(), (int) colorsDropdownAdapter.getItemId(position), getDb_helper());
                     attrColorValue.setSelection(position);
                     attrColorValue.setBackgroundColor(Color.parseColor(colorsDropdownAdapter.getColorAtPosition(position).getHexColor()));
                     if(!colorsDropdownAdapter.isColorLight(Color.parseColor(colorsDropdownAdapter.getColorAtPosition(position).getHexColor()))) {
@@ -593,7 +595,7 @@ public class NewItemActivity extends Activity {
 
     private int getIndex(Spinner spinner, int p_catId) {
         int index = 0;
-        Category targetCategory = new Category(getApplicationContext(), p_catId, this.db_helper);
+        Category targetCategory = new Category(getApplicationContext(), p_catId, getDb_helper());
 
         for (int i=0; i<spinner.getCount(); i++){
             if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(targetCategory.getName())){
@@ -604,6 +606,15 @@ public class NewItemActivity extends Activity {
         }
 
         return index;
+    }
+
+    private DataBaseHelper getDb_helper() {
+        if(!db_helper.isOpen()) {
+            System.out.println("db helper was closed");
+            db_helper = new DataBaseHelper(this);
+            db_helper.init();
+        }
+        return db_helper;
     }
 
 }

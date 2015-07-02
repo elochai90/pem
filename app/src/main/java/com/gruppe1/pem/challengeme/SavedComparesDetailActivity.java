@@ -44,6 +44,7 @@ public class SavedComparesDetailActivity extends Activity {
         nameitem1.setText(item1.getName());
         nameitem2.setText(item2.getName());
         compareTitle.setText(item.getName());
+        dbHelper.close();
     }
 
     @Override

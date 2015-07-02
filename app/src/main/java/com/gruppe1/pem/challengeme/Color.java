@@ -48,7 +48,7 @@ public class Color {
             } else {
                 Log.e("###NO_SUCH_ATTRIBUTE_ID", "" + m_id);
             }
-
+            itemData.close();
         } else {
             // prepare new item
         }
@@ -103,7 +103,8 @@ public class Color {
             allColors.add(color);
             allColorsIterator.moveToNext();
         }
-
+        allColorsIterator.close();
+        dbHelper.close();
         return allColors;
     }
 
@@ -142,6 +143,7 @@ public class Color {
             } catch (Exception e) {
                 rowId = 0;
             }
+            existingRowCursor.close();
             if(rowId == 0) {
                 this.m_dbHelper.setStringValue("name", this.m_name);
                 this.m_dbHelper.setStringValue("hex", this.m_hex);
@@ -160,6 +162,7 @@ public class Color {
         } else {
             //save changes to existing category
         }
+        m_dbHelper.close();
     }
 
     @Override

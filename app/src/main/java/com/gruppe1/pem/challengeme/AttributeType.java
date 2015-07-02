@@ -54,6 +54,7 @@ public class AttributeType {
             } else {
                 Log.e("###NO_SUCH_CATEGORY_ID", "" + m_id);
             }
+            attrTypeData.close();
 
         } else {
             // prepare new attribute
@@ -108,7 +109,8 @@ public class AttributeType {
             attributeTypes.add(attributeType);
             allAttrTypesIterator.moveToNext();
         }
-
+        allAttrTypesIterator.close();
+        helper.close();
         return attributeTypes;
     }
 
@@ -128,6 +130,8 @@ public class AttributeType {
         } else {
             attributeType = new AttributeType(p_context, allAttrTypesIterator.getInt(0), helper);
         }
+        allAttrTypesIterator.close();
+        helper.close();
         return attributeType;
     }
 
@@ -147,6 +151,8 @@ public class AttributeType {
         } else {
             attributeType = new AttributeType(p_context, allAttrTypesIterator.getInt(0), helper);
         }
+        allAttrTypesIterator.close();
+        helper.close();
         return attributeType;
     }
     public void edit(HashMap<String, String> p_values) {
@@ -199,6 +205,7 @@ public class AttributeType {
             } catch (Exception e) {
                 rowId = 0;
             }
+            existingRowCursor.close();
             if(rowId == 0) {
                 this.m_dbHelper.setStringValue("name", this.m_name);
                 this.m_dbHelper.setIntegerValue("value_type", this.m_valueType);
@@ -218,6 +225,7 @@ public class AttributeType {
         } else {
             //save changes to existing attribute type
         }
+        m_dbHelper.close();
     }
 
     @Override

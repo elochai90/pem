@@ -66,6 +66,7 @@ public class DefaultSetup {
         } catch(IOException e) {
             e.printStackTrace();
         }
+        this.m_dbHelper.close();
     }
 
     private void setupCategories(ArrayList<HashMap<String, String>> p_elements) {

@@ -70,7 +70,7 @@ public class Item {
             } else {
                 Log.e("###NO_SUCH_ITEM_ID", "" + m_id);
             }
-
+            itemData.close();
         } else {
             // prepare new item
         }
@@ -114,7 +114,6 @@ public class Item {
     }
 
     public void setIsWish(int p_isWish) {
-        System.out.println("setIsWish: " + p_isWish);
         this.m_isWish = p_isWish;
     }
 
@@ -152,7 +151,8 @@ public class Item {
             itemList.add(new Item(p_context, cursor.getInt(0), dbHelper));
             cursor.moveToNext();
         }
-
+        cursor.close();
+        dbHelper.close();
         return itemList;
     }
 
@@ -179,7 +179,8 @@ public class Item {
             itemList.add(new Item(p_context, cursor.getInt(0), dbHelper));
             cursor.moveToNext();
         }
-
+        cursor.close();
+        dbHelper.close();
         return itemList;
     }
     public static int getItemsCountByCategoryId(Context p_context, int p_categoryId) {
@@ -198,7 +199,8 @@ public class Item {
             itemsCount = cursor.getInt(0);
             cursor.moveToNext();
         }
-
+        cursor.close();
+        dbHelper.close();
         return itemsCount;
     }
 
@@ -247,6 +249,7 @@ public class Item {
             } catch (Exception e) {
                 rowId = 0;
             }
+            existingRowCursor.close();
             if(rowId == 0) {
                 this.setAllValuesToDbHelper();
                 int id = this.m_dbHelper.insert();
@@ -280,6 +283,7 @@ public class Item {
     public void delete() {
         this.m_dbHelper.setWhere("", new String[]{"_id=" + this.m_id});
         this.m_dbHelper.delete();
+        this.m_dbHelper.close();
     }
 
 }

@@ -22,6 +22,7 @@ public class CompareListAdapter extends ArrayAdapter<Compare> {
     private Context context;
     private int layoutResourceId;
     private List<Compare> data = new ArrayList<>();
+//    private DataBaseHelper dbHelper;
     private DataBaseHelper dbHelper;
 
     public CompareListAdapter(Context context, int layoutResourceId, List<Compare> data) {

@@ -210,7 +210,6 @@ public class WeatherRequest {
         // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(String result) {
-            System.out.println("Received: \n" + result);
             JSONObject json = null; // convert String to JSONObject
             try {
                 json = new JSONObject(result);
@@ -224,7 +223,6 @@ public class WeatherRequest {
                 weatherDescView.setText(weather_main);
                 weatherTempView.setText(temp);
 
-                System.out.println(weather_main + "; " + desc + "; " + temp);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

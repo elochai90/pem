@@ -37,7 +37,6 @@ public class MyLocationListener implements LocationListener {
         this.locationManager = locationManager;
 
         if(!getLastGPS()){
-            System.out.println("no GPS found");
             this.cityName = "Muenchen"; // TODO: get default location from sharedPreferences
             this.countryCode = "DE"; // TODO: get default location from sharedPreferences
         }
@@ -71,7 +70,6 @@ public class MyLocationListener implements LocationListener {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("GPS found: " + cityName + " - " + countryCode);
         return true;
     }
 
@@ -102,7 +100,6 @@ public class MyLocationListener implements LocationListener {
         List<Address> addresses;
         try {
             addresses = gcd.getFromLocation(loc.getLatitude(),loc.getLongitude(), 1);
-            System.out.println(addresses);
             if (addresses.size() > 0) {
                 cityName = addresses.get(0).getLocality();
                 countryCode = addresses.get(0).getCountryCode();
@@ -110,7 +107,6 @@ public class MyLocationListener implements LocationListener {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("GPS updated: " + cityName + " - " + countryCode);
     }
 
     @Override

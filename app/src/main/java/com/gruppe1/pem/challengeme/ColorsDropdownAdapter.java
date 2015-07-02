@@ -79,8 +79,7 @@ public class ColorsDropdownAdapter extends ArrayAdapter implements SpinnerAdapte
         db_helper.init();
         db_helper.setTable(Constants.COLORS_DB_TABLE);
         Color color = new Color(context, colorId, db_helper);
-        System.out.println(color.getName());
-        System.out.println(arrayList.indexOf(color));
+        db_helper.close();
         return arrayList.indexOf(color);
     }
 

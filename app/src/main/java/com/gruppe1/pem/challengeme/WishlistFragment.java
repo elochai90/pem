@@ -163,9 +163,6 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
 
 
     private void initDataset() {
-        DataBaseHelper db_helper = new DataBaseHelper(getActivity().getApplicationContext());
-        db_helper.init();
-
         mDataset.clear();
 
         ArrayList<Item> allWishlistItems = Item.getAllItems(getActivity().getApplicationContext(), true);
@@ -298,6 +295,8 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
 
                                     Item deleteItem = new Item(getActivity().getApplicationContext(), itemId, db_helper );
                                     deleteItem.delete();
+
+                                    db_helper.close();
 
                                     initDataset();
                                     listAdapter.notifyDataSetChanged();

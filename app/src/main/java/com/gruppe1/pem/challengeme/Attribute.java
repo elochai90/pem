@@ -48,10 +48,10 @@ public class Attribute {
                 this.m_itemId = itemData.getInt(1);
                 this.m_attributeType = AttributeType.getAttributeTypeById(m_context, itemData.getInt(2));
                 this.m_value = itemData.getString(3);
-
             } else {
                 Log.e("###NO_SUCH_ATTRIBUTE_ID", "" + m_id);
             }
+            itemData.close();
 
         } else {
             // prepare new item
@@ -77,10 +77,10 @@ public class Attribute {
                 this.m_itemId = itemData.getInt(1);
                 this.m_attributeType = AttributeType.getAttributeTypeById(m_context, itemData.getInt(2));
                 this.m_value = itemData.getString(3);
-
             } else {
                 Log.e("###NO_SUCH_ATTRIBUTE", "" + m_id);
             }
+            itemData.close();
 
         } else {
             // prepare new item
@@ -144,6 +144,8 @@ public class Attribute {
             attributeList.add(new Attribute(p_context, cursor.getInt(0), dbHelper));
             cursor.moveToNext();
         }
+        cursor.close();
+        dbHelper.close();
         return attributeList;
     }
 
@@ -160,6 +162,8 @@ public class Attribute {
         cursor.moveToFirst();
 
         Attribute result = new Attribute(p_context, cursor.getInt(0), dbHelper);
+        cursor.close();
+        dbHelper.close();
         return result;
     }
 
@@ -189,7 +193,8 @@ public class Attribute {
             allAttributes.add(attribute);
             allAttributesIterator.moveToNext();
         }
-
+        allAttributesIterator.close();
+        helper.close();
         return allAttributes;
     }
 
@@ -229,6 +234,7 @@ public class Attribute {
             } catch (Exception e) {
                 rowId = 0;
             }
+            existingRowCursor.close();
             if(rowId == 0) {
                 this.setAllValuesToDbHelper();
                 int id = this.m_dbHelper.insert();
@@ -240,7 +246,6 @@ public class Attribute {
                     Log.e("Attribute-Error", "save failed");
                 }
             } else {
-                Log.e("###ATTRIBUTE EXISTS", this.m_itemId + ":" + this.m_attributeType.getId() + " - " + rowId);
                 //save changes to existing attribute
                 this.m_dbHelper.setWhere("", new String[]{"_id=" + this.m_id});
                 this.setAllValuesToDbHelper();
@@ -251,8 +256,8 @@ public class Attribute {
             this.m_dbHelper.setWhere("", new String[] {"_id=" + this.m_id});
             this.setAllValuesToDbHelper();
             this.m_dbHelper.update();
-            Log.e("###ATTRIBUTE UPDATED", this.m_itemId + ":" + this.m_attributeType.getId() + " - " + this.m_value);
         }
+        this.m_dbHelper.close();
     }
 
     private void setAllValuesToDbHelper(){
@@ -264,11 +269,10 @@ public class Attribute {
 
     public void delete() {
         ArrayList<Attribute> attributes = Attribute.getAllAttributes(this.m_context);
-        Log.e("###BEFORE DEL ATTR###", "" + attributes.size());
         this.m_dbHelper.setWhere("", new String[]{"_id=" + this.m_id});
         this.m_dbHelper.delete();
         attributes = Attribute.getAllAttributes(this.m_context);
-        Log.e("###AFTER DEL ATTR###", "" + attributes.size());
+        this.m_dbHelper.close();
     }
 
 }

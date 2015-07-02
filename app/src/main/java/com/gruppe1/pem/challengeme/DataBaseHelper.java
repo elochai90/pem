@@ -134,6 +134,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         super.close();
     }
 
+    public boolean isOpen() {
+        return database.isOpen();
+    }
+
     @Override
     public void onCreate(SQLiteDatabase db) {
 
@@ -226,7 +230,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             cursor.moveToFirst();
             return cursor.getInt(0);
         }
-
+        cursor.close();
         return -1;
     }
 
@@ -237,4 +241,5 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public void delete() {
         this.database.delete(this.mTable, this.mWhere, null);
     }
+
 }

@@ -67,7 +67,6 @@ public class AnimatedTabHostListener implements TabHost.OnTabChangeListener
     public void onTabChanged(String tabId)
     {
         context.setSelectedNavigationDrawerItem();
-        System.out.println("before animation");
 
         for (int i = 0; i < tabHost.getTabWidget().getChildCount(); i++) {
             TextView tv = (TextView) tabHost.getTabWidget().getChildAt(i).findViewById(android.R.id.title); //Unselected Tabs

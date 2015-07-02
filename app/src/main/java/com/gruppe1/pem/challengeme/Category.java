@@ -51,7 +51,7 @@ public class Category {
             } else {
                 Log.e("###NO_SUCH_CATEGORY_ID", "" + m_id);
             }
-
+            categoryData.close();
         } else {
             // prepare new category
         }
@@ -63,13 +63,6 @@ public class Category {
      * --------------------------------------------------------------------
      */
 
-    public DataBaseHelper getDbHelper() {
-        return m_dbHelper;
-    }
-
-    public void setDbHelper(DataBaseHelper m_dbHelper) {
-        this.m_dbHelper = m_dbHelper;
-    }
 
     public int getId() {
         return m_id;
@@ -138,7 +131,8 @@ public class Category {
             allCategories.add(category);
             allCategoriesIterator.moveToNext();
         }
-
+        allCategoriesIterator.close();
+        helper.close();
         return allCategories;
     }
 
@@ -199,7 +193,7 @@ public class Category {
             } catch (Exception e) {
                 rowId = 0;
             }
-
+            existingRowCursor.close();
             if(rowId == 0) {
                 this.setAllValuesToDbHelper();
                 int id = this.m_dbHelper.insert();
@@ -219,6 +213,7 @@ public class Category {
             this.setAllValuesToDbHelper();
             this.m_dbHelper.update();
         }
+        m_dbHelper.close();
     }
 
     @Override
@@ -243,5 +238,6 @@ public class Category {
         this.m_dbHelper.delete();
         items = Item.getAllItems(this.context, false);
         Log.e("###AFTER DELETE###", "" + items.size());
+        m_dbHelper.close();
     }
 }

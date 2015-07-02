@@ -53,6 +53,8 @@ public class NewCategoryActivity extends Activity {
                 editCategory.setParentCategoryId(0); // TODO: real ParentCatId
                 editCategory.save();
 
+                db_helper.close();
+
                 // sending new Item back to CategoriesFragment for actualizing list view
                 Intent i = new Intent();
                 i.putExtra("categoryName", editCategory.getName()); // TODO: pass all data back to catFragment to show list item
@@ -66,7 +68,6 @@ public class NewCategoryActivity extends Activity {
 
         ArrayList<CharSequence> upperCategoriesList = new ArrayList<CharSequence>();
         ArrayList<Category> allCategories = Category.getAllCategories(this);
-        System.out.println(allCategories.toString());
         upperCategoriesList.add("None");
 
         for(Category cat : allCategories) {
@@ -90,6 +91,8 @@ public class NewCategoryActivity extends Activity {
 
             setTitle("Edit " + editCategory.getName());
             newCategory_name.setText(editCategory.getName());
+
+            dbHelper.close();
         }
     }
 

@@ -150,13 +150,6 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
             list = true;
         }
 
-        ArrayList<Item> items = Item.getAllItems(getActivity().getApplicationContext(), false);
-
-        Iterator i = items.iterator();
-
-        while (i.hasNext()) {
-            Log.e("###ITEM###", "" + ((Item) i.next()).getCategoryId());
-        }
 
 
         setHasOptionsMenu(true);
@@ -263,6 +256,7 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
             int iconId = getResources().getIdentifier(tmpCat.getIcon(), "drawable", "com.gruppe1.pem.challengeme");
             mDataset.add(new ListItemIconName(tmpCat.getId(), iconId , tmpCat.getName(), null));
         }
+        db_helper.close();
     }
 
     private void addNewCategory(ListItemIconName newCat) {
@@ -337,6 +331,8 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
 
                                     Category deleteCategory = new Category(getActivity().getApplicationContext(), categoryId, db_helper );
                                     deleteCategory.delete();
+
+                                    db_helper.close();
 
                                     initDataset();
                                     listAdapter.notifyDataSetChanged();
