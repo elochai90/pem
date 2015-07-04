@@ -34,5 +34,8 @@ public class Constants {
 
     public static final String DEFAULT_CAT_ICON = "kleiderbuegel";
 
+    public static final int LIST_VIEW_IMAGE_WIDTH = 150;
+    public static final int LIST_VIEW_IMAGE_HEIGHT = 150;
+
 
 }
