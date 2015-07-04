@@ -103,23 +103,33 @@ public class SettingsActivity extends PreferenceActivity {
 
         // Add 'notifications' preferences, and a corresponding header.
         PreferenceCategory fakeHeader = new PreferenceCategory(this);
-        fakeHeader.setTitle(R.string.pref_header_notifications);
+        fakeHeader.setTitle("Standard Sizes:");
         getPreferenceScreen().addPreference(fakeHeader);
         addPreferencesFromResource(R.xml.pref_notification);
 
+
+
         // Add 'data and sync' preferences, and a corresponding header.
         fakeHeader = new PreferenceCategory(this);
-        fakeHeader.setTitle(R.string.pref_header_data_sync);
+        fakeHeader.setTitle("Favourite Colors:");
         getPreferenceScreen().addPreference(fakeHeader);
         addPreferencesFromResource(R.xml.pref_data_sync);
+
+        // Add 'view preferences' preferences, and a corresponding header.
+        fakeHeader = new PreferenceCategory(this);
+        fakeHeader.setTitle("Default View:");
+        getPreferenceScreen().addPreference(fakeHeader);
+        addPreferencesFromResource(R.xml.pref_view);
+
+
 
         // Bind the summaries of EditText/List/Dialog/Ringtone preferences to
         // their values. When their values change, their summaries are updated
         // to reflect the new value, per the Android Design guidelines.
-        bindPreferenceSummaryToValue(findPreference("example_text"));
-        bindPreferenceSummaryToValue(findPreference("example_list"));
-        bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
-        bindPreferenceSummaryToValue(findPreference("sync_frequency"));
+        //bindPreferenceSummaryToValue(findPreference("example_text"));
+        //bindPreferenceSummaryToValue(findPreference("example_list"));
+        //bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
+        //bindPreferenceSummaryToValue(findPreference("sync_frequency"));
     }
 
     /**

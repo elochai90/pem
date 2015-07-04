@@ -3,10 +3,14 @@
 
     <!-- Strings related to Settings -->
 
+    <string name="list_title">List View</string>
+    <string name="grid_title">Grid View</string>
+    <string name="show_wishlist_item_in_compare">Show Wishlist Item in Compare:</string>
+
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
 
-    <string name="pref_title_social_recommendations">Enable social recommendations</string>
+    <string name="pref_title_social_recommendations"></string>
     <string name="pref_description_social_recommendations">Recommendations for people to contact
         based on your message history
     </string>
@@ -29,7 +33,10 @@
     <!-- Example settings for Data & Sync -->
     <string name="pref_header_data_sync">Data &amp; sync</string>
 
-    <string name="pref_title_sync_frequency">Sync frequency</string>
+    <string name="standard_tops">Top Size</string>
+    <string name="standard_pants">Pants Size</string>
+    <string name="standard_shoes">Shoe Size</string>
+
     <string-array name="pref_sync_frequency_titles">
         <item>15 minutes</item>
         <item>30 minutes</item>
@@ -52,7 +59,7 @@
     <!-- Example settings for Notifications -->
     <string name="pref_header_notifications">Notifications</string>
 
-    <string name="pref_title_new_message_notifications">New message notifications</string>
+    <string name="pref_title_new_message_notifications">Show Item List in Compare:</string>
 
     <string name="pref_title_ringtone">Ringtone</string>
     <string name="pref_ringtone_silent">Silent</string>
