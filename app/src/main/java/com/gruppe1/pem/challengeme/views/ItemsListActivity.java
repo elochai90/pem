@@ -119,7 +119,7 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClassName(getPackageName(), getPackageName() + ".NewCompareActivity");
+                intent.setClassName(getPackageName(), getPackageName() + ".views.NewCompareActivity");
                 startActivity(intent);
 
             }
@@ -129,7 +129,7 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClassName(getPackageName(), getPackageName() + ".NewItemActivity");
+                intent.setClassName(getPackageName(), getPackageName() + ".views.NewItemActivity");
                 intent.putExtra("is_wishlist", true);
                 startActivity(intent);
 
@@ -139,7 +139,7 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClassName(getPackageName(), getPackageName() + ".NewCategoryActivity");
+                intent.setClassName(getPackageName(), getPackageName() + ".views.NewCategoryActivity");
                 startActivity(intent);
 
             }
@@ -149,7 +149,7 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClassName(getPackageName(), getPackageName() + ".NewItemActivity");
+                intent.setClassName(getPackageName(), getPackageName() + ".views.NewItemActivity");
                 intent.putExtra("category_id", categoryId);
                 startActivityForResult(intent, 1);
             }
@@ -267,7 +267,7 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
    // @Override
     public void selectItem(int itemid) {
         Intent intent = new Intent();
-        intent.setClassName(getPackageName(), getPackageName() + ".NewItemActivity");
+        intent.setClassName(getPackageName(), getPackageName() + ".views.NewItemActivity");
         Bundle b = new Bundle();
         b.putInt(Constants.EXTRA_ITEM_ID, itemid);
         intent.putExtras(b);

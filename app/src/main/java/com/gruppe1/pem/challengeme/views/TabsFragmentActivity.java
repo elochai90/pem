@@ -21,7 +21,6 @@ import android.widget.TextView;
 import com.gruppe1.pem.challengeme.AnimatedTabHostListener;
 import com.gruppe1.pem.challengeme.ListItemIconName;
 import com.gruppe1.pem.challengeme.R;
-import com.gruppe1.pem.challengeme.WishlistFragment;
 import com.gruppe1.pem.challengeme.adapters.NavigationDrawerItemAdapter;
 import com.gruppe1.pem.challengeme.helpers.PicassoSingleton;
 
@@ -180,7 +179,7 @@ public class TabsFragmentActivity extends FragmentActivity {
                         break;
                     case 4:
                         Intent intent = new Intent();
-                        intent.setClassName(getPackageName(), getPackageName() + ".SettingsActivity");
+                        intent.setClassName(getPackageName(), getPackageName() + ".views.SettingsActivity");
                         startActivity(intent);
                         break;
                     default:

@@ -87,8 +87,8 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".NewCompareActivity");
-                startActivity(intent);
+                intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".views.NewCompareActivity");
+                startActivityForResult(intent,0);
 
             }
         });
@@ -97,7 +97,7 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".NewItemActivity");
+                intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".views.NewItemActivity");
                 intent.putExtra("is_wishlist", true);
                 startActivityForResult(intent, 0);
 
@@ -107,7 +107,7 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".NewCategoryActivity");
+                intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".views.NewCategoryActivity");
                 startActivityForResult(intent, 0);
 
             }
@@ -117,7 +117,7 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".NewItemActivity");
+                intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".views.NewItemActivity");
                 startActivity(intent);
 
             }
@@ -230,7 +230,7 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Intent intent = new Intent();
-            intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".SavedComparesDetailActivity");
+            intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".views.SavedComparesDetailActivity");
             intent.putExtra("item", mDataset.get(position));
             startActivity(intent);
     }

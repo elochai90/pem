@@ -93,7 +93,7 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".NewCompareActivity");
+                intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".views.NewCompareActivity");
                 startActivity(intent);
 
             }
@@ -103,7 +103,7 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".NewItemActivity");
+                intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".views.NewItemActivity");
                 intent.putExtra("is_wishlist", true);
                 startActivityForResult(intent, 0);
 
@@ -113,7 +113,7 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".NewCategoryActivity");
+                intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".views.NewCategoryActivity");
                 startActivityForResult(intent,0);
 
             }
@@ -123,7 +123,7 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".NewItemActivity");
+                intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".views.NewItemActivity");
                 startActivity(intent);
 
             }
@@ -155,7 +155,7 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
 
     public void selectCategory(int categoryId) {
         Intent intent = new Intent();
-        intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".ItemsListActivity");
+        intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".views.ItemsListActivity");
         Bundle b = new Bundle();
         b.putInt(Constants.EXTRA_CATEGORY_ID, categoryId);
         intent.putExtras(b);
@@ -340,7 +340,7 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
                 }
                 case R.id.edit: {
                     Intent intent = new Intent();
-                    intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".NewCategoryActivity");
+                    intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".views.NewCategoryActivity");
                     int categoryId = (int)listAdapter.getItemId((int)selectedItem[0]);
                     intent.putExtra("category_id", categoryId);
 

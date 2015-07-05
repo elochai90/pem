@@ -1,4 +1,4 @@
-package com.gruppe1.pem.challengeme;
+package com.gruppe1.pem.challengeme.views;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -23,6 +23,9 @@ import android.widget.TextView;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.gruppe1.pem.challengeme.Item;
+import com.gruppe1.pem.challengeme.ListItemIconName;
+import com.gruppe1.pem.challengeme.R;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 import com.gruppe1.pem.challengeme.adapters.DefaultGridAdapter;
@@ -84,7 +87,7 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".NewCompareActivity");
+                intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".views.NewCompareActivity");
                 startActivity(intent);
 
             }
@@ -94,7 +97,7 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".NewItemActivity");
+                intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".views.NewItemActivity");
                 intent.putExtra("is_wishlist", true);
                 startActivityForResult(intent, 0);
 
@@ -104,7 +107,7 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".NewCategoryActivity");
+                intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".views.NewCategoryActivity");
                startActivity(intent);
 
             }
@@ -114,7 +117,7 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".NewItemActivity");
+                intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".views.NewItemActivity");
                 startActivityForResult(intent, 0);
 
             }
@@ -223,7 +226,7 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
 
     public void selectItem(int itemid) {
         Intent intent = new Intent();
-        intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".NewItemActivity");
+        intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".views.NewItemActivity");
         Bundle b = new Bundle();
         b.putInt(Constants.EXTRA_ITEM_ID, itemid);
         intent.putExtras(b);
