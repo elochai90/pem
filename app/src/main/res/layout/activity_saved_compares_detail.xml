@@ -7,109 +7,113 @@
     android:dividerPadding="20dp"
     tools:context="com.gruppe1.pem.challengeme.views.SavedComparesDetailActivity">
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/comparetitle"
-        android:paddingTop="5dp"
-        android:paddingBottom="15dp"
-        android:gravity="center_vertical"
-        android:textSize="24sp"/>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.5">
-
-        <ImageView
-            android:layout_width="175dp"
-            android:layout_height="175dp"
-            android:id="@+id/detail1oben"
-            android:contentDescription="First Item Image"/>
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="10dp"
-            android:weightSum="1">
-
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/nameItem1"
-                android:layout_weight="0.06"
-                android:gravity="center_vertical"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Category"
-                android:textSize="18sp"
-                android:id="@+id/categorieTextView1"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Attribut1"
-                android:textSize="18sp"
-                android:id="@+id/attributTextView11"/>
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.5">
-
-        <ImageView
-            android:layout_width="175dp"
-            android:layout_height="175dp"
-            android:id="@+id/detail2unten"
-            android:contentDescription="Second Item Image" />
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="10dp"
-            android:weightSum="1">
-
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/nameItem2"
-                android:textStyle="bold"
-                android:layout_weight="0.07"
-                android:gravity="center_vertical"
-                android:textSize="20sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Category"
-                android:textSize="18sp"
-                android:id="@+id/categorieTextView2"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Attribut1"
-                android:textSize="18sp"
-                android:id="@+id/attributTextView21"/>
-        </LinearLayout>
-    </LinearLayout>
 
     <TextView
+        android:id="@+id/timeStampSavedCompare"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Saved: TT:MM:JJJJ"
-        android:textSize="18sp"
-        android:id="@+id/timeStampSavedCompare"
-        android:textAlignment="center" />
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="10dp"
+        android:textSize="18sp"/>
+
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view_item1"
+        android:background="@color/cardview_light_background"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
+        android:layout_width="220dp"
+        android:layout_height="220dp"
+        card_view:cardCornerRadius="4dp">
+
+        <RelativeLayout
+            android:id="@+id/item1InfoLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/detail1oben"
+                android:layout_width="match_parent"
+                android:layout_height="220dp"
+                android:contentDescription="First Item Image"/>
+
+
+            <TextView
+                android:id="@+id/nameItem1"
+                android:layout_alignBottom="@id/detail1oben"
+                android:background="@color/grey_transparent"
+                android:textColor="@android:color/white"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:padding="10dp"
+                android:textSize="20sp"/>
+
+            <!--<LinearLayout-->
+                <!--android:id="@+id/item1Attributes"-->
+                <!--android:layout_below="@id/detail1oben"-->
+                <!--android:orientation="vertical"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content">-->
+                <!--<TextView-->
+                    <!--android:id="@+id/categorieTextView1"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="Category"-->
+                    <!--android:textSize="18sp"/>-->
+            <!--</LinearLayout>-->
+
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view_item2"
+        android:background="@color/cardview_light_background"
+        android:layout_gravity="center"
+        android:layout_width="220dp"
+        android:layout_height="220dp"
+        card_view:cardCornerRadius="4dp">
+
+        <RelativeLayout
+            android:id="@+id/item2InfoLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/detail2unten"
+                android:layout_width="match_parent"
+                android:layout_height="220dp"
+                android:contentDescription="First Item Image"/>
+
+
+            <TextView
+                android:id="@+id/nameItem2"
+                android:layout_alignBottom="@id/detail2unten"
+                android:background="@color/grey_transparent"
+                android:textColor="@android:color/white"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:padding="10dp"
+                android:textSize="20sp"/>
+
+            <!--<LinearLayout-->
+                <!--android:id="@+id/item2Attributes"-->
+                <!--android:layout_below="@id/detail2unten"-->
+                <!--android:orientation="vertical"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content">-->
+                <!--<TextView-->
+                    <!--android:id="@+id/categorieTextView2"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="Category"-->
+                    <!--android:textSize="18sp"/>-->
+            <!--</LinearLayout>-->
+
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
 
 </LinearLayout>

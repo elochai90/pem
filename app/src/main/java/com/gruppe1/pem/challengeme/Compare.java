@@ -25,11 +25,10 @@ public class Compare implements Serializable{
     private transient Context context;
     private transient DataBaseHelper dbHelper;
 
-    public Compare(Context p_context, int p_id) {
+    public Compare(Context p_context, int p_id, DataBaseHelper p_dbHelper) {
         this.id = p_id;
         this.context = p_context;
-        this.dbHelper = new DataBaseHelper(this.context);
-        dbHelper.init();
+        this.dbHelper = p_dbHelper;
         this.dbHelper.setTable(Constants.COMPARES_DB_TABLE);
         itemIds = new ArrayList<Integer>();
 
@@ -88,7 +87,7 @@ public class Compare implements Serializable{
     }
 
     public void insert() {
-        this.dbHelper.setStringValue("name", this.name);
+        getDbHelper().setStringValue("name", this.name);
         String idConcat = "";
 
         Iterator idIterator = itemIds.iterator();
@@ -111,7 +110,7 @@ public class Compare implements Serializable{
     public static ArrayList<Compare> geAllCompares(Context p_context) {
         DataBaseHelper dbHelper = new DataBaseHelper(p_context);
         dbHelper.init();
-        dbHelper.setTable(Constants.DB_TABLE_PREFIX + "compares");
+        dbHelper.setTable(Constants.COMPARES_DB_TABLE);
         dbHelper.setColumns(new String[]{"*"});
         Cursor compareCursor = dbHelper.select();
         compareCursor.moveToFirst();
@@ -119,7 +118,7 @@ public class Compare implements Serializable{
         ArrayList<Compare> allCompares = new ArrayList<>();
 
         while (!compareCursor.isAfterLast()) {
-            Compare tmpCompare = new Compare(p_context, compareCursor.getInt(0));
+            Compare tmpCompare = new Compare(p_context, compareCursor.getInt(0), dbHelper);
             allCompares.add(tmpCompare);
             compareCursor.moveToNext();
         }
@@ -130,6 +129,7 @@ public class Compare implements Serializable{
 
 
     public void delete() {
+        getDbHelper().setTable(Constants.COMPARES_DB_TABLE);
         this.dbHelper.setWhere("", new String[]{"_id=" + this.id});
         this.dbHelper.delete();
         this.dbHelper.close();
@@ -137,6 +137,15 @@ public class Compare implements Serializable{
 
     public void closeDBConnection() {
         this.dbHelper.close();
+    }
+
+    private DataBaseHelper getDbHelper() {
+        if(!dbHelper.isOpen()) {
+            System.out.println("db helper was closed");
+            dbHelper = new DataBaseHelper(context);
+            dbHelper.init();
+        }
+        return dbHelper;
     }
 }
 

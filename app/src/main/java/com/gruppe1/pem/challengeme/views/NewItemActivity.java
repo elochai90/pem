@@ -13,6 +13,7 @@ import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -119,7 +120,6 @@ public class NewItemActivity extends Activity {
                 saveItem();
                 setResult(RESULT_OK);
                 thisActivity.finish();
-                // TODO: save item
             }
         });
 
@@ -519,12 +519,13 @@ public class NewItemActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
+        switch (item.getItemId()) {
+
+            case android.R.id.home:
+                super.onBackPressed();
+                return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }

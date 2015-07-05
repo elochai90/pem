@@ -42,5 +42,10 @@
     <string name="abort">Abort</string>
     <string name="save">Save</string>
 
+
+    <!--For detail compare activity-->
+    <string name="compare_saved">Saved</string>
+    <string name="compare_item_category">Category</string>
+
     <string name="no_exact_color_selected">Select a color</string>
 </resources>

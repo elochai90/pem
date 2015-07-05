@@ -25,6 +25,7 @@ import com.gruppe1.pem.challengeme.Compare;
 import com.gruppe1.pem.challengeme.Item;
 import com.gruppe1.pem.challengeme.R;
 import com.gruppe1.pem.challengeme.adapters.CompareImageAdapter;
+import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -205,12 +206,18 @@ public class NewCompareActivity extends Activity {
                         name = "Compare " + currentDateandTime;
                     }
 
-                    Compare newCompare = new Compare(getApplicationContext(), -1);
+                    DataBaseHelper dbHelper = new DataBaseHelper(getApplicationContext());
+                    dbHelper.init();
+
+
+                    Compare newCompare = new Compare(getApplicationContext(), -1, dbHelper);
                     newCompare.setName(name);
                     newCompare.addItemId(firstItemID);
                     newCompare.addItemId(secondtItemID);
                     newCompare.insert();
                     newCompare.closeDBConnection();
+
+                    dbHelper.close();
 
                     setResult(RESULT_OK);
                     thisActivity.finish();

@@ -24,12 +24,15 @@ import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.gruppe1.pem.challengeme.Category;
 import com.gruppe1.pem.challengeme.Compare;
 import com.gruppe1.pem.challengeme.R;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.adapters.CompareGridAdapter;
 import com.gruppe1.pem.challengeme.adapters.CompareListAdapter;
+import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -64,6 +67,7 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
         TextView noComparesText = (TextView) rootView.findViewById(R.id.noItemText);
         noComparesText.setText(R.string.no_compares);
 
+        mDataset = new ArrayList<>();
         initDataset();
 
         listView = (ListView) rootView.findViewById(R.id.listView);
@@ -213,14 +217,13 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
     }
 
     private void initDataset() {
-        // TODO: replace by database data
-        mDataset = Compare.geAllCompares(getActivity().getApplicationContext());
+        mDataset.clear();
+        mDataset.addAll(Compare.geAllCompares(getActivity().getApplicationContext()));
         if(mDataset.size() > 0) {
             showNoComparesLayout(false);
         } else {
             showNoComparesLayout(true);
         }
-
     }
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
@@ -234,7 +237,7 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
             Intent intent = new Intent();
             intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".views.SavedComparesDetailActivity");
             intent.putExtra("item", mDataset.get(position));
-            startActivity(intent);
+            startActivityForResult(intent, 0);
     }
 
     private ActionMode.Callback modeCallBack = new ActionMode.Callback() {
@@ -272,10 +275,15 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
 
                                 public void onClick(DialogInterface arg0, int arg1) {
 
+                                    DataBaseHelper dbHelper = new DataBaseHelper(getActivity().getApplicationContext());
+                                    dbHelper.init();
+
                                     int itemId = (int)listAdapter.getItemId((int)selectedItem[0]);
 
-                                    Compare deleteCompare = new Compare(getActivity().getApplicationContext(), itemId);
+                                    Compare deleteCompare = new Compare(getActivity().getApplicationContext(), itemId, dbHelper);
                                     deleteCompare.delete();
+
+                                    dbHelper.close();
 
                                     initDataset();
                                     listAdapter.notifyDataSetChanged();

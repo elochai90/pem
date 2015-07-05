@@ -2,4 +2,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.gruppe1.pem.challengeme.views.SavedComparesDetailActivity">
+    <item
+        android:id="@+id/delete"
+        android:title="Delete Compare"
+        android:showAsAction="always"
+        android:icon="@drawable/ic_delete"/>
 </menu>
