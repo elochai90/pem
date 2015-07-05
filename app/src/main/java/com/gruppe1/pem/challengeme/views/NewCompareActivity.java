@@ -63,7 +63,7 @@ public class NewCompareActivity extends Activity {
             }
         });
 
-        ArrayList<CharSequence> upperCategoriesList = new ArrayList<CharSequence>();
+        final ArrayList<CharSequence> upperCategoriesList = new ArrayList<CharSequence>();
         upperCategoriesList.add("None");
 
         for(Category cat : allCategories) {
@@ -90,8 +90,13 @@ public class NewCompareActivity extends Activity {
                     public void onClick(DialogInterface dialog, int item) {
                         if (item != 0) {
                             firstCatItems = Item.getItemsByCategoryId(getApplicationContext(), allCategories.get(item - 1).getId());
-                            CompareImageAdapter adapter = new CompareImageAdapter(getApplicationContext(), item); // TODO: richtige Id uebergeben
-                            viewPager1.setAdapter(adapter);
+                            for(int i =  0; i  < allCategories.size(); i++){
+                                if(allCategories.get(i).getName().equals(upperCategoriesList.get(item))){
+                                    CompareImageAdapter adapter = new CompareImageAdapter(getApplicationContext(), i);
+                                    viewPager1.setAdapter(adapter);
+                                    break;
+                                }
+                            }
                             img1.setVisibility(View.INVISIBLE);
                             viewPager1.setVisibility(View.VISIBLE);
                                                 }
@@ -115,8 +120,13 @@ public class NewCompareActivity extends Activity {
                     public void onClick(DialogInterface dialog, int item) {
                         if (item != 0) {
                             secontCatItems = Item.getItemsByCategoryId(getApplicationContext(), allCategories.get(item - 1).getId());
-                            CompareImageAdapter adapter = new CompareImageAdapter(getApplicationContext(), item); // TODO: richtige Id uebergeben
-                            viewPager2.setAdapter(adapter);
+                            for(int i =  0; i  < allCategories.size(); i++){
+                                if(allCategories.get(i).getName().equals(upperCategoriesList.get(item))){
+                                    CompareImageAdapter adapter = new CompareImageAdapter(getApplicationContext(), i);
+                                    viewPager2.setAdapter(adapter);
+                                    break;
+                                }
+                            }
                             img2.setVisibility(View.INVISIBLE);
                             viewPager2.setVisibility(View.VISIBLE);
                         }
