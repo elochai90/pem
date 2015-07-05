@@ -16,12 +16,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent" />
 
-            <!--@drawable/ic_add_circle_outline_black_48dp-->
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/img1"
-                android:src="@drawable/ic_add"
+                android:src="@drawable/ic_add_circle_outline_black_48dp"
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"
                 android:layout_margin="40dp" />
@@ -41,12 +40,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent" />
 
-            <!--@drawable/ic_add_circle_outline_black_48dp-->
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/img2"
-                android:src="@drawable/ic_add"
+                android:src="@drawable/ic_add_circle_outline_black_48dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentStart="true"
                 android:layout_margin="40dp" />
