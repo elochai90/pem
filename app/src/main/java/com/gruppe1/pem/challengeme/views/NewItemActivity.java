@@ -210,11 +210,14 @@ public class NewItemActivity extends Activity {
 
         try {
             String imgPath = editItem.getImageFile();
+            Log.d("ImageFile", imgPath);
             File imgFile = new File(imgPath);
 
             if (imgFile.exists()) {
                 Bitmap tmpBitmap = ImageLoader.getPicFromFile(editItem.getImageFile(), 500, 500);
+                ImgPhoto.setImageBitmap(tmpBitmap);
             }
+
         }catch(Exception e){
             e.printStackTrace();
         }
