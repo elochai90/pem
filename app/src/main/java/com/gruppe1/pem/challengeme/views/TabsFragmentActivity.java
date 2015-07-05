@@ -1,11 +1,9 @@
-package com.gruppe1.pem.challengeme;
+package com.gruppe1.pem.challengeme.views;
 
 import android.app.AlertDialog;
 import android.app.LocalActivityManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -19,7 +17,13 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.gruppe1.pem.challengeme.AnimatedTabHostListener;
+import com.gruppe1.pem.challengeme.ListItemIconName;
+import com.gruppe1.pem.challengeme.R;
+import com.gruppe1.pem.challengeme.WishlistFragment;
+import com.gruppe1.pem.challengeme.adapters.NavigationDrawerItemAdapter;
+import com.gruppe1.pem.challengeme.helpers.PicassoSingleton;
 
 public class TabsFragmentActivity extends FragmentActivity {
 
@@ -72,6 +76,13 @@ public class TabsFragmentActivity extends FragmentActivity {
 
         setupTabHost(savedInstanceState);
         setupNavigationDrawer();
+
+        initSingletons();
+
+    }
+
+    private void initSingletons() {
+        PicassoSingleton.initInstance(getApplicationContext());
     }
 
     @Override

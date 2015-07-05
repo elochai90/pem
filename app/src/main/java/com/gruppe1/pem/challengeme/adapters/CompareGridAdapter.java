@@ -1,4 +1,4 @@
-package com.gruppe1.pem.challengeme;
+package com.gruppe1.pem.challengeme.adapters;
 
 import android.app.Activity;
 import android.content.Context;
@@ -8,6 +8,14 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.gruppe1.pem.challengeme.Compare;
+import com.gruppe1.pem.challengeme.helpers.Constants;
+import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
+import com.gruppe1.pem.challengeme.helpers.ImageLoader;
+import com.gruppe1.pem.challengeme.Item;
+import com.gruppe1.pem.challengeme.R;
+import com.gruppe1.pem.challengeme.helpers.PicassoSingleton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +28,7 @@ public class CompareGridAdapter extends ArrayAdapter {
     private int layoutResourceId;
     private List<Compare> data = new ArrayList();
     private DataBaseHelper dbHelper;
+    private PicassoSingleton picassoSingleton;
 
     public CompareGridAdapter(Context context, int layoutResourceId, List<Compare> data) {
         super(context, layoutResourceId, data);
@@ -28,6 +37,7 @@ public class CompareGridAdapter extends ArrayAdapter {
         this.data = data;
         this.dbHelper = new DataBaseHelper(context);
         this.dbHelper.init();
+        this.picassoSingleton = PicassoSingleton.getInstance();
     }
 
     @Override
@@ -54,8 +64,8 @@ public class CompareGridAdapter extends ArrayAdapter {
         Item item1 = new Item(this.context, itemIds.get(0), this.dbHelper);
         Item item2 = new Item(this.context, itemIds.get(1), this.dbHelper);
 
-        holder.imageItem1.setImageBitmap(ImageLoader.getPicFromFile(item1.getImageFile(), 1000, 1000));
-        holder.imageItem2.setImageBitmap(ImageLoader.getPicFromFile(item2.getImageFile(), 1000, 1000));
+        picassoSingleton.setImage(item1.getImageFile(), Constants.LIST_VIEW_IMAGE_WIDTH, Constants.LIST_VIEW_IMAGE_HEIGHT, holder.imageItem1);
+        picassoSingleton.setImage(item2.getImageFile(), Constants.LIST_VIEW_IMAGE_WIDTH, Constants.LIST_VIEW_IMAGE_HEIGHT, holder.imageItem2);
         return row;
     }
 

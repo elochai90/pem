@@ -1,22 +1,20 @@
-package com.gruppe1.pem.challengeme;
+package com.gruppe1.pem.challengeme.adapters;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.gruppe1.pem.challengeme.Category;
+import com.gruppe1.pem.challengeme.helpers.Constants;
+import com.gruppe1.pem.challengeme.helpers.ImageLoader;
+import com.gruppe1.pem.challengeme.Item;
+import com.gruppe1.pem.challengeme.helpers.PicassoSingleton;
+
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.zip.Inflater;
 
 /**
  * Created by bianka on 21.06.2015.
@@ -24,12 +22,14 @@ import java.util.zip.Inflater;
 public class CompareImageAdapter extends PagerAdapter {
     Context context;
     private ArrayList<Item> categoryItems;
+    private PicassoSingleton picassoSingleton;
 
-    CompareImageAdapter(Context context){
+    public CompareImageAdapter(Context context){
         this.context = context;
+        this.picassoSingleton = PicassoSingleton.getInstance();
     }
 
-    CompareImageAdapter(Context p_context, int p_position) {
+    public CompareImageAdapter(Context p_context, int p_position) {
         this.context = p_context;
         Category chosenCategory = Category.getAllCategories(context).get(p_position - 1);
 
@@ -40,6 +40,8 @@ public class CompareImageAdapter extends PagerAdapter {
                 categoryItems.remove(i);
             }
         }
+
+        this.picassoSingleton = PicassoSingleton.getInstance();
     }
 
     @Override
@@ -59,8 +61,7 @@ public class CompareImageAdapter extends PagerAdapter {
         imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 
         String imageFile = categoryItems.get(position).getImageFile();
-        Bitmap tmpBitmap = ImageLoader.getPicFromFile(imageFile, 1000, 1000);
-        imageView.setImageBitmap(tmpBitmap);
+        this.picassoSingleton.setImage(imageFile, Constants.COMPARE_IMAGE_WIDTH,Constants.COMPARE_IMAGE_HEIGHT, imageView);
         container.addView(imageView, 0);
 
         return imageView;

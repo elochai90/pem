@@ -4,6 +4,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
+import com.gruppe1.pem.challengeme.helpers.Constants;
+import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -225,7 +228,8 @@ public class AttributeType {
         } else {
             //save changes to existing attribute type
         }
-        m_dbHelper.close();
+
+        //m_dbHelper.close();
     }
 
     @Override

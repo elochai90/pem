@@ -3,15 +3,15 @@
     <!-- These settings headers are only used on tablets. -->
 
     <header
-        android:fragment="com.gruppe1.pem.challengeme.SettingsActivity$GeneralPreferenceFragment"
+        android:fragment="com.gruppe1.pem.challengeme.views.SettingsActivity$GeneralPreferenceFragment"
         android:title="@string/pref_header_general" />
 
     <header
-        android:fragment="com.gruppe1.pem.challengeme.SettingsActivity$NotificationPreferenceFragment"
+        android:fragment="com.gruppe1.pem.challengeme.views.SettingsActivity$NotificationPreferenceFragment"
         android:title="@string/pref_header_notifications" />
 
     <header
-        android:fragment="com.gruppe1.pem.challengeme.SettingsActivity$DataSyncPreferenceFragment"
+        android:fragment="com.gruppe1.pem.challengeme.views.SettingsActivity$DataSyncPreferenceFragment"
         android:title="@string/pref_header_data_sync" />
 
 </preference-headers>

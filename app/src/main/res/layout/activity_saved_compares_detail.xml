@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:padding="10dp"
     android:dividerPadding="20dp"
-    tools:context="com.gruppe1.pem.challengeme.SavedComparesDetailActivity">
+    tools:context="com.gruppe1.pem.challengeme.views.SavedComparesDetailActivity">
 
     <TextView
         android:layout_width="fill_parent"

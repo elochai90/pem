@@ -1,7 +1,6 @@
-package com.gruppe1.pem.challengeme;
+package com.gruppe1.pem.challengeme.helpers;
 
-import android.content.Context;
-import android.content.SharedPreferences;
+import com.gruppe1.pem.challengeme.R;
 
 /**
  * Created by Simon on 13.06.2015.
@@ -38,4 +37,6 @@ public class Constants {
     public static final int LIST_VIEW_IMAGE_HEIGHT = 150;
 
 
+    public static final int COMPARE_IMAGE_WIDTH = 800;
+    public static final int COMPARE_IMAGE_HEIGHT = 800;
 }

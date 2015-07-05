@@ -56,7 +56,7 @@ public class WeatherRequest {
     TextView weatherTempView;
 
 
-    WeatherRequest(Context context, ImageView weatherImageView, TextView weatherDescView, TextView weatherTempView) {
+    public WeatherRequest(Context context, ImageView weatherImageView, TextView weatherDescView, TextView weatherTempView) {
         this.context = context;
         this.weatherImageView = weatherImageView;
         this.weatherDescView = weatherDescView;

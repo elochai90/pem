@@ -1,6 +1,5 @@
 package com.gruppe1.pem.challengeme;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -8,9 +7,10 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
-import android.widget.FrameLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
+
+import com.gruppe1.pem.challengeme.views.TabsFragmentActivity;
 
 /**
  * A custom OnTabChangeListener that uses the TabHost its related to to fetch information about the current and previous

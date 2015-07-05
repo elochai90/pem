@@ -1,4 +1,4 @@
-package com.gruppe1.pem.challengeme;
+package com.gruppe1.pem.challengeme.views;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
@@ -31,12 +30,20 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.github.clans.fab.FloatingActionButton;
+import com.gruppe1.pem.challengeme.Attribute;
+import com.gruppe1.pem.challengeme.AttributeType;
+import com.gruppe1.pem.challengeme.Category;
+import com.gruppe1.pem.challengeme.HSVColorPickerDialog;
+import com.gruppe1.pem.challengeme.Item;
+import com.gruppe1.pem.challengeme.R;
+import com.gruppe1.pem.challengeme.helpers.Constants;
+import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
+import com.gruppe1.pem.challengeme.helpers.ImageLoader;
+import com.gruppe1.pem.challengeme.adapters.CategoriesDropdownAdapter;
+import com.gruppe1.pem.challengeme.adapters.ColorsDropdownAdapter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.sql.DatabaseMetaData;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -284,6 +291,9 @@ public class NewItemActivity extends Activity {
             itemAttribute.edit(itemAttributeValue);
             itemAttribute.save();
         }
+
+        this.db_helper.close();
+
     }
 
     private void setAttributeLayout(AttributeType attributeType, Object attributeValue) {

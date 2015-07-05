@@ -1,4 +1,4 @@
-package com.gruppe1.pem.challengeme;
+package com.gruppe1.pem.challengeme.adapters;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,6 +10,12 @@ import android.widget.ArrayAdapter;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.gruppe1.pem.challengeme.Item;
+import com.gruppe1.pem.challengeme.ListItemIconName;
+import com.gruppe1.pem.challengeme.R;
+import com.gruppe1.pem.challengeme.helpers.Constants;
+import com.gruppe1.pem.challengeme.helpers.PicassoSingleton;
 
 import org.w3c.dom.Text;
 
@@ -26,6 +32,7 @@ public class DefaultGridAdapter extends ArrayAdapter<ListItemIconName> {
     private boolean isCategory;
 
     public int currentSelection;
+    private PicassoSingleton picassoSingleton;
 
     public DefaultGridAdapter(Context context, int layoutResourceId, List<ListItemIconName> data, boolean isCategory) {
         super(context, layoutResourceId, data);
@@ -33,6 +40,7 @@ public class DefaultGridAdapter extends ArrayAdapter<ListItemIconName> {
         this.context = context;
         this.data = data;
         this.isCategory = isCategory;
+        this.picassoSingleton = PicassoSingleton.getInstance();
     }
 
     @Override
@@ -58,10 +66,11 @@ public class DefaultGridAdapter extends ArrayAdapter<ListItemIconName> {
         holder.imageTitle.setText(item.name);
 
 
-        if(isCategory || item.itemBitmap ==  null) {
+        if(isCategory || item.itemFile ==  null) {
             holder.image.setImageResource(item.icon);
         } else {
-            holder.image.setImageBitmap(item.itemBitmap);
+            //holder.image.setImageBitmap(item.itemBitmap);
+            picassoSingleton.setImage(item.itemFile, Constants.LIST_VIEW_IMAGE_WIDTH, Constants.LIST_VIEW_IMAGE_HEIGHT, holder.image);
         }
 
 

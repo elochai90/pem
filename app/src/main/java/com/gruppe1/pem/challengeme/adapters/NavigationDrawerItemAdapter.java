@@ -1,4 +1,4 @@
-package com.gruppe1.pem.challengeme;
+package com.gruppe1.pem.challengeme.adapters;
 
 import android.app.Activity;
 import android.content.Context;
@@ -8,6 +8,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.gruppe1.pem.challengeme.ListItemIconName;
+import com.gruppe1.pem.challengeme.R;
+import com.gruppe1.pem.challengeme.WeatherRequest;
 
 /**
  * Created by bianka on 05.06.2015.

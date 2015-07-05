@@ -1,4 +1,4 @@
-package com.gruppe1.pem.challengeme;
+package com.gruppe1.pem.challengeme.views;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -9,30 +9,29 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.gruppe1.pem.challengeme.Category;
+import com.gruppe1.pem.challengeme.Item;
+import com.gruppe1.pem.challengeme.ListItemIconName;
+import com.gruppe1.pem.challengeme.R;
+import com.gruppe1.pem.challengeme.helpers.Constants;
+import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
+import com.gruppe1.pem.challengeme.adapters.DefaultGridAdapter;
+import com.gruppe1.pem.challengeme.adapters.DefaultListAdapter;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 
 public class ItemsListActivity extends Activity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener  {
@@ -255,7 +254,7 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
         while (catIt.hasNext()) {
             Item tmpItem = (Item)catIt.next();
             int iconId = getResources().getIdentifier("kleiderbuegel", "drawable", "com.gruppe1.pem.challengeme");
-            mDataset.add(new ListItemIconName(tmpItem.getId(), iconId , tmpItem.getName(), getPicFromFile(tmpItem.getImageFile())));
+            mDataset.add(new ListItemIconName(tmpItem.getId(), iconId , tmpItem.getName(), tmpItem.getImageFile()));
         }
         if(mDataset.size() > 0) {
             showNoItemLayout(false);

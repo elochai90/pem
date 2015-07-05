@@ -1,9 +1,11 @@
 package com.gruppe1.pem.challengeme;
 
-import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
+
+import com.gruppe1.pem.challengeme.helpers.Constants;
+import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -213,7 +215,7 @@ public class Category {
             this.setAllValuesToDbHelper();
             this.m_dbHelper.update();
         }
-        m_dbHelper.close();
+       //m_dbHelper.close();
     }
 
     @Override

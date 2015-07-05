@@ -1,20 +1,24 @@
-package com.gruppe1.pem.challengeme;
+package com.gruppe1.pem.challengeme.adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.text.DateFormat;
+import com.gruppe1.pem.challengeme.Compare;
+import com.gruppe1.pem.challengeme.helpers.Constants;
+import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
+import com.gruppe1.pem.challengeme.helpers.ImageLoader;
+import com.gruppe1.pem.challengeme.Item;
+import com.gruppe1.pem.challengeme.R;
+import com.gruppe1.pem.challengeme.helpers.PicassoSingleton;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -22,8 +26,8 @@ public class CompareListAdapter extends ArrayAdapter<Compare> {
     private Context context;
     private int layoutResourceId;
     private List<Compare> data = new ArrayList<>();
-//    private DataBaseHelper dbHelper;
     private DataBaseHelper dbHelper;
+    private PicassoSingleton picassoSingleton;
 
     public CompareListAdapter(Context context, int layoutResourceId, List<Compare> data) {
         super(context, layoutResourceId, data);
@@ -32,6 +36,7 @@ public class CompareListAdapter extends ArrayAdapter<Compare> {
         this.data = data;
         this.dbHelper = new DataBaseHelper(context);
         this.dbHelper.init();
+        this.picassoSingleton = PicassoSingleton.getInstance();
     }
 
     @Override
@@ -68,10 +73,9 @@ public class CompareListAdapter extends ArrayAdapter<Compare> {
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy");
         String currentDateandTime = sdf.format(new Date(Long.parseLong(item.getTimestamp())));
 
-
         holder.rightTextView.setText(currentDateandTime);
-        holder.imageItem1.setImageBitmap(ImageLoader.getPicFromFile(item1.getImageFile(), 100, 100));
-        holder.imageItem2.setImageBitmap(ImageLoader.getPicFromFile(item2.getImageFile(), 100, 100));
+        picassoSingleton.setImage(item1.getImageFile(), Constants.LIST_VIEW_IMAGE_WIDTH, Constants.LIST_VIEW_IMAGE_HEIGHT, holder.imageItem1);
+        picassoSingleton.setImage(item2.getImageFile(), Constants.LIST_VIEW_IMAGE_WIDTH, Constants.LIST_VIEW_IMAGE_HEIGHT, holder.imageItem2);
 
         return row;
     }

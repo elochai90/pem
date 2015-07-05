@@ -1,7 +1,14 @@
-package com.gruppe1.pem.challengeme;
+package com.gruppe1.pem.challengeme.helpers;
 
 import android.content.Context;
 import android.util.Log;
+
+import com.gruppe1.pem.challengeme.AttributeType;
+import com.gruppe1.pem.challengeme.Category;
+import com.gruppe1.pem.challengeme.Color;
+import com.gruppe1.pem.challengeme.Item;
+import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
+import com.gruppe1.pem.challengeme.helpers.XmlParser;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -10,8 +17,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Created by simon on 19.06.2015.
@@ -31,6 +36,7 @@ public class DefaultSetup {
             this.setup("setup_values.xml");
             initated = true;
         }
+        this.m_dbHelper.close();
     }
 
     public void setup(String p_xml_file) {

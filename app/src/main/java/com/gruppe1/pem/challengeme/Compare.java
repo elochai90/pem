@@ -2,12 +2,12 @@ package com.gruppe1.pem.challengeme;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.text.format.Time;
 import android.util.Log;
 
+import com.gruppe1.pem.challengeme.helpers.Constants;
+import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
+
 import java.io.Serializable;
-import java.lang.reflect.Array;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.regex.Pattern;
@@ -135,6 +135,9 @@ public class Compare implements Serializable{
         this.dbHelper.close();
     }
 
+    public void closeDBConnection() {
+        this.dbHelper.close();
+    }
 }
 
 

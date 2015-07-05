@@ -1,28 +1,27 @@
-package com.gruppe1.pem.challengeme;
+package com.gruppe1.pem.challengeme.views;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
+import com.gruppe1.pem.challengeme.Category;
+import com.gruppe1.pem.challengeme.Compare;
+import com.gruppe1.pem.challengeme.Item;
+import com.gruppe1.pem.challengeme.R;
+import com.gruppe1.pem.challengeme.adapters.CompareImageAdapter;
 
-import org.w3c.dom.Text;
-
-import java.lang.reflect.Array;
-import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -192,6 +191,7 @@ public class NewCompareActivity extends Activity {
                     newCompare.addItemId(firstItemID);
                     newCompare.addItemId(secondtItemID);
                     newCompare.insert();
+                    newCompare.closeDBConnection();
 
                     setResult(RESULT_OK);
                     thisActivity.finish();

@@ -1,4 +1,4 @@
-package com.gruppe1.pem.challengeme;
+package com.gruppe1.pem.challengeme.helpers;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

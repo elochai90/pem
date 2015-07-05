@@ -1,21 +1,27 @@
-package com.gruppe1.pem.challengeme;
+package com.gruppe1.pem.challengeme.adapters;
 
 import android.app.Activity;
-import android.app.LauncherActivity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.gruppe1.pem.challengeme.Attribute;
+import com.gruppe1.pem.challengeme.Color;
+import com.gruppe1.pem.challengeme.helpers.Constants;
+import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
+import com.gruppe1.pem.challengeme.Item;
+import com.gruppe1.pem.challengeme.ListItemIconName;
+import com.gruppe1.pem.challengeme.R;
+import com.gruppe1.pem.challengeme.helpers.PicassoSingleton;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class DefaultListAdapter extends ArrayAdapter<ListItemIconName> {
     private Context context;
@@ -27,6 +33,7 @@ public class DefaultListAdapter extends ArrayAdapter<ListItemIconName> {
     private DataBaseHelper db_helper;
 
     public int currentSelection;
+    private PicassoSingleton picassoSingleton;
 
     public DefaultListAdapter(Context context, int layoutResourceId, ArrayList<ListItemIconName> data, boolean isCategory, boolean wishlist) {
         super(context, layoutResourceId, data);
@@ -38,6 +45,8 @@ public class DefaultListAdapter extends ArrayAdapter<ListItemIconName> {
 
         db_helper = new DataBaseHelper(context);
         db_helper.init();
+
+        this.picassoSingleton = PicassoSingleton.getInstance();
     }
 
     @Override
@@ -70,10 +79,10 @@ public class DefaultListAdapter extends ArrayAdapter<ListItemIconName> {
 
             holder.firstLine.setText(item.name);
 
-            if(isCategory || item.itemBitmap == null) {
+            if(isCategory || item.itemFile == null) {
                 holder.image.setImageResource(item.icon);
             } else {
-                holder.image.setImageBitmap(item.itemBitmap);
+                picassoSingleton.setImage(item.itemFile, Constants.LIST_VIEW_IMAGE_WIDTH, Constants.LIST_VIEW_IMAGE_HEIGHT, holder.image );
             }
 
             if(isCategory) {

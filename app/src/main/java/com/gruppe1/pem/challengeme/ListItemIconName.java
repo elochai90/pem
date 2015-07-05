@@ -15,24 +15,24 @@ public class ListItemIconName {
     public int icon;
     public String name;
     public Date date;
-    public Bitmap itemBitmap;
+    public String itemFile;
 
-    public ListItemIconName(int elementId, int icon, String name, Bitmap itemBitmap)
+    public ListItemIconName(int elementId, int icon, String name, String itemBitmap)
     {
         this.elementId = elementId;
         this.icon = icon;
         this.name = name;
-        this.itemBitmap = itemBitmap;
+        this.itemFile = itemBitmap;
 
 //        Log.e("###LIST", this.name);
     }
 
-    public ListItemIconName(int elementId, int icon, String name, Bitmap itemBitmap, Date date)
+    public ListItemIconName(int elementId, int icon, String name, String itemFile, Date date)
     {
         this.elementId = elementId;
         this.icon = icon;
         this.name = name;
-        this.itemBitmap = itemBitmap;
+        this.itemFile = itemFile;
         this.date = date;
     }
 }
