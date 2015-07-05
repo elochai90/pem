@@ -15,13 +15,21 @@
                 android:id="@+id/view_pager1"
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent" />
-            <Spinner
-                android:id="@+id/view_pager1_spinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:prompt="@string/chooseCountry"
-                android:layout_centerInParent="true"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/img1"
+                android:src="@drawable/ic_add_circle_outline_black_48dp"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="40dp" />
         </RelativeLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -31,12 +39,15 @@
                 android:id="@+id/view_pager2"
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent" />
-            <Spinner
-                android:id="@+id/view_pager2_spinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:prompt="@string/chooseCountry"
-                android:layout_centerInParent="true"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/img2"
+                android:src="@drawable/ic_add_circle_outline_black_48dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:layout_margin="40dp" />
         </RelativeLayout>
 
     </LinearLayout>

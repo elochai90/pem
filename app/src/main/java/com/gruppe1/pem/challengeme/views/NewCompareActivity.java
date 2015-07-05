@@ -5,12 +5,16 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,8 +35,11 @@ public class NewCompareActivity extends Activity {
 
     ViewPager viewPager1;
     ViewPager viewPager2;
-    Spinner view_pager1_spinner;
-    Spinner view_pager2_spinner;
+    //Spinner view_pager1_spinner;
+    //Button newItemCompare;
+    ImageView img1;
+    ImageView img2;
+    //Spinner view_pager2_spinner;
     ArrayList<Item> firstCatItems;
     ArrayList<Item> secontCatItems;
     FloatingActionButton saveCompareFAB;
@@ -48,10 +55,13 @@ public class NewCompareActivity extends Activity {
         viewPager2 = (ViewPager) findViewById(R.id.view_pager2);
         viewPager1.setVisibility(View.INVISIBLE);
         viewPager2.setVisibility(View.INVISIBLE);
-        view_pager1_spinner = (Spinner) findViewById(R.id.view_pager1_spinner);
-        view_pager2_spinner = (Spinner) findViewById(R.id.view_pager2_spinner);
+        //view_pager1_spinner = (Spinner) findViewById(R.id.view_pager1_spinner);
+        //view_pager2_spinner = (Spinner) findViewById(R.id.view_pager2_spinner);
         saveCompareFAB = (FloatingActionButton) findViewById(R.id.save_compare);
         allCategories = Category.getAllCategories(getApplicationContext());
+        //newItemCompare = (Button) findViewById(R.id.new_item_compare);
+        img1 = (ImageView) findViewById(R.id.img1);
+        img2 = (ImageView) findViewById(R.id.img2);
 
         thisActivity = this;
         saveCompareFAB.setOnClickListener(new View.OnClickListener() {
@@ -63,64 +73,73 @@ public class NewCompareActivity extends Activity {
         });
 
         ArrayList<CharSequence> upperCategoriesList = new ArrayList<CharSequence>();
-
         upperCategoriesList.add("None");
 
         for(Category cat : allCategories) {
             upperCategoriesList.add(cat.getName());
         }
+        String tmpString = upperCategoriesList.toString();
+        final String[] upperCategoriesList2 = stringToArray(tmpString);
 
-        ArrayAdapter<CharSequence> spinnerAdapter1 = new ArrayAdapter<CharSequence>(getBaseContext(), android.R.layout.simple_spinner_item, upperCategoriesList);
-        ArrayAdapter<CharSequence> spinnerAdapter2 = new ArrayAdapter<CharSequence>(getBaseContext(), android.R.layout.simple_spinner_item, upperCategoriesList);
-        // Specify the layout to use when the list of choices appears
-        spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        view_pager1_spinner.setAdapter(spinnerAdapter1);
-        view_pager2_spinner.setAdapter(spinnerAdapter2);
+        final ArrayAdapter<CharSequence> arrayAdapter = new ArrayAdapter<CharSequence>(
+                this,
+                android.R.layout.simple_list_item_1,
+                upperCategoriesList );
 
-        view_pager1_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        img1.setOnClickListener(new AdapterView.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position != 0){
-                    firstCatItems = Item.getItemsByCategoryId(getApplicationContext(),allCategories.get(position - 1).getId());
+            public void onClick(View view) {
 
-                    if( firstCatItems.size() > 0) {
-                        CompareImageAdapter adapter = new CompareImageAdapter(getApplicationContext(), position); // TODO: richtige Id uebergeben
-                        viewPager1.setAdapter(adapter);
-                        view_pager1_spinner.setVisibility(View.INVISIBLE);
-                        viewPager1.setVisibility(View.VISIBLE);
-                    } else {
-                        Toast.makeText(getApplicationContext(), getString(R.string.no_child_items), Toast.LENGTH_SHORT).show();
+                final AlertDialog.Builder builder1 = new AlertDialog.Builder(NewCompareActivity.this);
+
+                builder1.setTitle("Choose Category");
+                builder1.setItems(upperCategoriesList2, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int item) {
+                        if (item != 0) {
+                            firstCatItems = Item.getItemsByCategoryId(getApplicationContext(), allCategories.get(item - 1).getId());
+                            if (firstCatItems.size() > 0) {
+                                CompareImageAdapter adapter = new CompareImageAdapter(getApplicationContext(), item); // TODO: richtige Id uebergeben
+                                viewPager1.setAdapter(adapter);
+                                img1.setVisibility(View.INVISIBLE);
+                                viewPager1.setVisibility(View.VISIBLE);
+                            } else {
+                                Toast.makeText(getApplicationContext(), getString(R.string.no_child_items), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        dialog.dismiss();
                     }
-                }
-            }
+                });
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                builder1.show();
+
 
             }
         });
 
-        view_pager2_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        img2.setOnClickListener(new AdapterView.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(position != 0) {
-                    secontCatItems = Item.getItemsByCategoryId(getApplicationContext(), allCategories.get(position - 1).getId());
+            public void onClick(View view) {
 
-                    if( secontCatItems.size() > 0) {
-                        CompareImageAdapter adapter = new CompareImageAdapter(getApplicationContext(), position); // TODO: richtige Id uebergeben
-                        viewPager2.setAdapter(adapter);
-                        view_pager2_spinner.setVisibility(View.INVISIBLE);
-                        viewPager2.setVisibility(View.VISIBLE);
-                    } else {
-                        Toast.makeText(getApplicationContext(), getString(R.string.no_child_items), Toast.LENGTH_SHORT).show();
+                final AlertDialog.Builder builder2 = new AlertDialog.Builder(NewCompareActivity.this);
+                builder2.setTitle("Choose Category");
+                builder2.setItems(upperCategoriesList2, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int item) {
+                        if (item != 0) {
+                            secontCatItems = Item.getItemsByCategoryId(getApplicationContext(), allCategories.get(item - 1).getId());
+
+                            if (secontCatItems.size() > 0) {
+                                CompareImageAdapter adapter = new CompareImageAdapter(getApplicationContext(), item); // TODO: richtige Id uebergeben
+                                viewPager2.setAdapter(adapter);
+                                img2.setVisibility(View.INVISIBLE);
+                                viewPager2.setVisibility(View.VISIBLE);
+                            } else {
+                                Toast.makeText(getApplicationContext(), getString(R.string.no_child_items), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        dialog.dismiss();
                     }
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                });
+                builder2.show();
 
             }
         });
@@ -150,11 +169,11 @@ public class NewCompareActivity extends Activity {
     }
 
     private void saveCompare() {
+
         final int firstElementPosition = viewPager1.getCurrentItem();
         final int secondElementPosition = viewPager2.getCurrentItem();
 
         if(firstCatItems != null && secontCatItems != null) {
-
 
             final int firstItemID = firstCatItems.get(firstElementPosition).getId();
             final int secondtItemID = secontCatItems.get(secondElementPosition).getId();
@@ -207,4 +226,11 @@ public class NewCompareActivity extends Activity {
             builder.create().show();
         }
     }
+    private String[] stringToArray(String str){
+        str = str.substring(1, str.length()-1);
+        String[] str2array = str.split(", ");
+
+        return str2array;
+    }
+
 }

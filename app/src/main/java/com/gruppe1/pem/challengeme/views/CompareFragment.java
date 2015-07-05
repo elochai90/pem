@@ -1,5 +1,6 @@
 package com.gruppe1.pem.challengeme.views;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -19,6 +20,7 @@ import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -88,7 +90,7 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".views.NewCompareActivity");
-                startActivityForResult(intent,0);
+                startActivityForResult(intent, 0);
 
             }
         });
@@ -302,5 +304,23 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
         selectedItem[1] = view;
 
         return true;
+    }
+
+    // for actualizing the categories list on coming back from new category
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        try {
+            super.onActivityResult(requestCode, resultCode, data);
+
+            if (requestCode == 0) {
+                if(resultCode == Activity.RESULT_OK) {
+                    initDataset();
+                    listAdapter.notifyDataSetChanged();
+                    gridAdapter.notifyDataSetChanged();
+                }
+            }
+        } catch (Exception ex) {
+            Toast.makeText(getActivity(), ex.toString(), Toast.LENGTH_SHORT).show();
+        }
     }
 }
