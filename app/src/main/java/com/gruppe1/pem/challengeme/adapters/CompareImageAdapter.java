@@ -3,6 +3,7 @@ package com.gruppe1.pem.challengeme.adapters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v4.view.PagerAdapter;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -31,10 +32,13 @@ public class CompareImageAdapter extends PagerAdapter {
 
     public CompareImageAdapter(Context p_context, int p_position) {
         this.context = p_context;
-        Category chosenCategory = Category.getAllCategories(context).get(p_position - 1);
+        Category chosenCategory = Category.getAllCategories(context).get(p_position);
+        Log.d("Category: ", chosenCategory.getName());
 
         categoryItems = Item.getItemsByCategoryId(p_context, chosenCategory.getId());
+
         for(int i = 0; i < categoryItems.size(); i++){
+            Log.d("Imagepaths: ", categoryItems.get(i).getImageFile());
             String imageFile = categoryItems.get(i).getImageFile();
             if(imageFile == null){
                 categoryItems.remove(i);
