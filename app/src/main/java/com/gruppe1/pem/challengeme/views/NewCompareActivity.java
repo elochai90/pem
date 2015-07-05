@@ -12,10 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,11 +32,8 @@ public class NewCompareActivity extends Activity {
 
     ViewPager viewPager1;
     ViewPager viewPager2;
-    //Spinner view_pager1_spinner;
-    //Button newItemCompare;
     ImageView img1;
     ImageView img2;
-    //Spinner view_pager2_spinner;
     ArrayList<Item> firstCatItems;
     ArrayList<Item> secontCatItems;
     FloatingActionButton saveCompareFAB;
@@ -55,11 +49,8 @@ public class NewCompareActivity extends Activity {
         viewPager2 = (ViewPager) findViewById(R.id.view_pager2);
         viewPager1.setVisibility(View.INVISIBLE);
         viewPager2.setVisibility(View.INVISIBLE);
-        //view_pager1_spinner = (Spinner) findViewById(R.id.view_pager1_spinner);
-        //view_pager2_spinner = (Spinner) findViewById(R.id.view_pager2_spinner);
         saveCompareFAB = (FloatingActionButton) findViewById(R.id.save_compare);
         allCategories = Category.getAllCategories(getApplicationContext());
-        //newItemCompare = (Button) findViewById(R.id.new_item_compare);
         img1 = (ImageView) findViewById(R.id.img1);
         img2 = (ImageView) findViewById(R.id.img2);
 
@@ -76,7 +67,9 @@ public class NewCompareActivity extends Activity {
         upperCategoriesList.add("None");
 
         for(Category cat : allCategories) {
-            upperCategoriesList.add(cat.getName());
+            int catsize = Item.getItemsCountByCategoryId(getApplicationContext(), cat.getId());
+            if(catsize > 0)
+                upperCategoriesList.add(cat.getName());
         }
         String tmpString = upperCategoriesList.toString();
         final String[] upperCategoriesList2 = stringToArray(tmpString);
@@ -97,15 +90,11 @@ public class NewCompareActivity extends Activity {
                     public void onClick(DialogInterface dialog, int item) {
                         if (item != 0) {
                             firstCatItems = Item.getItemsByCategoryId(getApplicationContext(), allCategories.get(item - 1).getId());
-                            if (firstCatItems.size() > 0) {
-                                CompareImageAdapter adapter = new CompareImageAdapter(getApplicationContext(), item); // TODO: richtige Id uebergeben
-                                viewPager1.setAdapter(adapter);
-                                img1.setVisibility(View.INVISIBLE);
-                                viewPager1.setVisibility(View.VISIBLE);
-                            } else {
-                                Toast.makeText(getApplicationContext(), getString(R.string.no_child_items), Toast.LENGTH_SHORT).show();
-                            }
-                        }
+                            CompareImageAdapter adapter = new CompareImageAdapter(getApplicationContext(), item); // TODO: richtige Id uebergeben
+                            viewPager1.setAdapter(adapter);
+                            img1.setVisibility(View.INVISIBLE);
+                            viewPager1.setVisibility(View.VISIBLE);
+                                                }
                         dialog.dismiss();
                     }
                 });
@@ -126,15 +115,10 @@ public class NewCompareActivity extends Activity {
                     public void onClick(DialogInterface dialog, int item) {
                         if (item != 0) {
                             secontCatItems = Item.getItemsByCategoryId(getApplicationContext(), allCategories.get(item - 1).getId());
-
-                            if (secontCatItems.size() > 0) {
-                                CompareImageAdapter adapter = new CompareImageAdapter(getApplicationContext(), item); // TODO: richtige Id uebergeben
-                                viewPager2.setAdapter(adapter);
-                                img2.setVisibility(View.INVISIBLE);
-                                viewPager2.setVisibility(View.VISIBLE);
-                            } else {
-                                Toast.makeText(getApplicationContext(), getString(R.string.no_child_items), Toast.LENGTH_SHORT).show();
-                            }
+                            CompareImageAdapter adapter = new CompareImageAdapter(getApplicationContext(), item); // TODO: richtige Id uebergeben
+                            viewPager2.setAdapter(adapter);
+                            img2.setVisibility(View.INVISIBLE);
+                            viewPager2.setVisibility(View.VISIBLE);
                         }
                         dialog.dismiss();
                     }
