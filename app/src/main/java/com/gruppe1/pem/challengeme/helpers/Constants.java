@@ -31,6 +31,12 @@ public class Constants {
     public static final String KEY_VIEW_COMPARE_AS_LIST = "CompareViewAsList";
     public static final String KEY_FIRST_DB_INIT = "FirstDbInit";
 
+    // Shared Preferences Keys for default sizes
+    public static final String KEY_DS_1_NAME = "Tops";
+    public static final String KEY_DS_2_NAME = "Bottoms";
+    public static final String KEY_DS_3_NAME = "Shoes";
+    public static final String KEY_DS_NONE = "None";
+
     public static final String DEFAULT_CAT_ICON = "kleiderbuegel";
 
     public static final int LIST_VIEW_IMAGE_WIDTH = 150;

@@ -65,8 +65,10 @@ public class MyLocationListener implements LocationListener {
         }
         Geocoder gcd = new Geocoder(context, Locale.getDefault());
         try {
-            cityName = gcd.getFromLocation(l.getLatitude(),  l.getLongitude(), 1).get(0).getLocality();
-            countryCode = gcd.getFromLocation(l.getLatitude(), l.getLongitude(), 1).get(0).getCountryCode();
+            if(gcd.getFromLocation(l.getLatitude(),  l.getLongitude(), 1).size() > 0) {
+                cityName = gcd.getFromLocation(l.getLatitude(),  l.getLongitude(), 1).get(0).getLocality();
+                countryCode = gcd.getFromLocation(l.getLatitude(), l.getLongitude(), 1).get(0).getCountryCode();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

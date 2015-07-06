@@ -4,68 +4,86 @@
     tools:context="com.gruppe1.pem.challengeme.views.NewCategoryActivity">
 
     <LinearLayout
+        android:id="@+id/categoryNameLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="10dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/linearLayout">
-
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
         <TextView
-            android:layout_width="wrap_content"
+            android:text="Name:"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:width="130dp"
-            android:layout_marginEnd="10dp"
-            android:text="Name:" />
-
+            android:textSize="18sp"/>
         <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:id="@+id/categoryName"
             android:singleLine="true"
-            android:id="@+id/editNameCategory"
-            android:hint="Add Category Name"
-            android:paddingBottom="5dp" />
-
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:textSize="18sp"
+            android:hint="Add Category Name" />
     </LinearLayout>
+
+    <View
+        android:id="@+id/categoryNameDivider"
+        android:layout_below="@id/categoryNameLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#c0c0c0"/>
 
     <LinearLayout
+        android:id="@+id/categoryDefaultSizeLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/categoryNameDivider"
         android:orientation="horizontal"
-        android:padding="10dp"
-        android:layout_below="@+id/linearLayout"
-        android:layout_alignParentStart="true"
-        android:id="@+id/linearLayout2">
-
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:width="130dp"
-            android:layout_marginEnd="10dp"
-            android:text="Upper categorie:" />
-
+            android:text="Default size:"
+            android:textSize="18sp"/>
         <Spinner
-            android:id="@+id/editUpperCategory"
+            android:id="@+id/categoryDefaultSize"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.66"
-            android:layout_marginStart="5dp"
-            android:paddingBottom="5dp"/>
+            android:layout_height="60dp">
+        </Spinner>
     </LinearLayout>
 
-    <com.github.clans.fab.FloatingActionButton
-        xmlns:fab="http://schemas.android.com/apk/res-auto"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:id="@+id/save_new_category"
-        android:layout_width="wrap_content"
+    <View
+        android:id="@+id/categoryDefaultSizeDivider"
+        android:layout_below="@id/categoryDefaultSizeLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#c0c0c0"/>
+
+    <LinearLayout
+        android:id="@+id/categoryIconLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginEnd="10dp"
-        android:src="@drawable/ic_save_white"
-        android:layout_gravity="bottom|end"/>
+        android:layout_below="@id/categoryDefaultSizeDivider"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="Icon:"
+            android:textSize="18sp"/>
+        <ImageView
+            android:id="@+id/categoryIcon"
+            android:src="@drawable/kleiderbuegel"
+            android:layout_width="80dp"
+            android:layout_height="80dp">
+        </ImageView>
+    </LinearLayout>
+
+    <View
+        android:layout_below="@id/categoryIconLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#c0c0c0"/>
 
 </RelativeLayout>

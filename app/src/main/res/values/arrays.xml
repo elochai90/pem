@@ -11,4 +11,26 @@
 
     </string-array>
 
+
+    <!--All category icons -->
+    <string-array name="category_icons_array">
+        <item>kleiderbuegel</item>
+        <item>anzug</item>
+        <item>bademode</item>
+        <item>cardigan</item>
+        <item>hose</item>
+        <item>jacke</item>
+        <item>kleid</item>
+        <item>mantel</item>
+        <item>pulli</item>
+        <item>rock</item>
+        <item>schuh</item>
+        <item>shorts</item>
+        <item>sneaker</item>
+        <item>socken</item>
+        <item>stiefel</item>
+        <item>top</item>
+        <item>tshirt</item>
+        <item>unterwaesche</item>
+    </string-array>
 </resources>

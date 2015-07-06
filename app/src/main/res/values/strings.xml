@@ -48,4 +48,6 @@
     <string name="compare_item_category">Category</string>
 
     <string name="no_exact_color_selected">Select a color</string>
+    <string name="new_category_overlay_title">Select an icon</string>
+
 </resources>
