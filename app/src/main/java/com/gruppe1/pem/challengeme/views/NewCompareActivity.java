@@ -195,7 +195,7 @@ public class NewCompareActivity extends Activity {
                     String name = inputField.getText().toString();
 
                     if(name.equals("")) {
-                        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy HH:mm:ss");
+                        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
                         String currentDateandTime = sdf.format(new Date());
                         name = "Compare " + currentDateandTime;
                     }

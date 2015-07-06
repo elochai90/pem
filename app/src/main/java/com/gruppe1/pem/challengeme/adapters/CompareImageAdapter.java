@@ -38,7 +38,6 @@ public class CompareImageAdapter extends PagerAdapter {
         categoryItems = Item.getItemsByCategoryId(p_context, chosenCategory.getId());
 
         for(int i = 0; i < categoryItems.size(); i++){
-            Log.d("Imagepaths: ", categoryItems.get(i).getImageFile());
             String imageFile = categoryItems.get(i).getImageFile();
             if(imageFile == null){
                 categoryItems.remove(i);
