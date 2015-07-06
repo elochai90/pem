@@ -2,6 +2,7 @@ package com.gruppe1.pem.challengeme;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.gruppe1.pem.challengeme.helpers.Constants;
@@ -146,6 +147,15 @@ public class Compare implements Serializable{
             dbHelper.init();
         }
         return dbHelper;
+    }
+
+    public static void deleteComparesByItemId(Context p_context, int m_id) {
+        DataBaseHelper dbHelper = new DataBaseHelper(p_context);
+        dbHelper.init();
+        dbHelper.setTable(Constants.COMPARES_DB_TABLE);
+        dbHelper.setWhere("OR", new String[]{"item_ids LIKE '" + m_id + "|'", "item_ids LIKE '|" + m_id + "'"});
+        dbHelper.delete();
+        dbHelper.close();
     }
 }
 
