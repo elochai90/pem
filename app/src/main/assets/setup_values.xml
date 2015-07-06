@@ -27,14 +27,14 @@
         <categorie>
             <name>Tops</name>
             <parent_categorie_id>0</parent_categorie_id>
-            <default_attribute_type>1</default_attribute_type>
+            <default_attribute_type>0</default_attribute_type>
             <icon>top</icon>
         </categorie>
 
         <categorie>
             <name>Socks</name>
             <parent_categorie_id>0</parent_categorie_id>
-            <default_attribute_type>1</default_attribute_type>
+            <default_attribute_type>2</default_attribute_type>
             <icon>socken</icon>
         </categorie>
 
@@ -69,21 +69,21 @@
         <categorie>
             <name>Sneaker</name>
             <parent_categorie_id>0</parent_categorie_id>
-            <default_attribute_type>1</default_attribute_type>
+            <default_attribute_type>2</default_attribute_type>
             <icon>sneaker</icon>
         </categorie>
 
         <categorie>
             <name>Boots</name>
             <parent_categorie_id>0</parent_categorie_id>
-            <default_attribute_type>1</default_attribute_type>
+            <default_attribute_type>2</default_attribute_type>
             <icon>stiefel</icon>
         </categorie>
 
         <categorie>
             <name>Heels</name>
             <parent_categorie_id>0</parent_categorie_id>
-            <default_attribute_type>1</default_attribute_type>
+            <default_attribute_type>2</default_attribute_type>
             <icon>schuh</icon>
         </categorie>
 

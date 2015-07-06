@@ -28,7 +28,7 @@ public class Category {
     private int m_parent_category_id = Constants.DEFAULT_CATEGORY_ID;
     private String m_icon;
     // TODO add default size to sql init
-    private int m_defaultAttributeType;
+    private int m_defaultSizeType;
     private DataBaseHelper m_dbHelper;
     private Context context;
 
@@ -49,6 +49,7 @@ public class Category {
                 this.m_id = categoryData.getInt(0);
                 this.m_name = categoryData.getString(1);
                 this.m_parent_category_id = categoryData.getInt(2);
+                this.m_defaultSizeType = categoryData.getInt(3);
                 this.m_icon = categoryData.getString(4);
             } else {
                 Log.e("###NO_SUCH_CATEGORY_ID", "" + m_id);
@@ -90,12 +91,12 @@ public class Category {
         this.m_parent_category_id = m_parent_cat_id;
     }
 
-    public int getDefaultAttributeType() {
-        return m_defaultAttributeType;
+    public int getDefaultSizeType() {
+        return m_defaultSizeType;
     }
 
-    public void setDefaultAttributeType(int m_defaultAttributeType) {
-        this.m_defaultAttributeType = m_defaultAttributeType;
+    public void setDefaultSizeType(int m_defaultSizeType) {
+        this.m_defaultSizeType = m_defaultSizeType;
     }
 
     public String getIcon() {
@@ -126,7 +127,7 @@ public class Category {
             Category category = new Category(p_context, allCategoriesIterator.getInt(0), helper);
             category.setName(allCategoriesIterator.getString(1));
             category.setParentCategoryId(allCategoriesIterator.getInt(2));
-            category.setDefaultAttributeType(allCategoriesIterator.getInt(3));
+            category.setDefaultSizeType(allCategoriesIterator.getInt(3));
 
             category.setIcon(allCategoriesIterator.getString(4));
             //Log.e("###All Cat call###", "name: " + allCategories.getString(1));
@@ -163,7 +164,7 @@ public class Category {
 
                 case "default_attribute_type":
                     //Log.e("###CAT EDIT###", "default_attribute_type is: " + dbColumnValue);
-                    this.setDefaultAttributeType(Integer.parseInt(dbColumnValue));
+                    this.setDefaultSizeType(Integer.parseInt(dbColumnValue));
                     break;
 
                 case "icon":
@@ -228,7 +229,7 @@ public class Category {
         this.m_dbHelper.deleteValues();
         this.m_dbHelper.setStringValue("name", this.m_name);
         this.m_dbHelper.setIntegerValue("parent_category_id", this.m_parent_category_id);
-        this.m_dbHelper.setIntegerValue("default_attribute_type", this.m_defaultAttributeType);
+        this.m_dbHelper.setIntegerValue("default_attribute_type", this.m_defaultSizeType);
         String iconValue = (this.m_icon != null) ? this.m_icon : Constants.DEFAULT_CAT_ICON;
         this.m_dbHelper.setStringValue("icon", iconValue);
     }

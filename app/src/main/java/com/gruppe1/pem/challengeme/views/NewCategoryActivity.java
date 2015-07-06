@@ -1,29 +1,56 @@
 package com.gruppe1.pem.challengeme.views;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Shader;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.gruppe1.pem.challengeme.Category;
+import com.gruppe1.pem.challengeme.Compare;
+import com.gruppe1.pem.challengeme.DefaultSize;
+import com.gruppe1.pem.challengeme.adapters.CompareGridAdapter;
+import com.gruppe1.pem.challengeme.adapters.DefaultSizesAdapter;
+import com.gruppe1.pem.challengeme.adapters.IconsGridAdapter;
+import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 import com.gruppe1.pem.challengeme.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 
 
 public class NewCategoryActivity extends Activity {
 
     private com.github.clans.fab.FloatingActionButton saveFAB;
     private EditText newCategory_name;
-    private Spinner editUpperCategory;
+    private Spinner categoryDefaultSize;
+    private ImageView categoryIcon;
     private Bundle extras;
+
+    private String iconName;
+
+
+    public SharedPreferences.Editor editor;
+    public SharedPreferences sharedPreferences;
 
     int categoryId;
 
@@ -33,51 +60,43 @@ public class NewCategoryActivity extends Activity {
         setContentView(R.layout.activity_new_category);
         extras = getIntent().getExtras();
 
-        final Activity thisActivity = this;
+
+        sharedPreferences = getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
 
         categoryId = 0;
+        iconName = "kleiderbuegel";
 
-        newCategory_name = (EditText) findViewById(R.id.editNameCategory);
-        editUpperCategory = (Spinner) findViewById(R.id.editUpperCategory);
-        saveFAB = (FloatingActionButton) findViewById(R.id.save_new_category);
-        saveFAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DataBaseHelper db_helper = new DataBaseHelper(getApplicationContext());
-                db_helper.init();
+        newCategory_name = (EditText) findViewById(R.id.categoryName);
+        categoryDefaultSize = (Spinner) findViewById(R.id.categoryDefaultSize);
+        categoryIcon = (ImageView) findViewById(R.id.categoryIcon);
 
-                Category editCategory = new Category(thisActivity.getApplicationContext(), categoryId, db_helper);
-                editCategory.setName(newCategory_name.getText().toString());
-                editCategory.setParentCategoryId(0); // TODO: real ParentCatId
-                editCategory.save();
+        String defaultSize1Value = sharedPreferences.getString(Constants.KEY_DS_1_NAME, "");
+        String defaultSize2Value = sharedPreferences.getString(Constants.KEY_DS_2_NAME, "");
+        String defaultSize3Value = sharedPreferences.getString(Constants.KEY_DS_3_NAME, "");
 
-                db_helper.close();
+        ArrayList<DefaultSize> defaultSizes = new ArrayList<>();
+        defaultSizes.add(new DefaultSize(Constants.KEY_DS_NONE, ""));
+        defaultSizes.add(new DefaultSize(Constants.KEY_DS_1_NAME, defaultSize1Value));
+        defaultSizes.add(new DefaultSize(Constants.KEY_DS_2_NAME, defaultSize2Value));
+        defaultSizes.add(new DefaultSize(Constants.KEY_DS_3_NAME, defaultSize3Value));
 
-                // sending new Item back to CategoriesFragment for actualizing list view
-                Intent i = new Intent();
-                i.putExtra("categoryName", editCategory.getName()); // TODO: pass all data back to catFragment to show list item
-                i.putExtra("categoryId", editCategory.getId()); // TODO: pass real Id back
-                i.putExtra("categoryParentId", 0); // TODO: pass real parentId back
 
-                setResult(Activity.RESULT_OK, i);
-                thisActivity.finish();
-            }
-        });
-
-        ArrayList<CharSequence> upperCategoriesList = new ArrayList<CharSequence>();
-        ArrayList<Category> allCategories = Category.getAllCategories(this);
-        upperCategoriesList.add("None");
-
-        for(Category cat : allCategories) {
-            upperCategoriesList.add(cat.getName());
-        }
-
-        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(getBaseContext(), android.R.layout.simple_spinner_item,
-                upperCategoriesList);
+        ArrayAdapter<DefaultSize> adapter = new DefaultSizesAdapter(getBaseContext(), android.R.layout.simple_spinner_item,
+                defaultSizes);
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
-        editUpperCategory.setAdapter(adapter);
+        categoryDefaultSize.setAdapter(adapter);
+
+        categoryIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createIconOverlay();
+            }
+        });
+
+
 
         if(extras != null) {
             //edit category
@@ -90,8 +109,62 @@ public class NewCategoryActivity extends Activity {
             setTitle("Edit " + editCategory.getName());
             newCategory_name.setText(editCategory.getName());
 
+            iconName = editCategory.getIcon();
+            int iconId = getResources().getIdentifier(editCategory.getIcon(), "drawable", "com.gruppe1.pem.challengeme");
+            categoryIcon.setImageResource(iconId);
+
+            String defaultSizeTypeString = "";
+            switch(editCategory.getDefaultSizeType()) {
+                case 0:
+                    defaultSizeTypeString = Constants.KEY_DS_1_NAME;
+                    break;
+                case 1:
+                    defaultSizeTypeString = Constants.KEY_DS_2_NAME;
+                    break;
+                case 2:
+                    defaultSizeTypeString = Constants.KEY_DS_3_NAME;
+                    break;
+                default:
+                    defaultSizeTypeString = Constants.KEY_DS_NONE;
+                    break;
+            }
+            int indexOfDefaultSize = defaultSizes.indexOf(new DefaultSize(defaultSizeTypeString, sharedPreferences.getString(defaultSizeTypeString, "")));
+            categoryDefaultSize.setSelection(indexOfDefaultSize);
+
             dbHelper.close();
         }
+    }
+
+    private void createIconOverlay() {
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+
+        final View dialogView = inflater.inflate(R.layout.dialog_listgrid, null);
+        TextView headline = (TextView)dialogView.findViewById(R.id.dialog_headline);
+        headline.setText(R.string.new_category_overlay_title);
+
+        ListView listView = (ListView) dialogView.findViewById(R.id.listView);
+        GridView gridView = (GridView) dialogView.findViewById(R.id.gridView);
+        listView.setVisibility(View.INVISIBLE);
+
+        ArrayList<String> iconsArray = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.category_icons_array)));
+        builder.setView(dialogView);
+        final AlertDialog alert = builder.create();
+        final IconsGridAdapter gridAdapter = new IconsGridAdapter(this, R.layout.grid_item_default, iconsArray);
+        gridView.setAdapter(gridAdapter);
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                int iconId = getResources().getIdentifier(gridAdapter.getItem(position), "drawable", "com.gruppe1.pem.challengeme");
+                categoryIcon.setImageResource(iconId);
+                iconName = gridAdapter.getItem(position);
+                alert.dismiss();
+            }
+        });
+
+
+        alert.show();
     }
 
     @Override
@@ -101,18 +174,37 @@ public class NewCategoryActivity extends Activity {
         return true;
     }
 
+    private void saveNewCategory() {
+        DataBaseHelper db_helper = new DataBaseHelper(getApplicationContext());
+        db_helper.init();
+
+        Category editCategory = new Category(getApplicationContext(), categoryId, db_helper);
+        editCategory.setName(newCategory_name.getText().toString());
+        editCategory.setDefaultSizeType(categoryDefaultSize.getSelectedItemPosition() - 1);
+        editCategory.setIcon(iconName);
+        editCategory.save();
+
+        db_helper.close();
+
+        // sending new Item back to CategoriesFragment for actualizing list view
+        Intent i = new Intent();
+        i.putExtra("categoryName", editCategory.getName());
+        i.putExtra("defaultSize", editCategory.getDefaultSizeType());
+        i.putExtra("icon", editCategory.getIcon());
+        i.putExtra("categoryId", editCategory.getId());
+
+        setResult(Activity.RESULT_OK, i);
+        this.finish();
+
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-
+        switch (item.getItemId()) {
+            case R.id.save:
+                saveNewCategory();
+                return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 }

@@ -1,7 +1,9 @@
 package com.gruppe1.pem.challengeme.views;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -21,6 +23,7 @@ import android.support.v4.app.NavUtils;
 
 
 import com.gruppe1.pem.challengeme.R;
+import com.gruppe1.pem.challengeme.helpers.Constants;
 
 import java.util.List;
 
@@ -44,10 +47,22 @@ public class SettingsActivity extends PreferenceActivity {
      */
     private static final boolean ALWAYS_SIMPLE_PREFS = false;
 
+
+    private static SharedPreferences sharedPreferences;
+    private static SharedPreferences.Editor editor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setupActionBar();
+        sharedPreferences = getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        // TODO: for Caro: save correct values! This is only for testing the NewCategoryActivity
+        editor.putString(Constants.KEY_DS_1_NAME, "36");
+        editor.putString(Constants.KEY_DS_2_NAME, "40");
+        editor.putString(Constants.KEY_DS_3_NAME, "38");
+        editor.apply();
+        System.out.println("Settings changed");
     }
 
     /**
@@ -183,6 +198,8 @@ public class SettingsActivity extends PreferenceActivity {
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
             String stringValue = value.toString();
+
+
 
             if (preference instanceof ListPreference) {
                 // For list preferences, look up the correct display value in
