@@ -182,7 +182,8 @@ public class NewCompareActivity extends Activity {
         final int firstElementPosition = viewPager1.getCurrentItem();
         final int secondElementPosition = viewPager2.getCurrentItem();
 
-        if(firstCatItems != null && secontCatItems != null) {
+        // FIXME lists sometimes empty
+        if(firstCatItems.size() > 0 && secontCatItems.size() > 0) {
 
             final int firstItemID = firstCatItems.get(firstElementPosition).getId();
             final int secondtItemID = secontCatItems.get(secondElementPosition).getId();
