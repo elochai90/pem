@@ -33,4 +33,49 @@
         <item>tshirt</item>
         <item>unterwaesche</item>
     </string-array>
+    <string-array name="sizes_shoes_text">
+        <item>33</item>
+        <item>33.5</item>
+        <item>34</item>
+        <item>34.5</item>
+        <item>35</item>
+        <item>35.5</item>
+        <item>36</item>
+        <item>36.5</item>
+        <item>37</item>
+        <item>37.5</item>
+        <item>38</item>
+        <item>38.5</item>
+        <item>39</item>
+        <item>39.5</item>
+        <item>40</item>
+        <item>40.5</item>
+        <item>41</item>
+        <item>41.5</item>
+        <item>42</item>
+        <item>42.5</item>
+        <item>43</item>
+        <item>43.5</item>
+        <item>44</item>
+        <item>44.5</item>
+        <item>45</item>
+
+    </string-array>
+
+
+    <string-array name="colours_text">
+        <item>Rot</item>
+        <item>Gelb</item>
+        <item>Blau</item>
+        <item>Grün</item>
+        <item>Lila</item>
+        <item>Orange</item>
+        <item>Schwarz</item>
+        <item>Weiß</item>
+        <item>Braun</item>
+        <item>Türkis</item>
+        <item>Bunt</item>
+        <item>Gemustert</item>
+    </string-array>
+
 </resources>
