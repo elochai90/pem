@@ -34,7 +34,7 @@
     <string name="pref_header_data_sync">Data &amp; sync</string>
 
     <string name="standard_tops">Top Size</string>
-    <string name="standard_pants">Pants Size</string>
+    <string name="standard_bottoms">Bottoms Size</string>
     <string name="standard_shoes">Shoe Size</string>
 
     <string-array name="pref_sync_frequency_titles">

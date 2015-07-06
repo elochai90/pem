@@ -10,6 +10,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -57,12 +58,6 @@ public class SettingsActivity extends PreferenceActivity {
         setupActionBar();
         sharedPreferences = getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
-        // TODO: for Caro: save correct values! This is only for testing the NewCategoryActivity
-        editor.putString(Constants.KEY_DS_1_NAME, "36");
-        editor.putString(Constants.KEY_DS_2_NAME, "40");
-        editor.putString(Constants.KEY_DS_3_NAME, "38");
-        editor.apply();
-        System.out.println("Settings changed");
     }
 
     /**
@@ -80,15 +75,6 @@ public class SettingsActivity extends PreferenceActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            // This ID represents the Home or Up button. In the case of this
-            // activity, the Up button is shown. Use NavUtils to allow users
-            // to navigate up one level in the application structure. For
-            // more details, see the Navigation pattern on Android Design:
-            //
-            // http://developer.android.com/design/patterns/navigation.html#up-vs-back
-            //
-            // TODO: If Settings has multiple levels, Up should navigate up
-            // that hierarchy.
             NavUtils.navigateUpFromSameTask(this);
             return true;
         }
@@ -139,14 +125,45 @@ public class SettingsActivity extends PreferenceActivity {
         addPreferencesFromResource(R.xml.pref_view);
 
 
+        boolean show_wishlist_item_in_compare;
+        if (sharedPreferences.contains(Constants.KEY_WISHLIST_IN_COMPARE)) {
+            show_wishlist_item_in_compare = sharedPreferences.getBoolean(Constants.KEY_WISHLIST_IN_COMPARE, false);
+        } else {
+            show_wishlist_item_in_compare = PreferenceManager
+                            .getDefaultSharedPreferences(findPreference("show_wishlist_item_in_compare").getContext())
+                            .getBoolean(findPreference("show_wishlist_item_in_compare").getKey(), false);
+        }
+        bindPreferenceSummaryToValue(findPreference("show_wishlist_item_in_compare"), Boolean.toString(show_wishlist_item_in_compare));
 
-        // Bind the summaries of EditText/List/Dialog/Ringtone preferences to
-        // their values. When their values change, their summaries are updated
-        // to reflect the new value, per the Android Design guidelines.
-        //bindPreferenceSummaryToValue(findPreference("example_text"));
-        //bindPreferenceSummaryToValue(findPreference("example_list"));
-        //bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
-        //bindPreferenceSummaryToValue(findPreference("sync_frequency"));
+        String tops_default = "";
+        if (sharedPreferences.contains(Constants.KEY_DS_1_NAME)) {
+            tops_default = sharedPreferences.getString(Constants.KEY_DS_1_NAME, "");
+        } else {
+            tops_default = PreferenceManager
+                    .getDefaultSharedPreferences(findPreference("Tops").getContext())
+                    .getString(findPreference("Tops").getKey(), "");
+        }
+        bindPreferenceSummaryToValue(findPreference("Tops"), tops_default);
+
+        String bottoms_default = "";
+        if (sharedPreferences.contains(Constants.KEY_DS_2_NAME)) {
+            bottoms_default = sharedPreferences.getString(Constants.KEY_DS_2_NAME, "");
+        } else {
+            bottoms_default = PreferenceManager
+                    .getDefaultSharedPreferences(findPreference("Bottoms").getContext())
+                    .getString(findPreference("Bottoms").getKey(), "");
+        }
+        bindPreferenceSummaryToValue(findPreference("Bottoms"), bottoms_default);
+
+        String shoes_default = "";
+        if (sharedPreferences.contains(Constants.KEY_DS_3_NAME)) {
+            shoes_default = sharedPreferences.getString(Constants.KEY_DS_3_NAME, "");
+        } else {
+            shoes_default = PreferenceManager
+                    .getDefaultSharedPreferences(findPreference("Shoes").getContext())
+                    .getString(findPreference("Shoes").getKey(), "");
+        }
+        bindPreferenceSummaryToValue(findPreference("Shoes"), shoes_default);
     }
 
     /**
@@ -195,15 +212,14 @@ public class SettingsActivity extends PreferenceActivity {
      * to reflect its new value.
      */
     private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
+
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
             String stringValue = value.toString();
 
 
-
+            System.out.println("Changed: " + preference.getKey() + " - " + stringValue);
             if (preference instanceof ListPreference) {
-                // For list preferences, look up the correct display value in
-                // the preference's 'entries' list.
                 ListPreference listPreference = (ListPreference) preference;
                 int index = listPreference.findIndexOfValue(stringValue);
 
@@ -213,29 +229,24 @@ public class SettingsActivity extends PreferenceActivity {
                                 ? listPreference.getEntries()[index]
                                 : null);
 
-            } else if (preference instanceof RingtonePreference) {
-                // For ringtone preferences, look up the correct display value
-                // using RingtoneManager.
-                if (TextUtils.isEmpty(stringValue)) {
-                    // Empty values correspond to 'silent' (no ringtone).
-                    preference.setSummary(R.string.pref_ringtone_silent);
-
-                } else {
-                    Ringtone ringtone = RingtoneManager.getRingtone(
-                            preference.getContext(), Uri.parse(stringValue));
-
-                    if (ringtone == null) {
-                        // Clear the summary if there was a lookup error.
-                        preference.setSummary(null);
-                    } else {
-                        // Set the summary to reflect the new ringtone display
-                        // name.
-                        String name = ringtone.getTitle(preference.getContext());
-                        preference.setSummary(name);
-                    }
+                if(preference.getKey().equals("Tops")) {
+                    editor.putString(Constants.KEY_DS_1_NAME, stringValue);
+                    editor.apply();
+                } else if(preference.getKey().equals("Bottoms")) {
+                    editor.putString(Constants.KEY_DS_2_NAME, stringValue);
+                    editor.apply();
+                } else if(preference.getKey().equals("Shoes")) {
+                    editor.putString(Constants.KEY_DS_3_NAME, stringValue);
+                    editor.apply();
                 }
+            } else if (preference instanceof CheckBoxPreference) {
+                if(preference.getKey().equals("show_wishlist_item_in_compare")) {
 
-            } else {
+                    editor.putBoolean(Constants.KEY_WISHLIST_IN_COMPARE, Boolean.parseBoolean(stringValue));
+                    editor.apply();
+                    System.out.println("Wishlist in Compare changed to :" + Boolean.parseBoolean(stringValue));
+                }
+            }  else {
                 // For all other preferences, set the summary to the value's
                 // simple string representation.
                 preference.setSummary(stringValue);
@@ -253,73 +264,70 @@ public class SettingsActivity extends PreferenceActivity {
      *
      * @see #sBindPreferenceSummaryToValueListener
      */
-    private static void bindPreferenceSummaryToValue(Preference preference) {
+    private static void bindPreferenceSummaryToValue(Preference preference, Object initialValue) {
         // Set the listener to watch for value changes.
         preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
 
         // Trigger the listener immediately with the preference's
         // current value.
-        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
-                PreferenceManager
-                        .getDefaultSharedPreferences(preference.getContext())
-                        .getString(preference.getKey(), ""));
+        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference, initialValue);
     }
 
-    /**
-     * This fragment shows general preferences only. It is used when the
-     * activity is showing a two-pane settings UI.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class GeneralPreferenceFragment extends PreferenceFragment {
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_general);
+//    /**
+//     * This fragment shows general preferences only. It is used when the
+//     * activity is showing a two-pane settings UI.
+//     */
+//    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+//    public static class GeneralPreferenceFragment extends PreferenceFragment {
+//        @Override
+//        public void onCreate(Bundle savedInstanceState) {
+//            super.onCreate(savedInstanceState);
+//            addPreferencesFromResource(R.xml.pref_general);
+//
+//            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
+//            // to their values. When their values change, their summaries are
+//            // updated to reflect the new value, per the Android Design
+//            // guidelines.
+//            bindPreferenceSummaryToValue(findPreference("example_text"));
+//            bindPreferenceSummaryToValue(findPreference("example_list"));
+//        }
+//    }
 
-            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
-            bindPreferenceSummaryToValue(findPreference("example_text"));
-            bindPreferenceSummaryToValue(findPreference("example_list"));
-        }
-    }
+//    /**
+//     * This fragment shows notification preferences only. It is used when the
+//     * activity is showing a two-pane settings UI.
+//     */
+//    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+//    public static class NotificationPreferenceFragment extends PreferenceFragment {
+//        @Override
+//        public void onCreate(Bundle savedInstanceState) {
+//            super.onCreate(savedInstanceState);
+//            addPreferencesFromResource(R.xml.pref_notification);
+//
+//            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
+//            // to their values. When their values change, their summaries are
+//            // updated to reflect the new value, per the Android Design
+//            // guidelines.
+//            bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
+//        }
+//    }
 
-    /**
-     * This fragment shows notification preferences only. It is used when the
-     * activity is showing a two-pane settings UI.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class NotificationPreferenceFragment extends PreferenceFragment {
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_notification);
-
-            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
-            bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
-        }
-    }
-
-    /**
-     * This fragment shows data and sync preferences only. It is used when the
-     * activity is showing a two-pane settings UI.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class DataSyncPreferenceFragment extends PreferenceFragment {
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_data_sync);
-
-            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
-            bindPreferenceSummaryToValue(findPreference("sync_frequency"));
-        }
-    }
+//    /**
+//     * This fragment shows data and sync preferences only. It is used when the
+//     * activity is showing a two-pane settings UI.
+//     */
+//    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+//    public static class DataSyncPreferenceFragment extends PreferenceFragment {
+//        @Override
+//        public void onCreate(Bundle savedInstanceState) {
+//            super.onCreate(savedInstanceState);
+//            addPreferencesFromResource(R.xml.pref_data_sync);
+//
+//            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
+//            // to their values. When their values change, their summaries are
+//            // updated to reflect the new value, per the Android Design
+//            // guidelines.
+//            bindPreferenceSummaryToValue(findPreference("sync_frequency"));
+//        }
+//    }
 }
