@@ -40,6 +40,10 @@ public class NewCompareActivity extends Activity {
     FloatingActionButton saveCompareFAB;
     ArrayList<Category> allCategories;
     Activity thisActivity;
+    String[] upperCategoriesList2;
+    ArrayList<CharSequence> upperCategoriesList;
+    AlertDialog.Builder builder1;
+    AlertDialog.Builder builder2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +68,7 @@ public class NewCompareActivity extends Activity {
             }
         });
 
-        final ArrayList<CharSequence> upperCategoriesList = new ArrayList<CharSequence>();
+        upperCategoriesList = new ArrayList<CharSequence>();
         upperCategoriesList.add("None");
 
         for(Category cat : allCategories) {
@@ -73,18 +77,19 @@ public class NewCompareActivity extends Activity {
                 upperCategoriesList.add(cat.getName());
         }
         String tmpString = upperCategoriesList.toString();
-        final String[] upperCategoriesList2 = stringToArray(tmpString);
+        upperCategoriesList2 = stringToArray(tmpString);
 
         final ArrayAdapter<CharSequence> arrayAdapter = new ArrayAdapter<CharSequence>(
                 this,
                 android.R.layout.simple_list_item_1,
                 upperCategoriesList );
 
+        builder1 = new AlertDialog.Builder(NewCompareActivity.this);
+        builder2 = new AlertDialog.Builder(NewCompareActivity.this);
+
         img1.setOnClickListener(new AdapterView.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                final AlertDialog.Builder builder1 = new AlertDialog.Builder(NewCompareActivity.this);
 
                 builder1.setTitle("Choose Category");
                 builder1.setItems(upperCategoriesList2, new DialogInterface.OnClickListener() {
@@ -93,7 +98,7 @@ public class NewCompareActivity extends Activity {
                             firstCatItems = Item.getItemsByCategoryId(getApplicationContext(), allCategories.get(item - 1).getId());
                             for(int i =  0; i  < allCategories.size(); i++){
                                 if(allCategories.get(i).getName().equals(upperCategoriesList.get(item))){
-                                    CompareImageAdapter adapter = new CompareImageAdapter(getApplicationContext(), i);
+                                    CompareImageAdapter adapter = new CompareImageAdapter(thisActivity, i, 1);
                                     viewPager1.setAdapter(adapter);
                                     break;
                                 }
@@ -115,7 +120,7 @@ public class NewCompareActivity extends Activity {
             @Override
             public void onClick(View view) {
 
-                final AlertDialog.Builder builder2 = new AlertDialog.Builder(NewCompareActivity.this);
+
                 builder2.setTitle("Choose Category");
                 builder2.setItems(upperCategoriesList2, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int item) {
@@ -123,7 +128,7 @@ public class NewCompareActivity extends Activity {
                             secontCatItems = Item.getItemsByCategoryId(getApplicationContext(), allCategories.get(item - 1).getId());
                             for(int i =  0; i  < allCategories.size(); i++){
                                 if(allCategories.get(i).getName().equals(upperCategoriesList.get(item))){
-                                    CompareImageAdapter adapter = new CompareImageAdapter(getApplicationContext(), i);
+                                    CompareImageAdapter adapter = new CompareImageAdapter(thisActivity, i, 2);
                                     viewPager2.setAdapter(adapter);
                                     break;
                                 }
@@ -234,4 +239,13 @@ public class NewCompareActivity extends Activity {
         return str2array;
     }
 
+    public void showCategoryChooser(int p_builder) {
+       switch (p_builder){
+           case 1:
+               builder1.show();
+                break;
+           case 2:
+               builder2.show();
+       }
+    }
 }
