@@ -113,15 +113,6 @@ public class NewItemActivity extends Activity {
         stars.getDrawable(0).setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
 
         final Activity thisActivity = this;
-        FloatingActionButton saveItemFAB = (FloatingActionButton) findViewById(R.id.save_item);
-        saveItemFAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveItem();
-                setResult(RESULT_OK);
-                thisActivity.finish();
-            }
-        });
 
         attributeTypesList = new ArrayList<AttributeType>();
         itemNameExitText = (EditText) findViewById(R.id.itemName);
@@ -525,6 +516,11 @@ public class NewItemActivity extends Activity {
             case android.R.id.home:
                 super.onBackPressed();
                 return true;
+
+            case R.id.action_item_save:
+                saveItem();
+                setResult(RESULT_OK);
+                this.finish();
         }
 
         return super.onOptionsItemSelected(item);
