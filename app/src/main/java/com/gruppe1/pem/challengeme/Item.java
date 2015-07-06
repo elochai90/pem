@@ -135,12 +135,16 @@ public class Item {
     }
 
 
-    public static ArrayList<Item> getItemsByCategoryId(Context p_context, int p_categoryId) {
+    public static ArrayList<Item> getItemsByCategoryId(Context p_context, int p_categoryId, boolean showAlsoWishlistItems) {
         DataBaseHelper dbHelper = new DataBaseHelper(p_context);
         dbHelper.init();
         dbHelper.setTable(Constants.ITEMS_DB_TABLE);
         dbHelper.setColumns(new String[]{"*"});
-        dbHelper.setWhere("", new String[]{"category_id='" + p_categoryId + "' AND is_wish=0"});
+        if (showAlsoWishlistItems) {
+            dbHelper.setWhere("", new String[]{"category_id='" + p_categoryId + "'"});
+        } else {
+            dbHelper.setWhere("", new String[]{"category_id='" + p_categoryId + "' AND is_wish=0"});
+        }
         dbHelper.setOrderBy("name ASC");
         Cursor cursor = dbHelper.select();
 
@@ -184,12 +188,16 @@ public class Item {
         dbHelper.close();
         return itemList;
     }
-    public static int getItemsCountByCategoryId(Context p_context, int p_categoryId) {
+    public static int getItemsCountByCategoryId(Context p_context, int p_categoryId, boolean showAlsoWishlistItems) {
         DataBaseHelper dbHelper = new DataBaseHelper(p_context);
         dbHelper.init();
         dbHelper.setTable(Constants.ITEMS_DB_TABLE);
         dbHelper.setColumns(new String[]{"COUNT(*)"});
-        dbHelper.setWhere("", new String[]{"category_id='" + p_categoryId + "' AND is_wish=0"});
+        if (showAlsoWishlistItems) {
+            dbHelper.setWhere("", new String[]{"category_id='" + p_categoryId + "'"});
+        } else {
+            dbHelper.setWhere("", new String[]{"category_id='" + p_categoryId + "' AND is_wish=0"});
+        }
         Cursor cursor = dbHelper.select();
 
         int itemsCount = 0;

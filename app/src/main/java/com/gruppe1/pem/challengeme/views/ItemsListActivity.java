@@ -247,7 +247,7 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
         DataBaseHelper db_helper = new DataBaseHelper(this);
         db_helper.init();
 
-        ArrayList<Item> allCategoryItems = Item.getItemsByCategoryId(this, categoryId);
+        ArrayList<Item> allCategoryItems = Item.getItemsByCategoryId(this, categoryId, false);
 
         Iterator catIt = allCategoryItems.iterator();
 

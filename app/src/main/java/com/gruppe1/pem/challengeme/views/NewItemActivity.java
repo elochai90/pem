@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -34,6 +35,7 @@ import com.github.clans.fab.FloatingActionButton;
 import com.gruppe1.pem.challengeme.Attribute;
 import com.gruppe1.pem.challengeme.AttributeType;
 import com.gruppe1.pem.challengeme.Category;
+import com.gruppe1.pem.challengeme.DefaultSize;
 import com.gruppe1.pem.challengeme.HSVColorPickerDialog;
 import com.gruppe1.pem.challengeme.Item;
 import com.gruppe1.pem.challengeme.R;
@@ -88,12 +90,15 @@ public class NewItemActivity extends Activity {
 
     private Bundle extras;
 
+    private SharedPreferences sharedPreferences;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_item);
 
+        sharedPreferences = getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
 
         db_helper = new DataBaseHelper(this);
         db_helper.init();
@@ -195,6 +200,7 @@ public class NewItemActivity extends Activity {
         ratingBar.setRating(editItem.getRating());
 
         attrCategoryValue.setSelection(((CategoriesDropdownAdapter) attrCategoryValue.getAdapter()).findPositionOfCategoryId(editItem.getCategoryId()));
+        attrCategorySelected = new Category(getApplicationContext(), (int)categoriesDropdownAdapter.getItemId(attrCategoryValue.getSelectedItemPosition()), getDb_helper());
         attrColorValue.setSelection(((ColorsDropdownAdapter) attrColorValue.getAdapter()).findPositionOfColorId(editItem.getPrimaryColorId()));
 
 //        attrColorValue.setText(editItem.getPrimaryColor());
@@ -367,12 +373,16 @@ public class NewItemActivity extends Activity {
             textAttributeValue.setSingleLine(true);
             textAttributeValue.setTextSize(18);
             ViewGroup.LayoutParams attibuteValueLayoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
-//              if(value is set) TODO: check if value was already set / if edit or new
             textAttributeValue.setLayoutParams(attibuteValueLayoutParams);
             textAttributeValue.setId(R.id.stringAttrField);
 
+            if(attributeType.getName().equals("Size")) {
+                textAttributeValue.setTag("size");
+            }
             if(attributeValue != null) {
                 textAttributeValue.setText(attributeValue.toString());
+            } else if(attributeType.getName().equals("Size")) {
+                textAttributeValue.setText(getSizeValueBySizeType(attrCategorySelected.getDefaultSizeType()));
             }
 
             attributeValueView = textAttributeValue;
@@ -383,12 +393,28 @@ public class NewItemActivity extends Activity {
         attributesView.addView(attributeLayout, attributesView.getChildCount());
     }
 
-
+    private String getSizeValueBySizeType(int sizeType) {
+        String sizeValue = "";
+        switch(sizeType) {
+            case 0:
+                sizeValue = sharedPreferences.getString(Constants.KEY_DS_1_NAME, "");
+                break;
+            case 1:
+                sizeValue = sharedPreferences.getString(Constants.KEY_DS_2_NAME, "");
+                break;
+            case 2:
+                sizeValue = sharedPreferences.getString(Constants.KEY_DS_3_NAME, "");
+                break;
+            default:
+                sizeValue = sharedPreferences.getString(Constants.KEY_DS_NONE, "");
+                break;
+        }
+        return sizeValue;
+    }
 
     private void setupAttributeViews() {
         ArrayList<AttributeType> allAttributeTypes = AttributeType.getAttributeTypes(getApplicationContext());
         Iterator allAttrTypesIterator =  allAttributeTypes.iterator();
-        // TODO: get all attributes with values for this Item
         while(allAttrTypesIterator.hasNext()) {
             AttributeType tmpAttrType = (AttributeType) allAttrTypesIterator.next();
             if(!attributeTypesList.contains(tmpAttrType)) {
@@ -551,6 +577,7 @@ public class NewItemActivity extends Activity {
                     getDb_helper().setTable(Constants.CATEGORIES_DB_TABLE);
                     attrCategorySelected = new Category(getBaseContext(), (int) categoriesDropdownAdapter.getItemId(position), getDb_helper());
                     attrCategoryValue.setSelection(position);
+                    ((TextView)attributesView.findViewWithTag("size")).setText(getSizeValueBySizeType(attrCategorySelected.getDefaultSizeType()));
                 }
             }
 

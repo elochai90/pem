@@ -40,7 +40,7 @@ public class DefaultGridAdapter extends ArrayAdapter<ListItemIconName> {
         this.context = context;
         this.data = data;
         this.isCategory = isCategory;
-        this.picassoSingleton = PicassoSingleton.getInstance();
+        this.picassoSingleton = PicassoSingleton.getInstance(context);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class DefaultGridAdapter extends ArrayAdapter<ListItemIconName> {
 
 
         if(isCategory) {
-            holder.rightTextView.setText(Item.getItemsCountByCategoryId(context, item.elementId) + "");
+            holder.rightTextView.setText(Item.getItemsCountByCategoryId(context, item.elementId, false) + "");
         }
         //}
         return row;

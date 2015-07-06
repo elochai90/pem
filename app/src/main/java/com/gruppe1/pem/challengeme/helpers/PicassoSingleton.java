@@ -19,13 +19,10 @@ public class PicassoSingleton {
         this.context = p_context;
     }
 
-    public static void initInstance(Context p_context){
+    public static PicassoSingleton getInstance(Context p_context){
         if(picassoSingleton == null) {
             picassoSingleton = new PicassoSingleton(p_context);
         }
-    }
-
-    public static PicassoSingleton getInstance(){
         return picassoSingleton;
     }
 

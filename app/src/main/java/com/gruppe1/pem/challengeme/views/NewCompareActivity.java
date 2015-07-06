@@ -2,7 +2,9 @@ package com.gruppe1.pem.challengeme.views;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -22,6 +24,7 @@ import com.gruppe1.pem.challengeme.Compare;
 import com.gruppe1.pem.challengeme.Item;
 import com.gruppe1.pem.challengeme.R;
 import com.gruppe1.pem.challengeme.adapters.CompareImageAdapter;
+import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 
 import java.text.SimpleDateFormat;
@@ -45,11 +48,15 @@ public class NewCompareActivity extends Activity {
     AlertDialog.Builder builder1;
     AlertDialog.Builder builder2;
     private  ArrayList<Item> items;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_compare);
+
+
+        sharedPreferences = getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
 
         viewPager1 = (ViewPager) findViewById(R.id.view_pager1);
         viewPager2 = (ViewPager) findViewById(R.id.view_pager2);
@@ -73,9 +80,9 @@ public class NewCompareActivity extends Activity {
         upperCategoriesList.add("None");
 
         for(Category cat : allCategories) {
-            int catsize = Item.getItemsCountByCategoryId(getApplicationContext(), cat.getId());
+            int catsize = Item.getItemsCountByCategoryId(getApplicationContext(), cat.getId(), sharedPreferences.getBoolean(Constants.KEY_WISHLIST_IN_COMPARE, false));
             if(catsize > 0) {
-                items = Item.getItemsByCategoryId(getApplicationContext(), cat.getId());
+                items = Item.getItemsByCategoryId(getApplicationContext(), cat.getId(), sharedPreferences.getBoolean(Constants.KEY_WISHLIST_IN_COMPARE, false));
                 for (int i = 0; i < items.size(); i++) {
                     if (items.get(i).getImageFile() != null) {
                         upperCategoriesList.add(cat.getName());
@@ -104,7 +111,7 @@ public class NewCompareActivity extends Activity {
                 builder1.setItems(upperCategoriesList2, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int item) {
                         if (item != 0) {
-                            firstCatItems = Item.getItemsByCategoryId(getApplicationContext(), allCategories.get(item - 1).getId());
+                            firstCatItems = Item.getItemsByCategoryId(getApplicationContext(), allCategories.get(item - 1).getId(), sharedPreferences.getBoolean(Constants.KEY_WISHLIST_IN_COMPARE, false));
                             for(int i =  0; i  < allCategories.size(); i++){
                                 if(allCategories.get(i).getName().equals(upperCategoriesList.get(item))){
                                     CompareImageAdapter adapter = new CompareImageAdapter(thisActivity, i, 1);
@@ -134,7 +141,7 @@ public class NewCompareActivity extends Activity {
                 builder2.setItems(upperCategoriesList2, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int item) {
                         if (item != 0) {
-                            secontCatItems = Item.getItemsByCategoryId(getApplicationContext(), allCategories.get(item - 1).getId());
+                            secontCatItems = Item.getItemsByCategoryId(getApplicationContext(), allCategories.get(item - 1).getId(), sharedPreferences.getBoolean(Constants.KEY_WISHLIST_IN_COMPARE, false));
                             for(int i =  0; i  < allCategories.size(); i++){
                                 if(allCategories.get(i).getName().equals(upperCategoriesList.get(item))){
                                     CompareImageAdapter adapter = new CompareImageAdapter(thisActivity, i, 2);

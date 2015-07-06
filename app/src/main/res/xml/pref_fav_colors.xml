@@ -2,11 +2,7 @@
     xmlns:androi="http://schemas.android.com/apk/res-auto">
 
     <MultiSelectListPreference
-        android:title="@string/pref_fav_colour"
-        android:entryValues="@array/colours_text"
-        android:entries="@array/colours_text"
-
-    />
-
+        android:key="favorite_colors"
+        android:title="@string/pref_fav_colour"/>
 
 </PreferenceScreen>

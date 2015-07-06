@@ -46,7 +46,7 @@ public class DefaultListAdapter extends ArrayAdapter<ListItemIconName> {
         db_helper = new DataBaseHelper(context);
         db_helper.init();
 
-        this.picassoSingleton = PicassoSingleton.getInstance();
+        this.picassoSingleton = PicassoSingleton.getInstance(context);
     }
 
     @Override
@@ -86,7 +86,7 @@ public class DefaultListAdapter extends ArrayAdapter<ListItemIconName> {
             }
 
             if(isCategory) {
-                holder.rightTextView.setText(Item.getItemsCountByCategoryId(context, item.elementId) + "");
+                holder.rightTextView.setText(Item.getItemsCountByCategoryId(context, item.elementId, false) + "");
                 holder.listItemRatingBar.setVisibility(View.INVISIBLE);
             } else {
                 getDb_helper().setTable(Constants.ITEMS_DB_TABLE);

@@ -36,7 +36,7 @@ public class CompareListAdapter extends ArrayAdapter<Compare> {
         this.data = data;
         this.dbHelper = new DataBaseHelper(context);
         this.dbHelper.init();
-        this.picassoSingleton = PicassoSingleton.getInstance();
+        this.picassoSingleton = PicassoSingleton.getInstance(context);
     }
 
     @Override

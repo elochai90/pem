@@ -2,6 +2,7 @@ package com.gruppe1.pem.challengeme.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.support.v4.view.PagerAdapter;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import com.gruppe1.pem.challengeme.Category;
 import com.gruppe1.pem.challengeme.helpers.Constants;
+import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 import com.gruppe1.pem.challengeme.helpers.ImageLoader;
 import com.gruppe1.pem.challengeme.Item;
 import com.gruppe1.pem.challengeme.helpers.PicassoSingleton;
@@ -28,22 +30,25 @@ public class CompareImageAdapter extends PagerAdapter {
     private PicassoSingleton picassoSingleton;
     NewCompareActivity activity;
     public int builder;
+    private SharedPreferences sharedPreferences;
 
     public CompareImageAdapter(Activity activity){
+        this.sharedPreferences = activity.getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
         this.activity = (NewCompareActivity)activity;
         this.context = activity.getApplicationContext();
         this.context = activity.getApplicationContext();
-        this.picassoSingleton = PicassoSingleton.getInstance();
+        this.picassoSingleton = PicassoSingleton.getInstance(activity);
     }
 
     public CompareImageAdapter(Activity activity, int p_position, int p_builder) {
+        this.sharedPreferences = activity.getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
         this.activity = (NewCompareActivity) activity;
         this.context = activity.getApplicationContext();
         Category chosenCategory = Category.getAllCategories(context).get(p_position);
         Log.d("Category: ", chosenCategory.getName());
         this.builder = p_builder;
 
-        categoryItems = Item.getItemsByCategoryId(activity, chosenCategory.getId());
+        categoryItems = Item.getItemsByCategoryId(activity, chosenCategory.getId(), sharedPreferences.getBoolean(Constants.KEY_WISHLIST_IN_COMPARE, false));
 
         for(int i = 0; i < categoryItems.size(); i++){
             String imageFile = categoryItems.get(i).getImageFile();
@@ -52,7 +57,7 @@ public class CompareImageAdapter extends PagerAdapter {
             }
         }
 
-        this.picassoSingleton = PicassoSingleton.getInstance();
+        this.picassoSingleton = PicassoSingleton.getInstance(activity);
     }
 
     @Override

@@ -31,6 +31,7 @@ public class Constants {
     public static final String KEY_VIEW_COMPARE_AS_LIST = "CompareViewAsList";
     public static final String KEY_FIRST_DB_INIT = "FirstDbInit";
     public static final String KEY_WISHLIST_IN_COMPARE = "ShowWishlistItemsInCompares";
+    public static final String KEY_FAVORITE_COLORS = "FavoriteColors";
 
     // Shared Preferences Keys for default sizes
     public static final String KEY_DS_1_NAME = "Tops";

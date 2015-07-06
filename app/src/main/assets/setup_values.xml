@@ -161,19 +161,6 @@
 
     </attribute_types>
 
-    <items>
-
-        <item>
-            <name>my first item</name>
-            <image></image>
-            <category_id>1</category_id>
-            <wish>0</wish>
-            <primary_color>2</primary_color>
-            <rating>3</rating>
-        </item>
-
-    </items>
-
     <colors>
         <color>
             <name>Black</name>
