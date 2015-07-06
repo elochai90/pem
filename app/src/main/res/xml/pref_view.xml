@@ -6,4 +6,5 @@
         android:title="@string/show_wishlist_item_in_compare"
         android:defaultValue="false"
         />
+
 </PreferenceScreen>

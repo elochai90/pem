@@ -119,10 +119,10 @@ public class SettingsActivity extends PreferenceActivity {
         addPreferencesFromResource(R.xml.pref_data_sync);
 
         // Add 'view preferences' preferences, and a corresponding header.
-        fakeHeader = new PreferenceCategory(this);
-        fakeHeader.setTitle("Default View:");
-        getPreferenceScreen().addPreference(fakeHeader);
-        addPreferencesFromResource(R.xml.pref_view);
+       // fakeHeader = new PreferenceCategory(this);
+       // fakeHeader.setTitle("Default View:");
+        //getPreferenceScreen().addPreference(fakeHeader);
+        //addPreferencesFromResource(R.xml.pref_view);
 
 
         boolean show_wishlist_item_in_compare;

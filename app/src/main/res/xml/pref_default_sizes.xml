@@ -5,22 +5,19 @@
         android:key="Tops"
         android:title="@string/standard_tops"
         android:entries="@array/sizes_text"
-        android:entryValues="@array/sizes_text"
-        />
+        android:entryValues="@array/sizes_text" />
 
     <ListPreference
         android:key="Bottoms"
         android:title="@string/standard_bottoms"
         android:entries="@array/sizes_text"
-        android:entryValues="@array/sizes_text"
-        />
+        android:entryValues="@array/sizes_text" />
 
     <ListPreference
         android:key="Shoes"
         android:title="@string/standard_shoes"
         android:entries="@array/sizes_shoes_text"
-        android:entryValues="@array/sizes_shoes_text"
-        />
+        android:entryValues="@array/sizes_shoes_text" />
 
 
 </PreferenceScreen>
