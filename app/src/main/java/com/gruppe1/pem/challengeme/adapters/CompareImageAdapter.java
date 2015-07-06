@@ -40,15 +40,13 @@ public class CompareImageAdapter extends PagerAdapter {
         this.picassoSingleton = PicassoSingleton.getInstance(activity);
     }
 
-    public CompareImageAdapter(Activity activity, int p_position, int p_builder) {
+    public CompareImageAdapter(Activity activity, ArrayList<Item> items, int p_builder) {
         this.sharedPreferences = activity.getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
         this.activity = (NewCompareActivity) activity;
         this.context = activity.getApplicationContext();
-        Category chosenCategory = Category.getAllCategories(context).get(p_position);
-        Log.d("Category: ", chosenCategory.getName());
         this.builder = p_builder;
 
-        categoryItems = Item.getItemsByCategoryId(activity, chosenCategory.getId(), sharedPreferences.getBoolean(Constants.KEY_WISHLIST_IN_COMPARE, false));
+        categoryItems = items;
 
         for(int i = 0; i < categoryItems.size(); i++){
             String imageFile = categoryItems.get(i).getImageFile();
