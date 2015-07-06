@@ -44,6 +44,7 @@ public class NewCompareActivity extends Activity {
     ArrayList<CharSequence> upperCategoriesList;
     AlertDialog.Builder builder1;
     AlertDialog.Builder builder2;
+    private  ArrayList<Item> items;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +74,16 @@ public class NewCompareActivity extends Activity {
 
         for(Category cat : allCategories) {
             int catsize = Item.getItemsCountByCategoryId(getApplicationContext(), cat.getId());
-            if(catsize > 0)
-                upperCategoriesList.add(cat.getName());
+            if(catsize > 0) {
+                items = Item.getItemsByCategoryId(getApplicationContext(), cat.getId());
+                for (int i = 0; i < items.size(); i++) {
+                    if (items.get(i).getImageFile() != null) {
+                        upperCategoriesList.add(cat.getName());
+                        break;
+                    }
+                }
+            }
+
         }
         String tmpString = upperCategoriesList.toString();
         upperCategoriesList2 = stringToArray(tmpString);
