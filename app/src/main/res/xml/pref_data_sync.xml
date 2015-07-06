@@ -8,8 +8,13 @@
 
     <!-- This preference simply launches an intent when selected. Use this UI sparingly, per
          design guidelines. -->
-    <Preference android:title="@string/pref_title_system_sync_settings">
-        <intent android:action="android.settings.SYNC_SETTINGS" />
-    </Preference>
+
+    <MultiSelectListPreference
+        android:title="@string/pref_fav_colour"
+        android:entryValues="@array/colours_text"
+        android:entries="@array/colours_text"
+
+    />
+
 
 </PreferenceScreen>
