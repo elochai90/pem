@@ -285,6 +285,7 @@ public class Item {
         this.m_dbHelper.setWhere("", new String[]{"_id=" + this.m_id});
         this.m_dbHelper.delete();
         this.m_dbHelper.close();
+        Compare.deleteComparesByItemId(this.m_context, this.m_id);
     }
 
 }
