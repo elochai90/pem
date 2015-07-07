@@ -1,60 +1,35 @@
 package com.gruppe1.pem.challengeme;
 
-import android.app.DownloadManager;
 import android.content.Context;
-import android.graphics.Color;
-import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
-import android.media.Image;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-/**
- * Created by bianka on 10.06.2015.
- */
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
-
 import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.Bundle;
 import android.util.Log;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.app.Activity;
 
 public class WeatherRequest {
 
     String etResponse;
     String tvIsConnected;
     Context context;
-    Boolean forecast = false;
 
     ImageView weatherImageView;
     ImageView weatherImg1;
@@ -97,9 +72,7 @@ public class WeatherRequest {
         String[] location = getGPS();
 
         // call AsynTask to perform network operation on separate thread
-        forecast = false;
         new HttpAsyncTask().execute("http://api.openweathermap.org/data/2.5/weather?q=" + location[0] + "," + location[1]);
-        forecast = true;
         new HttpAsyncTask().execute("http://api.openweathermap.org/data/2.5/forecast?q=" + location[0] + "," + location[1]);
     }
 
@@ -163,8 +136,6 @@ public class WeatherRequest {
     }
 
     public int getImage(String code) {
-        // TODO: take codes from here: http://openweathermap.org/wiki/API/Weather_Condition_Codes
-        // TODO: and switch images
 
         switch(code){
             case "200":
@@ -228,12 +199,10 @@ public class WeatherRequest {
             JSONObject json = null; // convert String to JSONObject
             try {
                 json = new JSONObject(result);
-                Log.d("FORECAST: ", forecast.toString());
-                Log.d("RESULT: ", result);
+
                 if(json.has("weather")){
                     JSONArray weather = json.getJSONArray("weather"); // get articles array
                     String weather_main = weather.getJSONObject(0).getString("main");
-                    String desc = weather.getJSONObject(0).getString("description");
                     String temp = Math.round(json.getJSONObject("main").getDouble("temp") - 273.15) + "°C";
                     String code = weather.getJSONObject(0).getString("id");
 
@@ -260,7 +229,7 @@ public class WeatherRequest {
 
                         if(!segs[0].equals(currentDateandTime)){
                             if(segs[1].equals("14")){
-                                Log.d("New TIME:", forecast.get(i).getClass().toString());
+
                                 JSONArray weather = forecast.getJSONObject(i).getJSONArray("weather"); // get articles array
                                 String weather_main = weather.getJSONObject(0).getString("main");
                                 String temp = Math.round(forecast.getJSONObject(i).getJSONObject("main").getDouble("temp") - 273.15) + "°C";
@@ -269,8 +238,7 @@ public class WeatherRequest {
                                 days.add(segs[0]);
                                 temps.add(temp);
                                 codes.add(code);
-                                Log.d("WEATHERtemp",temp);
-                                Log.d("WEATHERcode",code);
+
                             }
                         }
 
