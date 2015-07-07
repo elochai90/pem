@@ -14,7 +14,6 @@ import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -34,27 +33,22 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.github.clans.fab.FloatingActionButton;
 import com.gruppe1.pem.challengeme.Attribute;
 import com.gruppe1.pem.challengeme.AttributeType;
 import com.gruppe1.pem.challengeme.Category;
-import com.gruppe1.pem.challengeme.DefaultSize;
 import com.gruppe1.pem.challengeme.HSVColorPickerDialog;
 import com.gruppe1.pem.challengeme.Item;
 import com.gruppe1.pem.challengeme.ListItemIconName;
 import com.gruppe1.pem.challengeme.R;
 import com.gruppe1.pem.challengeme.adapters.CompareCategoryOverlayGridAdapter;
-import com.gruppe1.pem.challengeme.adapters.IconsGridAdapter;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 import com.gruppe1.pem.challengeme.helpers.ImageLoader;
-import com.gruppe1.pem.challengeme.adapters.CategoriesDropdownAdapter;
 import com.gruppe1.pem.challengeme.adapters.ColorsDropdownAdapter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -264,11 +258,10 @@ public class NewItemActivity extends Activity {
 
         ratingBar.setRating(editItem.getRating());
 
-        attrCategorySelected = new Category(getApplicationContext(), editItem.getId(), getDb_helper());
+        attrCategorySelected = new Category(getApplicationContext(), editItem.getCategoryId(), getDb_helper());
         attrCategoryValue.setText(attrCategorySelected.getName());
         attrColorSelected = new com.gruppe1.pem.challengeme.Color(getApplicationContext(), editItem.getPrimaryColorId(), getDb_helper());
         attrColorValue.setBackgroundColor(Color.parseColor(attrColorSelected.getHexColor()));
-        attrCategoryValue.setText(attrColorSelected.getName());
 
         try {
             String imgPath = editItem.getImageFile();
