@@ -1,32 +1,32 @@
 package com.gruppe1.pem.challengeme.views;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
+import android.preference.MultiSelectListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.preference.RingtonePreference;
-import android.text.TextUtils;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
 
 
+import com.gruppe1.pem.challengeme.Color;
 import com.gruppe1.pem.challengeme.R;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -98,31 +98,31 @@ public class SettingsActivity extends PreferenceActivity {
             return;
         }
 
-        // In the simplified UI, fragments are not used at all and we instead
-        // use the older PreferenceActivity APIs.
-
-        // Add 'general' preferences.
         addPreferencesFromResource(R.xml.pref_general);
 
-        // Add 'notifications' preferences, and a corresponding header.
         PreferenceCategory fakeHeader = new PreferenceCategory(this);
         fakeHeader.setTitle("Standard Sizes:");
         getPreferenceScreen().addPreference(fakeHeader);
-        addPreferencesFromResource(R.xml.pref_notification);
+        addPreferencesFromResource(R.xml.pref_default_sizes);
 
-
-
-        // Add 'data and sync' preferences, and a corresponding header.
         fakeHeader = new PreferenceCategory(this);
         fakeHeader.setTitle("Favourite Colors:");
         getPreferenceScreen().addPreference(fakeHeader);
-        addPreferencesFromResource(R.xml.pref_data_sync);
+        addPreferencesFromResource(R.xml.pref_fav_colors);
 
-        // Add 'view preferences' preferences, and a corresponding header.
-       // fakeHeader = new PreferenceCategory(this);
-       // fakeHeader.setTitle("Default View:");
-        //getPreferenceScreen().addPreference(fakeHeader);
-        //addPreferencesFromResource(R.xml.pref_view);
+        fakeHeader = new PreferenceCategory(this);
+        fakeHeader.setTitle("Show Wishlist Items in Compares:");
+        getPreferenceScreen().addPreference(fakeHeader);
+        addPreferencesFromResource(R.xml.pref_view);
+
+        ArrayList<Color> allColors = com.gruppe1.pem.challengeme.Color.getAllColors(this);
+        CharSequence[] allColorsChars = new CharSequence[allColors.size()];
+        for(int i = 0; i < allColors.size(); i++) {
+            allColorsChars[i] = allColors.get(i).getName();
+        }
+        MultiSelectListPreference favColorPreferences = (MultiSelectListPreference) findPreference("favorite_colors");
+        favColorPreferences.setEntries(allColorsChars);
+        favColorPreferences.setEntryValues(allColorsChars);
 
 
         boolean show_wishlist_item_in_compare;
@@ -164,6 +164,16 @@ public class SettingsActivity extends PreferenceActivity {
                     .getString(findPreference("Shoes").getKey(), "");
         }
         bindPreferenceSummaryToValue(findPreference("Shoes"), shoes_default);
+
+        Set<String> favorite_colors;
+        if (sharedPreferences.contains(Constants.KEY_FAVORITE_COLORS)) {
+            favorite_colors = sharedPreferences.getStringSet(Constants.KEY_FAVORITE_COLORS, new HashSet<String>());
+        } else {
+            favorite_colors = PreferenceManager
+                    .getDefaultSharedPreferences(findPreference("favorite_colors").getContext())
+                    .getStringSet(findPreference("favorite_colors").getKey(), new HashSet<String>());
+        }
+        bindPreferenceSummaryToValue(findPreference("favorite_colors"), favorite_colors);
     }
 
     /**
@@ -203,7 +213,6 @@ public class SettingsActivity extends PreferenceActivity {
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public void onBuildHeaders(List<Header> target) {
         if (!isSimplePreferences(this)) {
-            loadHeadersFromResource(R.xml.pref_headers, target);
         }
     }
 
@@ -216,9 +225,8 @@ public class SettingsActivity extends PreferenceActivity {
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
             String stringValue = value.toString();
-
-
             System.out.println("Changed: " + preference.getKey() + " - " + stringValue);
+
             if (preference instanceof ListPreference) {
                 ListPreference listPreference = (ListPreference) preference;
                 int index = listPreference.findIndexOfValue(stringValue);
@@ -241,12 +249,17 @@ public class SettingsActivity extends PreferenceActivity {
                 }
             } else if (preference instanceof CheckBoxPreference) {
                 if(preference.getKey().equals("show_wishlist_item_in_compare")) {
-
                     editor.putBoolean(Constants.KEY_WISHLIST_IN_COMPARE, Boolean.parseBoolean(stringValue));
                     editor.apply();
-                    System.out.println("Wishlist in Compare changed to :" + Boolean.parseBoolean(stringValue));
                 }
-            }  else {
+            } else if (preference instanceof MultiSelectListPreference) {
+                if(preference.getKey().equals("favorite_colors")) {
+                    HashSet<String> values = (HashSet<String>) value;
+                    editor.putStringSet(Constants.KEY_FAVORITE_COLORS,  values);
+                    editor.apply();
+                    preference.setSummary(stringValue.substring(1, stringValue.length() - 1));
+                }
+            } else {
                 // For all other preferences, set the summary to the value's
                 // simple string representation.
                 preference.setSummary(stringValue);
@@ -272,62 +285,4 @@ public class SettingsActivity extends PreferenceActivity {
         // current value.
         sBindPreferenceSummaryToValueListener.onPreferenceChange(preference, initialValue);
     }
-
-//    /**
-//     * This fragment shows general preferences only. It is used when the
-//     * activity is showing a two-pane settings UI.
-//     */
-//    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-//    public static class GeneralPreferenceFragment extends PreferenceFragment {
-//        @Override
-//        public void onCreate(Bundle savedInstanceState) {
-//            super.onCreate(savedInstanceState);
-//            addPreferencesFromResource(R.xml.pref_general);
-//
-//            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-//            // to their values. When their values change, their summaries are
-//            // updated to reflect the new value, per the Android Design
-//            // guidelines.
-//            bindPreferenceSummaryToValue(findPreference("example_text"));
-//            bindPreferenceSummaryToValue(findPreference("example_list"));
-//        }
-//    }
-
-//    /**
-//     * This fragment shows notification preferences only. It is used when the
-//     * activity is showing a two-pane settings UI.
-//     */
-//    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-//    public static class NotificationPreferenceFragment extends PreferenceFragment {
-//        @Override
-//        public void onCreate(Bundle savedInstanceState) {
-//            super.onCreate(savedInstanceState);
-//            addPreferencesFromResource(R.xml.pref_notification);
-//
-//            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-//            // to their values. When their values change, their summaries are
-//            // updated to reflect the new value, per the Android Design
-//            // guidelines.
-//            bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
-//        }
-//    }
-
-//    /**
-//     * This fragment shows data and sync preferences only. It is used when the
-//     * activity is showing a two-pane settings UI.
-//     */
-//    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-//    public static class DataSyncPreferenceFragment extends PreferenceFragment {
-//        @Override
-//        public void onCreate(Bundle savedInstanceState) {
-//            super.onCreate(savedInstanceState);
-//            addPreferencesFromResource(R.xml.pref_data_sync);
-//
-//            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-//            // to their values. When their values change, their summaries are
-//            // updated to reflect the new value, per the Android Design
-//            // guidelines.
-//            bindPreferenceSummaryToValue(findPreference("sync_frequency"));
-//        }
-//    }
 }

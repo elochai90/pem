@@ -75,14 +75,8 @@ public class TabsFragmentActivity extends FragmentActivity {
 
         setupTabHost(savedInstanceState);
         setupNavigationDrawer();
-
-        initSingletons();
-
     }
 
-    private void initSingletons() {
-        PicassoSingleton.initInstance(getApplicationContext());
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
