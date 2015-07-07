@@ -29,8 +29,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -49,18 +54,37 @@ public class WeatherRequest {
     String etResponse;
     String tvIsConnected;
     Context context;
-
+    Boolean forecast = false;
 
     ImageView weatherImageView;
+    ImageView weatherImg1;
+    ImageView weatherImg2;
+    ImageView weatherImg3;
     TextView weatherDescView;
     TextView weatherTempView;
+    TextView day1;
+    TextView day2;
+    TextView day3;
+    TextView temp1;
+    TextView temp2;
+    TextView temp3;
 
 
-    public WeatherRequest(Context context, ImageView weatherImageView, TextView weatherDescView, TextView weatherTempView) {
+    public WeatherRequest(Context context, ImageView weatherImageView, TextView weatherDescView, TextView weatherTempView, ImageView weatherImg1, ImageView weatherImg2, ImageView weatherImg3, TextView day1, TextView day2,
+                          TextView day3, TextView temp1, TextView temp2,TextView temp3) {
         this.context = context;
         this.weatherImageView = weatherImageView;
         this.weatherDescView = weatherDescView;
         this.weatherTempView = weatherTempView;
+        this.weatherImg1 = weatherImg1;
+        this.weatherImg2 = weatherImg2;
+        this.weatherImg3 = weatherImg3;
+        this.day1 = day1;
+        this.day2 = day2;
+        this.day3 = day3;
+        this.temp1 = temp1;
+        this.temp2 = temp2;
+        this.temp3 = temp3;
 
         // check if you are connected or not
         if(isConnected()){
@@ -73,8 +97,10 @@ public class WeatherRequest {
         String[] location = getGPS();
 
         // call AsynTask to perform network operation on separate thread
+        forecast = false;
         new HttpAsyncTask().execute("http://api.openweathermap.org/data/2.5/weather?q=" + location[0] + "," + location[1]);
-        //new HttpAsyncTask().execute("http://api.openweathermap.org/data/2.5/forecast?q=" + location[0] + "," + location[1]);
+        forecast = true;
+        new HttpAsyncTask().execute("http://api.openweathermap.org/data/2.5/forecast?q=" + location[0] + "," + location[1]);
     }
 
     private String[]  getGPS() {
@@ -151,52 +177,41 @@ public class WeatherRequest {
             case "230":
             case "231":
             case "232":
-                weatherImageView.setBackgroundColor(Color.parseColor("#A4A4A4"));
                 return R.mipmap.weather_thunderstorm;
             case "500":
             case "501":
-                weatherImageView.setBackgroundColor(Color.parseColor("#E0F2F7"));
                 return R.mipmap.weather_lightsunrain;
             case "502":
             case "503":
             case "504":
-                weatherImageView.setBackgroundColor(Color.parseColor("#E0F2F7"));
                 return R.mipmap.weather_heavysunrain;
             case "511":
-                weatherImageView.setBackgroundColor(Color.parseColor("#A4A4A4"));
                 return R.mipmap.weather_freezingrain;
             case "520":
             case "521":
-                weatherImageView.setBackgroundColor(Color.parseColor("#A4A4A4"));
                 return R.mipmap.weather_lightrain;
             case "522":
-                weatherImageView.setBackgroundColor(Color.parseColor("#A4A4A4"));
                 return R.mipmap.weather_heavyrain;
             case "600":
             case "601":
             case "602":
             case "611":
             case "621":
-                weatherImageView.setBackgroundColor(Color.parseColor("#A4A4A4"));
                 return R.mipmap.weather_snow;
             case "701":
             case "711":
             case "721":
             case "731":
             case "741":
-                weatherImageView.setBackgroundColor(Color.parseColor("#E0F2F7"));
                 return R.mipmap.weather_fog;
             case "800":
-                weatherImageView.setBackgroundColor(Color.parseColor("#E0F2F7"));
                 return R.mipmap.weather_sun;
             case "801":
-                weatherImageView.setBackgroundColor(Color.parseColor("#E0F2F7"));
                 return R.mipmap.weather_sunclouds;
             case "802":
             case "803":
             case "804":
             default:
-                weatherImageView.setBackgroundColor(Color.parseColor("#E0F2F7"));
                 return R.mipmap.weather_clouds;
         }
     }
@@ -213,15 +228,66 @@ public class WeatherRequest {
             JSONObject json = null; // convert String to JSONObject
             try {
                 json = new JSONObject(result);
-                JSONArray weather = json.getJSONArray("weather"); // get articles array
-                String weather_main = weather.getJSONObject(0).getString("main");
-                String desc = weather.getJSONObject(0).getString("description");
-                String temp = Math.round(json.getJSONObject("main").getDouble("temp") - 273.15) + "°C";
-                String code = weather.getJSONObject(0).getString("id");
+                Log.d("FORECAST: ", forecast.toString());
+                Log.d("RESULT: ", result);
+                if(json.has("weather")){
+                    JSONArray weather = json.getJSONArray("weather"); // get articles array
+                    String weather_main = weather.getJSONObject(0).getString("main");
+                    String desc = weather.getJSONObject(0).getString("description");
+                    String temp = Math.round(json.getJSONObject("main").getDouble("temp") - 273.15) + "°C";
+                    String code = weather.getJSONObject(0).getString("id");
 
-                weatherImageView.setImageResource(getImage(code));
-                weatherDescView.setText(weather_main);
-                weatherTempView.setText(temp);
+                    weatherImageView.setImageResource(getImage(code));
+                    weatherDescView.setText(weather_main);
+                    weatherTempView.setText(temp);
+                }
+                else{
+                   JSONArray forecast = json.getJSONArray("list"); // get articles array
+                    Date date = new Date();
+                    SimpleDateFormat sdf = new SimpleDateFormat("EEE");
+                    String currentDateandTime = sdf.format(date);
+
+                    ArrayList<String> days = new ArrayList<String>();
+                    ArrayList<String> temps = new ArrayList<String>();
+                    ArrayList<String> codes = new ArrayList<String>();
+
+                    for(int i = 1; i < forecast.length()-8; i++){
+                        int weather_dt = Integer.parseInt(forecast.getJSONObject(i).getString("dt"));
+                        Date converteddate = new Date(weather_dt*1000L);
+                        SimpleDateFormat sdf2 = new SimpleDateFormat("EEE-HH", Locale.ENGLISH);
+                        String forecastDateandTime = sdf2.format(converteddate);
+                        String[] segs = forecastDateandTime.split( Pattern.quote("-") );
+
+                        if(!segs[0].equals(currentDateandTime)){
+                            if(segs[1].equals("14")){
+                                Log.d("New TIME:", forecast.get(i).getClass().toString());
+                                JSONArray weather = forecast.getJSONObject(i).getJSONArray("weather"); // get articles array
+                                String weather_main = weather.getJSONObject(0).getString("main");
+                                String temp = Math.round(forecast.getJSONObject(i).getJSONObject("main").getDouble("temp") - 273.15) + "°C";
+                                String code = weather.getJSONObject(0).getString("id");
+
+                                days.add(segs[0]);
+                                temps.add(temp);
+                                codes.add(code);
+                                Log.d("WEATHERtemp",temp);
+                                Log.d("WEATHERcode",code);
+                            }
+                        }
+
+                    }
+
+                    weatherImg1.setImageResource(getImage(codes.get(0)));
+                    day1.setText(days.get(0));
+                    temp1.setText(temps.get(0));
+
+                    weatherImg2.setImageResource(getImage(codes.get(1)));
+                    day2.setText(days.get(1));
+                    temp2.setText(temps.get(1));
+
+                    weatherImg3.setImageResource(getImage(codes.get(2)));
+                    day3.setText(days.get(2));
+                    temp3.setText(temps.get(2));
+                }
 
             } catch (JSONException e) {
                 e.printStackTrace();
