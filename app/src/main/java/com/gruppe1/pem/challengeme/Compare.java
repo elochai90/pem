@@ -42,6 +42,7 @@ public class Compare implements Serializable{
                 this.name = compareCursor.getString(1);
                 this.timestamp = compareCursor.getString(3);
                 String[] idValues = compareCursor.getString(2).split(Pattern.quote("|"));
+                Log.e("###COMP###", compareCursor.getString(2));
 
                 for (String idValue : idValues) {
                     itemIds.add(Integer.parseInt(idValue));
@@ -101,6 +102,7 @@ public class Compare implements Serializable{
             }
         }
 
+        Log.e("###COMP IN###", idConcat);
         this.dbHelper.setStringValue("item_ids", idConcat);
         this.dbHelper.setStringValue("save_date", timestamp);
 
@@ -153,7 +155,7 @@ public class Compare implements Serializable{
         DataBaseHelper dbHelper = new DataBaseHelper(p_context);
         dbHelper.init();
         dbHelper.setTable(Constants.COMPARES_DB_TABLE);
-        dbHelper.setWhere("OR", new String[]{"item_ids LIKE '" + m_id + "|'", "item_ids LIKE '|" + m_id + "'"});
+        dbHelper.setWhere("OR", new String[]{"item_ids LIKE '" + m_id + "|%'", "item_ids LIKE '%|" + m_id + "'"});
         dbHelper.delete();
         dbHelper.close();
     }
