@@ -2,6 +2,8 @@ package com.gruppe1.pem.challengeme.views;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,6 +25,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -49,6 +52,8 @@ import com.gruppe1.pem.challengeme.adapters.ColorsDropdownAdapter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -80,6 +85,8 @@ public class NewItemActivity extends Activity {
     // Color Picker
     private int exactColorId;
     private TextView attrValueColorPicker;
+    private String buyDate;
+    private TextView attrValueDatePicker;
 
     private boolean isEdit;
 
@@ -94,6 +101,7 @@ public class NewItemActivity extends Activity {
 
     private SharedPreferences sharedPreferences;
 
+    static final int DATE_DIALOG_ID = 999;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -265,7 +273,7 @@ public class NewItemActivity extends Activity {
 
         try {
             String imgPath = editItem.getImageFile();
-            Log.d("ImageFile", imgPath);
+//            Log.d("ImageFile", imgPath);
             File imgFile = new File(imgPath);
 
             if (imgFile.exists()) {
@@ -334,6 +342,10 @@ public class NewItemActivity extends Activity {
             // Color Picker
             else if (tmpItemAttrType.getValueType() == 3) {
                 attributeSaveValue  = exactColorId + "";
+            }
+            // Date Picker
+            else if(tmpItemAttrType.getValueType() == 4) {
+                attributeSaveValue = buyDate;
             }
             else {
                 attributeSaveValue = ((EditText) attributeView.findViewById(R.id.stringAttrField)).getText().toString();
@@ -430,6 +442,33 @@ public class NewItemActivity extends Activity {
             });
             attributeValueView = attrValueColorPicker;
         }
+        // attribute is DatePicker
+        else if(attributeType.getValueType() == 4) {
+            attrValueDatePicker = new TextView(this);
+            ViewGroup.LayoutParams attibuteValueLayoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, with_background_height);
+            attrValueDatePicker.setLayoutParams(attibuteValueLayoutParams);
+            attrValueDatePicker.setTextSize(18);
+            attrValueDatePicker.setGravity(Gravity.CENTER);
+
+            if(attributeValue != null) {
+                attrValueDatePicker.setTextColor(getResources().getColor(android.R.color.black));
+                buyDate = attributeValue.toString();
+                attrValueDatePicker.setText(buyDate);
+            } else {
+                attrValueDatePicker.setTextColor(getResources().getColor(android.R.color.white));
+                attrValueDatePicker.setText(R.string.no_buy_date_selected);
+                buyDate = "";
+            }
+            attrValueDatePicker.setBackgroundColor(getResources().getColor(R.color.color_picker_initial));
+            attrValueDatePicker.setText(buyDate);
+            attrValueDatePicker.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showDialog(DATE_DIALOG_ID);
+                }
+            });
+            attributeValueView = attrValueDatePicker;
+        }
         else {
             EditText textAttributeValue = new EditText(this);
             textAttributeValue.setSingleLine(true);
@@ -454,6 +493,41 @@ public class NewItemActivity extends Activity {
 
         attributesView.addView(attributeLayout, attributesView.getChildCount());
     }
+
+
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        switch (id) {
+            case DATE_DIALOG_ID:
+                // set date picker as current date
+                int year = Calendar.getInstance().get(Calendar.YEAR);
+                int month = Calendar.getInstance().get(Calendar.MONTH);
+                int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+                if(buyDate.length()>0) {
+                    String[] parts = buyDate.split("\\.");
+                    day = Integer.parseInt(parts[0]);
+                    month = Integer.parseInt(parts[1])-1;
+                    year = Integer.parseInt(parts[2]);
+                }
+                return new DatePickerDialog(this, datePickerListener,
+                        year, month,day);
+        }
+        return null;
+    }
+
+    private DatePickerDialog.OnDateSetListener datePickerListener
+            = new DatePickerDialog.OnDateSetListener() {
+
+        // when dialog box is closed, below method will be called.
+        public void onDateSet(DatePicker view, int selectedYear,
+                              int selectedMonth, int selectedDay) {
+
+            buyDate = selectedDay + "." + (selectedMonth+1) + "." + selectedYear;
+            attrValueDatePicker.setText(buyDate);
+            attrValueDatePicker.setTextColor(getResources().getColor(android.R.color.black));
+
+        }
+    };
 
     private String getSizeValueBySizeType(int sizeType) {
         String sizeValue = "";

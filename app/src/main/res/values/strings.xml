@@ -49,6 +49,7 @@
     <string name="compare_saved">Saved</string>
     <string name="compare_item_category">Category</string>
 
+    <string name="no_buy_date_selected">Select a date</string>
     <string name="no_exact_color_selected">Select a color</string>
     <string name="new_category_overlay_title">Select an icon</string>
     <string name="delete">delete</string>
