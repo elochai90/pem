@@ -42,6 +42,8 @@
     <string name="abort">Abort</string>
     <string name="save">Save</string>
 
+    <string name="edit">Edit</string>
+
 
     <!--For detail compare activity-->
     <string name="compare_saved">Saved</string>
@@ -49,5 +51,7 @@
 
     <string name="no_exact_color_selected">Select a color</string>
     <string name="new_category_overlay_title">Select an icon</string>
+    <string name="delete">delete</string>
+    <string name="cancel">cancel</string>
 
 </resources>

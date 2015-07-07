@@ -171,7 +171,7 @@ public class NewCompareActivity extends Activity {
 
         builder.setView(dialogView);
         final AlertDialog alert = builder.create();
-        final CompareCategoryOverlayGridAdapter gridAdapter = new CompareCategoryOverlayGridAdapter(this, R.layout.grid_item_default, catArray);
+        final CompareCategoryOverlayGridAdapter gridAdapter = new CompareCategoryOverlayGridAdapter(this, R.layout.grid_item_overlay, catArray);
         gridView.setAdapter(gridAdapter);
         gridView.setOnItemClickListener(onItemClickListener);
 

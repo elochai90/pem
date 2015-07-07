@@ -6,8 +6,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,11 +20,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.gruppe1.pem.challengeme.Category;
+import com.gruppe1.pem.challengeme.Item;
 import com.gruppe1.pem.challengeme.ListItemIconName;
 import com.gruppe1.pem.challengeme.R;
 import com.gruppe1.pem.challengeme.helpers.Constants;
@@ -31,6 +35,7 @@ import com.gruppe1.pem.challengeme.helpers.DefaultSetup;
 import com.gruppe1.pem.challengeme.adapters.DefaultGridAdapter;
 import com.gruppe1.pem.challengeme.adapters.DefaultListAdapter;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -358,12 +363,66 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
         if(actionMode != null)
             actionMode.finish();
-            actionMode = getActivity().startActionMode(modeCallBack);
+            //actionMode = getActivity().startActionMode(modeCallBack);
             view.setSelected(true);
 
             selectedItem = new Object[2];
             selectedItem[0] = position;
             selectedItem[1] = view;
+
+               final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        // Get the layout inflater
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+
+        // Inflate and set the layout for the dialog
+        // Pass null as the parent view because its going in the dialog layout
+
+        View dialogView = inflater.inflate(R.layout.dialog_edit, null);
+        TextView headline = (TextView)dialogView.findViewById(R.id.dialog_headline);
+        headline.setText(mDataset.get(position).name);
+
+        builder.setView(dialogView).setPositiveButton(R.string.edit, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent();
+                intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".views.NewCategoryActivity");
+                int categoryId = (int)listAdapter.getItemId((int)selectedItem[0]);
+                intent.putExtra("category_id", categoryId);
+
+                startActivityForResult(intent, REQUEST_CODE);
+            }
+        }).setNegativeButton(R.string.delete, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                int categoryId = (int)listAdapter.getItemId((int)selectedItem[0]);
+
+                ArrayList<Item> items = Item.getItemsByCategoryId(getActivity().getApplicationContext(), categoryId, true);
+
+                for (Item c : items) {
+                    c.delete();
+                }
+
+
+                DataBaseHelper db_helper = new DataBaseHelper(getActivity().getApplicationContext());
+                db_helper.init();
+
+                Category deleteCategory = new Category(getActivity().getApplicationContext(), categoryId, db_helper );
+                deleteCategory.delete();
+
+                db_helper.close();
+
+                initDataset();
+                listAdapter.notifyDataSetChanged();
+                gridAdapter.notifyDataSetChanged();
+            }
+        }).setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        builder.create().show();
 
         return true;
     }

@@ -91,13 +91,20 @@
                     <TextView
                         android:id="@+id/attrCategoryName"
                         android:layout_width="100dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center_vertical"
                         android:textSize="18sp"/>
-                    <Spinner
+                    <TextView
                         android:id="@+id/attrCategoryValue"
+                        android:textColor="@android:color/black"
+                        android:background="@color/color_picker_initial"
+                        android:textSize="18sp"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center"
                         android:layout_width="fill_parent"
-                        android:layout_height="40dp">
-                    </Spinner>
+                        android:layout_height="30dp">
+                    </TextView>
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -108,13 +115,20 @@
                     <TextView
                         android:id="@+id/attrColorName"
                         android:layout_width="100dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center_vertical"
                         android:textSize="18sp"/>
-                    <Spinner
+                    <TextView
                         android:id="@+id/attrColorValue"
+                        android:textColor="@android:color/black"
+                        android:background="@color/color_picker_initial"
+                        android:textSize="18sp"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center"
                         android:layout_width="fill_parent"
-                        android:layout_height="40dp">
-                    </Spinner>
+                        android:layout_height="30dp">
+                    </TextView>
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
