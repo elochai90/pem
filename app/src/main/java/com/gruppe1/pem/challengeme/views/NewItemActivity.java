@@ -326,10 +326,12 @@ public class NewItemActivity extends Activity {
             attrValueSwitch.setTextOff(getResources().getString(R.string.switch_false));
             attrValueSwitch.setId(R.id.boolAttrField);
 
+
             if(attributeValue != null) {
-                boolean bool = Boolean.parseBoolean(attributeValue.toString());
+                boolean bool = (attributeValue.toString().equals("1"));
                 attrValueSwitch.setChecked(bool);
             }
+
             attributeValueView = attrValueSwitch;
 
         }
