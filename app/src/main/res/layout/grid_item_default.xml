@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="?android:attr/listPreferredItemHeight"
-    android:background="@drawable/default_item_background"
     android:layout_margin="5dp"
+    android:background="@color/listItems"
     tools:layoutgravity="center">
 
     <com.gruppe1.pem.challengeme.SquareImageView

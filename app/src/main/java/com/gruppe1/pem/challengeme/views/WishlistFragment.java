@@ -23,12 +23,12 @@ import android.widget.TextView;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.gruppe1.pem.challengeme.Compare;
 import com.gruppe1.pem.challengeme.Item;
 import com.gruppe1.pem.challengeme.ListItemIconName;
 import com.gruppe1.pem.challengeme.R;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
-import com.gruppe1.pem.challengeme.adapters.DefaultGridAdapter;
 import com.gruppe1.pem.challengeme.adapters.DefaultListAdapter;
 import com.gruppe1.pem.challengeme.views.TabsFragmentActivity;
 
@@ -46,7 +46,6 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
     private View rootView;
 
     private GridView gridView;
-    private DefaultGridAdapter gridAdapter;
     private ListView listView;
     private DefaultListAdapter listAdapter;
 
@@ -256,77 +255,46 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
         }
     }
 
-
-
-    private ActionMode.Callback modeCallBack = new ActionMode.Callback() {
-
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false;
-        }
-
-        public void onDestroyActionMode(ActionMode mode) {
-            ((TabsFragmentActivity)getActivity()).showTabHost();
-            if(selectedItem != null) {
-                int position = (int) selectedItem[0];
-                View view = (View) selectedItem[1];
-                view.setSelected(false);
-                selectedItem = null;
-            }
-            mode = null;
-        }
-
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            ((TabsFragmentActivity)getActivity()).hideTabHost();
-            mode.setTitle("Options");
-            mode.getMenuInflater().inflate(R.menu.menu_wishlist_items_list_action_mode, menu);
-            return true;
-        }
-
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            int id = item.getItemId();
-            switch (id) {
-                case R.id.delete: {
-                    new AlertDialog.Builder(getActivity())
-                            .setTitle("Do you really want to delete '" + listAdapter.getItem((int)selectedItem[0]).name + "'?")
-                            .setNegativeButton(android.R.string.no, null)
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-
-                                public void onClick(DialogInterface arg0, int arg1) {
-
-                                    int itemId = (int)listAdapter.getItemId((int)selectedItem[0]);
-
-                                    DataBaseHelper db_helper = new DataBaseHelper(getActivity().getApplicationContext());
-                                    db_helper.init();
-
-                                    Item deleteItem = new Item(getActivity().getApplicationContext(), itemId, db_helper );
-                                    deleteItem.delete();
-
-                                    db_helper.close();
-
-                                    initDataset();
-                                    listAdapter.notifyDataSetChanged();
-                                    actionMode.finish();
-                                }
-                            }).create().show();
-                    break;
-                }
-                default:
-                    return false;
-            }
-            return true;
-        }
-    };
-
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-        if(actionMode != null)
-            actionMode.finish();
-        actionMode = getActivity().startActionMode(modeCallBack);
-        view.setSelected(true);
-
         selectedItem = new Object[2];
         selectedItem[0] = position;
         selectedItem[1] = view;
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        // Get the layout inflater
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+
+        // Inflate and set the layout for the dialog
+        // Pass null as the parent view because its going in the dialog layout
+
+        View dialogView = inflater.inflate(R.layout.dialog_edit, null);
+        TextView headline = (TextView)dialogView.findViewById(R.id.dialog_headline);
+        headline.setText(mDataset.get(position).name);
+
+        builder.setView(dialogView).setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                int wishlistItemId = (int) listAdapter.getItemId((int) selectedItem[0]);
+
+                DataBaseHelper db_helper = new DataBaseHelper(getActivity().getApplicationContext());
+                db_helper.init();
+
+                Item deleteWishlistItem = new Item(getActivity().getApplicationContext(), wishlistItemId, db_helper);
+                deleteWishlistItem.delete();
+                db_helper.close();
+
+                initDataset();
+                listAdapter.notifyDataSetChanged();
+            }
+        }).setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        builder.create().show();
 
         return true;
     }

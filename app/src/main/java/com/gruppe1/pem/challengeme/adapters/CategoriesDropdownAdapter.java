@@ -13,9 +13,7 @@ import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 
 import java.util.ArrayList;
 
-/**
- * Created by bianka on 26.06.2015.
- */
+
 public class CategoriesDropdownAdapter extends ArrayAdapter implements SpinnerAdapter {
 
     Context context;

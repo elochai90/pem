@@ -48,7 +48,7 @@ public class NewCompareActivity extends Activity {
     ImageView img2;
     ArrayList<Item> firstCatItems;
     ArrayList<Item> secontCatItems;
-    FloatingActionButton saveCompareFAB;
+
     ArrayList<Category> allCategories;
     Activity thisActivity;
     String[] upperCategoriesList2;
@@ -70,19 +70,14 @@ public class NewCompareActivity extends Activity {
         viewPager2 = (ViewPager) findViewById(R.id.view_pager2);
         viewPager1.setVisibility(View.INVISIBLE);
         viewPager2.setVisibility(View.INVISIBLE);
-        saveCompareFAB = (FloatingActionButton) findViewById(R.id.save_compare);
+
         allCategories = Category.getAllCategories(getApplicationContext());
         img1 = (ImageView) findViewById(R.id.img1);
         img2 = (ImageView) findViewById(R.id.img2);
 
         thisActivity = this;
-        saveCompareFAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveCompare();
-                // TODO: save item
-            }
-        });
+
+
 
         upperCategoriesList = new ArrayList<Category>();
 
@@ -126,7 +121,7 @@ public class NewCompareActivity extends Activity {
                                 viewPager1.setVisibility(View.VISIBLE);
                                 builder1.dismiss();
                             }
-                });
+                        });
                 builder1.show();
             }
         });
@@ -176,7 +171,7 @@ public class NewCompareActivity extends Activity {
 
         builder.setView(dialogView);
         final AlertDialog alert = builder.create();
-        final CompareCategoryOverlayGridAdapter gridAdapter = new CompareCategoryOverlayGridAdapter(this, R.layout.grid_item_default, catArray);
+        final CompareCategoryOverlayGridAdapter gridAdapter = new CompareCategoryOverlayGridAdapter(this, R.layout.grid_item_overlay, catArray);
         gridView.setAdapter(gridAdapter);
         gridView.setOnItemClickListener(onItemClickListener);
 
@@ -196,7 +191,14 @@ public class NewCompareActivity extends Activity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+
+
+        switch (item.getItemId()) {
+
+            case R.id.action_item_save:
+                saveCompare();
+
+        }
 
         //noinspection SimplifiableIfStatement
 //        if (id == R.id.action_settings) {

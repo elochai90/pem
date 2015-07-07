@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.ActionMode;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -327,75 +328,47 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
         return cropImg;
     }
 
-
-
-    private ActionMode.Callback modeCallBack = new ActionMode.Callback() {
-
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false;
-        }
-
-        public void onDestroyActionMode(ActionMode mode) {
-            if(selectedItem != null) {
-                int position = (int) selectedItem[0];
-                View view = (View) selectedItem[1];
-                view.setSelected(false);
-                selectedItem = null;
-            }
-            mode = null;
-        }
-
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            mode.setTitle("Options");
-            mode.getMenuInflater().inflate(R.menu.menu_items_list_action_mode, menu);
-            return true;
-        }
-
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            int id = item.getItemId();
-            switch (id) {
-                case R.id.delete: {
-                    new AlertDialog.Builder(ItemsListActivity.this)
-                            .setTitle("Do you really want to delete '" + listAdapter.getItem((int) selectedItem[0]).name + "'?")
-                            .setNegativeButton(android.R.string.no, null)
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-
-                                public void onClick(DialogInterface arg0, int arg1) {
-
-                                    int itemId = (int)listAdapter.getItemId((int)selectedItem[0]);
-
-                                    DataBaseHelper db_helper = new DataBaseHelper(getApplicationContext());
-                                    db_helper.init();
-
-                                    Item deleteItem = new Item(getApplicationContext(), itemId, db_helper );
-                                    deleteItem.delete();
-                                    db_helper.close();
-
-                                    initDataset();
-                                    listAdapter.notifyDataSetChanged();
-                                    gridAdapter.notifyDataSetChanged();
-                                    actionMode.finish();
-                                }
-                            }).create().show();
-                    break;
-                }
-                default:
-                    return false;
-            }
-            return true;
-        }
-    };
-
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-        if(actionMode != null)
-            actionMode.finish();
-        actionMode = startActionMode(modeCallBack);
-        view.setSelected(true);
-
         selectedItem = new Object[2];
         selectedItem[0] = position;
         selectedItem[1] = view;
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        // Get the layout inflater
+        LayoutInflater inflater = getLayoutInflater();
+
+        // Inflate and set the layout for the dialog
+        // Pass null as the parent view because its going in the dialog layout
+
+        View dialogView = inflater.inflate(R.layout.dialog_edit, null);
+        TextView headline = (TextView)dialogView.findViewById(R.id.dialog_headline);
+        headline.setText(mDataset.get(position).name);
+
+        builder.setView(dialogView).setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                int itemId = (int)listAdapter.getItemId((int)selectedItem[0]);
+
+                DataBaseHelper db_helper = new DataBaseHelper(getApplicationContext());
+                db_helper.init();
+
+                Item deleteItem = new Item(getApplicationContext(), itemId, db_helper );
+                deleteItem.delete();
+                db_helper.close();
+
+                initDataset();
+                listAdapter.notifyDataSetChanged();
+                gridAdapter.notifyDataSetChanged();
+            }
+        }).setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        builder.create().show();
 
         return true;
     }

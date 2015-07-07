@@ -21,9 +21,9 @@ import java.util.List;
 public class CompareCategoryOverlayGridAdapter extends ArrayAdapter<ListItemIconName> {
     private Context context;
     private int layoutResourceId;
-    private List<ListItemIconName> data = new ArrayList();
+    private ArrayList<ListItemIconName> data = new ArrayList<>();
 
-    public CompareCategoryOverlayGridAdapter(Context context, int layoutResourceId, List<ListItemIconName> data) {
+    public CompareCategoryOverlayGridAdapter(Context context, int layoutResourceId, ArrayList<ListItemIconName> data) {
         super(context, layoutResourceId, data);
         this.layoutResourceId = layoutResourceId;
         this.context = context;
@@ -41,9 +41,7 @@ public class CompareCategoryOverlayGridAdapter extends ArrayAdapter<ListItemIcon
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
             row = inflater.inflate(layoutResourceId, parent, false);
             holder = new ViewHolder();
-            holder.rightTextView = (TextView) row.findViewById(R.id.rightTextView);
             holder.textView = (TextView) row.findViewById(R.id.textView);
-            holder.rightTextView.setVisibility(View.INVISIBLE);
             holder.textView.setText(categoryName);
             holder.imageView = (ImageView) row.findViewById(R.id.imageView);
             row.setTag(holder);
@@ -54,7 +52,6 @@ public class CompareCategoryOverlayGridAdapter extends ArrayAdapter<ListItemIcon
         return row;
     }
     static class ViewHolder {
-        TextView rightTextView;
         TextView textView;
         ImageView imageView;
     }

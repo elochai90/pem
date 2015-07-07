@@ -7,7 +7,6 @@
     android:dividerPadding="20dp"
     tools:context="com.gruppe1.pem.challengeme.views.SavedComparesDetailActivity">
 
-
     <TextView
         android:id="@+id/timeStampSavedCompare"
         android:layout_width="wrap_content"
@@ -15,6 +14,13 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="10dp"
         android:textSize="18sp"/>
+
+    <View
+        android:layout_below="@id/categoryIconLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="20dp"
+        android:background="#c0c0c0"/>
 
     <android.support.v7.widget.CardView
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -111,7 +117,6 @@
                     <!--android:text="Category"-->
                     <!--android:textSize="18sp"/>-->
             <!--</LinearLayout>-->
-
 
         </RelativeLayout>
     </android.support.v7.widget.CardView>
