@@ -67,38 +67,17 @@
         </categorie>
 
         <categorie>
-            <name>Sneaker</name>
+            <name>Shoes</name>
             <parent_categorie_id>0</parent_categorie_id>
             <default_attribute_type>2</default_attribute_type>
             <icon>sneaker</icon>
         </categorie>
 
         <categorie>
-            <name>Boots</name>
-            <parent_categorie_id>0</parent_categorie_id>
-            <default_attribute_type>2</default_attribute_type>
-            <icon>stiefel</icon>
-        </categorie>
-
-        <categorie>
-            <name>Heels</name>
-            <parent_categorie_id>0</parent_categorie_id>
-            <default_attribute_type>2</default_attribute_type>
-            <icon>schuh</icon>
-        </categorie>
-
-        <categorie>
             <name>Accessoires</name>
             <parent_categorie_id>0</parent_categorie_id>
             <default_attribute_type>-1</default_attribute_type>
-            <icon>kleiderbuegel</icon>
-        </categorie>
-
-        <categorie>
-            <name>Belts</name>
-            <parent_categorie_id>0</parent_categorie_id>
-            <default_attribute_type>-1</default_attribute_type>
-            <icon>kleiderbuegel</icon>
+            <icon>accessoires</icon>
         </categorie>
 
     </categories>
