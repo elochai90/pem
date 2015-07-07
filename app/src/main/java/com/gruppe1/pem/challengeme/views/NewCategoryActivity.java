@@ -151,7 +151,7 @@ public class NewCategoryActivity extends Activity {
         ArrayList<String> iconsArray = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.category_icons_array)));
         builder.setView(dialogView);
         final AlertDialog alert = builder.create();
-        final IconsGridAdapter gridAdapter = new IconsGridAdapter(this, R.layout.grid_item_default, iconsArray);
+        final IconsGridAdapter gridAdapter = new IconsGridAdapter(this, R.layout.grid_item_overlay, iconsArray);
         gridView.setAdapter(gridAdapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

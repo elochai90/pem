@@ -45,9 +45,7 @@ public class IconsGridAdapter extends ArrayAdapter<String> {
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
             row = inflater.inflate(layoutResourceId, parent, false);
             holder = new ViewHolder();
-            holder.rightTextView = (TextView) row.findViewById(R.id.rightTextView);
             holder.textView = (TextView) row.findViewById(R.id.textView);
-            holder.rightTextView.setVisibility(View.INVISIBLE);
             holder.textView.setVisibility(View.INVISIBLE);
             holder.imageView = (ImageView) row.findViewById(R.id.imageView);
             row.setTag(holder);
@@ -59,7 +57,6 @@ public class IconsGridAdapter extends ArrayAdapter<String> {
         return row;
     }
     static class ViewHolder {
-        TextView rightTextView;
         TextView textView;
         ImageView imageView;
     }
