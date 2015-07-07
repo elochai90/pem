@@ -21,9 +21,9 @@ import java.util.List;
 public class CompareCategoryOverlayGridAdapter extends ArrayAdapter<ListItemIconName> {
     private Context context;
     private int layoutResourceId;
-    private List<ListItemIconName> data = new ArrayList();
+    private ArrayList<ListItemIconName> data = new ArrayList<>();
 
-    public CompareCategoryOverlayGridAdapter(Context context, int layoutResourceId, List<ListItemIconName> data) {
+    public CompareCategoryOverlayGridAdapter(Context context, int layoutResourceId, ArrayList<ListItemIconName> data) {
         super(context, layoutResourceId, data);
         this.layoutResourceId = layoutResourceId;
         this.context = context;

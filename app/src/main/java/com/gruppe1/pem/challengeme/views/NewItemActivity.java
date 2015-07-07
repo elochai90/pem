@@ -18,14 +18,17 @@ import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -38,7 +41,10 @@ import com.gruppe1.pem.challengeme.Category;
 import com.gruppe1.pem.challengeme.DefaultSize;
 import com.gruppe1.pem.challengeme.HSVColorPickerDialog;
 import com.gruppe1.pem.challengeme.Item;
+import com.gruppe1.pem.challengeme.ListItemIconName;
 import com.gruppe1.pem.challengeme.R;
+import com.gruppe1.pem.challengeme.adapters.CompareCategoryOverlayGridAdapter;
+import com.gruppe1.pem.challengeme.adapters.IconsGridAdapter;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 import com.gruppe1.pem.challengeme.helpers.ImageLoader;
@@ -48,6 +54,7 @@ import com.gruppe1.pem.challengeme.adapters.ColorsDropdownAdapter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -62,10 +69,10 @@ public class NewItemActivity extends Activity {
     private LinearLayout attributesView;
 
     private TextView attrCategoryName;
-    private Spinner attrCategoryValue;
+    private TextView attrCategoryValue;
     private Category attrCategorySelected;
     private TextView attrColorName;
-    private Spinner attrColorValue;
+    private TextView attrColorValue;
     private com.gruppe1.pem.challengeme.Color attrColorSelected;
     private TextView attrWishlistName;
     private Switch attrWishlistValue;
@@ -84,9 +91,10 @@ public class NewItemActivity extends Activity {
 
     private ArrayList<AttributeType> attributeTypesList;
     private ArrayList<Category> allCategories;
-    private CategoriesDropdownAdapter categoriesDropdownAdapter;
+    private CompareCategoryOverlayGridAdapter gridCateoriesAdapter;
     private ArrayList<com.gruppe1.pem.challengeme.Color> allColors;
-    private ColorsDropdownAdapter colorsDropdownAdapter;
+//    private ColorsDropdownAdapter colorsDropdownAdapter;
+    private ColorsDropdownAdapter gridColorsAdapter;
 
     private Bundle extras;
 
@@ -125,9 +133,9 @@ public class NewItemActivity extends Activity {
         attributesView = (LinearLayout) findViewById(R.id.itemDetailAttributes);
 
         attrCategoryName = (TextView) findViewById(R.id.attrCategoryName);
-        attrCategoryValue = (Spinner) findViewById(R.id.attrCategoryValue);
+        attrCategoryValue = (TextView) findViewById(R.id.attrCategoryValue);
         attrColorName = (TextView) findViewById(R.id.attrColorName);
-        attrColorValue = (Spinner) findViewById(R.id.attrColorValue);
+        attrColorValue = (TextView) findViewById(R.id.attrColorValue);
         attrWishlistName = (TextView) findViewById(R.id.attrWishlistName);
         attrWishlistValue = (Switch) findViewById(R.id.attrWishlistValue);
 
@@ -138,11 +146,46 @@ public class NewItemActivity extends Activity {
 
         extras = getIntent().getExtras();
 
+        // Setup Categories Adapter
         allCategories = Category.getAllCategories(this);
-        categoriesDropdownAdapter = new CategoriesDropdownAdapter (getBaseContext(), android.R.layout.simple_spinner_item, allCategories);
-        allColors = com.gruppe1.pem.challengeme.Color.getAllColors(this);
-        colorsDropdownAdapter = new ColorsDropdownAdapter(getBaseContext(), android.R.layout.simple_spinner_item, allColors);
+        ArrayList<ListItemIconName> catArray = new ArrayList<>();
+        Iterator catIt = allCategories.iterator();
+        while (catIt.hasNext()) {
+            Category tmpCat = (Category)catIt.next();
+            int iconId = getResources().getIdentifier(tmpCat.getIcon(), "drawable", "com.gruppe1.pem.challengeme");
+            catArray.add(new ListItemIconName(tmpCat.getId(), iconId , tmpCat.getName(), null));
+        }
+        gridCateoriesAdapter = new CompareCategoryOverlayGridAdapter(this, R.layout.grid_item_overlay, catArray);
 
+
+
+        attrCategoryValue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setupCategoryDropdown();
+            }
+        });
+
+
+        // Setup Colors Adapter
+        allColors = com.gruppe1.pem.challengeme.Color.getAllColors(this);
+        gridColorsAdapter = new ColorsDropdownAdapter(this, R.layout.grid_item_overlay, allColors);
+
+
+
+        attrCategoryValue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setupCategoryDropdown();
+            }
+        });
+
+        attrColorValue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setupColorsDropdown();
+            }
+        });
 
 
         if (savedInstanceState == null) {
@@ -184,8 +227,31 @@ public class NewItemActivity extends Activity {
             }
         }
 
-        setupCategoryDropdown();
-        setupColorsDropdown();
+
+        if(parentCategoryId != -1) {
+            attrCategorySelected = new Category(getApplicationContext(), parentCategoryId, getDb_helper());
+            attrCategoryValue.setText(attrCategorySelected.getName());
+        } else {
+            attrCategorySelected = new Category(getApplicationContext(), (int)gridCateoriesAdapter.getItem(0).elementId, getDb_helper());
+            attrCategoryValue.setText(attrCategorySelected.getName());
+        }
+
+
+        if(savedColorId != -1) {
+            attrColorSelected = new com.gruppe1.pem.challengeme.Color(getApplicationContext(), savedColorId, getDb_helper());
+            attrColorValue.setText(attrColorSelected.getName());
+            attrColorValue.setBackgroundColor(Color.parseColor(attrColorSelected.getHexColor()));
+            if(!gridColorsAdapter.isColorLight(Color.parseColor(attrColorSelected.getHexColor()))) {
+                attrColorValue.setTextColor(getResources().getColor(android.R.color.white));
+            }
+        } else {
+            attrColorSelected = new com.gruppe1.pem.challengeme.Color(getApplicationContext(), (int)gridColorsAdapter.getItem(0).getId(), getDb_helper());
+            attrColorValue.setText(attrColorSelected.getName());
+            attrColorValue.setBackgroundColor(Color.parseColor(attrColorSelected.getHexColor()));
+            if(!gridColorsAdapter.isColorLight(Color.parseColor(attrColorSelected.getHexColor()))) {
+                attrColorValue.setTextColor(getResources().getColor(android.R.color.white));
+            }
+        }
 
         if(editItemId > 0) {
             setItemData();
@@ -194,16 +260,15 @@ public class NewItemActivity extends Activity {
     }
 
     private void setItemData() {
-        // TODO: set Item Data from DB
         itemNameExitText.setText(editItem.getName());
 
         ratingBar.setRating(editItem.getRating());
 
-        attrCategoryValue.setSelection(((CategoriesDropdownAdapter) attrCategoryValue.getAdapter()).findPositionOfCategoryId(editItem.getCategoryId()));
-        attrCategorySelected = new Category(getApplicationContext(), (int)categoriesDropdownAdapter.getItemId(attrCategoryValue.getSelectedItemPosition()), getDb_helper());
-        attrColorValue.setSelection(((ColorsDropdownAdapter) attrColorValue.getAdapter()).findPositionOfColorId(editItem.getPrimaryColorId()));
-
-//        attrColorValue.setText(editItem.getPrimaryColor());
+        attrCategorySelected = new Category(getApplicationContext(), editItem.getId(), getDb_helper());
+        attrCategoryValue.setText(attrCategorySelected.getName());
+        attrColorSelected = new com.gruppe1.pem.challengeme.Color(getApplicationContext(), editItem.getPrimaryColorId(), getDb_helper());
+        attrColorValue.setBackgroundColor(Color.parseColor(attrColorSelected.getHexColor()));
+        attrCategoryValue.setText(attrColorSelected.getName());
 
         try {
             String imgPath = editItem.getImageFile();
@@ -228,7 +293,6 @@ public class NewItemActivity extends Activity {
         ArrayList<Attribute> itemAttributes = Attribute.getAttributesByItemId(this, editItem.getId());
         Iterator allItemAttributesIterator = itemAttributes.iterator();
 
-        // TODO: get all attributes with values for this Item
         while (allItemAttributesIterator.hasNext()) {
             Attribute tmpItemAttr = (Attribute) allItemAttributesIterator.next();
             attributeTypesList.add(tmpItemAttr.getAttributeType());
@@ -240,7 +304,7 @@ public class NewItemActivity extends Activity {
 
         String item_name = itemNameExitText.getText().toString();
 
-        Category newParentCatId = (attrCategorySelected != null) ? attrCategorySelected : new Category(getApplicationContext(), (int) categoriesDropdownAdapter.getItemId(0),getDb_helper());
+        Category newParentCatId = (attrCategorySelected != null) ? attrCategorySelected : new Category(getApplicationContext(), (int) gridCateoriesAdapter.getItem(0).elementId,getDb_helper());
 
         String item_categoryId = "" + attrCategorySelected.getId();
 
@@ -298,6 +362,10 @@ public class NewItemActivity extends Activity {
 
     private void setAttributeLayout(AttributeType attributeType, Object attributeValue) {
 
+        int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics());
+        int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, getResources().getDisplayMetrics());
+        int with_background_height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, getResources().getDisplayMetrics());
+
         LinearLayout attributeLayout = new LinearLayout(this);
         attributeLayout.setOrientation(LinearLayout.HORIZONTAL);
         int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
@@ -309,10 +377,9 @@ public class NewItemActivity extends Activity {
 
         TextView attributeName = new TextView(this);
         attributeName.setTextSize(18);
-        int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics());
-        int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, getResources().getDisplayMetrics());
         ViewGroup.LayoutParams attibuteNameLayoutParams = new ViewGroup.LayoutParams(width, height);
         attributeName.setLayoutParams(attibuteNameLayoutParams);
+        attributeName.setGravity(Gravity.CENTER_VERTICAL);
         attributeName.setText(attributeType.getName() + ":");
 
         View attributeValueView;
@@ -338,7 +405,7 @@ public class NewItemActivity extends Activity {
         // attribute is ColorPicker
         else if(attributeType.getValueType() == 3) {
             attrValueColorPicker = new TextView(this);
-            ViewGroup.LayoutParams attibuteValueLayoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
+            ViewGroup.LayoutParams attibuteValueLayoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, with_background_height);
             attrValueColorPicker.setLayoutParams(attibuteValueLayoutParams);
             attrValueColorPicker.setTextColor(getResources().getColor(android.R.color.white));
             attrValueColorPicker.setTextSize(18);
@@ -556,80 +623,68 @@ public class NewItemActivity extends Activity {
 
 
     private void setupCategoryDropdown() {
-        // Specify the layout to use when the list of choices appears
-        categoriesDropdownAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
 
-        // Apply the adapter to the spinner
-        attrCategoryValue.setAdapter(categoriesDropdownAdapter);
+        final View dialogView = inflater.inflate(R.layout.dialog_listgrid, null);
+        TextView headline = (TextView)dialogView.findViewById(R.id.dialog_headline);
+        headline.setText("Select a category");
 
-        if(parentCategoryId != -1) {
-            attrCategorySelected = new Category(getApplicationContext(), parentCategoryId, getDb_helper());
-            int activeIndex = this.getIndex(attrCategoryValue, parentCategoryId);
-            attrCategoryValue.setSelection(activeIndex);
-        } else {
-            attrCategorySelected = new Category(getApplicationContext(), (int)categoriesDropdownAdapter.getItemId(0), getDb_helper());
-        }
+        ListView listView = (ListView) dialogView.findViewById(R.id.listView);
+        GridView gridView = (GridView) dialogView.findViewById(R.id.gridView);
+        listView.setVisibility(View.INVISIBLE);
 
-        categoriesDropdownAdapter.notifyDataSetChanged();
-        attrCategoryValue.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        gridView.setAdapter(gridCateoriesAdapter);
 
+        builder.setView(dialogView);
+        final AlertDialog alert = builder.create();
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (view != null) {
-                    getDb_helper().setTable(Constants.CATEGORIES_DB_TABLE);
-                    attrCategorySelected = new Category(getBaseContext(), (int) categoriesDropdownAdapter.getItemId(position), getDb_helper());
-                    attrCategoryValue.setSelection(position);
-                    ((TextView)attributesView.findViewWithTag("size")).setText(getSizeValueBySizeType(attrCategorySelected.getDefaultSizeType()));
-                }
-            }
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-            @Override
-            public void onNothingSelected(AdapterView<?> arg0) {
-                // TODO Auto-generated method stub
-
+                getDb_helper().setTable(Constants.CATEGORIES_DB_TABLE);
+                attrCategorySelected = new Category(getBaseContext(), (int) gridCateoriesAdapter.getItem(position).elementId, getDb_helper());
+                attrCategoryValue.setText(gridCateoriesAdapter.getItem(position).name);
+                ((TextView)attributesView.findViewWithTag("size")).setText(getSizeValueBySizeType(attrCategorySelected.getDefaultSizeType()));
+                alert.dismiss();
             }
         });
+        alert.show();
     }
 
 
 
     private void setupColorsDropdown() {
-        // Specify the layout to use when the list of choices appears
-        colorsDropdownAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
 
-        // Apply the adapter to the spinner
-        attrColorValue.setAdapter(colorsDropdownAdapter);
+        final View dialogView = inflater.inflate(R.layout.dialog_listgrid, null);
+        TextView headline = (TextView)dialogView.findViewById(R.id.dialog_headline);
+        headline.setText("Select a color");
 
-        if(savedColorId != -1) {
-            attrColorSelected = new com.gruppe1.pem.challengeme.Color(getApplicationContext(), savedColorId, getDb_helper());
-            int activeIndex = this.getIndex(attrColorValue, savedColorId);
-            attrColorValue.setSelection(activeIndex);
-        } else {
-            attrColorSelected = new com.gruppe1.pem.challengeme.Color(getApplicationContext(), (int)colorsDropdownAdapter.getItemId(0), getDb_helper());
-        }
+        ListView listView = (ListView) dialogView.findViewById(R.id.listView);
+        GridView gridView = (GridView) dialogView.findViewById(R.id.gridView);
+        listView.setVisibility(View.INVISIBLE);
 
-        colorsDropdownAdapter.notifyDataSetChanged();
-        attrColorValue.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        gridView.setAdapter(gridColorsAdapter);
 
+        builder.setView(dialogView);
+        final AlertDialog alert = builder.create();
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (view != null) {
-                    getDb_helper().setTable(Constants.COLORS_DB_TABLE);
-                    attrColorSelected = new com.gruppe1.pem.challengeme.Color(getBaseContext(), (int) colorsDropdownAdapter.getItemId(position), getDb_helper());
-                    attrColorValue.setSelection(position);
-                    attrColorValue.setBackgroundColor(Color.parseColor(colorsDropdownAdapter.getColorAtPosition(position).getHexColor()));
-                    if(!colorsDropdownAdapter.isColorLight(Color.parseColor(colorsDropdownAdapter.getColorAtPosition(position).getHexColor()))) {
-                        ((TextView) attrColorValue.findViewById(android.R.id.text1)).setTextColor(getResources().getColor(android.R.color.white));
-                    }
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                getDb_helper().setTable(Constants.CATEGORIES_DB_TABLE);
+                attrColorSelected = new com.gruppe1.pem.challengeme.Color(getBaseContext(), (int) gridColorsAdapter.getItem(position).getId(), getDb_helper());
+                attrColorValue.setText(attrColorSelected.getName());
+                attrColorValue.setBackgroundColor(Color.parseColor(attrColorSelected.getHexColor()));
+                if(!gridColorsAdapter.isColorLight(Color.parseColor(attrColorSelected.getHexColor()))) {
+                    attrColorValue.setTextColor(getResources().getColor(android.R.color.white));
                 }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> arg0) {
-                // TODO Auto-generated method stub
-
+                alert.dismiss();
             }
         });
+        alert.show();
     }
 
     private int getIndex(Spinner spinner, int p_catId) {
