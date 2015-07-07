@@ -8,7 +8,7 @@
     <color name="listItems">#ffffffff</color>
 
     <!-- for the grid cards -->
-    <color name="grey_transparent">#55000000</color>
+    <color name="grey_transparent">#5e000000</color>
 
     <!-- for the floating action button -->
     <color name="fab_color_1">#ff5252</color>
