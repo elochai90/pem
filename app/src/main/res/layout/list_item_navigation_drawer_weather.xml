@@ -20,7 +20,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_alignParentTop="true"
-                android:layout_margin="5dp"
+                android:layout_margin="10dp"
                 android:background="#E0F2F7"
                 android:gravity="center"
                 android:layout_gravity="center"
@@ -61,7 +61,7 @@
         <View
             android:layout_width="fill_parent"
             android:layout_height="1dp"
-            android:background="@android:color/darker_gray"/>
+            android:background="@color/button_material_light"/>
 
         <LinearLayout
             android:orientation="horizontal"
@@ -84,7 +84,6 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Mo"
                         android:id="@+id/day1"
                         android:layout_gravity="center"
                         android:textAppearance="@android:style/TextAppearance.Small"
@@ -93,7 +92,6 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="20°C"
                         android:id="@+id/temp1"
                         android:layout_gravity="center"
                         android:textAppearance="@android:style/TextAppearance.Small"
@@ -106,14 +104,13 @@
                     android:layout_height="match_parent"
                     android:id="@+id/imgView1"
                     android:background="#E0F2F7"
-                    android:src="@mipmap/weather_sun"
                     android:layout_gravity="center" />
             </LinearLayout>
 
             <View
                 android:layout_width="1dp"
                 android:layout_height="fill_parent"
-                android:background="@android:color/darker_gray"/>
+                android:background="@color/button_material_light"/>
 
             <LinearLayout
                 android:orientation="vertical"
@@ -132,7 +129,6 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Tue"
                         android:id="@+id/day2"
                         android:layout_gravity="center"
                         android:textAppearance="@android:style/TextAppearance.Small"
@@ -141,7 +137,6 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="20°C"
                         android:id="@+id/temp2"
                         android:layout_gravity="center"
                         android:textAppearance="@android:style/TextAppearance.Small"
@@ -154,14 +149,13 @@
                     android:layout_height="match_parent"
                     android:id="@+id/imgView2"
                     android:background="#E0F2F7"
-                    android:src="@mipmap/weather_sun"
                     android:layout_gravity="center" />
             </LinearLayout>
 
             <View
                 android:layout_width="1dp"
                 android:layout_height="fill_parent"
-                android:background="@android:color/darker_gray"/>
+                android:background="@color/button_material_light"/>
 
             <LinearLayout
                 android:orientation="vertical"
@@ -179,7 +173,6 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Wed"
                         android:id="@+id/day3"
                         android:layout_gravity="center"
                         android:textAppearance="@android:style/TextAppearance.Small"
@@ -188,7 +181,6 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="20°C"
                         android:id="@+id/temp3"
                         android:layout_gravity="center"
                         android:textAppearance="@android:style/TextAppearance.Small"
@@ -201,7 +193,6 @@
                     android:layout_height="match_parent"
                     android:id="@+id/imgView3"
                     android:background="#E0F2F7"
-                    android:src="@mipmap/weather_sun"
                     android:layout_gravity="center" />
             </LinearLayout>
 

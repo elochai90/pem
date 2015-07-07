@@ -1,6 +1,7 @@
 package com.gruppe1.pem.challengeme;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -25,6 +26,8 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import android.util.Log;
 
+import com.gruppe1.pem.challengeme.helpers.Constants;
+
 public class WeatherRequest {
 
     String etResponse;
@@ -45,6 +48,10 @@ public class WeatherRequest {
     TextView temp3;
 
 
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+
+
     public WeatherRequest(Context context, ImageView weatherImageView, TextView weatherDescView, TextView weatherTempView, ImageView weatherImg1, ImageView weatherImg2, ImageView weatherImg3, TextView day1, TextView day2,
                           TextView day3, TextView temp1, TextView temp2,TextView temp3) {
         this.context = context;
@@ -60,6 +67,9 @@ public class WeatherRequest {
         this.temp1 = temp1;
         this.temp2 = temp2;
         this.temp3 = temp3;
+
+        this.sharedPreferences = context.getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
+        this.editor = sharedPreferences.edit();
 
         // check if you are connected or not
         if(isConnected()){
@@ -197,21 +207,36 @@ public class WeatherRequest {
         @Override
         protected void onPostExecute(String result) {
             JSONObject json = null; // convert String to JSONObject
+            String weather_today_desc = "";
+            String weather_today_temp = "";
+            int weather_today_image = 0;
+            String weather_1_day = "";
+            String weather_1_temp = "";
+            int weather_1_image = 0;
+            String weather_2_day = "";
+            String weather_2_temp = "";
+            int weather_2_image = 0;
+            String weather_3_day = "";
+            String weather_3_temp = "";
+            int weather_3_image = 0;
+
+            boolean weatherAvailable = false;
+            boolean todayWeather = false;
+
             try {
                 json = new JSONObject(result);
+                weatherAvailable = true;
 
                 if(json.has("weather")){
+                    todayWeather = true;
                     JSONArray weather = json.getJSONArray("weather"); // get articles array
-                    String weather_main = weather.getJSONObject(0).getString("main");
-                    String temp = Math.round(json.getJSONObject("main").getDouble("temp") - 273.15) + "°C";
-                    String code = weather.getJSONObject(0).getString("id");
+                    weather_today_desc = weather.getJSONObject(0).getString("main");
+                    weather_today_temp = Math.round(json.getJSONObject("main").getDouble("temp") - 273.15) + "°C";
+                    weather_today_image = getImage(weather.getJSONObject(0).getString("id"));
 
-                    weatherImageView.setImageResource(getImage(code));
-                    weatherDescView.setText(weather_main);
-                    weatherTempView.setText(temp);
                 }
                 else{
-                   JSONArray forecast = json.getJSONArray("list"); // get articles array
+                    JSONArray forecast = json.getJSONArray("list"); // get articles array
                     Date date = new Date();
                     SimpleDateFormat sdf = new SimpleDateFormat("EEE");
                     String currentDateandTime = sdf.format(date);
@@ -243,23 +268,68 @@ public class WeatherRequest {
                         }
 
                     }
+                    weather_1_day = days.get(0);
+                    weather_1_temp = temps.get(0);
+                    weather_1_image = getImage(codes.get(0));
+                    weather_2_day = days.get(1);
+                    weather_2_temp = temps.get(1);
+                    weather_2_image = getImage(codes.get(1));
+                    weather_3_day = days.get(2);
+                    weather_3_temp = temps.get(2);
+                    weather_3_image = getImage(codes.get(2));
 
-                    weatherImg1.setImageResource(getImage(codes.get(0)));
-                    day1.setText(days.get(0));
-                    temp1.setText(temps.get(0));
-
-                    weatherImg2.setImageResource(getImage(codes.get(1)));
-                    day2.setText(days.get(1));
-                    temp2.setText(temps.get(1));
-
-                    weatherImg3.setImageResource(getImage(codes.get(2)));
-                    day3.setText(days.get(2));
-                    temp3.setText(temps.get(2));
                 }
 
             } catch (JSONException e) {
                 e.printStackTrace();
+                System.out.println("NOOO WEATHER");
+                weather_today_desc = sharedPreferences.getString(Constants.KEY_W_TODAY_DESC, "");
+                weather_today_temp = sharedPreferences.getString(Constants.KEY_W_TODAY_TEMP, "");
+                weather_today_image = sharedPreferences.getInt(Constants.KEY_W_TODAY_IMAGE, 0);
+                weather_1_day = sharedPreferences.getString(Constants.KEY_W_1_DAY, "");
+                weather_1_temp = sharedPreferences.getString(Constants.KEY_W_1_TEMP, "");
+                weather_1_image = sharedPreferences.getInt(Constants.KEY_W_1_IMAGE, 0);
+                weather_2_day = sharedPreferences.getString(Constants.KEY_W_2_DAY, "");
+                weather_2_temp = sharedPreferences.getString(Constants.KEY_W_2_TEMP, "");
+                weather_2_image = sharedPreferences.getInt(Constants.KEY_W_2_IMAGE, 0);
+                weather_3_day = sharedPreferences.getString(Constants.KEY_W_3_DAY, "");
+                weather_3_temp = sharedPreferences.getString(Constants.KEY_W_3_TEMP, "");
+                weather_3_image = sharedPreferences.getInt(Constants.KEY_W_3_IMAGE, 0);
             }
+
+
+            if(!weatherAvailable || todayWeather) {
+                weatherImageView.setImageResource(weather_today_image);
+                weatherDescView.setText(weather_today_desc);
+                weatherTempView.setText(weather_today_temp);
+                editor.putInt(Constants.KEY_W_TODAY_IMAGE, weather_today_image);
+                editor.putString(Constants.KEY_W_TODAY_DESC, weather_today_desc);
+                editor.putString(Constants.KEY_W_TODAY_TEMP, weather_today_temp);
+            }
+            if(!weatherAvailable || !todayWeather){
+                weatherImg1.setImageResource(weather_1_image);
+                day1.setText(weather_1_day);
+                temp1.setText(weather_1_temp);
+                editor.putString(Constants.KEY_W_1_DAY, weather_1_day);
+                editor.putInt(Constants.KEY_W_1_IMAGE, weather_1_image);
+                editor.putString(Constants.KEY_W_1_TEMP, weather_1_temp);
+
+                weatherImg2.setImageResource(weather_2_image);
+                day2.setText(weather_2_day);
+                temp2.setText(weather_2_temp);
+                editor.putString(Constants.KEY_W_2_DAY, weather_2_day);
+                editor.putInt(Constants.KEY_W_2_IMAGE, weather_2_image);
+                editor.putString(Constants.KEY_W_2_TEMP, weather_2_temp);
+
+                weatherImg3.setImageResource(weather_3_image);
+                day3.setText(weather_3_day);
+                temp3.setText(weather_3_temp);
+                editor.putString(Constants.KEY_W_3_DAY, weather_3_day);
+                editor.putInt(Constants.KEY_W_3_IMAGE, weather_3_image);
+                editor.putString(Constants.KEY_W_3_TEMP, weather_3_temp);
+            }
+
+            editor.apply();
 
             etResponse = result;
         }

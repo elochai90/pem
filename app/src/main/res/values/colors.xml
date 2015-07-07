@@ -3,7 +3,8 @@
 
     <color name="primary">#ff1d4064</color>
     <color name="primary_dark">#ff12283e</color>
-    <color name="accent">#ff3e88d4</color>
+    <color name="accent">#ff33b4f8</color>
+    <color name="accent_old">#ff3e88d4</color>
     <color name="background">#fff4f4f4</color>
     <color name="listItems">#ffffffff</color>
 

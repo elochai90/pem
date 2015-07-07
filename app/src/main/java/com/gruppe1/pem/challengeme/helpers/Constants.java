@@ -39,6 +39,20 @@ public class Constants {
     public static final String KEY_DS_3_NAME = "Shoes";
     public static final String KEY_DS_NONE = "None";
 
+    // Shared Preferences Keys for the weather
+    public static final String KEY_W_TODAY_IMAGE = "WeatherTodayImage";
+    public static final String KEY_W_TODAY_DESC = "WeatherTodayDescription";
+    public static final String KEY_W_TODAY_TEMP = "WeatherTodayTemperature";
+    public static final String KEY_W_1_IMAGE = "Weather1Image";
+    public static final String KEY_W_1_DAY = "Weather1Day";
+    public static final String KEY_W_1_TEMP = "Weather1Temperature";
+    public static final String KEY_W_2_IMAGE = "Weather2Image";
+    public static final String KEY_W_2_DAY = "Weather2Day";
+    public static final String KEY_W_2_TEMP = "Weather2Temperature";
+    public static final String KEY_W_3_IMAGE = "Weather3Image";
+    public static final String KEY_W_3_DAY = "Weather3Day";
+    public static final String KEY_W_3_TEMP = "Weather3Temperature";
+
     public static final String DEFAULT_CAT_ICON = "kleiderbuegel";
 
     public static final int LIST_VIEW_IMAGE_WIDTH = 150;
