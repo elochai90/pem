@@ -238,14 +238,14 @@ public class WeatherRequest {
                 else{
                     JSONArray forecast = json.getJSONArray("list"); // get articles array
                     Date date = new Date();
-                    SimpleDateFormat sdf = new SimpleDateFormat("EEE");
+                    SimpleDateFormat sdf = new SimpleDateFormat("EEE", Locale.ENGLISH);
                     String currentDateandTime = sdf.format(date);
 
                     ArrayList<String> days = new ArrayList<String>();
                     ArrayList<String> temps = new ArrayList<String>();
                     ArrayList<String> codes = new ArrayList<String>();
 
-                    for(int i = 1; i < forecast.length()-8; i++){
+                    for(int i = 0; i < forecast.length()-8; i++){
                         int weather_dt = Integer.parseInt(forecast.getJSONObject(i).getString("dt"));
                         Date converteddate = new Date(weather_dt*1000L);
                         SimpleDateFormat sdf2 = new SimpleDateFormat("EEE-HH", Locale.ENGLISH);
@@ -268,6 +268,7 @@ public class WeatherRequest {
                         }
 
                     }
+
                     weather_1_day = days.get(0);
                     weather_1_temp = temps.get(0);
                     weather_1_image = getImage(codes.get(0));
