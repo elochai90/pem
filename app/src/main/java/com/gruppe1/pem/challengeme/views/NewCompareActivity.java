@@ -114,6 +114,14 @@ public class NewCompareActivity extends Activity {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                 firstCatItems = Item.getItemsByCategoryId(getApplicationContext(), upperCategoriesList.get(position).getId(), sharedPreferences.getBoolean(Constants.KEY_WISHLIST_IN_COMPARE, false));
+
+                                for(int i = 0; i < firstCatItems.size(); i++){
+                                    String imageFile = firstCatItems.get(i).getImageFile();
+                                    if(imageFile == null){
+                                        firstCatItems.remove(i);
+                                    }
+                                }
+
                                 System.out.println("firstCatItems.size: " + firstCatItems.size());
                                 CompareImageAdapter adapter = new CompareImageAdapter(thisActivity, firstCatItems, 1);
                                 viewPager1.setAdapter(adapter);
@@ -134,6 +142,14 @@ public class NewCompareActivity extends Activity {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         secontCatItems = Item.getItemsByCategoryId(getApplicationContext(), upperCategoriesList.get(position).getId(), sharedPreferences.getBoolean(Constants.KEY_WISHLIST_IN_COMPARE, false));
+
+                        for(int i = 0; i < secontCatItems.size(); i++){
+                            String imageFile = secontCatItems.get(i).getImageFile();
+                            if(imageFile == null){
+                                secontCatItems.remove(i);
+                            }
+                        }
+
                         CompareImageAdapter adapter = new CompareImageAdapter(thisActivity, secontCatItems, 2);
                         viewPager2.setAdapter(adapter);
                         img2.setVisibility(View.INVISIBLE);
