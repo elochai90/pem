@@ -427,7 +427,7 @@ public class NewItemActivity extends Activity {
             attrValueColorPicker.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final HSVColorPickerDialog cpd = new HSVColorPickerDialog( NewItemActivity.this, exactColorId, new HSVColorPickerDialog.OnColorSelectedListener() {
+                    final HSVColorPickerDialog cpd = new HSVColorPickerDialog(NewItemActivity.this, exactColorId, new HSVColorPickerDialog.OnColorSelectedListener() {
                         @Override
                         public void colorSelected(Integer color) {
                             // Do something with the selected color
@@ -436,7 +436,7 @@ public class NewItemActivity extends Activity {
                             attrValueColorPicker.setText("");
                         }
                     });
-                    cpd.setTitle( "Pick the exact color" );
+                    cpd.setTitle("Pick the exact color");
                     cpd.show();
                 }
             });
@@ -459,6 +459,8 @@ public class NewItemActivity extends Activity {
                 attrValueDatePicker.setText(R.string.no_buy_date_selected);
                 buyDate = "";
             }
+
+
             attrValueDatePicker.setBackgroundColor(getResources().getColor(R.color.color_picker_initial));
             attrValueDatePicker.setText(buyDate);
             attrValueDatePicker.setOnClickListener(new View.OnClickListener() {
