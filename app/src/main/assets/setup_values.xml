@@ -4,10 +4,10 @@
     <categories>
 
         <categorie>
-            <name>T-Shirts</name>
+            <name>Sweater</name>
             <parent_categorie_id>0</parent_categorie_id>
             <default_attribute_type>0</default_attribute_type>
-            <icon>tshirt</icon>
+            <icon>pulli</icon>
         </categorie>
 
         <categorie>
@@ -22,6 +22,13 @@
             <parent_categorie_id>0</parent_categorie_id>
             <default_attribute_type>1</default_attribute_type>
             <icon>rock</icon>
+        </categorie>
+
+        <categorie>
+            <name>Coats</name>
+            <parent_categorie_id>0</parent_categorie_id>
+            <default_attribute_type>0</default_attribute_type>
+            <icon>mantel</icon>
         </categorie>
 
         <categorie>
@@ -71,6 +78,13 @@
             <parent_categorie_id>0</parent_categorie_id>
             <default_attribute_type>2</default_attribute_type>
             <icon>sneaker</icon>
+        </categorie>
+
+        <categorie>
+            <name>Dresses</name>
+            <parent_categorie_id>0</parent_categorie_id>
+            <default_attribute_type>0</default_attribute_type>
+            <icon>kleid</icon>
         </categorie>
 
         <categorie>
