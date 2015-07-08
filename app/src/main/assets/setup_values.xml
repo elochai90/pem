@@ -67,38 +67,17 @@
         </categorie>
 
         <categorie>
-            <name>Sneaker</name>
+            <name>Shoes</name>
             <parent_categorie_id>0</parent_categorie_id>
             <default_attribute_type>2</default_attribute_type>
             <icon>sneaker</icon>
         </categorie>
 
         <categorie>
-            <name>Boots</name>
-            <parent_categorie_id>0</parent_categorie_id>
-            <default_attribute_type>2</default_attribute_type>
-            <icon>stiefel</icon>
-        </categorie>
-
-        <categorie>
-            <name>Heels</name>
-            <parent_categorie_id>0</parent_categorie_id>
-            <default_attribute_type>2</default_attribute_type>
-            <icon>schuh</icon>
-        </categorie>
-
-        <categorie>
             <name>Accessoires</name>
             <parent_categorie_id>0</parent_categorie_id>
             <default_attribute_type>-1</default_attribute_type>
-            <icon>kleiderbuegel</icon>
-        </categorie>
-
-        <categorie>
-            <name>Belts</name>
-            <parent_categorie_id>0</parent_categorie_id>
-            <default_attribute_type>-1</default_attribute_type>
-            <icon>kleiderbuegel</icon>
+            <icon>accessoires</icon>
         </categorie>
 
     </categories>
@@ -143,7 +122,7 @@
 
         <attribute_type>
             <name>Buy Date</name>
-            <value_type>1</value_type>
+            <value_type>4</value_type>
             <is_unique>1</is_unique>
         </attribute_type>
 

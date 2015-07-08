@@ -16,13 +16,17 @@
     <!--All category icons -->
     <string-array name="category_icons_array">
         <item>kleiderbuegel</item>
+        <item>accessoires</item>
         <item>anzug</item>
         <item>bademode</item>
+        <item>bag</item>
+        <item>belt</item>
         <item>cardigan</item>
         <item>hose</item>
         <item>jacke</item>
         <item>kleid</item>
         <item>mantel</item>
+        <item>nail_polish</item>
         <item>pulli</item>
         <item>rock</item>
         <item>schuh</item>
