@@ -20,6 +20,7 @@ import java.util.Iterator;
 
 /**
  * Created by simon on 19.06.2015.
+ * Stores initial data in database
  */
 public class DefaultSetup {
     private static boolean initated = false;
@@ -39,6 +40,10 @@ public class DefaultSetup {
         this.m_dbHelper.close();
     }
 
+    /**
+     * receives xml file and parses it to database valid values
+     * @param p_xml_file XML-File to be parsed
+     */
     public void setup(String p_xml_file) {
         XmlParser parser = new XmlParser();
 
@@ -75,8 +80,11 @@ public class DefaultSetup {
         this.m_dbHelper.close();
     }
 
+    /**
+     * Sets up the default categories
+     * @param p_elements Category list
+     */
     private void setupCategories(ArrayList<HashMap<String, String>> p_elements) {
-        Log.e("###SETUP##", "categories called");
 
         Iterator iterator = p_elements.iterator();
 
@@ -89,8 +97,11 @@ public class DefaultSetup {
 
     }
 
+    /**
+     * Sets up the default attributetypes
+     * @param p_elements Attribute types list
+     */
     private void setupAttributeTypes(ArrayList<HashMap<String, String>> p_elements) {
-        Log.e("###SETUP##", "attributes called");
 
         Iterator iterator = p_elements.iterator();
 
@@ -103,8 +114,11 @@ public class DefaultSetup {
 
     }
 
+    /**
+     * Sets up the default items(if recommended)
+     * @param p_elements List of Items
+     */
     private void setupItems(ArrayList<HashMap<String, String>> p_elements) {
-        Log.e("###SETUP##", "items called");
 
         Iterator iterator = p_elements.iterator();
 
@@ -116,8 +130,11 @@ public class DefaultSetup {
         }
     }
 
+    /**
+     * Sets up the default colors
+     * @param p_elements List of Colors
+     */
     private void setupColors(ArrayList<HashMap<String, String>> p_elements) {
-        Log.e("###SETUP##", "colors called");
 
         Iterator iterator = p_elements.iterator();
 

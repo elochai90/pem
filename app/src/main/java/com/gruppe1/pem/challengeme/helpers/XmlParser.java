@@ -19,6 +19,13 @@ public class XmlParser {
     // We don't use namespaces
     private static final String ns = null;
 
+    /**
+     * initiates the parse
+     * @param in InputStream
+     * @return HashMap of the dataset
+     * @throws XmlPullParserException
+     * @throws IOException
+     */
     public HashMap<String, ArrayList<HashMap<String, String>>> parse(InputStream in) throws XmlPullParserException, IOException {
         try {
             XmlPullParser parser = Xml.newPullParser();
@@ -50,8 +57,6 @@ public class XmlParser {
         while (eventType != XmlPullParser.END_DOCUMENT) {
             String name = null;
             parserDepth = parser.getDepth();
-            String elementTypeWrapper = "";
-            String elementType = "";
 
             switch (eventType) {
                 case XmlPullParser.START_DOCUMENT:
@@ -64,13 +69,11 @@ public class XmlParser {
                     switch(parserDepth) {
                         case 2:
                             //i.e categories
-                            elementTypeWrapper = name;
                             elementValueList = new ArrayList<HashMap<String, String>>();
                             break;
 
                         case 3:
                             //i.e category
-                            elementType = name;
                             elementValues = new HashMap<String, String>();
                             break;
 
@@ -105,7 +108,7 @@ public class XmlParser {
             eventType = parser.next();
         }
 
-        //just for debugging START
+        //just for debugging START -  leave in code for further debugging
         Set<String> elementTypes = elementWrapperList.keySet();
         Iterator iterator = elementTypes.iterator();
 

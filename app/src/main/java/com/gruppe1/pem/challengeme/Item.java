@@ -34,8 +34,6 @@ public class Item {
     private int m_primaryColorId;
     private Float m_rating;
 
-//    private HashMap<AttributeType, Object> attributes;
-
     private ArrayList<HashMap<AttributeType, String>> m_customAttributes;
 
     private Context m_context;
@@ -48,8 +46,6 @@ public class Item {
         this.m_dbHelper = p_dbHelper;
         this.m_dbHelper.setTable(Constants.ITEMS_DB_TABLE);
 
-//        attributes = new HashMap<AttributeType, Object>();
-
         if(p_id > 0) {
             // get data from existing item
             this.m_dbHelper.setColumns(new String[]{"*"});
@@ -57,7 +53,6 @@ public class Item {
             Cursor itemData = this.m_dbHelper.select();
 
             if(itemData.moveToFirst()) {
-//                Log.e("###Item Id:###", "" + itemData.getInt(0));
                 this.m_id = itemData.getInt(0);
                 this.m_name = itemData.getString(1);
                 this.m_imageFile = itemData.getString(2);
@@ -65,17 +60,12 @@ public class Item {
                 this.m_isWish = itemData.getInt(4);
                 this.m_primaryColorId = itemData.getInt(5);
                 this.m_rating= itemData.getFloat(6);
-
-                //TODO handle item_attribute_types table for m_customAttributes
-
             } else {
-                Log.e("###NO_SUCH_ITEM_ID", "" + m_id);
             }
             itemData.close();
         } else {
             // prepare new item
         }
-
     }
 
     public int getId() {
@@ -135,16 +125,25 @@ public class Item {
     }
 
 
+    /**
+     * gets all items of specific category
+     * @param p_context applicaton context
+     * @param p_categoryId parent category id
+     * @param showAlsoWishlistItems decides wether wishlist items are to be shown as well
+     * @return ArrayList of Items
+     */
     public static ArrayList<Item> getItemsByCategoryId(Context p_context, int p_categoryId, boolean showAlsoWishlistItems) {
         DataBaseHelper dbHelper = new DataBaseHelper(p_context);
         dbHelper.init();
         dbHelper.setTable(Constants.ITEMS_DB_TABLE);
         dbHelper.setColumns(new String[]{"*"});
+
         if (showAlsoWishlistItems) {
             dbHelper.setWhere("", new String[]{"category_id='" + p_categoryId + "'"});
         } else {
             dbHelper.setWhere("", new String[]{"category_id='" + p_categoryId + "' AND is_wish=0"});
         }
+
         dbHelper.setOrderBy("name ASC");
         Cursor cursor = dbHelper.select();
 
@@ -156,10 +155,17 @@ public class Item {
             itemList.add(new Item(p_context, cursor.getInt(0), dbHelper));
             cursor.moveToNext();
         }
+
         cursor.close();
         return itemList;
     }
 
+    /**
+     * gets all Items
+     * @param p_context applicaton context
+     * @param p_wishListItems decides wether wishlist items are to be shown as well
+     * @return returns all items
+     */
     public static ArrayList<Item> getAllItems(Context p_context, boolean p_wishListItems) {
         DataBaseHelper dbHelper = new DataBaseHelper(p_context);
         dbHelper.init();
@@ -183,20 +189,31 @@ public class Item {
             itemList.add(new Item(p_context, cursor.getInt(0), dbHelper));
             cursor.moveToNext();
         }
+
         cursor.close();
         dbHelper.close();
         return itemList;
     }
+
+    /**
+     * gets count of items in category (not really smart...has to be changed in combination with other method)
+     * @param p_context application context
+     * @param p_categoryId parent category id
+     * @param showAlsoWishlistItems decides wether wishlist items are to be shown as well
+     * @return count of items in category
+     */
     public static int getItemsCountByCategoryId(Context p_context, int p_categoryId, boolean showAlsoWishlistItems) {
         DataBaseHelper dbHelper = new DataBaseHelper(p_context);
         dbHelper.init();
         dbHelper.setTable(Constants.ITEMS_DB_TABLE);
         dbHelper.setColumns(new String[]{"COUNT(*)"});
+
         if (showAlsoWishlistItems) {
             dbHelper.setWhere("", new String[]{"category_id='" + p_categoryId + "'"});
         } else {
             dbHelper.setWhere("", new String[]{"category_id='" + p_categoryId + "' AND is_wish=0"});
         }
+
         Cursor cursor = dbHelper.select();
 
         int itemsCount = 0;
@@ -207,11 +224,16 @@ public class Item {
             itemsCount = cursor.getInt(0);
             cursor.moveToNext();
         }
+
         cursor.close();
         dbHelper.close();
         return itemsCount;
     }
 
+    /**
+     * edit the item
+     * @param p_values value to be edited
+     */
     public void edit(HashMap<String, String> p_values) {
         Set<String> keys = p_values.keySet();
         Iterator iterator = keys.iterator();
@@ -243,6 +265,9 @@ public class Item {
         }
     }
 
+    /**
+     * save the item
+     */
     public void save() {
         if(this.m_id == 0) {
             // insert as new item
@@ -257,19 +282,18 @@ public class Item {
             } catch (Exception e) {
                 rowId = 0;
             }
+
             existingRowCursor.close();
+
             if(rowId == 0) {
                 this.setAllValuesToDbHelper();
                 int id = this.m_dbHelper.insert();
 
                 if (id > -1) {
                     this.m_id = id;
-//                    Log.e("###ITEM INSERTED","id:" + id);
                 } else {
-                    Log.e("Item-Error", "save failed");
                 }
             } else {
-//                Log.e("###ITEM EXISTS", this.m_name + " - " + rowId);
             }
         } else {
             //save changes to existing item
@@ -279,6 +303,9 @@ public class Item {
         }
     }
 
+    /**
+     * sets all values to database helper
+     */
     private void setAllValuesToDbHelper() {
         this.m_dbHelper.setStringValue("name", this.m_name);
         this.m_dbHelper.setStringValue("image_file", this.m_imageFile);
@@ -288,6 +315,9 @@ public class Item {
         this.m_dbHelper.setFloatValue("rating", this.m_rating);
     }
 
+    /**
+     * deletes the item and concerning compares
+     */
     public void delete() {
         this.m_dbHelper.setWhere("", new String[]{"_id=" + this.m_id});
         this.m_dbHelper.delete();
@@ -295,5 +325,4 @@ public class Item {
 
         Compare.deleteComparesByItemId(this.m_context, this.m_id);
     }
-
 }

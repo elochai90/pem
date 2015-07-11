@@ -23,6 +23,7 @@ public class Category {
         put("default_attribute_type", 1);
         put("icon", 1);
     }};
+
     private int m_id;
     private String m_name;
     private int m_parent_category_id = Constants.DEFAULT_CATEGORY_ID;
@@ -31,7 +32,6 @@ public class Category {
     private int m_defaultSizeType;
     private DataBaseHelper m_dbHelper;
     private Context context;
-
 
     public Category(Context context, int m_id, DataBaseHelper p_dbHelper) {
         this.context = context;
@@ -45,14 +45,12 @@ public class Category {
             Cursor categoryData = this.m_dbHelper.select();
 
             if(categoryData.moveToFirst()) {
-//                Log.e("###Category Id:###", "" + categoryData.getInt(0));
                 this.m_id = categoryData.getInt(0);
                 this.m_name = categoryData.getString(1);
                 this.m_parent_category_id = categoryData.getInt(2);
                 this.m_defaultSizeType = categoryData.getInt(3);
                 this.m_icon = categoryData.getString(4);
             } else {
-                Log.e("###NO_SUCH_CATEGORY_ID", "" + m_id);
             }
             categoryData.close();
         } else {
@@ -65,7 +63,6 @@ public class Category {
      * ------------------------- Getter and setter ------------------------
      * --------------------------------------------------------------------
      */
-
 
     public int getId() {
         return m_id;
@@ -121,7 +118,6 @@ public class Category {
 
         Cursor allCategoriesIterator = helper.select();
         allCategoriesIterator.moveToFirst();
-//        Log.e("###All Cat count###", "" + allCategoriesIterator.getCount());
 
         while (!allCategoriesIterator.isAfterLast()) {
             Category category = new Category(p_context, allCategoriesIterator.getInt(0), helper);
@@ -130,51 +126,45 @@ public class Category {
             category.setDefaultSizeType(allCategoriesIterator.getInt(3));
 
             category.setIcon(allCategoriesIterator.getString(4));
-            //Log.e("###All Cat call###", "name: " + allCategories.getString(1));
             allCategories.add(category);
             allCategoriesIterator.moveToNext();
         }
+
         allCategoriesIterator.close();
         helper.close();
         return allCategories;
     }
 
+    /**
+     * Edit a Category
+     * @param p_values values to be edited
+     */
     public void edit(HashMap<String, String> p_values) {
         Set<String> keys = p_values.keySet();
         Iterator iterator = keys.iterator();
-
-//        Log.e("KEYS", keys.toString());
 
         while (iterator.hasNext()) {
             String dbColumnName = iterator.next().toString();
             String dbColumnValue = p_values.get(dbColumnName);
 
-//            Log.e("DBCOLUMNS", dbColumnName.toString());
-
             switch (dbColumnName) {
                 case "name":
                     this.setName(dbColumnValue);
-                    //Log.e("###CAT EDIT###", "name is: " + dbColumnValue);
                     break;
 
                 case "parent_categorie_id":
                     this.setParentCategoryId(Integer.parseInt(dbColumnValue));
-                    //Log.e("###CAT EDIT###", "parent_cat_id is: " + dbColumnValue);
                     break;
 
                 case "default_attribute_type":
-                    //Log.e("###CAT EDIT###", "default_attribute_type is: " + dbColumnValue);
                     this.setDefaultSizeType(Integer.parseInt(dbColumnValue));
                     break;
 
                 case "icon":
-
-//                    Log.e("###CAT EDIT ICON###", "icon is: " + dbColumnValue);
                     this.setIcon(dbColumnValue);
                     break;
 
                 default:
-                    Log.e("###CAT EDIT###", dbColumnName + " is not declared as columns in " + Constants.CATEGORIES_DB_TABLE);
                     break;
             }
         }
@@ -203,12 +193,9 @@ public class Category {
 
                 if (id > -1) {
                     this.m_id = id;
-//                   Log.e("###CAT INSERTED","id:" + id);
                 } else {
-                    Log.e("Category-Error", "save failed");
                 }
             } else {
-//                Log.e("###CAT EXISTS", this.m_name + " - " + rowId);
             }
         } else {
             //save changes to existing category
@@ -216,15 +203,18 @@ public class Category {
             this.setAllValuesToDbHelper();
             this.m_dbHelper.update();
         }
+
        //m_dbHelper.close();
     }
 
     @Override
     public boolean equals(Object o) {
         return (o instanceof Category && getId() == ((Category) o).getId());
-
     }
 
+    /**
+     * sets all values to database helper object
+     */
     private void setAllValuesToDbHelper(){
         this.m_dbHelper.deleteValues();
         this.m_dbHelper.setStringValue("name", this.m_name);
@@ -234,13 +224,12 @@ public class Category {
         this.m_dbHelper.setStringValue("icon", iconValue);
     }
 
+    /**
+     * delete category
+     */
     public void delete() {
-        ArrayList<Item> items = Item.getAllItems(this.context, false);
-        Log.e("###BEFORE DELETE###", "" + items.size());
         this.m_dbHelper.setWhere("", new String[]{"_id=" + this.m_id});
         this.m_dbHelper.delete();
-        items = Item.getAllItems(this.context, false);
-        Log.e("###AFTER DELETE###", "" + items.size());
         m_dbHelper.close();
     }
 }

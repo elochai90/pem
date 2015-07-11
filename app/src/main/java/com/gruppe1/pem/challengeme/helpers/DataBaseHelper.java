@@ -45,6 +45,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         this.mValues = new ContentValues();
     }
 
+    /**
+     * checks if database exists and otherwise creates it
+     */
     public void init() {
         if(!db_existanceChecked) {
             try {
@@ -148,13 +151,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     }
 
+    /**
+     *  creates the database
+     */
     public void createDataBase() throws IOException {
 
         boolean dbExist = checkDataBase();
 
         if(!dbExist){
-            //By calling this method and empty database will be created into the default system path
-            //of your application so we are gonna be able to overwrite that database with our database.
             this.getReadableDatabase();
 
             try {
@@ -165,6 +169,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     *  checks wether database can be opened or not
+     *  @return boolean if database can be opened
+     */
     private boolean checkDataBase() {
 
         SQLiteDatabase checkDB = null;
@@ -184,6 +192,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return checkDB != null;
     }
 
+
+    /**
+     * copies the database to the used one
+     * @throws IOException
+     */
     private void copyDataBase() throws IOException {
 
         //Open your local db as the input stream
@@ -205,8 +218,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         myInput.close();
     }
 
+    /**
+     * Open the database
+     * @throws SQLException
+     */
     public void openDataBase() throws SQLException {
-        //Open the database
         this.database = SQLiteDatabase.openDatabase(DB_FULL_PATH, null, SQLiteDatabase.OPEN_READWRITE);
     }
 
@@ -216,12 +232,19 @@ public class DataBaseHelper extends SQLiteOpenHelper {
      * --------------------------------------------------------------------
      */
 
+    /**
+     * sets the SELECT-Query
+     * @return Datacursor
+     */
     public Cursor select() {
         return this.database.query(this.mTable, this.mColumns, this.mWhere, null, null,null, this.mOrderBy);
     }
 
+    /**
+     * sets the INSERT-Query
+     * @return id of new element
+     */
     public int insert() {
-        Log.e("###INSERT###", this.mValues.toString());
         this.database.insert(this.mTable, null, this.mValues);
         this.mColumns = new String[]{"MAX(_id)"};
         Cursor cursor = this.select();
@@ -234,10 +257,16 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return -1;
     }
 
+    /**
+     * updates selected table at specific rows
+     */
     public void update(){
         this.database.update(this.mTable, this.mValues, this.mWhere, null);
     }
 
+    /**
+     * deteles selected elements
+     */
     public void delete() {
         this.database.delete(this.mTable, this.mWhere, null);
     }

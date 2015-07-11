@@ -49,13 +49,11 @@ public class AttributeType {
             Cursor attrTypeData = this.m_dbHelper.select();
 
             if(attrTypeData.moveToFirst()) {
-//                Log.e("###AttrType Name:###", "" + attrTypeData.getInt(0));
                 this.m_id = attrTypeData.getInt(0);
                 this.m_name = attrTypeData.getString(1);
                 this.m_valueType = attrTypeData.getInt(2);
                 this.m_isUnique = attrTypeData.getInt(3);
             } else {
-                Log.e("###NO_SUCH_CATEGORY_ID", "" + m_id);
             }
             attrTypeData.close();
 
@@ -96,6 +94,11 @@ public class AttributeType {
         this.m_isUnique = is_unique;
     }
 
+    /**
+     * get all attribute types
+     * @param p_context application context
+     * @return ArrayList of AttributeType Obejcts
+     */
     public static ArrayList<AttributeType> getAttributeTypes(Context p_context) {
         DataBaseHelper helper = new DataBaseHelper(p_context);
         helper.init();
@@ -112,11 +115,18 @@ public class AttributeType {
             attributeTypes.add(attributeType);
             allAttrTypesIterator.moveToNext();
         }
+
         allAttrTypesIterator.close();
         helper.close();
         return attributeTypes;
     }
 
+    /**
+     * gets an specific attribute type by id
+     * @param p_context application context
+     * @param attrTypeId AttributeType ID
+     * @return AttributeType with requested ID
+     */
     public static AttributeType getAttributeTypeById(Context p_context, int attrTypeId) {
         DataBaseHelper helper = new DataBaseHelper(p_context);
         helper.init();
@@ -133,11 +143,18 @@ public class AttributeType {
         } else {
             attributeType = new AttributeType(p_context, allAttrTypesIterator.getInt(0), helper);
         }
+
         allAttrTypesIterator.close();
         helper.close();
         return attributeType;
     }
 
+    /**
+     * gets an AttributeType Obeject by name (not in use right now, due to missing unique statement on column `name`)
+     * @param p_context application context
+     * @param attrName name of the attribute type
+     * @return AttributeType with requested name
+     */
     public static AttributeType getAttributeTypeByName(Context p_context, String attrName) {
         DataBaseHelper helper = new DataBaseHelper(p_context);
         helper.init();
@@ -154,15 +171,19 @@ public class AttributeType {
         } else {
             attributeType = new AttributeType(p_context, allAttrTypesIterator.getInt(0), helper);
         }
+
         allAttrTypesIterator.close();
         helper.close();
         return attributeType;
     }
+
+    /**
+     * Edits the AttributeType Object
+     * @param p_values values to be edited
+     */
     public void edit(HashMap<String, String> p_values) {
         Set<String> keys = p_values.keySet();
         Iterator iterator = keys.iterator();
-
-//        Log.e("###ATTR KEYS###", keys.toString());
 
         while (iterator.hasNext()) {
             String dbColumnName = iterator.next().toString();
@@ -171,21 +192,17 @@ public class AttributeType {
             switch (dbColumnName) {
                 case "name":
                     this.setName(dbColumnValue);
-                    //Log.e("###ATTR EDIT###", "name is: " + dbColumnValue);
                     break;
 
                 case "value_type":
                     this.setValueType(Integer.parseInt(dbColumnValue));
-                    //Log.e("###ATTR EDIT###", "value_type is: " + dbColumnValue);
                     break;
 
                 case "is_unique":
-                    //Log.e("###ATTR EDIT###", "is unique is: " + dbColumnValue);
                     this.setIsUnique(Integer.parseInt(dbColumnValue));
                     break;
 
                 default:
-                    Log.e("###ATTR EDIT###", dbColumnName + " is not declared as columns in " + Constants.ATTRIBUTE_TYPES_DB_TABLE);
                     break;
             }
         }
@@ -218,12 +235,9 @@ public class AttributeType {
 
                 if (id > -1) {
                     this.m_id = id;
-//                    Log.e("###ATTR INSERTED","name: " + this.m_name);
                 } else {
-                    Log.e("Attribute-Type-Error", "save failed");
                 }
             } else {
-//                Log.e("###ATTR TYPE EXISTS", this.m_name + " - " + rowId);
             }
         } else {
             //save changes to existing attribute type
@@ -235,6 +249,5 @@ public class AttributeType {
     @Override
     public boolean equals(Object o) {
         return (o instanceof AttributeType && getId() == ((AttributeType) o).getId());
-
     }
 }

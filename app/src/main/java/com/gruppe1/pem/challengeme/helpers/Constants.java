@@ -4,6 +4,7 @@ import com.gruppe1.pem.challengeme.R;
 
 /**
  * Created by Simon on 13.06.2015.
+ * holds multiple used values
  */
 public class Constants {
     public static final int DEFAULT_CATEGORY_ID = 0;

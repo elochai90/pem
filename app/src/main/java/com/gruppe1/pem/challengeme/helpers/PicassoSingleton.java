@@ -19,6 +19,11 @@ public class PicassoSingleton {
         this.context = p_context;
     }
 
+    /**
+     * checks on the existance of the Singleton
+     * @param p_context Application context
+     * @return PicassoSingleton
+     */
     public static PicassoSingleton getInstance(Context p_context){
         if(picassoSingleton == null) {
             picassoSingleton = new PicassoSingleton(p_context);
@@ -26,6 +31,13 @@ public class PicassoSingleton {
         return picassoSingleton;
     }
 
+    /**
+     * Sets an image to a ImageView
+     * @param p_file filename
+     * @param p_width desired width
+     * @param p_height desired height
+     * @param p_targetView target ImageView
+     */
     public void setImage(String p_file, int p_width, int p_height, ImageView p_targetView) {
         if (p_file != "") {
             Picasso.with(context).load(new File(p_file)).resize(p_width, p_height).centerCrop().into(p_targetView);

@@ -16,8 +16,6 @@ import java.util.Set;
  * Created by Simon on 13.06.2015.
  */
 public class Color {
-
-
     //0 = String, 1 = Integer
     public static final HashMap<String, Integer> dbColumns = new HashMap<String, Integer>() {{
         put("name", 0);
@@ -49,7 +47,6 @@ public class Color {
                 this.m_hex = itemData.getString(2);
 
             } else {
-                Log.e("###NO_SUCH_ATTRIBUTE_ID", "" + m_id);
             }
             itemData.close();
         } else {
@@ -89,6 +86,11 @@ public class Color {
     }
 
 
+    /**
+     * gets all stored colors
+     * @param p_context application context
+     * @return ArrayList with all colors
+     */
     public static ArrayList<Color> getAllColors(Context p_context) {
         DataBaseHelper dbHelper = new DataBaseHelper(p_context);
         dbHelper.init();
@@ -99,6 +101,7 @@ public class Color {
 
         Cursor allColorsIterator = dbHelper.select();
         allColorsIterator.moveToFirst();
+
         while (!allColorsIterator.isAfterLast()) {
             Color color = new Color(p_context, allColorsIterator.getInt(0), dbHelper);
             color.setName(allColorsIterator.getString(1));
@@ -106,12 +109,17 @@ public class Color {
             allColors.add(color);
             allColorsIterator.moveToNext();
         }
+
         allColorsIterator.close();
         dbHelper.close();
         return allColors;
     }
 
 
+    /**
+     * Edit Colot
+     * @param p_values values to be edited
+     */
     public void edit(HashMap<String, String> p_values) {
         Set<String> keys = p_values.keySet();
         Iterator iterator = keys.iterator();
@@ -131,6 +139,9 @@ public class Color {
         }
     }
 
+    /**
+     * save color
+     */
     public void save() {
         if(this.m_id == 0) {
             // insert as new color
@@ -146,7 +157,9 @@ public class Color {
             } catch (Exception e) {
                 rowId = 0;
             }
+
             existingRowCursor.close();
+
             if(rowId == 0) {
                 this.m_dbHelper.setStringValue("name", this.m_name);
                 this.m_dbHelper.setStringValue("hex", this.m_hex);
@@ -155,15 +168,11 @@ public class Color {
 
                 if (id > -1) {
                     this.m_id = id;
-                    Log.e("###COLOR INSERTED","id:" + id);
                 } else {
-                    Log.e("Color-Error", "save failed");
                 }
             } else {
-//                Log.e("###ATTRIBUTE EXISTS", this.m_itemId + ":" + this.m_attributeType.getId() + " - " + rowId);
             }
         } else {
-            //save changes to existing category
         }
         //m_dbHelper.close();
     }
@@ -171,7 +180,5 @@ public class Color {
     @Override
     public boolean equals(Object o) {
         return (o instanceof Color && getId() == ((Color) o).getId());
-
     }
-
 }

@@ -17,18 +17,14 @@ public class ListItemIconName {
     public Date date;
     public String itemFile;
 
-    public ListItemIconName(int elementId, int icon, String name, String itemBitmap)
-    {
+    public ListItemIconName(int elementId, int icon, String name, String itemBitmap) {
         this.elementId = elementId;
         this.icon = icon;
         this.name = name;
         this.itemFile = itemBitmap;
-
-//        Log.e("###LIST", this.name);
     }
 
-    public ListItemIconName(int elementId, int icon, String name, String itemFile, Date date)
-    {
+    public ListItemIconName(int elementId, int icon, String name, String itemFile, Date date) {
         this.elementId = elementId;
         this.icon = icon;
         this.name = name;

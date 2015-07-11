@@ -42,22 +42,17 @@ public class Compare implements Serializable{
                 this.name = compareCursor.getString(1);
                 this.timestamp = compareCursor.getString(3);
                 String[] idValues = compareCursor.getString(2).split(Pattern.quote("|"));
-                Log.e("###COMP###", compareCursor.getString(2));
 
                 for (String idValue : idValues) {
                     itemIds.add(Integer.parseInt(idValue));
                 }
-
-
             } else {
-                Log.e("###NO_SUCH_COMPARE_ID", "" + p_id);
             }
 
             compareCursor.close();
         } else {
             this.timestamp = (System.currentTimeMillis()) + "";
         }
-
     }
 
     public void setId(int p_id) {
@@ -88,6 +83,9 @@ public class Compare implements Serializable{
         return this.timestamp;
     }
 
+    /**
+     * inserts new compare
+     */
     public void insert() {
         getDbHelper().setStringValue("name", this.name);
         String idConcat = "";
@@ -102,14 +100,17 @@ public class Compare implements Serializable{
             }
         }
 
-        Log.e("###COMP IN###", idConcat);
         this.dbHelper.setStringValue("item_ids", idConcat);
         this.dbHelper.setStringValue("save_date", timestamp);
 
         this.dbHelper.insert();
-        // TODO: close dbHelper?
     }
 
+    /**
+     * gets all compares
+     * @param p_context application context
+     * @return ArrayList w/ all compares
+     */
     public static ArrayList<Compare> geAllCompares(Context p_context) {
         DataBaseHelper dbHelper = new DataBaseHelper(p_context);
         dbHelper.init();
@@ -125,12 +126,15 @@ public class Compare implements Serializable{
             allCompares.add(tmpCompare);
             compareCursor.moveToNext();
         }
+
         compareCursor.close();
         dbHelper.close();
         return allCompares;
     }
 
-
+    /**
+     * deletes the compare
+     */
     public void delete() {
         getDbHelper().setTable(Constants.COMPARES_DB_TABLE);
         this.dbHelper.setWhere("", new String[]{"_id=" + this.id});
@@ -138,19 +142,30 @@ public class Compare implements Serializable{
         this.dbHelper.close();
     }
 
+    /**
+     * closed the database connection
+     */
     public void closeDBConnection() {
         this.dbHelper.close();
     }
 
+    /**
+     * gets the database helper
+     * @return DatabaseHelper
+     */
     private DataBaseHelper getDbHelper() {
         if(!dbHelper.isOpen()) {
-            System.out.println("db helper was closed");
             dbHelper = new DataBaseHelper(context);
             dbHelper.init();
         }
         return dbHelper;
     }
 
+    /**
+     * Deteles compares with specific it ID in it
+     * @param p_context application context
+     * @param m_id it of the requested item
+     */
     public static void deleteComparesByItemId(Context p_context, int m_id) {
         DataBaseHelper dbHelper = new DataBaseHelper(p_context);
         dbHelper.init();
@@ -160,6 +175,3 @@ public class Compare implements Serializable{
         dbHelper.close();
     }
 }
-
-
-

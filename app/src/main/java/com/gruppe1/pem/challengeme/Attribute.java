@@ -52,7 +52,6 @@ public class Attribute {
                 this.m_attributeType = AttributeType.getAttributeTypeById(m_context, itemData.getInt(2));
                 this.m_value = itemData.getString(3);
             } else {
-                Log.e("###NO_SUCH_ATTRIBUTE_ID", "" + m_id);
             }
             itemData.close();
 
@@ -81,7 +80,6 @@ public class Attribute {
                 this.m_attributeType = AttributeType.getAttributeTypeById(m_context, itemData.getInt(2));
                 this.m_value = itemData.getString(3);
             } else {
-                Log.e("###NO_SUCH_ATTRIBUTE", "" + m_id);
             }
             itemData.close();
 
@@ -131,6 +129,12 @@ public class Attribute {
     }
 
 
+    /**
+     * gets all attributes connected to an specific item
+     * @param p_context application context
+     * @param p_itemId item ID
+     * @return ArrayList of Attributes
+     */
     public static ArrayList<Attribute> getAttributesByItemId(Context p_context, int p_itemId) {
         DataBaseHelper dbHelper = new DataBaseHelper(p_context);
         dbHelper.init();
@@ -147,29 +151,11 @@ public class Attribute {
             attributeList.add(new Attribute(p_context, cursor.getInt(0), dbHelper));
             cursor.moveToNext();
         }
+
         cursor.close();
         dbHelper.close();
         return attributeList;
     }
-
-    public static Attribute getAttributeOfItem(Context p_context, int p_itemId, String attributeTypeName) {
-        DataBaseHelper dbHelper = new DataBaseHelper(p_context);
-        dbHelper.init();
-        dbHelper.setTable(Constants.ATTRIBUTE_TYPES_DB_TABLE);
-        AttributeType attributeType = AttributeType.getAttributeTypeByName(p_context, attributeTypeName);
-        dbHelper.setTable(Constants.ITEM_ATTR_DB_TABLE);
-        dbHelper.setColumns(new String[]{"*"});
-        dbHelper.setWhere("", new String[]{"item_id='" + p_itemId + "' AND attribute_type_id='" + attributeType.getId() + "'"});
-        Cursor cursor = dbHelper.select();
-
-        cursor.moveToFirst();
-
-        Attribute result = new Attribute(p_context, cursor.getInt(0), dbHelper);
-        cursor.close();
-        dbHelper.close();
-        return result;
-    }
-
 
     /**
      * get all attributes from database
@@ -202,6 +188,10 @@ public class Attribute {
     }
 
 
+    /**
+     * edits the attribute data
+     * @param p_values Values to be edited
+     */
     public void edit(HashMap<String, String> p_values) {
         Set<String> keys = p_values.keySet();
         Iterator iterator = keys.iterator();
@@ -224,6 +214,9 @@ public class Attribute {
         }
     }
 
+    /**
+     * saves the attribute data in the database
+     */
     public void save() {
         if(this.m_id == 0) {
             // insert as new attribute
@@ -237,6 +230,7 @@ public class Attribute {
             } catch (Exception e) {
                 rowId = 0;
             }
+
             existingRowCursor.close();
             if(rowId == 0) {
                 this.setAllValuesToDbHelper();
@@ -244,9 +238,7 @@ public class Attribute {
 
                 if (id > -1) {
                     this.m_id = id;
-//                    Log.e("###ATTRIBUTE INSERTED","id:" + id);
                 } else {
-                    Log.e("Attribute-Error", "save failed");
                 }
             } else {
                 //save changes to existing attribute
@@ -260,9 +252,13 @@ public class Attribute {
             this.setAllValuesToDbHelper();
             this.m_dbHelper.update();
         }
+
         this.m_dbHelper.close();
     }
 
+    /**
+     * sets the attribute values to the database helper
+     */
     private void setAllValuesToDbHelper(){
         this.m_dbHelper.deleteValues();
         this.m_dbHelper.setIntegerValue("item_id", this.m_itemId);
@@ -270,11 +266,12 @@ public class Attribute {
         this.m_dbHelper.setStringValue("attribute_value", this.m_value.toString());
     }
 
+    /**
+     * deletes the attribute
+     */
     public void delete() {
-        ArrayList<Attribute> attributes = Attribute.getAllAttributes(this.m_context);
         this.m_dbHelper.setWhere("", new String[]{"_id=" + this.m_id});
         this.m_dbHelper.delete();
-        attributes = Attribute.getAllAttributes(this.m_context);
         this.m_dbHelper.close();
     }
 

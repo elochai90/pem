@@ -8,8 +8,6 @@ import java.util.Date;
  */
 public class CompareItem{
 
-    // TODO: not public, but method get...
-    // TODO: besser waere zwei Item Objekte zu uebergeben mit namen und createdAt
     public int iconItem1;
     public int iconItem2;
     public String name;
