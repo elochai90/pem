@@ -14,7 +14,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -22,77 +21,42 @@ import com.gruppe1.pem.challengeme.AnimatedTabHostListener;
 import com.gruppe1.pem.challengeme.ListItemIconName;
 import com.gruppe1.pem.challengeme.R;
 import com.gruppe1.pem.challengeme.adapters.NavigationDrawerAdapter;
+import com.gruppe1.pem.challengeme.helpers.Constants;
 
 public class TabsFragmentActivity extends FragmentActivity {
 
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
-    private LocalActivityManager mlam;
+    private LocalActivityManager localActivityManager;
     private ListView mDrawerList;
     private FragmentTabHost tabs;
-    private ImageView imgPhoto;
-
-    // TODO: make only one Instance in another file, to be able to access it from everywhere
-    public static final String MY_PREFERENCES = "Preferences_File";
-
     private String mTitle;
-
-    public static String TAG_TAB_1 = "tag01";
-    public static String TAG_TAB_2 = "tag02";
-    public static String TAG_TAB_3 = "tag03";
     private String[] menuItems = {"Categories", "Compare", "Wishlist", "Settings"};
-
-    public void setSelectedNavigationDrawerItem() {
-        mDrawerList.setItemChecked(tabs.getCurrentTab() + 1, true);
-        mTitle = menuItems[tabs.getCurrentTab()];
-        getActionBar().setTitle(mTitle);
-    }
-/*
-
-    private void setDefaultFont() {
-        try {
-            final Typeface customFontTypeface = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/texgyreadventor-regular.otf");
-
-            final Field defaultFontTypefaceField = Typeface.class.getDeclaredField("SERIF");
-            defaultFontTypefaceField.setAccessible(true);
-            defaultFontTypefaceField.set(null, customFontTypeface);
-        } catch (Exception e) {
-        }
-    }
-*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         setContentView(R.layout.activity_tabs);
 
-        imgPhoto = (ImageView) findViewById(R.id.itemDetailImage);
         mTitle = getString(R.string.app_name);
-        getActionBar().setTitle(mTitle);
+        if(getActionBar() != null) {
+            getActionBar().setTitle(mTitle);
+        }
 
         setupTabHost(savedInstanceState);
         setupNavigationDrawer();
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        //menu.clear();
-        // Inflate the menu; this adds items to the action bar if it is present.
         return false;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
-
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -100,11 +64,10 @@ public class TabsFragmentActivity extends FragmentActivity {
         mDrawerToggle.syncState();
     }
 
-
     @Override
     protected void onPostResume() {
         super.onResume();
-        mlam.dispatchResume();
+        localActivityManager.dispatchResume();
         for (int i = 0; i < tabs.getTabWidget().getChildCount(); i++) {
             TextView tv = (TextView) tabs.getTabWidget().getChildAt(i).findViewById(android.R.id.title);
             tv.setTextColor(Color.parseColor("#A4A4A4"));
@@ -112,26 +75,32 @@ public class TabsFragmentActivity extends FragmentActivity {
         }
         TextView tv = (TextView) tabs.getCurrentTabView().findViewById(android.R.id.title); //for Selected Tab
         tv.setTextColor(Color.parseColor("#ffffff"));
-
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mlam.dispatchPause(isFinishing());
+        localActivityManager.dispatchPause(isFinishing());
     }
 
-    public void hideTabHost() {
-        tabs.getTabWidget().setVisibility(View.GONE);
+    /**
+     * selects the current tab in the navigation drawer
+     */
+    public void setSelectedNavigationDrawerItem() {
+        mDrawerList.setItemChecked(tabs.getCurrentTab() + 1, true);
+        mTitle = menuItems[tabs.getCurrentTab()];
+        if(getActionBar() != null) {
+            getActionBar().setTitle(mTitle);
+        }
     }
 
-    public void showTabHost() {
-        tabs.getTabWidget().setVisibility(View.VISIBLE);
-    }
-
-
-    public void setupNavigationDrawer() {
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+    /**
+     * sets up the navigation drawer
+     */
+    private void setupNavigationDrawer() {
+        if(getActionBar() != null) {
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
@@ -151,9 +120,6 @@ public class TabsFragmentActivity extends FragmentActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                // Getting an array of rivers
-                //String[] menuItems = getResources().getStringArray(R.array.menus);
-                // Currently selected river
                 if (position != 0)
                     mTitle = menuItems[position - 1];
 
@@ -197,38 +163,29 @@ public class TabsFragmentActivity extends FragmentActivity {
                 invalidateOptionsMenu();
             }
         };
-
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerList.setItemChecked(1, true);
     }
 
-    public void setupTabHost(Bundle savedInstanceState) {
-        mlam = new LocalActivityManager(this, false);
-        mlam.dispatchCreate(savedInstanceState);
-       // tabs = (FragmentTabHost) findViewById(R.id.tabHost);
+    /**
+     * sets up the TabHost
+     * @param savedInstanceState Bundle
+     */
+    private void setupTabHost(Bundle savedInstanceState) {
+        localActivityManager = new LocalActivityManager(this, false);
+        localActivityManager.dispatchCreate(savedInstanceState);
 
-        //tabs.setup(mlam);
         tabs = (FragmentTabHost) findViewById(R.id.tabHost);
         tabs.setup(this, getSupportFragmentManager(), android.R.id.tabcontent);
 
-        tabs.addTab(tabs.newTabSpec(TAG_TAB_1).setIndicator(getString(R.string.title_activity_categories)),
+        tabs.addTab(tabs.newTabSpec(Constants.TAG_TAB_1).setIndicator(getString(R.string.title_activity_categories)),
                 CategoriesFragment.class, null);
-        tabs.addTab(tabs.newTabSpec(TAG_TAB_2).setIndicator(getString(R.string.title_activity_compare)),
+        tabs.addTab(tabs.newTabSpec(Constants.TAG_TAB_2).setIndicator(getString(R.string.title_activity_compare)),
                 CompareFragment.class, null);
-        tabs.addTab(tabs.newTabSpec(TAG_TAB_3).setIndicator(getString(R.string.title_activity_wishlist)),
+        tabs.addTab(tabs.newTabSpec(Constants.TAG_TAB_3).setIndicator(getString(R.string.title_activity_wishlist)),
                 WishlistFragment.class, null);
 
-
-        /*tabs.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
-            @Override
-            public void onTabChanged(String tabId) {
-                System.out.println(tabs.getCurrentTab());
-                mDrawerList.setItemChecked(tabs.getCurrentTab(), true);
-            }
-        });*/
         tabs.setOnTabChangedListener(new AnimatedTabHostListener(this, tabs));
-
-
         for (int i = 0; i < tabs.getTabWidget().getChildCount(); i++) {
             TextView tv = (TextView) tabs.getTabWidget().getChildAt(i).findViewById(android.R.id.title);
             tv.setTextColor(Color.parseColor("#FFFFFF"));
@@ -237,7 +194,6 @@ public class TabsFragmentActivity extends FragmentActivity {
 
     @Override
     public void onBackPressed() {
-
         new AlertDialog.Builder(this)
                 .setTitle("Do you really want to exit '" + getResources().getString(R.string.app_name) + "'?")
                 .setNegativeButton(android.R.string.no, null)
@@ -248,6 +204,5 @@ public class TabsFragmentActivity extends FragmentActivity {
                     }
                 }).create().show();
     }
-
 }
 

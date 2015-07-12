@@ -9,7 +9,7 @@
         android:layout_width="?android:attr/listPreferredItemHeightLarge"
         android:layout_height="?android:attr/listPreferredItemHeightLarge"
         android:layout_marginEnd="10dp"
-        android:contentDescription="Wishlist Item Image"/>
+        android:contentDescription="@string/list_grid_item_desc_image"/>
 
 
     <Button
@@ -22,8 +22,7 @@
         android:text="@string/wishlist_button_not_selected"
         android:textColor="@color/accent"
         android:visibility="invisible"
-        style="?android:attr/borderlessButtonStyle"
-        android:contentDescription="Add Item to Category/Wishlist"/>
+        style="?android:attr/borderlessButtonStyle"/>
 
 
 

@@ -6,10 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.view.ActionMode;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,19 +24,15 @@ import com.gruppe1.pem.challengeme.Category;
 import com.gruppe1.pem.challengeme.Item;
 import com.gruppe1.pem.challengeme.ListItemIconName;
 import com.gruppe1.pem.challengeme.R;
-import com.gruppe1.pem.challengeme.helpers.Constants;
-import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 import com.gruppe1.pem.challengeme.adapters.DefaultGridAdapter;
 import com.gruppe1.pem.challengeme.adapters.DefaultListAdapter;
+import com.gruppe1.pem.challengeme.helpers.Constants;
+import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 
 public class ItemsListActivity extends Activity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener  {
-
-    public static final int REQUEST_CODE = 1;
-
     private ArrayList<ListItemIconName> mDataset;
 
     private GridView gridView;
@@ -51,18 +45,16 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
 
     private int categoryId;
 
-    public SharedPreferences.Editor editor;
-    public SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
+    private SharedPreferences sharedPreferences;
 
     private Object[] selectedItem;
-    ActionMode actionMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.default_list_grid_view);
-
 
         noItemLayout = (RelativeLayout) findViewById(R.id.noItemLayout);
         TextView noItemText = (TextView) findViewById(R.id.noItemText);
@@ -72,14 +64,11 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
         editor = sharedPreferences.edit();
 
 
-        if (savedInstanceState != null) {
-            list = savedInstanceState.getBoolean(Constants.KEY_VIEW_ITEMS_AS_LIST, true);
-        } else {
-            list = true;
-        }
+        list = savedInstanceState == null || savedInstanceState.getBoolean(Constants.KEY_VIEW_ITEMS_AS_LIST, true);
+
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
-            if(extras == null) {
+            if (extras == null) {
                 categoryId = -1;
             } else {
                 categoryId = extras.getInt(Constants.EXTRA_CATEGORY_ID);
@@ -88,13 +77,12 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
             categoryId = -1;
         }
 
-
         DataBaseHelper db_helper = new DataBaseHelper(this);
         db_helper.init();
         Category category = new Category(this, categoryId, db_helper);
         db_helper.close(); // TODO: functioning or do we have to delete it?
         setTitle(category.getName());
-        mDataset = new ArrayList<ListItemIconName>();
+        mDataset = new ArrayList<>();
 
         initDataset();
 
@@ -155,10 +143,13 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
                 startActivityForResult(intent, 1);
             }
         });
-
-
     }
 
+
+    /**
+     * shows/hides the noCompareLayout
+     * @param show boolean if the noCompareLayout should be shown
+     */
     private void showNoItemLayout(boolean show) {
         if(show) {
             noItemLayout.setVisibility(View.VISIBLE);
@@ -202,6 +193,11 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
         return true;
     }
 
+
+    /**
+     * Switches the list/grid view of the items
+     * @param shouldBeListView boolean if the items should be shown as list view
+     */
     private void switchListGridView(boolean shouldBeListView) {
         if(shouldBeListView) {
             gridView.setVisibility(View.INVISIBLE);
@@ -235,13 +231,16 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
 
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
+    public void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
         // Save currently selected layout manager.
         savedInstanceState.putSerializable(Constants.KEY_VIEW_ITEMS_AS_LIST, list);
         super.onSaveInstanceState(savedInstanceState);
     }
 
 
+    /**
+     * initializes the dataset of compares
+     */
     private void initDataset() {
         mDataset.clear();
 
@@ -250,12 +249,9 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
 
         ArrayList<Item> allCategoryItems = Item.getItemsByCategoryId(this, categoryId, false);
 
-        Iterator catIt = allCategoryItems.iterator();
-
-        while (catIt.hasNext()) {
-            Item tmpItem = (Item)catIt.next();
+        for (Item tmpItem : allCategoryItems) {
             int iconId = getResources().getIdentifier("kleiderbuegel", "drawable", "com.gruppe1.pem.challengeme");
-            mDataset.add(new ListItemIconName(tmpItem.getId(), iconId , tmpItem.getName(), tmpItem.getImageFile()));
+            mDataset.add(new ListItemIconName(tmpItem.getId(), iconId, tmpItem.getName(), tmpItem.getImageFile()));
         }
         if(mDataset.size() > 0) {
             showNoItemLayout(false);
@@ -265,8 +261,12 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
         db_helper.close();
     }
 
-   // @Override
-    public void selectItem(int itemid) {
+
+    /**
+     * Starts the NewItemActivity to show detail informations of an item
+     * @param itemid the id of the selected item
+     */
+    private void selectItem(int itemid) {
         Intent intent = new Intent();
         intent.setClassName(getPackageName(), getPackageName() + ".views.NewItemActivity");
         Bundle b = new Bundle();
@@ -279,54 +279,10 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-      /*  if(position == 0) {
-            Intent intent = new Intent();
-            intent.setClassName(getPackageName(), getPackageName() + ".NewItemActivity");
-            startActivity(intent);
-        } else {*/
-            int itemid = list ? listAdapter.getItem(position).elementId : gridAdapter.getItem(position).elementId;
-            selectItem(itemid);
-        //}
+        int itemid = list ? listAdapter.getItem(position).getElementId() : gridAdapter.getItem(position).getElementId();
+        selectItem(itemid);
     }
 
-
-    private Bitmap getPicFromFile(String imageFile) {
-        int targetW = 500;
-        int targetH = 500;
-
-        // Get the dimensions of the bitmap
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(imageFile, bmOptions);
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
-
-        // Determine how much to scale down the image
-        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
-
-        // Decode the image file into a Bitmap sized to fill the View
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-        bmOptions.inPurgeable = true;
-
-        Bitmap bitmap = BitmapFactory.decodeFile(imageFile, bmOptions);
-
-        Bitmap cropImg = bitmap;
-        if(bitmap != null) {
-            int width = bitmap.getWidth();
-            int height = bitmap.getHeight();
-            if (width > height) {
-                int crop = (width - height) / 2;
-                cropImg = Bitmap.createBitmap(bitmap, crop, 0, height, height);
-            } else {
-                int crop = (height - width) / 2;
-                cropImg = Bitmap.createBitmap(bitmap, 0, crop, width, width);
-            }
-        }
-
-        return cropImg;
-    }
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -341,9 +297,9 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
 
-        View dialogView = inflater.inflate(R.layout.dialog_edit, null);
+        View dialogView = inflater.inflate(R.layout.dialog_edit, parent, false);
         TextView headline = (TextView)dialogView.findViewById(R.id.dialog_headline);
-        headline.setText(mDataset.get(position).name);
+        headline.setText(mDataset.get(position).getName());
 
         builder.setView(dialogView).setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
             @Override

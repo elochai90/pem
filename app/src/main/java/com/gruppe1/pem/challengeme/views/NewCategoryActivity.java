@@ -15,17 +15,16 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.gruppe1.pem.challengeme.Category;
 import com.gruppe1.pem.challengeme.DefaultSize;
+import com.gruppe1.pem.challengeme.R;
 import com.gruppe1.pem.challengeme.adapters.DefaultSizesAdapter;
 import com.gruppe1.pem.challengeme.adapters.IconsGridOverlayAdapter;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
-import com.gruppe1.pem.challengeme.R;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,19 +32,15 @@ import java.util.Arrays;
 
 public class NewCategoryActivity extends Activity {
 
-    private com.github.clans.fab.FloatingActionButton saveFAB;
     private EditText newCategory_name;
     private Spinner categoryDefaultSize;
     private ImageView categoryIcon;
     private Bundle extras;
 
     private String iconName;
+    private SharedPreferences sharedPreferences;
 
-
-    public SharedPreferences.Editor editor;
-    public SharedPreferences sharedPreferences;
-
-    int categoryId;
+    private int categoryId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +48,7 @@ public class NewCategoryActivity extends Activity {
         setContentView(R.layout.activity_new_category);
         extras = getIntent().getExtras();
 
-
         sharedPreferences = getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
 
         categoryId = 0;
         iconName = "kleiderbuegel";
@@ -106,7 +99,7 @@ public class NewCategoryActivity extends Activity {
             int iconId = getResources().getIdentifier(editCategory.getIcon(), "drawable", "com.gruppe1.pem.challengeme");
             categoryIcon.setImageResource(iconId);
 
-            String defaultSizeTypeString = "";
+            String defaultSizeTypeString;
             switch(editCategory.getDefaultSizeType()) {
                 case 0:
                     defaultSizeTypeString = Constants.KEY_DS_1_NAME;
@@ -128,12 +121,15 @@ public class NewCategoryActivity extends Activity {
         }
     }
 
+    /**
+     * creates the overlay to choose an Icon for the new category
+     */
     private void createIconOverlay() {
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
 
-        final View dialogView = inflater.inflate(R.layout.dialog_grid, null);
+        View dialogView = inflater.inflate(R.layout.dialog_grid, null);
         TextView headline = (TextView)dialogView.findViewById(R.id.dialog_headline);
         headline.setText(R.string.new_category_overlay_title);
         GridView gridView = (GridView) dialogView.findViewById(R.id.gridView);
@@ -152,8 +148,6 @@ public class NewCategoryActivity extends Activity {
                 alert.dismiss();
             }
         });
-
-
         alert.show();
     }
 
@@ -164,6 +158,9 @@ public class NewCategoryActivity extends Activity {
         return true;
     }
 
+    /**
+     * creates and saves the new category
+     */
     private void saveNewCategory() {
         DataBaseHelper db_helper = new DataBaseHelper(getApplicationContext());
         db_helper.init();
@@ -185,7 +182,6 @@ public class NewCategoryActivity extends Activity {
 
         setResult(Activity.RESULT_OK, i);
         this.finish();
-
     }
 
     @Override

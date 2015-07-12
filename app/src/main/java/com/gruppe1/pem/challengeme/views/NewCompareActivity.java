@@ -14,7 +14,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.gruppe1.pem.challengeme.Category;
@@ -30,32 +29,28 @@ import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
+import java.util.Locale;
 
 
 public class NewCompareActivity extends Activity {
 
-    ViewPager viewPager1;
-    ViewPager viewPager2;
-    ImageView img1;
-    ImageView img2;
-    ArrayList<Item> firstCatItems;
-    ArrayList<Item> secontCatItems;
+    private ViewPager viewPager1;
+    private ViewPager viewPager2;
+    private ImageView img1;
+    private ImageView img2;
+    private ArrayList<Item> firstCatItems;
+    private ArrayList<Item> secontCatItems;
 
-    ArrayList<Category> allCategories;
-    Activity thisActivity;
-    String[] upperCategoriesList2;
-    ArrayList<Category> upperCategoriesList;
-    AlertDialog builder1;
-    AlertDialog builder2;
-    private  ArrayList<Item> items;
+    private Activity thisActivity;
+    private ArrayList<Category> upperCategoriesList;
+    private AlertDialog builder1;
+    private AlertDialog builder2;
     private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_compare);
-
 
         sharedPreferences = getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
 
@@ -64,20 +59,18 @@ public class NewCompareActivity extends Activity {
         viewPager1.setVisibility(View.INVISIBLE);
         viewPager2.setVisibility(View.INVISIBLE);
 
-        allCategories = Category.getAllCategories(getApplicationContext());
+        ArrayList<Category> allCategories = Category.getAllCategories(getApplicationContext());
         img1 = (ImageView) findViewById(R.id.img1);
         img2 = (ImageView) findViewById(R.id.img2);
 
         thisActivity = this;
 
-
-
-        upperCategoriesList = new ArrayList<Category>();
+        upperCategoriesList = new ArrayList<>();
 
         for(Category cat : allCategories) {
             int catsize = Item.getItemsCountByCategoryId(getApplicationContext(), cat.getId(), sharedPreferences.getBoolean(Constants.KEY_WISHLIST_IN_COMPARE, false));
             if(catsize > 0) {
-                items = Item.getItemsByCategoryId(getApplicationContext(), cat.getId(), sharedPreferences.getBoolean(Constants.KEY_WISHLIST_IN_COMPARE, false));
+                ArrayList<Item> items = Item.getItemsByCategoryId(getApplicationContext(), cat.getId(), sharedPreferences.getBoolean(Constants.KEY_WISHLIST_IN_COMPARE, false));
                 for (int i = 0; i < items.size(); i++) {
                     if (items.get(i).getImageFile() != null) {
                         upperCategoriesList.add(cat);
@@ -85,44 +78,28 @@ public class NewCompareActivity extends Activity {
                     }
                 }
             }
-
         }
-//        String tmpString = upperCategoriesList.toString();
-//        upperCategoriesList2 = stringToArray(tmpString);
-
-//        final ArrayAdapter<CharSequence> arrayAdapter = new ArrayAdapter<CharSequence>(
-//                this,
-//                android.R.layout.simple_list_item_1,
-//                upperCategoriesList );
-
-//        builder1 = new AlertDialog.Builder(NewCompareActivity.this);
-//        builder2 = new AlertDialog.Builder(NewCompareActivity.this);
-
         img1.setOnClickListener(new AdapterView.OnClickListener() {
             @Override
             public void onClick(View view) {
+                builder1 = createCategoryOverlay(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        firstCatItems = Item.getItemsByCategoryId(getApplicationContext(), upperCategoriesList.get(position).getId(), sharedPreferences.getBoolean(Constants.KEY_WISHLIST_IN_COMPARE, false));
 
-                builder1 = createCategoryOverlay(
-                        new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                firstCatItems = Item.getItemsByCategoryId(getApplicationContext(), upperCategoriesList.get(position).getId(), sharedPreferences.getBoolean(Constants.KEY_WISHLIST_IN_COMPARE, false));
-
-                                for(int i = 0; i < firstCatItems.size(); i++){
-                                    String imageFile = firstCatItems.get(i).getImageFile();
-                                    if(imageFile == null){
-                                        firstCatItems.remove(i);
-                                    }
-                                }
-
-                                System.out.println("firstCatItems.size: " + firstCatItems.size());
-                                CompareImageAdapter adapter = new CompareImageAdapter(thisActivity, firstCatItems, 1);
-                                viewPager1.setAdapter(adapter);
-                                img1.setVisibility(View.INVISIBLE);
-                                viewPager1.setVisibility(View.VISIBLE);
-                                builder1.dismiss();
+                        for (int i = 0; i < firstCatItems.size(); i++) {
+                            String imageFile = firstCatItems.get(i).getImageFile();
+                            if (imageFile == null) {
+                                firstCatItems.remove(i);
                             }
-                        });
+                        }
+                        CompareImageAdapter adapter = new CompareImageAdapter(thisActivity, firstCatItems, 1);
+                        viewPager1.setAdapter(adapter);
+                        img1.setVisibility(View.INVISIBLE);
+                        viewPager1.setVisibility(View.VISIBLE);
+                        builder1.dismiss();
+                    }
+                });
                 builder1.show();
             }
         });
@@ -130,19 +107,17 @@ public class NewCompareActivity extends Activity {
         img2.setOnClickListener(new AdapterView.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 builder2 = createCategoryOverlay(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         secontCatItems = Item.getItemsByCategoryId(getApplicationContext(), upperCategoriesList.get(position).getId(), sharedPreferences.getBoolean(Constants.KEY_WISHLIST_IN_COMPARE, false));
 
-                        for(int i = 0; i < secontCatItems.size(); i++){
+                        for (int i = 0; i < secontCatItems.size(); i++) {
                             String imageFile = secontCatItems.get(i).getImageFile();
-                            if(imageFile == null){
+                            if (imageFile == null) {
                                 secontCatItems.remove(i);
                             }
                         }
-
                         CompareImageAdapter adapter = new CompareImageAdapter(thisActivity, secontCatItems, 2);
                         viewPager2.setAdapter(adapter);
                         img2.setVisibility(View.INVISIBLE);
@@ -155,6 +130,11 @@ public class NewCompareActivity extends Activity {
         });
     }
 
+    /**
+     * creates a overlay with categories as grid view
+     * @param onItemClickListener the onItemClickListener for the items in the overlay
+     * @return the created AlertDialog
+     */
     private AlertDialog createCategoryOverlay(AdapterView.OnItemClickListener onItemClickListener) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
@@ -166,12 +146,9 @@ public class NewCompareActivity extends Activity {
 
         ArrayList<ListItemIconName> catArray = new ArrayList<>();
 
-        Iterator catIt = upperCategoriesList.iterator();
-
-        while (catIt.hasNext()) {
-            Category tmpCat = (Category)catIt.next();
+        for (Category tmpCat : upperCategoriesList) {
             int iconId = getResources().getIdentifier(tmpCat.getIcon(), "drawable", "com.gruppe1.pem.challengeme");
-            catArray.add(new ListItemIconName(tmpCat.getId(), iconId , tmpCat.getName(), null));
+            catArray.add(new ListItemIconName(tmpCat.getId(), iconId, tmpCat.getName(), null));
         }
 
         builder.setView(dialogView);
@@ -180,39 +157,27 @@ public class NewCompareActivity extends Activity {
         gridView.setAdapter(gridAdapter);
         gridView.setOnItemClickListener(onItemClickListener);
 
-
         return alert;
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_new_compare, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-
-
         switch (item.getItemId()) {
-
             case R.id.action_item_save:
                 saveCompare();
-
         }
-
-        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * creates and saves the new category
+     */
     private void saveCompare() {
 
         final int firstElementPosition = viewPager1.getCurrentItem();
@@ -226,7 +191,6 @@ public class NewCompareActivity extends Activity {
 
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            // Get the layout inflater
             LayoutInflater inflater = getLayoutInflater();
 
             // Inflate and set the layout for the dialog
@@ -240,13 +204,13 @@ public class NewCompareActivity extends Activity {
             inputField.setHint(R.string.compare_name);
 
 
-           builder.setView(dialogView).setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+            builder.setView(dialogView).setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int id) {
                     String name = inputField.getText().toString();
 
                     if(name.equals("")) {
-                        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+                        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
                         String currentDateandTime = sdf.format(new Date());
                         name = "Compare " + currentDateandTime;
                     }
@@ -268,23 +232,15 @@ public class NewCompareActivity extends Activity {
                     thisActivity.finish();
                 }
             })
-            .setNegativeButton(R.string.abort, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-
-
-                }
-            });
-
+            .setNegativeButton(R.string.abort,null);
             builder.create().show();
         }
     }
-    private String[] stringToArray(String str){
-        str = str.substring(1, str.length()-1);
-        String[] str2array = str.split(", ");
 
-        return str2array;
-    }
-
+    /**
+     * shows the overlay to choose a category
+     * @param p_builder int the overlay buider to show
+     */
     public void showCategoryChooser(int p_builder) {
        switch (p_builder){
            case 1:

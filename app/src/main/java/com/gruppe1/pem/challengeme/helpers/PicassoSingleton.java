@@ -9,10 +9,11 @@ import java.io.File;
 
 /**
  * Created by Simon on 04.07.2015.
+ * Singleton of Picasso Library
  */
 public class PicassoSingleton {
 
-    Context context;
+    private Context context;
     private static PicassoSingleton picassoSingleton;
 
     private PicassoSingleton(Context p_context) {
@@ -39,7 +40,7 @@ public class PicassoSingleton {
      * @param p_targetView target ImageView
      */
     public void setImage(String p_file, int p_width, int p_height, ImageView p_targetView) {
-        if (p_file != "") {
+        if (!p_file.equals("")) {
             Picasso.with(context).load(new File(p_file)).resize(p_width, p_height).centerCrop().into(p_targetView);
         }
     }

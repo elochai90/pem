@@ -6,13 +6,20 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.gruppe1.pem.challengeme.helpers.Constants;
+
+import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,11 +29,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import java.util.regex.Pattern;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import android.util.Log;
-
-import com.gruppe1.pem.challengeme.helpers.Constants;
 
 public class WeatherRequest {
 
@@ -78,7 +80,6 @@ public class WeatherRequest {
         else{
             tvIsConnected = "You are NOT conncted";
         }
-
         String[] location = getGPS();
 
         // call AsynTask to perform network operation on separate thread
@@ -91,12 +92,11 @@ public class WeatherRequest {
         LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         MyLocationListener locationListener = new MyLocationListener(context, locationManager);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3600000, 1000, locationListener); // all 1h, more than 1000 meters
-        String[] location = {locationListener.getCityName(), locationListener.getCountryCode()};
-        return location;
+        return new String[]{locationListener.getCityName(), locationListener.getCountryCode()};
     }
 
     public static String GET(String url){
-        InputStream inputStream = null;
+        InputStream inputStream;
         String result = "";
         try {
 
@@ -114,18 +114,21 @@ public class WeatherRequest {
                 result = convertInputStreamToString(inputStream);
             else
                 result = "Did not work!";
-
         } catch (Exception e) {
             Log.d("InputStream", e.getLocalizedMessage());
         }
-
         return result;
     }
 
-    // convert inputstream to String
+    /**
+     * converts an input stream to String
+     * @param inputStream the inputStream to convert
+     * @return the converted inputStream as String
+     * @throws IOException
+     */
     private static String convertInputStreamToString(InputStream inputStream) throws IOException{
         BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(inputStream));
-        String line = "";
+        String line;
         String result = "";
         while((line = bufferedReader.readLine()) != null)
             result += line;
@@ -135,18 +138,23 @@ public class WeatherRequest {
 
     }
 
-    // check network connection
+
+    /**
+     * checks if there is a network connection
+     * @return boolean if is connected to a network
+     */
     public boolean isConnected(){
-        ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnected())
-            return true;
-        else
-            return false;
+        return networkInfo != null && networkInfo.isConnected();
     }
 
+    /**
+     * returns the image resource to the given weather code
+     * @param code String weather code
+     * @return the image resource to the given weather code
+     */
     public int getImage(String code) {
-
         switch(code){
             case "200":
             case "201":
@@ -206,7 +214,7 @@ public class WeatherRequest {
         // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(String result) {
-            JSONObject json = null; // convert String to JSONObject
+            JSONObject json; // convert String to JSONObject
             String weather_today_desc = "";
             String weather_today_temp = "";
             int weather_today_image = 0;
@@ -241,9 +249,9 @@ public class WeatherRequest {
                     SimpleDateFormat sdf = new SimpleDateFormat("EEE", Locale.ENGLISH);
                     String currentDateandTime = sdf.format(date);
 
-                    ArrayList<String> days = new ArrayList<String>();
-                    ArrayList<String> temps = new ArrayList<String>();
-                    ArrayList<String> codes = new ArrayList<String>();
+                    ArrayList<String> days = new ArrayList<>();
+                    ArrayList<String> temps = new ArrayList<>();
+                    ArrayList<String> codes = new ArrayList<>();
 
                     for(int i = 0; i < forecast.length()-8; i++){
                         int weather_dt = Integer.parseInt(forecast.getJSONObject(i).getString("dt"));
@@ -256,7 +264,6 @@ public class WeatherRequest {
                             if(segs[1].equals("14")){
 
                                 JSONArray weather = forecast.getJSONObject(i).getJSONArray("weather"); // get articles array
-                                String weather_main = weather.getJSONObject(0).getString("main");
                                 String temp = Math.round(forecast.getJSONObject(i).getJSONObject("main").getDouble("temp") - 273.15) + "°C";
                                 String code = weather.getJSONObject(0).getString("id");
 
@@ -282,8 +289,6 @@ public class WeatherRequest {
                 }
 
             } catch (JSONException e) {
-                e.printStackTrace();
-                System.out.println("NOOO WEATHER");
                 weather_today_desc = sharedPreferences.getString(Constants.KEY_W_TODAY_DESC, "");
                 weather_today_temp = sharedPreferences.getString(Constants.KEY_W_TODAY_TEMP, "");
                 weather_today_image = sharedPreferences.getInt(Constants.KEY_W_TODAY_IMAGE, 0);

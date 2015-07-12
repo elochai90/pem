@@ -9,14 +9,14 @@
         android:layout_width="?android:attr/listPreferredItemHeightSmall"
         android:layout_height="?android:attr/listPreferredItemHeightSmall"
         android:layout_marginEnd="10dp"
-        android:contentDescription="First Item Image"/>
+        android:contentDescription="@string/compare_desc_image1"/>
     <ImageView
         android:id="@+id/imageItem2"
         android:layout_width="?android:attr/listPreferredItemHeightSmall"
         android:layout_height="?android:attr/listPreferredItemHeightSmall"
         android:layout_below="@id/imageItem1"
         android:layout_marginEnd="10dp"
-        android:contentDescription="Second Item Image"/>
+        android:contentDescription="@string/compare_desc_image2"/>
 
 
     <TextView

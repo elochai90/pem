@@ -2,28 +2,19 @@ package com.gruppe1.pem.challengeme;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.util.Log;
 
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Set;
 
 /**
  * Created by Simon on 13.06.2015.
+ * Category class
  */
 public class Category {
-    //0 = String, 1 = Integer
-    public static final HashMap<String, Integer> dbColumns = new HashMap<String, Integer>() {{
-        put("name", 0);
-        put("parent_categorie_id", 1);
-        put("default_attribute_type", 1);
-        put("icon", 1);
-    }};
-
     private int m_id;
     private String m_name;
     private int m_parent_category_id = Constants.DEFAULT_CATEGORY_ID;
@@ -50,11 +41,8 @@ public class Category {
                 this.m_parent_category_id = categoryData.getInt(2);
                 this.m_defaultSizeType = categoryData.getInt(3);
                 this.m_icon = categoryData.getString(4);
-            } else {
             }
             categoryData.close();
-        } else {
-            // prepare new category
         }
     }
 
@@ -114,7 +102,7 @@ public class Category {
         helper.setTable(Constants.CATEGORIES_DB_TABLE);
         helper.setColumns(new String[]{"*"});
         helper.setOrderBy("name ASC");
-        ArrayList<Category> allCategories = new ArrayList<Category>();
+        ArrayList<Category> allCategories = new ArrayList<>();
 
         Cursor allCategoriesIterator = helper.select();
         allCategoriesIterator.moveToFirst();
@@ -141,13 +129,11 @@ public class Category {
      */
     public void edit(HashMap<String, String> p_values) {
         Set<String> keys = p_values.keySet();
-        Iterator iterator = keys.iterator();
 
-        while (iterator.hasNext()) {
-            String dbColumnName = iterator.next().toString();
-            String dbColumnValue = p_values.get(dbColumnName);
+        for (String key : keys) {
+            String dbColumnValue = p_values.get(key);
 
-            switch (dbColumnName) {
+            switch (key) {
                 case "name":
                     this.setName(dbColumnValue);
                     break;
@@ -193,9 +179,7 @@ public class Category {
 
                 if (id > -1) {
                     this.m_id = id;
-                } else {
                 }
-            } else {
             }
         } else {
             //save changes to existing category
@@ -203,8 +187,6 @@ public class Category {
             this.setAllValuesToDbHelper();
             this.m_dbHelper.update();
         }
-
-       //m_dbHelper.close();
     }
 
     @Override

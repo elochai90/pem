@@ -65,18 +65,18 @@ public class DefaultGridAdapter extends ArrayAdapter<ListItemIconName> {
             holder = (ViewHolder) row.getTag();
         }
 
-        holder.imageTitle.setText(item.name);
+        holder.imageTitle.setText(item.getName());
 
 
-        if(isCategory || item.itemFile ==  null) {
-            holder.image.setImageResource(item.icon);
+        if(isCategory || item.getItemFile() ==  null) {
+            holder.image.setImageResource(item.getIcon());
         } else {
-            picassoSingleton.setImage(item.itemFile, Constants.LIST_VIEW_IMAGE_WIDTH, Constants.LIST_VIEW_IMAGE_HEIGHT, holder.image);
+            picassoSingleton.setImage(item.getItemFile(), Constants.LIST_VIEW_IMAGE_WIDTH, Constants.LIST_VIEW_IMAGE_HEIGHT, holder.image);
         }
 
 
         if(isCategory) {
-            holder.rightTextView.setText(Item.getItemsCountByCategoryId(context, item.elementId, false) + "");
+            holder.rightTextView.setText(Item.getItemsCountByCategoryId(context, item.getElementId(), false) + "");
         }
         return row;
     }

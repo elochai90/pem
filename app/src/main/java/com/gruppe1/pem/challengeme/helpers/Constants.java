@@ -1,16 +1,18 @@
 package com.gruppe1.pem.challengeme.helpers;
 
-import com.gruppe1.pem.challengeme.R;
-
 /**
  * Created by Simon on 13.06.2015.
- * holds multiple used values
+ * holds multiple used constant values
  */
 public class Constants {
     public static final int DEFAULT_CATEGORY_ID = 0;
     public static String DB_TABLE_PREFIX = "orga_nice_";
     public static String XML_ELEMENT_EMPTY = "###empty###";
-    public static int DEFAULT_CATEGORY_THUMBNAIL = R.drawable.hose;
+
+    // Tags of the TabHost Tabs
+    public static final String TAG_TAB_1 = "tag01";
+    public static final String TAG_TAB_2 = "tag02";
+    public static final String TAG_TAB_3 = "tag03";
 
     // DB Tables
     public static final String ITEMS_DB_TABLE = DB_TABLE_PREFIX + "items";

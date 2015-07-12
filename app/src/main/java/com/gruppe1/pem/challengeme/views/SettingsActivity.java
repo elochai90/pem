@@ -14,18 +14,15 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
-
+import android.view.MenuItem;
 
 import com.gruppe1.pem.challengeme.Color;
 import com.gruppe1.pem.challengeme.R;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -40,14 +37,6 @@ import java.util.Set;
  * API Guide</a> for more information on developing a Settings UI.
  */
 public class SettingsActivity extends PreferenceActivity {
-    /**
-     * Determines whether to always show the simplified settings UI, where
-     * settings are presented in a single list. When false, settings are shown
-     * as a master/detail two-pane view on tablets. When true, a single pane is
-     * shown on tablets.
-     */
-    private static final boolean ALWAYS_SIMPLE_PREFS = false;
-
 
     private static SharedPreferences sharedPreferences;
     private static SharedPreferences.Editor editor;
@@ -67,7 +56,9 @@ public class SettingsActivity extends PreferenceActivity {
     private void setupActionBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             // Show the Up button in the action bar.
-            getActionBar().setDisplayHomeAsUpEnabled(true);
+            if(getActionBar() != null) {
+                getActionBar().setDisplayHomeAsUpEnabled(true);
+            }
         }
     }
 
@@ -135,7 +126,7 @@ public class SettingsActivity extends PreferenceActivity {
         }
         bindPreferenceSummaryToValue(findPreference("show_wishlist_item_in_compare"), Boolean.toString(show_wishlist_item_in_compare));
 
-        String tops_default = "";
+        String tops_default;
         if (sharedPreferences.contains(Constants.KEY_DS_1_NAME)) {
             tops_default = sharedPreferences.getString(Constants.KEY_DS_1_NAME, "");
         } else {
@@ -145,7 +136,7 @@ public class SettingsActivity extends PreferenceActivity {
         }
         bindPreferenceSummaryToValue(findPreference("Tops"), tops_default);
 
-        String bottoms_default = "";
+        String bottoms_default;
         if (sharedPreferences.contains(Constants.KEY_DS_2_NAME)) {
             bottoms_default = sharedPreferences.getString(Constants.KEY_DS_2_NAME, "");
         } else {
@@ -155,7 +146,7 @@ public class SettingsActivity extends PreferenceActivity {
         }
         bindPreferenceSummaryToValue(findPreference("Bottoms"), bottoms_default);
 
-        String shoes_default = "";
+        String shoes_default;
         if (sharedPreferences.contains(Constants.KEY_DS_3_NAME)) {
             shoes_default = sharedPreferences.getString(Constants.KEY_DS_3_NAME, "");
         } else {
@@ -195,26 +186,16 @@ public class SettingsActivity extends PreferenceActivity {
 
     /**
      * Determines whether the simplified settings UI should be shown. This is
-     * true if this is forced via {@link #ALWAYS_SIMPLE_PREFS}, or the device
+     * true if this is forced via ALWAYS_SIMPLE_PREFS, or the device
      * doesn't have newer APIs like {@link PreferenceFragment}, or the device
      * doesn't have an extra-large screen. In these cases, a single-pane
      * "simplified" settings UI should be shown.
      */
     private static boolean isSimplePreferences(Context context) {
-        return ALWAYS_SIMPLE_PREFS
-                || Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB
+        return Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB
                 || !isXLargeTablet(context);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public void onBuildHeaders(List<Header> target) {
-        if (!isSimplePreferences(this)) {
-        }
-    }
 
     /**
      * A preference value change listener that updates the preference's summary
@@ -225,7 +206,6 @@ public class SettingsActivity extends PreferenceActivity {
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
             String stringValue = value.toString();
-            System.out.println("Changed: " + preference.getKey() + " - " + stringValue);
 
             if (preference instanceof ListPreference) {
                 ListPreference listPreference = (ListPreference) preference;

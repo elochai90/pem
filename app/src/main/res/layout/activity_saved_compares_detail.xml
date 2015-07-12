@@ -16,7 +16,6 @@
         android:textSize="18sp"/>
 
     <View
-        android:layout_below="@id/categoryIconLayout"
         android:layout_width="fill_parent"
         android:layout_height="1dp"
         android:layout_marginBottom="10dp"
@@ -40,7 +39,7 @@
                 android:id="@+id/detail1oben"
                 android:layout_width="match_parent"
                 android:layout_height="220dp"
-                android:contentDescription="First Item Image"/>
+                android:contentDescription="@string/compare_desc_image1"/>
 
 
             <TextView
@@ -75,7 +74,7 @@
                 android:id="@+id/detail2unten"
                 android:layout_width="match_parent"
                 android:layout_height="220dp"
-                android:contentDescription="First Item Image"/>
+                android:contentDescription="@string/compare_desc_image2"/>
 
 
             <TextView

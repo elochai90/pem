@@ -1,11 +1,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.gruppe1.pem.challengeme.views.NewItemActivity">
 
     <item android:id="@+id/action_item_save"
         android:icon="@drawable/ic_save_white"
-        android:title="List/Grid View"
+        android:title="@string/menu_title_listGridView"
         android:showAsAction="always"/>
 
 </menu>

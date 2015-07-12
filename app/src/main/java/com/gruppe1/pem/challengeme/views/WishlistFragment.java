@@ -4,11 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,57 +20,42 @@ import android.widget.TextView;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
-import com.gruppe1.pem.challengeme.Compare;
 import com.gruppe1.pem.challengeme.Item;
 import com.gruppe1.pem.challengeme.ListItemIconName;
 import com.gruppe1.pem.challengeme.R;
+import com.gruppe1.pem.challengeme.adapters.DefaultListAdapter;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
-import com.gruppe1.pem.challengeme.adapters.DefaultListAdapter;
-import com.gruppe1.pem.challengeme.views.TabsFragmentActivity;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 
 public class WishlistFragment extends Fragment implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
-
-    public static final int REQUEST_CODE = 1;
-
-
     private ArrayList<ListItemIconName> mDataset;
-
-    private View rootView;
-
-    private GridView gridView;
-    private ListView listView;
     private DefaultListAdapter listAdapter;
-
     private RelativeLayout noWishlistItemLayout;
-
     private Object[] selectedItem;
-    ActionMode actionMode;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        rootView = inflater.inflate(R.layout.default_list_grid_view, container, false);
+        View rootView = inflater.inflate(R.layout.default_list_grid_view, container, false);
 
         noWishlistItemLayout = (RelativeLayout) rootView.findViewById(R.id.noItemLayout);
         TextView noWishlistItemText = (TextView) rootView.findViewById(R.id.noItemText);
         noWishlistItemText.setText(R.string.no_wishlist_items);
 
-        mDataset = new ArrayList<ListItemIconName>();
+        mDataset = new ArrayList<>();
         initDataset();
 
-        listView = (ListView) rootView.findViewById(R.id.listView);
+        ListView listView = (ListView) rootView.findViewById(R.id.listView);
         listAdapter = new DefaultListAdapter(getActivity(), R.layout.list_item_default, mDataset, false, true);
         listView.setAdapter(listAdapter);
         listView.setOnItemClickListener(this);
         listView.setOnItemLongClickListener(this);
-        gridView = (GridView) rootView.findViewById(R.id.gridView);
+        GridView gridView = (GridView) rootView.findViewById(R.id.gridView);
         gridView.setVisibility(View.INVISIBLE);
 
         FloatingActionMenu menu = (FloatingActionMenu) rootView.findViewById(R.id.menu);
@@ -133,6 +115,11 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
 
     }
 
+
+    /**
+     * shows/hides the noCompareLayout
+     * @param show boolean if the noCompareLayout should be shown
+     */
     private void showNoWishlistItemLayout(boolean show) {
         if(show) {
             noWishlistItemLayout.setVisibility(View.VISIBLE);
@@ -142,39 +129,25 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menu.clear();
-        inflater.inflate(R.menu.menu_wishlist_fragment, menu);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_switchView) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
-    }
 
-
+    /**
+     * initializes the dataset
+     */
     private void initDataset() {
         mDataset.clear();
 
         ArrayList<Item> allWishlistItems = Item.getAllItems(getActivity().getApplicationContext(), true);
 
-        Iterator wItemIt = allWishlistItems.iterator();
-
-        while (wItemIt.hasNext()) {
-            Item tmpItem = (Item)wItemIt.next();
+        for (Item tmpItem : allWishlistItems) {
             int iconId = getResources().getIdentifier("kleiderbuegel", "drawable", "com.gruppe1.pem.challengeme");
             mDataset.add(new ListItemIconName(tmpItem.getId(), iconId, tmpItem.getName(), tmpItem.getImageFile()));
         }
@@ -185,45 +158,11 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
         }
     }
 
-
-    private Bitmap getPicFromFile(String imageFile) {
-        int targetW = 500;
-        int targetH = 500;
-
-        // Get the dimensions of the bitmap
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(imageFile, bmOptions);
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
-
-        // Determine how much to scale down the image
-        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
-
-        // Decode the image file into a Bitmap sized to fill the View
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-        bmOptions.inPurgeable = true;
-
-        Bitmap bitmap = BitmapFactory.decodeFile(imageFile, bmOptions);
-        Bitmap cropImg = bitmap;
-        if(bitmap != null) {
-            int width = bitmap.getWidth();
-            int height = bitmap.getHeight();
-            if (width > height) {
-                int crop = (width - height) / 2;
-                cropImg = Bitmap.createBitmap(bitmap, crop, 0, height, height);
-            } else {
-                int crop = (height - width) / 2;
-                cropImg = Bitmap.createBitmap(bitmap, 0, crop, width, width);
-            }
-        }
-
-        return cropImg;
-    }
-
-
-    public void selectItem(int itemid) {
+    /**
+     * Starts the NewItemActivity to show detail information of an item
+     * @param itemid the id of the selected item
+     */
+    private void selectItem(int itemid) {
         Intent intent = new Intent();
         intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".views.NewItemActivity");
         Bundle b = new Bundle();
@@ -234,7 +173,7 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        int itemid = listAdapter.getItem(position).elementId;
+        int itemid = listAdapter.getItem(position).getElementId();
         selectItem(itemid);
     }
 
@@ -268,9 +207,9 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
 
-        View dialogView = inflater.inflate(R.layout.dialog_edit, null);
+        View dialogView = inflater.inflate(R.layout.dialog_edit, parent, false);
         TextView headline = (TextView)dialogView.findViewById(R.id.dialog_headline);
-        headline.setText(mDataset.get(position).name);
+        headline.setText(mDataset.get(position).getName());
 
         builder.setView(dialogView).setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
             @Override
@@ -293,9 +232,7 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
 
             }
         });
-
         builder.create().show();
-
         return true;
     }
 }

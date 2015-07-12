@@ -2,30 +2,19 @@ package com.gruppe1.pem.challengeme;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.util.Log;
 
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Set;
 
 /**
  * Created by Simon on 24.06.2015.
+ * Item class
  */
 public class Item {
-    //0 = String, 1 = Integer
-    public static final HashMap<String, Integer> dbColumns = new HashMap<String, Integer>() {{
-        put("name", 0);
-        put("image_file", 1);
-        put("category_id", 1);
-        put("is_wish", 1);
-        put("primary_color", 0);
-        put("rating", 1);
-    }};
-
     private int m_id;
     private String m_name;
     private String m_imageFile;
@@ -33,9 +22,6 @@ public class Item {
     private int m_isWish;
     private int m_primaryColorId;
     private Float m_rating;
-
-    private ArrayList<HashMap<AttributeType, String>> m_customAttributes;
-
     private Context m_context;
     private DataBaseHelper m_dbHelper;
 
@@ -60,11 +46,8 @@ public class Item {
                 this.m_isWish = itemData.getInt(4);
                 this.m_primaryColorId = itemData.getInt(5);
                 this.m_rating= itemData.getFloat(6);
-            } else {
             }
             itemData.close();
-        } else {
-            // prepare new item
         }
     }
 
@@ -147,7 +130,7 @@ public class Item {
         dbHelper.setOrderBy("name ASC");
         Cursor cursor = dbHelper.select();
 
-        ArrayList<Item> itemList = new ArrayList<Item>();
+        ArrayList<Item> itemList = new ArrayList<>();
 
         cursor.moveToFirst();
 
@@ -155,7 +138,6 @@ public class Item {
             itemList.add(new Item(p_context, cursor.getInt(0), dbHelper));
             cursor.moveToNext();
         }
-
         cursor.close();
         return itemList;
     }
@@ -181,7 +163,7 @@ public class Item {
         dbHelper.setOrderBy("name ASC");
         Cursor cursor = dbHelper.select();
 
-        ArrayList<Item> itemList = new ArrayList<Item>();
+        ArrayList<Item> itemList = new ArrayList<>();
 
         cursor.moveToFirst();
 
@@ -236,13 +218,11 @@ public class Item {
      */
     public void edit(HashMap<String, String> p_values) {
         Set<String> keys = p_values.keySet();
-        Iterator iterator = keys.iterator();
 
-        while (iterator.hasNext()) {
-            String dbColumnName = iterator.next().toString();
-            String dbColumnValue = p_values.get(dbColumnName);
+        for (String key : keys) {
+            String dbColumnValue = p_values.get(key);
 
-            switch (dbColumnName) {
+            switch (key) {
                 case "name":
                     this.setName(dbColumnValue);
                     break;
@@ -291,9 +271,7 @@ public class Item {
 
                 if (id > -1) {
                     this.m_id = id;
-                } else {
                 }
-            } else {
             }
         } else {
             //save changes to existing item

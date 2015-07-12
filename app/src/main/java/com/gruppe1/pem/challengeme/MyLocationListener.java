@@ -7,10 +7,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.List;
@@ -18,19 +14,16 @@ import java.util.Locale;
 
 /**
  * Created by bianka on 11.06.2015.
+ * custom LocationListener
  */
 public class MyLocationListener implements LocationListener {
 
-    Context context;
-    LocationManager locationManager;
-
-    String cityName;
-    String countryCode;
-
-
+    private Context context;
+    private LocationManager locationManager;
+    private String cityName;
+    private String countryCode;
 
     // TODO: implement Methods to check if GPS is turned on
-
 
     MyLocationListener(Context context, LocationManager locationManager) {
         this.context = context;
@@ -43,8 +36,6 @@ public class MyLocationListener implements LocationListener {
     }
 
     private boolean getLastGPS() {
-
-
         List<String> providers = locationManager.getProviders(true);
 
         /* Loop over the array backwards, and if you get an accurate location, then break out the loop*/
@@ -55,13 +46,8 @@ public class MyLocationListener implements LocationListener {
             if (l != null) break;
         }
 
-        double[] gps = new double[2];
         if(l == null) {
             return false;
-        }
-        else {
-            gps[0] = l.getLatitude();
-            gps[1] = l.getLongitude();
         }
         Geocoder gcd = new Geocoder(context, Locale.getDefault());
         try {
@@ -75,23 +61,35 @@ public class MyLocationListener implements LocationListener {
         return true;
     }
 
+    /**
+     * replaces 'umlaute' from a string
+     * @param string String with umlaute
+     * @return the string without umlaute
+     */
     private String replaceUmlauteFromString(String string) {
         String result = "";
         if(string != null) {
-            result = string.toLowerCase();
-            result = string.replace("ä","ae");
-            result = string.replace("ö","oe");
-            result = string.replace("ü","ue");
+            string = string.toLowerCase();
+            string = string.replace("ä","ae");
+            string = string.replace("ö","oe");
+            string = string.replace("ü","ue");
             result = string.replace("ß","ss");
         }
         return result;
     }
 
+    /**
+     * get the GPS city name without umlaute
+     * @return the GPS city name without umlaute
+     */
     public String getCityName() {
-
         return replaceUmlauteFromString(cityName);
     }
 
+    /**
+     * get the GPS country code without umlaute
+     * @return the GPS country code without umlaute
+     */
     public String getCountryCode() {
         return replaceUmlauteFromString(countryCode);
     }

@@ -1,9 +1,0 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.gruppe1.pem.challengeme.views.NewCompareActivity">
-    <item android:id="@+id/action_switchView"
-        android:icon="@drawable/ic_view_grid"
-        android:title="List/Grid View"
-        app:showAsAction="always"/>
-</menu>

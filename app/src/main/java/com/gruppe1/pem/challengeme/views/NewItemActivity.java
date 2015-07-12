@@ -30,9 +30,7 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RatingBar;
-import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -43,8 +41,8 @@ import com.gruppe1.pem.challengeme.HSVColorPickerDialog;
 import com.gruppe1.pem.challengeme.Item;
 import com.gruppe1.pem.challengeme.ListItemIconName;
 import com.gruppe1.pem.challengeme.R;
-import com.gruppe1.pem.challengeme.adapters.ColorsGridOverlayAdapter;
 import com.gruppe1.pem.challengeme.adapters.CategoriesGridOverlayAdapter;
+import com.gruppe1.pem.challengeme.adapters.ColorsGridOverlayAdapter;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 import com.gruppe1.pem.challengeme.helpers.ImageLoader;
@@ -54,7 +52,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Iterator;
 
 
 public class NewItemActivity extends Activity {
@@ -74,7 +71,7 @@ public class NewItemActivity extends Activity {
     private com.gruppe1.pem.challengeme.Color attrColorSelected;
     private TextView attrWishlistName;
     private Switch attrWishlistValue;
-    String item_imageFile;
+    private String item_imageFile;
 
     private int editItemId;
     private Item editItem;
@@ -87,20 +84,27 @@ public class NewItemActivity extends Activity {
     private String buyDate;
     private TextView attrValueDatePicker;
 
-    private boolean isEdit;
-
     private ArrayList<AttributeType> attributeTypesList;
-    private ArrayList<Category> allCategories;
     private CategoriesGridOverlayAdapter gridCateoriesAdapter;
-    private ArrayList<com.gruppe1.pem.challengeme.Color> allColors;
-//    private ColorsGridOverlayAdapter colorsDropdownAdapter;
     private ColorsGridOverlayAdapter gridColorsAdapter;
-
-    private Bundle extras;
 
     private SharedPreferences sharedPreferences;
 
-    static final int DATE_DIALOG_ID = 999;
+    private static final int DATE_DIALOG_ID = 999;
+
+
+    private DatePickerDialog.OnDateSetListener datePickerListener
+            = new DatePickerDialog.OnDateSetListener() {
+
+        // when dialog box is closed, below method will be called.
+        public void onDateSet(DatePicker view, int selectedYear,
+                              int selectedMonth, int selectedDay) {
+            buyDate = selectedDay + "." + (selectedMonth+1) + "." + selectedYear;
+            attrValueDatePicker.setText(buyDate);
+            attrValueDatePicker.setTextColor(getResources().getColor(android.R.color.black));
+
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,13 +130,9 @@ public class NewItemActivity extends Activity {
         stars.getDrawable(1).setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
         stars.getDrawable(0).setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
 
-        final Activity thisActivity = this;
-
-        attributeTypesList = new ArrayList<AttributeType>();
+        attributeTypesList = new ArrayList<>();
         itemNameExitText = (EditText) findViewById(R.id.itemName);
-
         attributesView = (LinearLayout) findViewById(R.id.itemDetailAttributes);
-
         attrCategoryName = (TextView) findViewById(R.id.attrCategoryName);
         attrCategoryValue = (TextView) findViewById(R.id.attrCategoryValue);
         attrColorName = (TextView) findViewById(R.id.attrColorName);
@@ -144,32 +144,23 @@ public class NewItemActivity extends Activity {
         attrColorName.setText("Color:");
         attrWishlistName.setText("In Wishlist:");
 
-
-        extras = getIntent().getExtras();
-
         // Setup Categories Adapter
-        allCategories = Category.getAllCategories(this);
+        ArrayList<Category> allCategories = Category.getAllCategories(this);
         ArrayList<ListItemIconName> catArray = new ArrayList<>();
-        Iterator catIt = allCategories.iterator();
-        while (catIt.hasNext()) {
-            Category tmpCat = (Category)catIt.next();
+        for (Category tmpCat : allCategories) {
             int iconId = getResources().getIdentifier(tmpCat.getIcon(), "drawable", "com.gruppe1.pem.challengeme");
-            catArray.add(new ListItemIconName(tmpCat.getId(), iconId , tmpCat.getName(), null));
+            catArray.add(new ListItemIconName(tmpCat.getId(), iconId, tmpCat.getName(), null));
         }
         gridCateoriesAdapter = new CategoriesGridOverlayAdapter(this, R.layout.grid_item_overlay, catArray);
-
-
-
         attrCategoryValue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setupCategoryDropdown();
+                setupCategoryOverlay();
             }
         });
 
-
         // Setup Colors Adapter
-        allColors = com.gruppe1.pem.challengeme.Color.getAllColors(this);
+        ArrayList<com.gruppe1.pem.challengeme.Color> allColors = com.gruppe1.pem.challengeme.Color.getAllColors(this);
         gridColorsAdapter = new ColorsGridOverlayAdapter(this, R.layout.grid_item_overlay, allColors);
 
 
@@ -177,17 +168,16 @@ public class NewItemActivity extends Activity {
         attrCategoryValue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setupCategoryDropdown();
+                setupCategoryOverlay();
             }
         });
 
         attrColorValue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setupColorsDropdown();
+                setupColorsOverlay();
             }
         });
-
 
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
@@ -200,43 +190,43 @@ public class NewItemActivity extends Activity {
             editItemId = -1;
         }
 
-
-        if (extras != null &&  extras.getBoolean("is_wishlist")) {
+        Bundle extras1 = getIntent().getExtras();
+        if (extras1 != null &&  extras1.getBoolean("is_wishlist")) {
             attrWishlistValue.setChecked(true);
         }
         // Not a new item, but editing an existing item
         if(editItemId > 0) {
-            isEdit = true;
-            getActionBar().setTitle(R.string.title_activity_edit_item);
+            if(getActionBar() != null) {
+                getActionBar().setTitle(R.string.title_activity_edit_item);
+            }
             getDb_helper().setTable(Constants.ITEMS_DB_TABLE);
             editItem = new Item(this, editItemId, getDb_helper());
             parentCategoryId = editItem.getCategoryId();
             savedColorId = editItem.getPrimaryColorId();
 
         } else {
-            isEdit = false;
-            getActionBar().setTitle(R.string.title_activity_new_item);
+            if(getActionBar() != null) {
+                getActionBar().setTitle(R.string.title_activity_new_item);
+            }
             getDb_helper().setTable(Constants.ITEMS_DB_TABLE);
             editItem = new Item(this, 0, getDb_helper());
 
             savedColorId = -1;
 
-            if (extras != null && extras.getInt("category_id") != 0) {
-                parentCategoryId = extras.getInt("category_id");
+            if (extras1 != null && extras1.getInt("category_id") != 0) {
+                parentCategoryId = extras1.getInt("category_id");
             } else {
                 parentCategoryId = -1;
             }
         }
 
-
         if(parentCategoryId != -1) {
             attrCategorySelected = new Category(getApplicationContext(), parentCategoryId, getDb_helper());
             attrCategoryValue.setText(attrCategorySelected.getName());
         } else {
-            attrCategorySelected = new Category(getApplicationContext(), (int)gridCateoriesAdapter.getItem(0).elementId, getDb_helper());
+            attrCategorySelected = new Category(getApplicationContext(), gridCateoriesAdapter.getItem(0).getElementId(), getDb_helper());
             attrCategoryValue.setText(attrCategorySelected.getName());
         }
-
 
         if(savedColorId != -1) {
             attrColorSelected = new com.gruppe1.pem.challengeme.Color(getApplicationContext(), savedColorId, getDb_helper());
@@ -246,7 +236,7 @@ public class NewItemActivity extends Activity {
                 attrColorValue.setTextColor(getResources().getColor(android.R.color.white));
             }
         } else {
-            attrColorSelected = new com.gruppe1.pem.challengeme.Color(getApplicationContext(), (int)gridColorsAdapter.getItem(0).getId(), getDb_helper());
+            attrColorSelected = new com.gruppe1.pem.challengeme.Color(getApplicationContext(), gridColorsAdapter.getItem(0).getId(), getDb_helper());
             attrColorValue.setText(attrColorSelected.getName());
             attrColorValue.setBackgroundColor(Color.parseColor(attrColorSelected.getHexColor()));
             if(!gridColorsAdapter.isColorLight(Color.parseColor(attrColorSelected.getHexColor()))) {
@@ -260,9 +250,11 @@ public class NewItemActivity extends Activity {
         setupAttributeViews();
     }
 
+    /**
+     * sets the data of the editing item into the formular
+     */
     private void setItemData() {
         itemNameExitText.setText(editItem.getName());
-
         ratingBar.setRating(editItem.getRating());
 
         attrCategorySelected = new Category(getApplicationContext(), editItem.getCategoryId(), getDb_helper());
@@ -272,14 +264,11 @@ public class NewItemActivity extends Activity {
 
         try {
             String imgPath = editItem.getImageFile();
-//            Log.d("ImageFile", imgPath);
             File imgFile = new File(imgPath);
-
             if (imgFile.exists()) {
                 Bitmap tmpBitmap = ImageLoader.getPicFromFile(editItem.getImageFile(), 500, 500);
                 ImgPhoto.setImageBitmap(tmpBitmap);
             }
-
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -289,31 +278,25 @@ public class NewItemActivity extends Activity {
             attrWishlistValue.setChecked(true);
         }
 
-
         ArrayList<Attribute> itemAttributes = Attribute.getAttributesByItemId(this, editItem.getId());
-        Iterator allItemAttributesIterator = itemAttributes.iterator();
-
-        while (allItemAttributesIterator.hasNext()) {
-            Attribute tmpItemAttr = (Attribute) allItemAttributesIterator.next();
+        for (Attribute tmpItemAttr : itemAttributes) {
             attributeTypesList.add(tmpItemAttr.getAttributeType());
             setAttributeLayout(tmpItemAttr.getAttributeType(), tmpItemAttr.getValue());
         }
     }
 
+    /**
+     * creates/updates the item
+     */
     private void saveItem() {
-
         String item_name = itemNameExitText.getText().toString();
-
-        Category newParentCatId = (attrCategorySelected != null) ? attrCategorySelected : new Category(getApplicationContext(), (int) gridCateoriesAdapter.getItem(0).elementId,getDb_helper());
-
+//        Category newParentCatId = (attrCategorySelected != null) ? attrCategorySelected : new Category(getApplicationContext(), (int) gridCateoriesAdapter.getItem(0).elementId,getDb_helper());
         String item_categoryId = "" + attrCategorySelected.getId();
-
         String item_primaryColor = "" + attrColorSelected.getId();
-
         String item_rating = Float.toString(ratingBar.getRating());
         String item_isWish = attrWishlistValue.isChecked()  ? "1" : "0";
 
-        HashMap<String, String> itemAttributes = new HashMap<String, String>();
+        HashMap<String, String> itemAttributes = new HashMap<>();
         itemAttributes.put("name", item_name);
         itemAttributes.put("image_file", editItem.getImageFile());
         itemAttributes.put("category_id", item_categoryId);
@@ -325,45 +308,42 @@ public class NewItemActivity extends Activity {
         editItem.edit(itemAttributes);
         editItem.save();
 
-        Iterator allItemAttributesIterator = attributeTypesList.iterator();
-
-
         // TODO: get all attributes with values for this Item
-        while (allItemAttributesIterator.hasNext()) {
-            AttributeType tmpItemAttrType = (AttributeType) allItemAttributesIterator.next();
-
+        for (AttributeType tmpItemAttrType : attributeTypesList) {
             LinearLayout attributeView = (LinearLayout) attributesView.findViewWithTag(tmpItemAttrType.getId());
-            String attributeSaveValue = "";
+            String attributeSaveValue;
             // boolean
-            if(tmpItemAttrType.getValueType() == 2) {
-                attributeSaveValue  = ((Switch) attributeView.findViewById(R.id.boolAttrField)).isChecked() ? "1" : "0";
+            if (tmpItemAttrType.getValueType() == 2) {
+                attributeSaveValue = ((Switch) attributeView.findViewById(R.id.boolAttrField)).isChecked() ? "1" : "0";
             }
             // Color Picker
             else if (tmpItemAttrType.getValueType() == 3) {
-                attributeSaveValue  = exactColorId + "";
+                attributeSaveValue = exactColorId + "";
             }
             // Date Picker
-            else if(tmpItemAttrType.getValueType() == 4) {
+            else if (tmpItemAttrType.getValueType() == 4) {
                 attributeSaveValue = buyDate;
-            }
-            else {
+            } else {
                 attributeSaveValue = ((EditText) attributeView.findViewById(R.id.stringAttrField)).getText().toString();
             }
-            HashMap<String, String> itemAttributeValue = new HashMap<String, String>();
-            itemAttributeValue.put("item_id",editItem.getId() + "");
-            itemAttributeValue.put("attribute_type_id",tmpItemAttrType.getId() + "");
-            itemAttributeValue.put("attribute_value",attributeSaveValue);
+            HashMap<String, String> itemAttributeValue = new HashMap<>();
+            itemAttributeValue.put("item_id", editItem.getId() + "");
+            itemAttributeValue.put("attribute_type_id", tmpItemAttrType.getId() + "");
+            itemAttributeValue.put("attribute_value", attributeSaveValue);
 
             getDb_helper().setTable(Constants.ITEM_ATTR_DB_TABLE);
             Attribute itemAttribute = new Attribute(this, editItem.getId(), tmpItemAttrType.getId(), getDb_helper());
             itemAttribute.edit(itemAttributeValue);
             itemAttribute.save();
         }
-
         this.db_helper.close();
-
     }
 
+    /**
+     * creates the layout for a attribute type with the atrribute value
+     * @param attributeType AttributeType the attribute type
+     * @param attributeValue Object the value of the attribute type
+     */
     private void setAttributeLayout(AttributeType attributeType, Object attributeValue) {
 
         int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics());
@@ -516,22 +496,13 @@ public class NewItemActivity extends Activity {
         return null;
     }
 
-    private DatePickerDialog.OnDateSetListener datePickerListener
-            = new DatePickerDialog.OnDateSetListener() {
-
-        // when dialog box is closed, below method will be called.
-        public void onDateSet(DatePicker view, int selectedYear,
-                              int selectedMonth, int selectedDay) {
-
-            buyDate = selectedDay + "." + (selectedMonth+1) + "." + selectedYear;
-            attrValueDatePicker.setText(buyDate);
-            attrValueDatePicker.setTextColor(getResources().getColor(android.R.color.black));
-
-        }
-    };
-
+    /**
+     * get the size value to a size type
+     * @param sizeType int the size type
+     * @return the size value
+     */
     private String getSizeValueBySizeType(int sizeType) {
-        String sizeValue = "";
+        String sizeValue;
         switch(sizeType) {
             case 0:
                 sizeValue = sharedPreferences.getString(Constants.KEY_DS_1_NAME, "");
@@ -549,12 +520,13 @@ public class NewItemActivity extends Activity {
         return sizeValue;
     }
 
+    /**
+     * sets up all attribute views
+     */
     private void setupAttributeViews() {
         ArrayList<AttributeType> allAttributeTypes = AttributeType.getAttributeTypes(getApplicationContext());
-        Iterator allAttrTypesIterator =  allAttributeTypes.iterator();
-        while(allAttrTypesIterator.hasNext()) {
-            AttributeType tmpAttrType = (AttributeType) allAttrTypesIterator.next();
-            if(!attributeTypesList.contains(tmpAttrType)) {
+        for (AttributeType tmpAttrType : allAttributeTypes) {
+            if (!attributeTypesList.contains(tmpAttrType)) {
                 attributeTypesList.add(tmpAttrType);
                 setAttributeLayout(tmpAttrType, null);
             }
@@ -562,9 +534,10 @@ public class NewItemActivity extends Activity {
     }
 
 
-
+    /**
+     * creates and shows an AlertDialog with options to choose/take an image
+     */
     private void selectImage() {
-
         final CharSequence[] options = {"Take Photo", "Choose from Gallery", "Cancel"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -586,23 +559,16 @@ public class NewItemActivity extends Activity {
             }
 
         });
-
         builder.show();
-
     }
 
     @Override
-
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
-
             if (requestCode == 1) {
-
                 try {
-
                     Bitmap photo = (Bitmap) data.getExtras().get("data");
                     ImgPhoto.setImageBitmap(photo);
 
@@ -611,36 +577,23 @@ public class NewItemActivity extends Activity {
 
                     // CALL THIS METHOD TO GET THE ACTUAL PATH
                     File finalFile = new File(getRealPathFromURI(tempUri));
-                    Log.d("path: ", finalFile.getAbsolutePath());
                     item_imageFile = finalFile.getAbsolutePath();
                     editItem.setImageFile(item_imageFile);
-
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
-
-
             } else if (requestCode == 2) {
-
                 Uri selectedImage = data.getData();
-
                 String[] filePath = {MediaStore.Images.Media.DATA};
-                Log.d("path: ", filePath[0]);
+
                 Cursor c = getContentResolver().query(selectedImage, filePath, null, null, null);
-
                 c.moveToFirst();
-
                 int columnIndex = c.getColumnIndex(filePath[0]);
-
                 String picturePath = c.getString(columnIndex);
-
                 c.close();
 
                 item_imageFile = picturePath;
                 editItem.setImageFile(item_imageFile);
-                Log.w("path of image", item_imageFile + "");
 
                 Bitmap tmpBitmap = ImageLoader.getPicFromFile(editItem.getImageFile(), 500, 500);
                 ImgPhoto.setImageBitmap(tmpBitmap);
@@ -648,14 +601,25 @@ public class NewItemActivity extends Activity {
         }
     }
 
-    public Uri getImageUri(Context inContext, Bitmap inImage) {
+    /**
+     * gets the URI from a bitmap
+     * @param inContext the context
+     * @param inImage the bitmap image
+     * @return the Uri to the image
+     */
+    private Uri getImageUri(Context inContext, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
         return Uri.parse(path);
     }
 
-    public String getRealPathFromURI(Uri uri) {
+    /**
+     * gets the actual path of a URI
+     * @param uri the Uri to which you want the path
+     * @return the path to the uri
+     */
+    private String getRealPathFromURI(Uri uri) {
         Cursor cursor = getContentResolver().query(uri, null, null, null, null);
         cursor.moveToFirst();
         int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
@@ -673,9 +637,7 @@ public class NewItemActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         switch (item.getItemId()) {
-
             case android.R.id.home:
                 super.onBackPressed();
                 return true;
@@ -685,12 +647,14 @@ public class NewItemActivity extends Activity {
                 setResult(RESULT_OK);
                 this.finish();
         }
-
         return super.onOptionsItemSelected(item);
     }
 
 
-    private void setupCategoryDropdown() {
+    /**
+     * creates and shows the overlay to choose a category
+     */
+    private void setupCategoryOverlay() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
 
@@ -708,8 +672,8 @@ public class NewItemActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 getDb_helper().setTable(Constants.CATEGORIES_DB_TABLE);
-                attrCategorySelected = new Category(getBaseContext(), (int) gridCateoriesAdapter.getItem(position).elementId, getDb_helper());
-                attrCategoryValue.setText(gridCateoriesAdapter.getItem(position).name);
+                attrCategorySelected = new Category(getBaseContext(), gridCateoriesAdapter.getItem(position).getElementId(), getDb_helper());
+                attrCategoryValue.setText(gridCateoriesAdapter.getItem(position).getName());
                 ((TextView)attributesView.findViewWithTag("size")).setText(getSizeValueBySizeType(attrCategorySelected.getDefaultSizeType()));
                 alert.dismiss();
             }
@@ -718,8 +682,10 @@ public class NewItemActivity extends Activity {
     }
 
 
-
-    private void setupColorsDropdown() {
+    /**
+     * creates and shows the overlay to choose a color
+     */
+    private void setupColorsOverlay() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
 
@@ -737,7 +703,7 @@ public class NewItemActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 getDb_helper().setTable(Constants.CATEGORIES_DB_TABLE);
-                attrColorSelected = new com.gruppe1.pem.challengeme.Color(getBaseContext(), (int) gridColorsAdapter.getItem(position).getId(), getDb_helper());
+                attrColorSelected = new com.gruppe1.pem.challengeme.Color(getBaseContext(), gridColorsAdapter.getItem(position).getId(), getDb_helper());
                 attrColorValue.setText(attrColorSelected.getName());
                 attrColorValue.setBackgroundColor(Color.parseColor(attrColorSelected.getHexColor()));
                 if(!gridColorsAdapter.isColorLight(Color.parseColor(attrColorSelected.getHexColor()))) {
@@ -749,21 +715,10 @@ public class NewItemActivity extends Activity {
         alert.show();
     }
 
-    private int getIndex(Spinner spinner, int p_catId) {
-        int index = 0;
-        Category targetCategory = new Category(getApplicationContext(), p_catId, getDb_helper());
-
-        for (int i=0; i<spinner.getCount(); i++){
-            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(targetCategory.getName())){
-                index = i;
-                attrCategorySelected = targetCategory;
-                break;
-            }
-        }
-
-        return index;
-    }
-
+    /**
+     * Get the db_helper instance for this class
+     * @return DataBaseHelper instance
+     */
     private DataBaseHelper getDb_helper() {
         if(!db_helper.isOpen()) {
             System.out.println("db helper was closed");

@@ -2,8 +2,6 @@ package com.gruppe1.pem.challengeme;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.provider.ContactsContract;
-import android.util.Log;
 
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
@@ -15,6 +13,7 @@ import java.util.regex.Pattern;
 
 /**
  * Created by Simon on 29.06.2015.
+ * Compare class
  */
 public class Compare implements Serializable{
 
@@ -31,7 +30,7 @@ public class Compare implements Serializable{
         this.context = p_context;
         this.dbHelper = p_dbHelper;
         this.dbHelper.setTable(Constants.COMPARES_DB_TABLE);
-        itemIds = new ArrayList<Integer>();
+        itemIds = new ArrayList<>();
 
         if(p_id > -1) {
             this.dbHelper.setColumns(new String[]{"*"});
@@ -46,9 +45,7 @@ public class Compare implements Serializable{
                 for (String idValue : idValues) {
                     itemIds.add(Integer.parseInt(idValue));
                 }
-            } else {
             }
-
             compareCursor.close();
         } else {
             this.timestamp = (System.currentTimeMillis()) + "";
@@ -99,10 +96,8 @@ public class Compare implements Serializable{
                 idConcat += "|";
             }
         }
-
         this.dbHelper.setStringValue("item_ids", idConcat);
         this.dbHelper.setStringValue("save_date", timestamp);
-
         this.dbHelper.insert();
     }
 

@@ -70,8 +70,8 @@ public class NavigationDrawerAdapter extends ArrayAdapter<ListItemIconName>
 
             ListItemIconName choice = data[position-1];
 
-            imageView.setImageResource(choice.icon);
-            textView.setText(choice.name);
+            imageView.setImageResource(choice.getIcon());
+            textView.setText(choice.getName());
         }
         return v;
     }

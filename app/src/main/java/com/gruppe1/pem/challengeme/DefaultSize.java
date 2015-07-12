@@ -1,9 +1,8 @@
 package com.gruppe1.pem.challengeme;
 
-import java.util.Date;
-
 /**
  * Created by bianka on 06.07.2015.
+ * DefaultSize class
  */
 public class DefaultSize {
 
@@ -26,7 +25,7 @@ public class DefaultSize {
 
     @Override
     public boolean equals(Object o) {
-        return (o instanceof DefaultSize && getDefaultSizeName() == ((DefaultSize) o).getDefaultSizeName());
+        return (o instanceof DefaultSize && getDefaultSizeName().equals(((DefaultSize) o).getDefaultSizeName()));
 
     }
 }

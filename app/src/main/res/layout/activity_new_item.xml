@@ -1,157 +1,148 @@
-
-<RelativeLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.gruppe1.pem.challengeme.views.NewItemActivity"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:focusableInTouchMode="true"
-    android:orientation="vertical">
+    android:layout_height="match_parent"
+    android:fillViewport="true">
 
-    <ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <ImageView
+            android:background="@android:color/darker_gray"
+            android:id="@+id/itemDetailImage"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:contentDescription="@string/new_item_desc_itemImage"
+            android:src="@mipmap/addcamera2"
+            android:scaleType="centerCrop" />
 
-        <RelativeLayout
+
+        <LinearLayout
+            android:id="@+id/itemDetailRating"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_below="@id/itemDetailImage"
+            android:layout_gravity="center_horizontal"
+            android:background="@color/background_floating_material_dark"
+            android:weightSum="1">
+
+            <RatingBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/ratingBar" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/itemNameLayout"
+            android:layout_below="@id/itemDetailRating"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+            <TextView
+                android:text="@string/new_item_label_name"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"/>
+            <EditText
+                android:id="@+id/itemName"
+                android:singleLine="true"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:textSize="18sp"
+                android:hint="@string/new_item_hint_name" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/itemNameDivider"
+            android:layout_below="@id/itemNameLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="#c0c0c0"/>
+
+
+
+        <LinearLayout
+            android:id="@+id/itemDetailAttributes"
+            android:layout_below="@id/itemNameDivider"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <ImageView
-                android:background="@android:color/darker_gray"
-                android:id="@+id/itemDetailImage"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:src="@mipmap/addcamera2"
-                android:scaleType="centerCrop" />
-
-
             <LinearLayout
-                android:id="@+id/itemDetailRating"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:layout_below="@id/itemDetailImage"
-                android:layout_gravity="center_horizontal"
-                android:background="@color/background_floating_material_dark"
-                android:weightSum="1">
-
-                <RatingBar
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/ratingBar" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/itemNameLayout"
-                android:layout_below="@id/itemDetailRating"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp">
                 <TextView
-                    android:text="Name:"
+                    android:id="@+id/attrCategoryName"
+                    android:layout_width="100dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:textSize="18sp"/>
+                <TextView
+                    android:id="@+id/attrCategoryValue"
+                    android:textColor="@android:color/black"
+                    android:background="@color/color_picker_initial"
+                    android:textSize="18sp"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center"
+                    android:layout_width="fill_parent"
+                    android:layout_height="30dp">
+                </TextView>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+                <TextView
+                    android:id="@+id/attrColorName"
+                    android:layout_width="100dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:textSize="18sp"/>
+                <TextView
+                    android:id="@+id/attrColorValue"
+                    android:textColor="@android:color/black"
+                    android:background="@color/color_picker_initial"
+                    android:textSize="18sp"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center"
+                    android:layout_width="fill_parent"
+                    android:layout_height="30dp">
+                </TextView>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+                <TextView
+                    android:id="@+id/attrWishlistName"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:textSize="18sp"/>
-                <EditText
-                    android:id="@+id/itemName"
-                    android:singleLine="true"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:textSize="18sp"
-                    android:hint="Add Item Name" />
+                <Switch
+                    android:id="@+id/attrWishlistValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:textOff="@string/switch_false"
+                    android:showText="true"
+                    android:textOn="@string/switch_true"
+                    android:checked="false"/>
             </LinearLayout>
+        </LinearLayout>
 
-            <View
-                android:id="@+id/itemNameDivider"
-                android:layout_below="@id/itemNameLayout"
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:background="#c0c0c0"/>
-
-
-
-            <LinearLayout
-                android:id="@+id/itemDetailAttributes"
-                android:layout_below="@id/itemNameDivider"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
-                    <TextView
-                        android:id="@+id/attrCategoryName"
-                        android:layout_width="100dp"
-                        android:layout_height="40dp"
-                        android:layout_gravity="center_vertical"
-                        android:gravity="center_vertical"
-                        android:textSize="18sp"/>
-                    <TextView
-                        android:id="@+id/attrCategoryValue"
-                        android:textColor="@android:color/black"
-                        android:background="@color/color_picker_initial"
-                        android:textSize="18sp"
-                        android:layout_gravity="center_vertical"
-                        android:gravity="center"
-                        android:layout_width="fill_parent"
-                        android:layout_height="30dp">
-                    </TextView>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
-                    <TextView
-                        android:id="@+id/attrColorName"
-                        android:layout_width="100dp"
-                        android:layout_height="40dp"
-                        android:layout_gravity="center_vertical"
-                        android:gravity="center_vertical"
-                        android:textSize="18sp"/>
-                    <TextView
-                        android:id="@+id/attrColorValue"
-                        android:textColor="@android:color/black"
-                        android:background="@color/color_picker_initial"
-                        android:textSize="18sp"
-                        android:layout_gravity="center_vertical"
-                        android:gravity="center"
-                        android:layout_width="fill_parent"
-                        android:layout_height="30dp">
-                    </TextView>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
-                    <TextView
-                        android:id="@+id/attrWishlistName"
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:textSize="18sp"/>
-                    <Switch
-                        android:id="@+id/attrWishlistValue"
-                        android:layout_width="wrap_content"
-                        android:layout_height="40dp"
-                        android:textOff="@string/switch_false"
-                        android:showText="true"
-                        android:textOn="@string/switch_true"
-                        android:checked="false"/>
-                </LinearLayout>
-            </LinearLayout>
-
-        </RelativeLayout>
-    </ScrollView>
-</RelativeLayout>
+    </RelativeLayout>
+</ScrollView>

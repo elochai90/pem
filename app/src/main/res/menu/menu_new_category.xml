@@ -1,10 +1,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.gruppe1.pem.challengeme.views.NewCategoryActivity">
     <item
         android:id="@+id/save"
-        android:title="Save Category"
+        android:title="@string/menu_title_saveCategory"
         android:showAsAction="always"
         android:icon="@drawable/ic_save_white"/>
 </menu>

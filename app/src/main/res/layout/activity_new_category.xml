@@ -11,7 +11,7 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp">
         <TextView
-            android:text="Name:"
+            android:text="@string/new_category_label_name"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:textSize="18sp"/>
@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:textSize="18sp"
-            android:hint="Add Category Name" />
+            android:hint="@string/new_category_hint_name" />
     </LinearLayout>
 
     <View
@@ -42,7 +42,7 @@
         <TextView
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="Default size:"
+            android:text="@string/new_category_label_defaultSize"
             android:textSize="18sp"/>
         <Spinner
             android:id="@+id/categoryDefaultSize"
@@ -70,13 +70,14 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:text="Icon:"
+            android:text="@string/new_category_label_icon"
             android:textSize="18sp"/>
         <ImageView
             android:id="@+id/categoryIcon"
             android:src="@drawable/kleiderbuegel"
             android:layout_width="80dp"
-            android:layout_height="80dp">
+            android:layout_height="80dp"
+            android:contentDescription="@string/new_category_desc_icon">
         </ImageView>
     </LinearLayout>
 

@@ -9,15 +9,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Set;
 
 /**
  * Created by simon on 19.06.2015.
+ * XML Parser class
  */
 public class XmlParser {
-    // We don't use namespaces
-    private static final String ns = null;
 
     /**
      * initiates the parse
@@ -47,20 +44,18 @@ public class XmlParser {
      * @throws IOException
      */
     private HashMap<String, ArrayList<HashMap<String, String>>> readXml(XmlPullParser parser) throws XmlPullParserException, IOException {
-        ArrayList elements = null;
         int eventType = parser.getEventType();
-        int parserDepth = 0;
+        int parserDepth;
         ArrayList<HashMap<String,String>> elementValueList = null;
-        HashMap<String, ArrayList<HashMap<String, String>>> elementWrapperList = new HashMap<String, ArrayList<HashMap<String, String>>>();
-        HashMap<String, String> elementValues = new HashMap<String, String>();
+        HashMap<String, ArrayList<HashMap<String, String>>> elementWrapperList = new HashMap<>();
+        HashMap<String, String> elementValues = new HashMap<>();
 
         while (eventType != XmlPullParser.END_DOCUMENT) {
-            String name = null;
+            String name;
             parserDepth = parser.getDepth();
 
             switch (eventType) {
                 case XmlPullParser.START_DOCUMENT:
-                    elements = new ArrayList();
                     break;
 
                 case XmlPullParser.START_TAG:
@@ -69,12 +64,12 @@ public class XmlParser {
                     switch(parserDepth) {
                         case 2:
                             //i.e categories
-                            elementValueList = new ArrayList<HashMap<String, String>>();
+                            elementValueList = new ArrayList<>();
                             break;
 
                         case 3:
                             //i.e category
-                            elementValues = new HashMap<String, String>();
+                            elementValues = new HashMap<>();
                             break;
 
                         case 4:
@@ -93,7 +88,9 @@ public class XmlParser {
                     switch (parserDepth) {
                         case 3: {
                             // i.e category element is closed -> add element values to ArrayList
-                            elementValueList.add(elementValues);
+                            if(elementValueList != null) {
+                                elementValueList.add(elementValues);
+                            }
                             break;
                         }
 
@@ -109,28 +106,25 @@ public class XmlParser {
         }
 
         //just for debugging START -  leave in code for further debugging
-        Set<String> elementTypes = elementWrapperList.keySet();
-        Iterator iterator = elementTypes.iterator();
-
-        while (iterator.hasNext()) {
-            String iteratorName = iterator.next().toString();
-            ArrayList<HashMap<String, String>> elementsList = elementWrapperList.get(iteratorName);
-            //Log.e("###XML wrapper " + iteratorName, elementsList.size() + " element(s)");
-
-            int counter = 0;
-
-            while (counter < elementsList.size()) {
-                HashMap<String, String> elementValuesMap = elementsList.get(counter++);
-
-                Set<String> elementKeys = elementValuesMap.keySet();
-                Iterator elementValueIterator = elementKeys.iterator();
-
-                while (elementValueIterator.hasNext()) {
-                    String elementValueKey = elementValueIterator.next().toString();
-                    //Log.e("###XML values " + elementValueKey, elementValuesMap.get(elementValueKey));
-                }
-            }
-        }
+//        Set<String> elementTypes = elementWrapperList.keySet();
+//
+//        for (String elementType : elementTypes) {
+//            ArrayList<HashMap<String, String>> elementsList = elementWrapperList.get(elementType);
+//            Log.e("###XML wrapper " + iteratorName, elementsList.size() + " element(s)");
+//
+//            int counter = 0;
+//
+//            while (counter < elementsList.size()) {
+//                HashMap<String, String> elementValuesMap = elementsList.get(counter++);
+//
+//                Set<String> elementKeys = elementValuesMap.keySet();
+//
+//                for (String elementKey : elementKeys) {
+//                    String elementValueKey = elementKey;
+//                    Log.e("###XML values " + elementValueKey, elementValuesMap.get(elementValueKey));
+//                }
+//            }
+//        }
         //just for debugging END
 
         return elementWrapperList;

@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,13 +23,11 @@ import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
-import com.gruppe1.pem.challengeme.Category;
 import com.gruppe1.pem.challengeme.Compare;
-import com.gruppe1.pem.challengeme.Item;
 import com.gruppe1.pem.challengeme.R;
-import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.adapters.CompareGridAdapter;
 import com.gruppe1.pem.challengeme.adapters.CompareListAdapter;
+import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 
 import java.util.ArrayList;
@@ -51,11 +48,10 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
 
     private RelativeLayout noComparesLayout;
 
-    public SharedPreferences.Editor editor;
-    public SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
+    private SharedPreferences sharedPreferences;
 
     private Object[] selectedItem;
-    ActionMode actionMode;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -129,9 +125,6 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
 
             }
         });
-
-
-
         return rootView;
     }
 
@@ -139,20 +132,18 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (savedInstanceState != null) {
-            list = savedInstanceState.getBoolean(Constants.KEY_VIEW_COMPARE_AS_LIST, true);
-        } else {
-            list = true;
-        }
+        list = savedInstanceState == null || savedInstanceState.getBoolean(Constants.KEY_VIEW_COMPARE_AS_LIST, true);
 
         setHasOptionsMenu(true);
 
         sharedPreferences = getActivity().getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
-
-
     }
 
+    /**
+     * shows/hides the noCompareLayout
+     * @param show boolean if the noCompareLayout should be shown
+     */
     private void showNoComparesLayout(boolean show) {
         if(show) {
             noComparesLayout.setVisibility(View.VISIBLE);
@@ -182,6 +173,10 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
         inflater.inflate(R.menu.menu_compare_fragment, menu);
     }
 
+    /**
+     * Switches the list/grid view of the compares
+     * @param shouldBeListView boolean if the compares should be shown as list view
+     */
     private void switchListGridView(boolean shouldBeListView) {
         if(shouldBeListView) {
             gridView.setVisibility(View.INVISIBLE);
@@ -199,9 +194,6 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         if (id == R.id.action_switchView) {
@@ -217,6 +209,9 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * initializes the dataset of compares
+     */
     private void initDataset() {
         mDataset.clear();
         mDataset.addAll(Compare.geAllCompares(getActivity().getApplicationContext()));
@@ -272,7 +267,7 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
 
-        View dialogView = inflater.inflate(R.layout.dialog_edit, null);
+        View dialogView = inflater.inflate(R.layout.dialog_edit, parent, false);
         TextView headline = (TextView)dialogView.findViewById(R.id.dialog_headline);
         headline.setText(mDataset.get(position).getName());
 

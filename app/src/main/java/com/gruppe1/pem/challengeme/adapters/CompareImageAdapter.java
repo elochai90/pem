@@ -66,7 +66,6 @@ public class CompareImageAdapter extends PagerAdapter {
         imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 
         String imageFile = categoryItems.get(position).getImageFile();
-        Log.d("###COMP###", imageFile);
 
         this.picassoSingleton.setImage(imageFile, Constants.COMPARE_IMAGE_WIDTH,Constants.COMPARE_IMAGE_HEIGHT, imageView);
         container.addView(imageView, 0);

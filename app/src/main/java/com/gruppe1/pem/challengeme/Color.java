@@ -2,26 +2,19 @@ package com.gruppe1.pem.challengeme;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.util.Log;
 
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Set;
 
 /**
  * Created by Simon on 13.06.2015.
+ * Color class
  */
 public class Color {
-    //0 = String, 1 = Integer
-    public static final HashMap<String, Integer> dbColumns = new HashMap<String, Integer>() {{
-        put("name", 0);
-        put("hex", 0);
-    }};
-
     private int m_id;
     private String m_name;
     private String m_hex;
@@ -46,13 +39,9 @@ public class Color {
                 this.m_name = itemData.getString(1);
                 this.m_hex = itemData.getString(2);
 
-            } else {
             }
             itemData.close();
-        } else {
-            // prepare new item
         }
-
     }
 
     /*
@@ -97,7 +86,7 @@ public class Color {
         dbHelper.setTable(Constants.COLORS_DB_TABLE);
         dbHelper.setColumns(new String[]{"*"});
         dbHelper.setOrderBy("name ASC");
-        ArrayList<Color> allColors = new ArrayList<Color>();
+        ArrayList<Color> allColors = new ArrayList<>();
 
         Cursor allColorsIterator = dbHelper.select();
         allColorsIterator.moveToFirst();
@@ -122,13 +111,11 @@ public class Color {
      */
     public void edit(HashMap<String, String> p_values) {
         Set<String> keys = p_values.keySet();
-        Iterator iterator = keys.iterator();
 
-        while (iterator.hasNext()) {
-            String dbColumnName = iterator.next().toString();
-            String dbColumnValue = p_values.get(dbColumnName);
+        for (String key : keys) {
+            String dbColumnValue = p_values.get(key);
 
-            switch (dbColumnName) {
+            switch (key) {
                 case "name":
                     this.setName(dbColumnValue);
                     break;
@@ -160,7 +147,7 @@ public class Color {
 
             existingRowCursor.close();
 
-            if(rowId == 0) {
+            if (rowId == 0) {
                 this.m_dbHelper.setStringValue("name", this.m_name);
                 this.m_dbHelper.setStringValue("hex", this.m_hex);
 
@@ -168,13 +155,9 @@ public class Color {
 
                 if (id > -1) {
                     this.m_id = id;
-                } else {
                 }
-            } else {
             }
-        } else {
         }
-        //m_dbHelper.close();
     }
 
     @Override

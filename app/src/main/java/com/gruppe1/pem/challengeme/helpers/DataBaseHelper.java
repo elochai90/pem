@@ -7,16 +7,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.text.TextUtils;
-import android.util.Log;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.Array;
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
 
 /**
  * Created by Simon on 12.06.2015.
@@ -50,24 +45,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
      */
     public void init() {
         if(!db_existanceChecked) {
-            try {
-                this.createDataBase();
-                db_existanceChecked = true;
-            } catch (IOException ioe) {
-                throw new Error("Unable to create database");
-            }
+            this.createDataBase();
+            db_existanceChecked = true;
         }
-
-        try {
-            this.openDataBase();
-            this.database.execSQL("PRAGMA foreign_keys=ON;");
-        } catch (SQLException sqle){
-            try {
-                throw sqle;
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+        this.openDataBase();
+        this.database.execSQL("PRAGMA foreign_keys=ON;");
     }
 
     /*
@@ -154,7 +136,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     /**
      *  creates the database
      */
-    public void createDataBase() throws IOException {
+    private void createDataBase() {
 
         boolean dbExist = checkDataBase();
 
@@ -220,9 +202,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     /**
      * Open the database
-     * @throws SQLException
      */
-    public void openDataBase() throws SQLException {
+    private void openDataBase() {
         this.database = SQLiteDatabase.openDatabase(DB_FULL_PATH, null, SQLiteDatabase.OPEN_READWRITE);
     }
 
@@ -251,9 +232,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         if (cursor != null) {
             cursor.moveToFirst();
-            return cursor.getInt(0);
+            int cursorInt = cursor.getInt(0);
+            cursor.close();
+            return cursorInt;
         }
-        cursor.close();
         return -1;
     }
 

@@ -79,23 +79,23 @@ public class DefaultListAdapter extends ArrayAdapter<ListItemIconName> {
             holder = (ViewHolder) row.getTag();
         }
 
-        holder.firstLine.setText(item.name);
+        holder.firstLine.setText(item.getName());
 
-        if(isCategory || item.itemFile == null) {
-            holder.image.setImageResource(item.icon);
+        if(isCategory || item.getItemFile() == null) {
+            holder.image.setImageResource(item.getIcon());
         } else {
-            picassoSingleton.setImage(item.itemFile, Constants.LIST_VIEW_IMAGE_WIDTH, Constants.LIST_VIEW_IMAGE_HEIGHT, holder.image );
+            picassoSingleton.setImage(item.getItemFile(), Constants.LIST_VIEW_IMAGE_WIDTH, Constants.LIST_VIEW_IMAGE_HEIGHT, holder.image );
         }
 
         if(isCategory) {
-            holder.rightTextView.setText(Item.getItemsCountByCategoryId(context, item.elementId, false) + "");
+            holder.rightTextView.setText(Item.getItemsCountByCategoryId(context, item.getElementId(), false) + "");
             holder.listItemRatingBar.setVisibility(View.INVISIBLE);
         } else {
             getDb_helper().setTable(Constants.ITEMS_DB_TABLE);
-            Item listItem = new Item(context, item.elementId, getDb_helper());
+            Item listItem = new Item(context, item.getElementId(), getDb_helper());
             getDb_helper().setTable(Constants.COLORS_DB_TABLE);
             Color attributeColor = new Color(context, listItem.getPrimaryColorId(), getDb_helper());
-            ArrayList<Attribute> allAttributes = Attribute.getAttributesByItemId(context, item.elementId);
+            ArrayList<Attribute> allAttributes = Attribute.getAttributesByItemId(context, item.getElementId());
             String secondLineText = "";
             int attributesToShowCount = 0;
             if(!attributeColor.getName().equals("")) {
@@ -124,7 +124,7 @@ public class DefaultListAdapter extends ArrayAdapter<ListItemIconName> {
 
             getDb_helper().setTable(Constants.ITEMS_DB_TABLE);
 
-            Item wishlistItem = new Item(context, item.elementId, getDb_helper());
+            Item wishlistItem = new Item(context, item.getElementId(), getDb_helper());
 
             if(wishlistItem.getIsWish() == 1) {
                 holder.itemActionButton.setSelected(false);
@@ -142,7 +142,7 @@ public class DefaultListAdapter extends ArrayAdapter<ListItemIconName> {
 
                     getDb_helper().setTable(Constants.ITEMS_DB_TABLE);
 
-                    Item wishlistItem = new Item(context, item.elementId, getDb_helper());
+                    Item wishlistItem = new Item(context, item.getElementId(), getDb_helper());
 
                     HashMap<String, String> itemAttributes = new HashMap<>();
                     itemAttributes.put("name", wishlistItem.getName());
@@ -174,7 +174,7 @@ public class DefaultListAdapter extends ArrayAdapter<ListItemIconName> {
 
     @Override
     public long getItemId(int p_position){
-        return this.data.get(p_position).elementId;
+        return this.data.get(p_position).getElementId();
     }
 
     static class ViewHolder {

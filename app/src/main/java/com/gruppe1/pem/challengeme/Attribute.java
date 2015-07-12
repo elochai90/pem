@@ -8,28 +8,17 @@ import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Set;
 
 /**
  * Created by Simon on 13.06.2015.
+ * Attribute class
  */
 public class Attribute {
-
-
-    //0 = String, 1 = Integer
-    public static final HashMap<String, Integer> dbColumns = new HashMap<String, Integer>() {{
-        put("item_id", 1);
-        put("attribute_type_id", 1);
-        put("attribute_value", 0);
-    }};
-
     private int m_id;
     private int m_itemId;
     private AttributeType m_attributeType;
-//    private int m_attrTypeId;
     private Object m_value;
-
     private Context m_context;
     private DataBaseHelper m_dbHelper;
 
@@ -50,15 +39,12 @@ public class Attribute {
                 this.m_itemId = itemData.getInt(1);
                 this.m_attributeType = AttributeType.getAttributeTypeById(m_context, itemData.getInt(2));
                 this.m_value = itemData.getString(3);
-            } else {
             }
             itemData.close();
-
-        } else {
-            // prepare new item
         }
-
     }
+
+
     public Attribute(Context p_context, int p_itemId, int p_attributeTypeId, DataBaseHelper p_dbHelper) {
         this.m_itemId = p_itemId;
         this.m_attributeType = AttributeType.getAttributeTypeById(m_context, p_attributeTypeId);
@@ -78,7 +64,6 @@ public class Attribute {
                 this.m_itemId = itemData.getInt(1);
                 this.m_attributeType = AttributeType.getAttributeTypeById(m_context, itemData.getInt(2));
                 this.m_value = itemData.getString(3);
-            } else {
             }
             itemData.close();
 
@@ -86,7 +71,6 @@ public class Attribute {
             // prepare new item
             m_id = 0;
         }
-
     }
 
     /*
@@ -142,7 +126,7 @@ public class Attribute {
         dbHelper.setWhere("", new String[]{"item_id='" + p_itemId + "'"});
         Cursor cursor = dbHelper.select();
 
-        ArrayList<Attribute> attributeList = new ArrayList<Attribute>();
+        ArrayList<Attribute> attributeList = new ArrayList<>();
 
         cursor.moveToFirst();
 
@@ -150,7 +134,6 @@ public class Attribute {
             attributeList.add(new Attribute(p_context, cursor.getInt(0), dbHelper));
             cursor.moveToNext();
         }
-
         cursor.close();
         dbHelper.close();
         return attributeList;
@@ -166,11 +149,10 @@ public class Attribute {
         helper.setTable(Constants.ITEM_ATTR_DB_TABLE);
         helper.setColumns(new String[]{"*"});
         helper.setOrderBy("item_id ASC");
-        ArrayList<Attribute> allAttributes = new ArrayList<Attribute>();
+        ArrayList<Attribute> allAttributes = new ArrayList<>();
 
         Cursor allAttributesIterator = helper.select();
         allAttributesIterator.moveToFirst();
-//        Log.e("###All Cat count###", "" + allCategoriesIterator.getCount());
 
         while (!allAttributesIterator.isAfterLast()) {
             Attribute attribute = new Attribute(p_context, allAttributesIterator.getInt(0), helper);
@@ -193,18 +175,16 @@ public class Attribute {
      */
     public void edit(HashMap<String, String> p_values) {
         Set<String> keys = p_values.keySet();
-        Iterator iterator = keys.iterator();
 
-        while (iterator.hasNext()) {
-            String dbColumnName = iterator.next().toString();
-            String dbColumnValue = p_values.get(dbColumnName);
+        for (String key : keys) {
+            String dbColumnValue = p_values.get(key);
 
-            switch (dbColumnName) {
+            switch (key) {
                 case "item_id":
                     this.setItemId(Integer.parseInt(dbColumnValue));
                     break;
                 case "attribute_type_id":
-                    this.setAttributeType(AttributeType.getAttributeTypeById(m_context,Integer.parseInt(dbColumnValue)));
+                    this.setAttributeType(AttributeType.getAttributeTypeById(m_context, Integer.parseInt(dbColumnValue)));
                     break;
                 case "attribute_value":
                     this.setValue(dbColumnValue);
@@ -237,7 +217,6 @@ public class Attribute {
 
                 if (id > -1) {
                     this.m_id = id;
-                } else {
                 }
             } else {
                 //save changes to existing attribute
@@ -251,7 +230,6 @@ public class Attribute {
             this.setAllValuesToDbHelper();
             this.m_dbHelper.update();
         }
-
         this.m_dbHelper.close();
     }
 
@@ -273,5 +251,4 @@ public class Attribute {
         this.m_dbHelper.delete();
         this.m_dbHelper.close();
     }
-
 }

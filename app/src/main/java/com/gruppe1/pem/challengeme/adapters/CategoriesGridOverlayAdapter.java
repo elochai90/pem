@@ -41,8 +41,8 @@ public class CategoriesGridOverlayAdapter extends ArrayAdapter<ListItemIconName>
         View row = convertView;
         ViewHolder holder;
 
-        int iconId = data.get(position).icon;
-        String categoryName = data.get(position).name;
+        int iconId = data.get(position).getIcon();
+        String categoryName = data.get(position).getName();
         if (row == null || row.getTag() == null) {
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
             row = inflater.inflate(layoutResourceId, parent, false);

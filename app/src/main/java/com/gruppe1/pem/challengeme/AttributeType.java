@@ -2,28 +2,19 @@ package com.gruppe1.pem.challengeme;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.util.Log;
 
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Set;
 
 /**
  * Created by Simon on 13.06.2015.
+ * AttributeType class
  */
 public class AttributeType {
-
-    //0 = String, 1 = Integer
-    public static final HashMap<String, Integer> dbColumns = new HashMap<String, Integer>() {{
-        put("name", 0);
-        put("value_type", 1);
-        put("is_unique", 1);
-    }};
-
     private int m_id;
     private String m_name;
     private int m_valueType;
@@ -53,12 +44,9 @@ public class AttributeType {
                 this.m_name = attrTypeData.getString(1);
                 this.m_valueType = attrTypeData.getInt(2);
                 this.m_isUnique = attrTypeData.getInt(3);
-            } else {
             }
             attrTypeData.close();
 
-        } else {
-            // prepare new attribute
         }
     }
 
@@ -104,7 +92,7 @@ public class AttributeType {
         helper.init();
         helper.setTable(Constants.ATTRIBUTE_TYPES_DB_TABLE);
         helper.setColumns(new String[]{"*"});
-        ArrayList<AttributeType> attributeTypes = new ArrayList<AttributeType>();
+        ArrayList<AttributeType> attributeTypes = new ArrayList<>();
 
         Cursor allAttrTypesIterator = helper.select();
         allAttrTypesIterator.moveToFirst();
@@ -133,7 +121,7 @@ public class AttributeType {
         helper.setTable(Constants.ATTRIBUTE_TYPES_DB_TABLE);
         helper.setColumns(new String[]{"*"});
         helper.setWhere("", new String[]{"_id='" + attrTypeId + "'"});
-        AttributeType attributeType = null;
+        AttributeType attributeType;
 
         Cursor allAttrTypesIterator = helper.select();
         allAttrTypesIterator.moveToFirst();
@@ -161,7 +149,7 @@ public class AttributeType {
         helper.setTable(Constants.ATTRIBUTE_TYPES_DB_TABLE);
         helper.setColumns(new String[]{"*"});
         helper.setWhere("", new String[]{"name='" + attrName + "'"});
-        AttributeType attributeType = null;
+        AttributeType attributeType;
 
         Cursor allAttrTypesIterator = helper.select();
         allAttrTypesIterator.moveToFirst();
@@ -183,13 +171,11 @@ public class AttributeType {
      */
     public void edit(HashMap<String, String> p_values) {
         Set<String> keys = p_values.keySet();
-        Iterator iterator = keys.iterator();
 
-        while (iterator.hasNext()) {
-            String dbColumnName = iterator.next().toString();
-            String dbColumnValue = p_values.get(dbColumnName);
+        for (String key : keys) {
+            String dbColumnValue = p_values.get(key);
 
-            switch (dbColumnName) {
+            switch (key) {
                 case "name":
                     this.setName(dbColumnValue);
                     break;
@@ -235,15 +221,9 @@ public class AttributeType {
 
                 if (id > -1) {
                     this.m_id = id;
-                } else {
                 }
-            } else {
             }
-        } else {
-            //save changes to existing attribute type
         }
-
-        //m_dbHelper.close();
     }
 
     @Override

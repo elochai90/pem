@@ -15,9 +15,6 @@ import com.gruppe1.pem.challengeme.views.TabsFragmentActivity;
 /**
  * A custom OnTabChangeListener that uses the TabHost its related to to fetch information about the current and previous
  * tabs. It uses this information to perform some custom animations that slide the tabs in and out from left and right.
- *
- * @author Daniel Kvist
- *
  */
 
 public class AnimatedTabHostListener implements TabHost.OnTabChangeListener
@@ -34,8 +31,8 @@ public class AnimatedTabHostListener implements TabHost.OnTabChangeListener
     /**
      * Constructor that takes the TabHost as a parameter and sets previousView to the currentView at instantiation
      *
-     * @param context
-     * @param tabHost
+     * @param context the context
+     * @param tabHost the Tabhost to animate
      */
     public AnimatedTabHostListener(TabsFragmentActivity context, TabHost tabHost)
     {
@@ -47,14 +44,7 @@ public class AnimatedTabHostListener implements TabHost.OnTabChangeListener
         {
             public boolean onTouch(View v, MotionEvent event)
             {
-                if (gestureDetector.onTouchEvent(event))
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
+                return !gestureDetector.onTouchEvent(event);
             }
         });
     }
