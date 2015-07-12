@@ -80,7 +80,7 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
         DataBaseHelper db_helper = new DataBaseHelper(this);
         db_helper.init();
         Category category = new Category(this, categoryId, db_helper);
-        db_helper.close(); // TODO: functioning or do we have to delete it?
+        db_helper.close();
         setTitle(category.getName());
         mDataset = new ArrayList<>();
 

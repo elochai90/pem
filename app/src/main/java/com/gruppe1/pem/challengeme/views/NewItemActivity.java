@@ -308,7 +308,6 @@ public class NewItemActivity extends Activity {
         editItem.edit(itemAttributes);
         editItem.save();
 
-        // TODO: get all attributes with values for this Item
         for (AttributeType tmpItemAttrType : attributeTypesList) {
             LinearLayout attributeView = (LinearLayout) attributesView.findViewWithTag(tmpItemAttrType.getId());
             String attributeSaveValue;
