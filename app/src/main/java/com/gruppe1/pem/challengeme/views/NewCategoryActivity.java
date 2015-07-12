@@ -3,10 +3,8 @@ package com.gruppe1.pem.challengeme.views;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Shader;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,21 +19,16 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.github.clans.fab.FloatingActionButton;
 import com.gruppe1.pem.challengeme.Category;
-import com.gruppe1.pem.challengeme.Compare;
 import com.gruppe1.pem.challengeme.DefaultSize;
-import com.gruppe1.pem.challengeme.adapters.CompareGridAdapter;
 import com.gruppe1.pem.challengeme.adapters.DefaultSizesAdapter;
-import com.gruppe1.pem.challengeme.adapters.IconsGridAdapter;
+import com.gruppe1.pem.challengeme.adapters.IconsGridOverlayAdapter;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 import com.gruppe1.pem.challengeme.R;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 
 
 public class NewCategoryActivity extends Activity {
@@ -140,18 +133,15 @@ public class NewCategoryActivity extends Activity {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
 
-        final View dialogView = inflater.inflate(R.layout.dialog_listgrid, null);
+        final View dialogView = inflater.inflate(R.layout.dialog_grid, null);
         TextView headline = (TextView)dialogView.findViewById(R.id.dialog_headline);
         headline.setText(R.string.new_category_overlay_title);
-
-        ListView listView = (ListView) dialogView.findViewById(R.id.listView);
         GridView gridView = (GridView) dialogView.findViewById(R.id.gridView);
-        listView.setVisibility(View.INVISIBLE);
 
         ArrayList<String> iconsArray = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.category_icons_array)));
         builder.setView(dialogView);
         final AlertDialog alert = builder.create();
-        final IconsGridAdapter gridAdapter = new IconsGridAdapter(this, R.layout.grid_item_overlay, iconsArray);
+        final IconsGridOverlayAdapter gridAdapter = new IconsGridOverlayAdapter(this, R.layout.grid_item_overlay, iconsArray);
         gridView.setAdapter(gridAdapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

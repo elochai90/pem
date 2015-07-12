@@ -9,26 +9,27 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.gruppe1.pem.challengeme.Compare;
-import com.gruppe1.pem.challengeme.Item;
 import com.gruppe1.pem.challengeme.ListItemIconName;
 import com.gruppe1.pem.challengeme.R;
-import com.gruppe1.pem.challengeme.helpers.Constants;
-import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
-import com.gruppe1.pem.challengeme.helpers.PicassoSingleton;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by bianka on 18.06.2015.
+ * the Category Adapter for a Category Select Overlay
  */
-public class IconsGridAdapter extends ArrayAdapter<String> {
+public class CategoriesGridOverlayAdapter extends ArrayAdapter<ListItemIconName> {
     private Context context;
     private int layoutResourceId;
-    private List<String> data = new ArrayList();
+    private ArrayList<ListItemIconName> data = new ArrayList<>();
 
-    public IconsGridAdapter(Context context, int layoutResourceId, List<String> data) {
+    /**
+     * Constructor of the CategoriesGridOverlayAdapter
+     * @param context the context
+     * @param layoutResourceId Layout resource for a row
+     * @param data the data to fill the overlay grid with
+     */
+    public CategoriesGridOverlayAdapter(Context context, int layoutResourceId, ArrayList<ListItemIconName> data) {
         super(context, layoutResourceId, data);
         this.layoutResourceId = layoutResourceId;
         this.context = context;
@@ -38,24 +39,25 @@ public class IconsGridAdapter extends ArrayAdapter<String> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
-        ViewHolder holder = null;
+        ViewHolder holder;
 
-        String iconName = data.get(position);
+        int iconId = data.get(position).icon;
+        String categoryName = data.get(position).name;
         if (row == null || row.getTag() == null) {
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
             row = inflater.inflate(layoutResourceId, parent, false);
             holder = new ViewHolder();
             holder.textView = (TextView) row.findViewById(R.id.textView);
-            holder.textView.setVisibility(View.INVISIBLE);
+            holder.textView.setText(categoryName);
             holder.imageView = (ImageView) row.findViewById(R.id.imageView);
             row.setTag(holder);
         } else {
             holder = (ViewHolder) row.getTag();
         }
-        int iconId = context.getResources().getIdentifier(iconName, "drawable", "com.gruppe1.pem.challengeme");
         holder.imageView.setImageResource(iconId);
         return row;
     }
+
     static class ViewHolder {
         TextView textView;
         ImageView imageView;

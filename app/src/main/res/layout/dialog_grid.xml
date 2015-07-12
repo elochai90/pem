@@ -13,15 +13,6 @@
         android:padding="11sp"
         android:textSize="20sp" />
 
-    <ListView
-        android:id="@+id/listView"
-        android:layout_height="wrap_content"
-        android:layout_width="fill_parent"
-        android:drawSelectorOnTop="true"
-        android:focusable="true"
-        android:clickable="true"
-        >
-    </ListView>
     <GridView
         android:id="@+id/gridView"
         android:layout_width="fill_parent"

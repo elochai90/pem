@@ -2,7 +2,6 @@ package com.gruppe1.pem.challengeme.adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +10,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.gruppe1.pem.challengeme.Compare;
-import com.gruppe1.pem.challengeme.helpers.Constants;
-import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
-import com.gruppe1.pem.challengeme.helpers.ImageLoader;
 import com.gruppe1.pem.challengeme.Item;
 import com.gruppe1.pem.challengeme.R;
+import com.gruppe1.pem.challengeme.helpers.Constants;
+import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 import com.gruppe1.pem.challengeme.helpers.PicassoSingleton;
 
 import java.util.ArrayList;
@@ -23,14 +21,21 @@ import java.util.List;
 
 /**
  * Created by bianka on 18.06.2015.
+ * Compare adapter to fill the grid view of the compare list
  */
 public class CompareGridAdapter extends ArrayAdapter {
     private Context context;
     private int layoutResourceId;
-    private List<Compare> data = new ArrayList();
+    private List<Compare> data = new ArrayList<>();
     private DataBaseHelper dbHelper;
     private PicassoSingleton picassoSingleton;
 
+    /**
+     * Constructor of the CompareGridAdapter
+     * @param context the context
+     * @param layoutResourceId Layout resource for a item
+     * @param data the list of compares to fill the grid list with
+     */
     public CompareGridAdapter(Context context, int layoutResourceId, List<Compare> data) {
         super(context, layoutResourceId, data);
         this.layoutResourceId = layoutResourceId;
@@ -44,7 +49,7 @@ public class CompareGridAdapter extends ArrayAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
-        ViewHolder holder = null;
+        ViewHolder holder;
 
         Compare item = data.get(position);
         if (row == null || row.getTag() == null) {

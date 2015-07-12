@@ -15,14 +15,21 @@ import com.gruppe1.pem.challengeme.WeatherRequest;
 
 /**
  * Created by bianka on 05.06.2015.
+ * Array adapter to fill the navigation drawer
  */
-public class NavigationDrawerItemAdapter extends ArrayAdapter<ListItemIconName>
+public class NavigationDrawerAdapter extends ArrayAdapter<ListItemIconName>
 {
     private final Context context;
     private final int layoutResourceId;
     private ListItemIconName data[] = null;
 
-    public NavigationDrawerItemAdapter(Context context, int layoutResourceId, ListItemIconName[] data)
+    /**
+     * Constructor of the NavigationDrawerAdapter
+     * @param context the context
+     * @param layoutResourceId Layout resource for a navigation drawer list item
+     * @param data the array of ListItemIconName to fill the navigation drawer with
+     */
+    public NavigationDrawerAdapter(Context context, int layoutResourceId, ListItemIconName[] data)
     {
         super(context, layoutResourceId, data);
         this.context = context;

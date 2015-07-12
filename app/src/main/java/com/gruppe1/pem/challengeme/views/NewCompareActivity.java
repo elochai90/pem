@@ -7,35 +7,28 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.github.clans.fab.FloatingActionButton;
 import com.gruppe1.pem.challengeme.Category;
 import com.gruppe1.pem.challengeme.Compare;
 import com.gruppe1.pem.challengeme.Item;
 import com.gruppe1.pem.challengeme.ListItemIconName;
 import com.gruppe1.pem.challengeme.R;
-import com.gruppe1.pem.challengeme.adapters.CompareCategoryOverlayGridAdapter;
+import com.gruppe1.pem.challengeme.adapters.CategoriesGridOverlayAdapter;
 import com.gruppe1.pem.challengeme.adapters.CompareImageAdapter;
-import com.gruppe1.pem.challengeme.adapters.IconsGridAdapter;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
-import com.gruppe1.pem.challengeme.helpers.DefaultSetup;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 
@@ -166,14 +159,10 @@ public class NewCompareActivity extends Activity {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
 
-        final View dialogView = inflater.inflate(R.layout.dialog_listgrid, null);
+        final View dialogView = inflater.inflate(R.layout.dialog_grid, null);
         TextView headline = (TextView)dialogView.findViewById(R.id.dialog_headline);
         headline.setText("Choose category");
-
-        ListView listView = (ListView) dialogView.findViewById(R.id.listView);
         GridView gridView = (GridView) dialogView.findViewById(R.id.gridView);
-        listView.setVisibility(View.INVISIBLE);
-
 
         ArrayList<ListItemIconName> catArray = new ArrayList<>();
 
@@ -187,7 +176,7 @@ public class NewCompareActivity extends Activity {
 
         builder.setView(dialogView);
         final AlertDialog alert = builder.create();
-        final CompareCategoryOverlayGridAdapter gridAdapter = new CompareCategoryOverlayGridAdapter(this, R.layout.grid_item_overlay, catArray);
+        final CategoriesGridOverlayAdapter gridAdapter = new CategoriesGridOverlayAdapter(this, R.layout.grid_item_overlay, catArray);
         gridView.setAdapter(gridAdapter);
         gridView.setOnItemClickListener(onItemClickListener);
 

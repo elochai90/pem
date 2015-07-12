@@ -2,7 +2,6 @@ package com.gruppe1.pem.challengeme;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.util.Log;
 
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;

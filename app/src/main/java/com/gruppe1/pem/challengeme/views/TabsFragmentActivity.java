@@ -21,8 +21,7 @@ import android.widget.TextView;
 import com.gruppe1.pem.challengeme.AnimatedTabHostListener;
 import com.gruppe1.pem.challengeme.ListItemIconName;
 import com.gruppe1.pem.challengeme.R;
-import com.gruppe1.pem.challengeme.adapters.NavigationDrawerItemAdapter;
-import com.gruppe1.pem.challengeme.helpers.PicassoSingleton;
+import com.gruppe1.pem.challengeme.adapters.NavigationDrawerAdapter;
 
 public class TabsFragmentActivity extends FragmentActivity {
 
@@ -145,7 +144,7 @@ public class TabsFragmentActivity extends FragmentActivity {
                 new ListItemIconName(0, R.drawable.ic_wishlist, menuItems[2], null),
                 new ListItemIconName(0, R.drawable.ic_settings, menuItems[3], null)
         };
-        mDrawerList.setAdapter(new NavigationDrawerItemAdapter(this, R.layout.list_item_navigation_drawer, navigationDrawerItems));
+        mDrawerList.setAdapter(new NavigationDrawerAdapter(this, R.layout.list_item_navigation_drawer, navigationDrawerItems));
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 

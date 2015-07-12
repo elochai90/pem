@@ -10,18 +10,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.gruppe1.pem.challengeme.Compare;
-import com.gruppe1.pem.challengeme.helpers.Constants;
-import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
-import com.gruppe1.pem.challengeme.helpers.ImageLoader;
 import com.gruppe1.pem.challengeme.Item;
 import com.gruppe1.pem.challengeme.R;
+import com.gruppe1.pem.challengeme.helpers.Constants;
+import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 import com.gruppe1.pem.challengeme.helpers.PicassoSingleton;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
+/**
+ * Created by bianka on 18.06.2015.
+ * Compare adapter to fill the list view of the compare list
+ */
 public class CompareListAdapter extends ArrayAdapter<Compare> {
     private Context context;
     private int layoutResourceId;
@@ -29,6 +33,12 @@ public class CompareListAdapter extends ArrayAdapter<Compare> {
     private DataBaseHelper dbHelper;
     private PicassoSingleton picassoSingleton;
 
+    /**
+     * Constructor of the CompareGridAdapter
+     * @param context the context
+     * @param layoutResourceId Layout resource for a item
+     * @param data the list of compares to fill the list with
+     */
     public CompareListAdapter(Context context, int layoutResourceId, List<Compare> data) {
         super(context, layoutResourceId, data);
         this.layoutResourceId = layoutResourceId;
@@ -41,9 +51,8 @@ public class CompareListAdapter extends ArrayAdapter<Compare> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Long time = System.currentTimeMillis();
         View row = convertView;
-        ViewHolder holder = null;
+        ViewHolder holder;
 
         Compare item = data.get(position);
 
@@ -70,7 +79,7 @@ public class CompareListAdapter extends ArrayAdapter<Compare> {
 
         holder.itemName1.setText(item1.getName());
         holder.itemName2.setText(item2.getName());
-        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy", Locale.ENGLISH);
         String currentDateandTime = sdf.format(new Date(Long.parseLong(item.getTimestamp())));
 
         holder.rightTextView.setText(currentDateandTime);

@@ -7,27 +7,30 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.gruppe1.pem.challengeme.Color;
-import com.gruppe1.pem.challengeme.ListItemIconName;
 import com.gruppe1.pem.challengeme.R;
-import com.gruppe1.pem.challengeme.helpers.Constants;
-import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 
 import java.util.ArrayList;
 
 /**
  * Created by bianka on 26.06.2015.
+ * the Color Adapter for a Color Overlay
  */
-public class ColorsDropdownAdapter  extends ArrayAdapter<Color> {
+public class ColorsGridOverlayAdapter extends ArrayAdapter<Color> {
 
     private Context context;
     private int layoutResourceId;
     private ArrayList<Color> data;
 
-    public ColorsDropdownAdapter(Context context, int layoutResourceId, ArrayList<Color> data) {
+    /**
+     * Constructor of the ColorsGridOverlayAdapter
+     * @param context the context
+     * @param layoutResourceId Layout resource for a item
+     * @param data the list of colors to fill the overlay grid with
+     */
+    public ColorsGridOverlayAdapter(Context context, int layoutResourceId, ArrayList<Color> data) {
         super(context, layoutResourceId, data);
 
         this.context = context;
@@ -38,7 +41,7 @@ public class ColorsDropdownAdapter  extends ArrayAdapter<Color> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
-        ViewHolder holder = null;
+        ViewHolder holder;
 
         String hexColor = data.get(position).getHexColor();
         String colorName = data.get(position).getName();
@@ -66,6 +69,12 @@ public class ColorsDropdownAdapter  extends ArrayAdapter<Color> {
         return data.size();
     }
 
+
+    /**
+     *
+     * @param color the color to check
+     * @return if the color has brightness over 60%
+     */
     public boolean isColorLight(int color) {
         boolean isColorLight = false;
         float[] pixelHSV = new float[3];

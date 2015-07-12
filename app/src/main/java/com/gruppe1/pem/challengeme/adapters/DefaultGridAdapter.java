@@ -2,12 +2,10 @@ package com.gruppe1.pem.challengeme.adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.v7.internal.widget.AdapterViewCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,23 +15,27 @@ import com.gruppe1.pem.challengeme.R;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.PicassoSingleton;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by bianka on 18.06.2015.
+ * Array adapter to fill a default grid view
  */
 public class DefaultGridAdapter extends ArrayAdapter<ListItemIconName> {
     private Context context;
     private int layoutResourceId;
-    private List<ListItemIconName> data = new ArrayList();
+    private List<ListItemIconName> data = new ArrayList<>();
     private boolean isCategory;
-
-    public int currentSelection;
     private PicassoSingleton picassoSingleton;
 
+    /**
+     * Constructor of the DefaultGridAdapter
+     * @param context the context
+     * @param layoutResourceId  Layout resource for a item
+     * @param data the list of ListItemIconNames to fill the grid list with
+     * @param isCategory boolean if the adapter should fill the category grid
+     */
     public DefaultGridAdapter(Context context, int layoutResourceId, List<ListItemIconName> data, boolean isCategory) {
         super(context, layoutResourceId, data);
         this.layoutResourceId = layoutResourceId;
@@ -46,7 +48,7 @@ public class DefaultGridAdapter extends ArrayAdapter<ListItemIconName> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
-        ViewHolder holder = null;
+        ViewHolder holder;
 
         ListItemIconName item = data.get(position);
 
@@ -69,7 +71,6 @@ public class DefaultGridAdapter extends ArrayAdapter<ListItemIconName> {
         if(isCategory || item.itemFile ==  null) {
             holder.image.setImageResource(item.icon);
         } else {
-            //holder.image.setImageBitmap(item.itemBitmap);
             picassoSingleton.setImage(item.itemFile, Constants.LIST_VIEW_IMAGE_WIDTH, Constants.LIST_VIEW_IMAGE_HEIGHT, holder.image);
         }
 
@@ -77,7 +78,6 @@ public class DefaultGridAdapter extends ArrayAdapter<ListItemIconName> {
         if(isCategory) {
             holder.rightTextView.setText(Item.getItemsCountByCategoryId(context, item.elementId, false) + "");
         }
-        //}
         return row;
     }
 

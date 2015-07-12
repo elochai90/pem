@@ -2,20 +2,14 @@ package com.gruppe1.pem.challengeme.adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.support.v4.view.PagerAdapter;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.gruppe1.pem.challengeme.Category;
-import com.gruppe1.pem.challengeme.helpers.Constants;
-import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
-import com.gruppe1.pem.challengeme.helpers.ImageLoader;
 import com.gruppe1.pem.challengeme.Item;
+import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.PicassoSingleton;
 import com.gruppe1.pem.challengeme.views.NewCompareActivity;
 
@@ -23,25 +17,22 @@ import java.util.ArrayList;
 
 /**
  * Created by bianka on 21.06.2015.
+ * PagerAdapter to fill the compare views
  */
 public class CompareImageAdapter extends PagerAdapter {
-    Context context;
+    private Context context;
     private ArrayList<Item> categoryItems;
     private PicassoSingleton picassoSingleton;
-    NewCompareActivity activity;
-    public int builder;
-    private SharedPreferences sharedPreferences;
+    private NewCompareActivity activity;
+    private int builder;
 
-    public CompareImageAdapter(Activity activity){
-        this.sharedPreferences = activity.getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
-        this.activity = (NewCompareActivity)activity;
-        this.context = activity.getApplicationContext();
-        this.context = activity.getApplicationContext();
-        this.picassoSingleton = PicassoSingleton.getInstance(activity);
-    }
-
+    /**
+     * Constructor of the CompareImageAdapter
+     * @param activity the activity of the context
+     * @param items list of the items to fill the pager with
+     * @param p_builder the parent builder
+     */
     public CompareImageAdapter(Activity activity, ArrayList<Item> items, int p_builder) {
-        this.sharedPreferences = activity.getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
         this.activity = (NewCompareActivity) activity;
         this.context = activity.getApplicationContext();
         this.builder = p_builder;

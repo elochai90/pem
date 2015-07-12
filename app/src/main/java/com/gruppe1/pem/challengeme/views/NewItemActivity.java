@@ -43,17 +43,16 @@ import com.gruppe1.pem.challengeme.HSVColorPickerDialog;
 import com.gruppe1.pem.challengeme.Item;
 import com.gruppe1.pem.challengeme.ListItemIconName;
 import com.gruppe1.pem.challengeme.R;
-import com.gruppe1.pem.challengeme.adapters.CompareCategoryOverlayGridAdapter;
+import com.gruppe1.pem.challengeme.adapters.ColorsGridOverlayAdapter;
+import com.gruppe1.pem.challengeme.adapters.CategoriesGridOverlayAdapter;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 import com.gruppe1.pem.challengeme.helpers.ImageLoader;
-import com.gruppe1.pem.challengeme.adapters.ColorsDropdownAdapter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -92,10 +91,10 @@ public class NewItemActivity extends Activity {
 
     private ArrayList<AttributeType> attributeTypesList;
     private ArrayList<Category> allCategories;
-    private CompareCategoryOverlayGridAdapter gridCateoriesAdapter;
+    private CategoriesGridOverlayAdapter gridCateoriesAdapter;
     private ArrayList<com.gruppe1.pem.challengeme.Color> allColors;
-//    private ColorsDropdownAdapter colorsDropdownAdapter;
-    private ColorsDropdownAdapter gridColorsAdapter;
+//    private ColorsGridOverlayAdapter colorsDropdownAdapter;
+    private ColorsGridOverlayAdapter gridColorsAdapter;
 
     private Bundle extras;
 
@@ -157,7 +156,7 @@ public class NewItemActivity extends Activity {
             int iconId = getResources().getIdentifier(tmpCat.getIcon(), "drawable", "com.gruppe1.pem.challengeme");
             catArray.add(new ListItemIconName(tmpCat.getId(), iconId , tmpCat.getName(), null));
         }
-        gridCateoriesAdapter = new CompareCategoryOverlayGridAdapter(this, R.layout.grid_item_overlay, catArray);
+        gridCateoriesAdapter = new CategoriesGridOverlayAdapter(this, R.layout.grid_item_overlay, catArray);
 
 
 
@@ -171,7 +170,7 @@ public class NewItemActivity extends Activity {
 
         // Setup Colors Adapter
         allColors = com.gruppe1.pem.challengeme.Color.getAllColors(this);
-        gridColorsAdapter = new ColorsDropdownAdapter(this, R.layout.grid_item_overlay, allColors);
+        gridColorsAdapter = new ColorsGridOverlayAdapter(this, R.layout.grid_item_overlay, allColors);
 
 
 
@@ -695,13 +694,10 @@ public class NewItemActivity extends Activity {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
 
-        final View dialogView = inflater.inflate(R.layout.dialog_listgrid, null);
+        final View dialogView = inflater.inflate(R.layout.dialog_grid, null);
         TextView headline = (TextView)dialogView.findViewById(R.id.dialog_headline);
         headline.setText("Select a category");
-
-        ListView listView = (ListView) dialogView.findViewById(R.id.listView);
         GridView gridView = (GridView) dialogView.findViewById(R.id.gridView);
-        listView.setVisibility(View.INVISIBLE);
 
         gridView.setAdapter(gridCateoriesAdapter);
 
@@ -727,13 +723,10 @@ public class NewItemActivity extends Activity {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
 
-        final View dialogView = inflater.inflate(R.layout.dialog_listgrid, null);
+        final View dialogView = inflater.inflate(R.layout.dialog_grid, null);
         TextView headline = (TextView)dialogView.findViewById(R.id.dialog_headline);
         headline.setText("Select a color");
-
-        ListView listView = (ListView) dialogView.findViewById(R.id.listView);
         GridView gridView = (GridView) dialogView.findViewById(R.id.gridView);
-        listView.setVisibility(View.INVISIBLE);
 
         gridView.setAdapter(gridColorsAdapter);
 
