@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by bianka on 18.06.2015.
  * Array adapter to fill a default grid view
  */
 public class DefaultGridAdapter extends ArrayAdapter<ListItemIconName> {

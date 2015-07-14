@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by bianka on 18.06.2015.
  * Compare adapter to fill the grid view of the compare list
  */
 public class CompareGridAdapter extends ArrayAdapter {

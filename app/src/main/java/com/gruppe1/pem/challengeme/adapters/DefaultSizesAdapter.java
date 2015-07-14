@@ -15,7 +15,6 @@ import com.gruppe1.pem.challengeme.DefaultSize;
 import java.util.ArrayList;
 
 /**
- * Created by bianka on 06.07.2015.
  * DefaultSize adapter to fill the default sizes dropdown view
  */
 public class DefaultSizesAdapter extends ArrayAdapter<DefaultSize> implements SpinnerAdapter {

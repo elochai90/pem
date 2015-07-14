@@ -8,7 +8,6 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 
 /**
- * Created by Simon on 04.07.2015.
  * Singleton of Picasso Library
  */
 public class PicassoSingleton {

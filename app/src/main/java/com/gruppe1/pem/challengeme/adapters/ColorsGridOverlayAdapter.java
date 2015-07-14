@@ -15,7 +15,6 @@ import com.gruppe1.pem.challengeme.R;
 import java.util.ArrayList;
 
 /**
- * Created by bianka on 26.06.2015.
  * the Color Adapter for a Color Overlay
  */
 public class ColorsGridOverlayAdapter extends ArrayAdapter<Color> {

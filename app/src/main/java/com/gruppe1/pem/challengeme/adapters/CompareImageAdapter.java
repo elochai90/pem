@@ -3,7 +3,6 @@ package com.gruppe1.pem.challengeme.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -16,7 +15,6 @@ import com.gruppe1.pem.challengeme.views.NewCompareActivity;
 import java.util.ArrayList;
 
 /**
- * Created by bianka on 21.06.2015.
  * PagerAdapter to fill the compare views
  */
 public class CompareImageAdapter extends PagerAdapter {
@@ -63,7 +61,7 @@ public class CompareImageAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, int position) {
         ImageView imageView = new ImageView(context);
         imageView.setPadding(0, 0, 0, 0);
-        imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        //imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 
         String imageFile = categoryItems.get(position).getImageFile();
 

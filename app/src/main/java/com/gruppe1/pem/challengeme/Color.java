@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.Set;
 
 /**
- * Created by Simon on 13.06.2015.
  * Color class
  */
 public class Color {

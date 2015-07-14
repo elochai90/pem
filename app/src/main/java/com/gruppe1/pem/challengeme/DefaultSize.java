@@ -1,7 +1,6 @@
 package com.gruppe1.pem.challengeme;
 
 /**
- * Created by bianka on 06.07.2015.
  * DefaultSize class
  */
 public class DefaultSize {

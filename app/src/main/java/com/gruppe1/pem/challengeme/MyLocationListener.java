@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Created by bianka on 11.06.2015.
  * custom LocationListener
  */
 public class MyLocationListener implements LocationListener {

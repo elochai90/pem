@@ -14,7 +14,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * Created by Simon on 12.06.2015.
  * handles the database connection and requests
  */
 public class DataBaseHelper extends SQLiteOpenHelper {

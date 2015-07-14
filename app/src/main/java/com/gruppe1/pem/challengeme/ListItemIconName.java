@@ -3,7 +3,6 @@ package com.gruppe1.pem.challengeme;
 import java.util.Date;
 
 /**
- * Created by bianka on 05.06.2015.
  * ListItemIconName class
  */
 public class ListItemIconName {

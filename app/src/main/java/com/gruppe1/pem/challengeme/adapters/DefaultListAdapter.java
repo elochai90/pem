@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Created by bianka on 18.06.2015.
  * Array adapter to fill a default list view
  */
 public class DefaultListAdapter extends ArrayAdapter<ListItemIconName> {

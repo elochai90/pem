@@ -235,16 +235,17 @@ public class WeatherRequest {
                 json = new JSONObject(result);
                 weatherAvailable = true;
 
+                // get current weather
                 if(json.has("weather")){
                     todayWeather = true;
-                    JSONArray weather = json.getJSONArray("weather"); // get articles array
+                    JSONArray weather = json.getJSONArray("weather");
                     weather_today_desc = weather.getJSONObject(0).getString("main");
                     weather_today_temp = Math.round(json.getJSONObject("main").getDouble("temp") - 273.15) + "°C";
                     weather_today_image = getImage(weather.getJSONObject(0).getString("id"));
 
                 }
-                else{
-                    JSONArray forecast = json.getJSONArray("list"); // get articles array
+                else{ // get weather forecast
+                    JSONArray forecast = json.getJSONArray("list");
                     Date date = new Date();
                     SimpleDateFormat sdf = new SimpleDateFormat("EEE", Locale.ENGLISH);
                     String currentDateandTime = sdf.format(date);
@@ -289,6 +290,7 @@ public class WeatherRequest {
                 }
 
             } catch (JSONException e) {
+                weatherAvailable = false;
                 weather_today_desc = sharedPreferences.getString(Constants.KEY_W_TODAY_DESC, "");
                 weather_today_temp = sharedPreferences.getString(Constants.KEY_W_TODAY_TEMP, "");
                 weather_today_image = sharedPreferences.getInt(Constants.KEY_W_TODAY_IMAGE, 0);

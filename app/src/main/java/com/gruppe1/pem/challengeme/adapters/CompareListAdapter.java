@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Created by bianka on 18.06.2015.
  * Compare adapter to fill the list view of the compare list
  */
 public class CompareListAdapter extends ArrayAdapter<Compare> {

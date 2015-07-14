@@ -12,7 +12,6 @@ import java.util.Iterator;
 import java.util.regex.Pattern;
 
 /**
- * Created by Simon on 29.06.2015.
  * Compare class
  */
 public class Compare implements Serializable{

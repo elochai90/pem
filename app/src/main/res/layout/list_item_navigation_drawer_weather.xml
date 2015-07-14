@@ -11,42 +11,50 @@
         android:layout_weight="0.43">
 
         <LinearLayout
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="10dp"
-            android:background="#E0F2F7"
-            android:gravity="center"
-            android:layout_gravity="center">
+            android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/navDrawerWeatherTemp"
-                android:textColor="@android:color/black"
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:layout_gravity="center" />
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:background="#E0F2F7"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:layout_weight="0.5">
 
-            <TextView
-                android:id="@+id/navDrawerWeatherDescription"
-                android:textColor="@android:color/black"
+                <TextView
+                    android:id="@+id/navDrawerWeatherTemp"
+                    android:textColor="@android:color/black"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:layout_gravity="center" />
+
+                <TextView
+                    android:id="@+id/navDrawerWeatherDescription"
+                    android:textColor="@android:color/black"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:layout_gravity="center" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/navDrawerWeatherImage"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:layout_gravity="center" />
-
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:background="#E0F2F7"
+                android:contentDescription="@string/nav_drawer_desc_weatherImage"
+                android:layout_gravity="center"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="0.5" />
         </LinearLayout>
-
-        <ImageView
-            android:id="@+id/navDrawerWeatherImage"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:adjustViewBounds="true"
-            android:background="#E0F2F7"
-            android:contentDescription="@string/nav_drawer_desc_weatherImage"
-            android:layout_gravity="center"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="10dp" />
 
     </RelativeLayout>
 

@@ -14,7 +14,6 @@ import com.gruppe1.pem.challengeme.R;
 import com.gruppe1.pem.challengeme.WeatherRequest;
 
 /**
- * Created by bianka on 05.06.2015.
  * Array adapter to fill the navigation drawer
  */
 public class NavigationDrawerAdapter extends ArrayAdapter<ListItemIconName>

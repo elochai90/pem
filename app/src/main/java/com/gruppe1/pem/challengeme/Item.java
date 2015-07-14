@@ -10,10 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
-/**
- * Created by Simon on 24.06.2015.
- * Item class
- */
+
 public class Item {
     private int m_id;
     private String m_name;

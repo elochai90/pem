@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 /**
- * Created by Simon on 29.06.2015.
  * ImageLoader class
  */
 public class ImageLoader {

@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Created by simon on 19.06.2015.
  * XML Parser class
  */
 public class XmlParser {

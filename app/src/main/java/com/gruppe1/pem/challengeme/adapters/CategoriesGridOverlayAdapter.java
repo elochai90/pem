@@ -15,7 +15,6 @@ import com.gruppe1.pem.challengeme.R;
 import java.util.ArrayList;
 
 /**
- * Created by bianka on 18.06.2015.
  * the Category Adapter for a Category Select Overlay
  */
 public class CategoriesGridOverlayAdapter extends ArrayAdapter<ListItemIconName> {

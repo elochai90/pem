@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by bianka on 18.06.2015.
  * Array adapter to fill the icon overlay view
  */
 public class IconsGridOverlayAdapter extends ArrayAdapter<String> {

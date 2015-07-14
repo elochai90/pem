@@ -1,7 +1,6 @@
 package com.gruppe1.pem.challengeme.helpers;
 
 /**
- * Created by Simon on 13.06.2015.
  * holds multiple used constant values
  */
 public class Constants {
