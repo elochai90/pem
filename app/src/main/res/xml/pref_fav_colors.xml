@@ -2,6 +2,6 @@
 
     <MultiSelectListPreference
         android:key="favorite_colors"
-        android:title="@string/pref_fav_colour"/>
+        android:title="@string/chooseColor"/>
 
 </PreferenceScreen>

@@ -72,7 +72,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/fab_add"
             fab:fab_size="mini"
-            fab:fab_label="New Compare" />
+            fab:fab_label="@string/title_activity_saved_compares" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/add_wishlist_item"
@@ -80,7 +80,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/fab_add"
             fab:fab_size="mini"
-            fab:fab_label="New Wishlist Item" />
+            fab:fab_label="@string/title_activity_new_Wishlistitem" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/add_category"
@@ -88,7 +88,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/fab_add"
             fab:fab_size="mini"
-            fab:fab_label="New Category" />
+            fab:fab_label="@string/title_activity_new_category" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/add_item"
@@ -96,7 +96,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/fab_add"
             fab:fab_size="mini"
-            fab:fab_label="New Item" />
+            fab:fab_label="@string/title_activity_new_item" />
 
     </com.github.clans.fab.FloatingActionMenu>
 

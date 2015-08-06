@@ -66,5 +66,10 @@
         <item>45</item>
 
     </string-array>
+    <string-array name="language_text">
+        <item>German</item>
+        <item>English</item>
+
+    </string-array>
 
 </resources>

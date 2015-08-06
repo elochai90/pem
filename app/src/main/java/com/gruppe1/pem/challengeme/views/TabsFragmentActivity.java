@@ -1,15 +1,18 @@
 package com.gruppe1.pem.challengeme.views;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.LocalActivityManager;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +26,8 @@ import com.gruppe1.pem.challengeme.R;
 import com.gruppe1.pem.challengeme.adapters.NavigationDrawerAdapter;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 
+import java.util.Locale;
+
 public class TabsFragmentActivity extends FragmentActivity {
 
     private ActionBarDrawerToggle mDrawerToggle;
@@ -32,19 +37,79 @@ public class TabsFragmentActivity extends FragmentActivity {
     private FragmentTabHost tabs;
     private String mTitle;
     private String[] menuItems = {"Categories", "Compare", "Wishlist", "Settings"};
+    private Locale myLocale;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tabs);
 
+        menuItems[0] = getString(R.string.title_activity_categories);
+        menuItems[1] = getString(R.string.title_activity_compare);
+        menuItems[2] = getString(R.string.title_activity_wishlist2);
+        menuItems[3] = getString(R.string.title_activity_settings);
+        //menuItems =  {getString(R.string.title_activity_categories), ""+R.string.title_activity_compare, ""+R.string.title_activity_wishlist, ""+R.string.title_activity_settings};
+        System.out.println(getString(R.string.title_activity_categories));
+
         mTitle = getString(R.string.app_name);
         if(getActionBar() != null) {
             getActionBar().setTitle(mTitle);
         }
 
+        loadLocale();
         setupTabHost(savedInstanceState);
         setupNavigationDrawer();
+
+    }
+
+    public void loadLocale()
+    {
+        String langPref = "Language";
+        SharedPreferences prefs = getSharedPreferences(Constants.MY_PREFERENCES, Activity.MODE_PRIVATE);
+        String language = prefs.getString(Constants.KEY_DS_4_NAME, "");
+        System.out.println("laaang: " + language);
+        String lang = "en";
+        switch (language) {
+            case "German":
+                lang = "de";
+                break;
+            case "English":
+                lang = "en";
+                break;
+            default:
+                break;
+        }
+        changeLang(lang);
+    }
+    /* public void saveLocale(String lang)
+    {
+        String langPref = "Language";
+        SharedPreferences prefs = getSharedPreferences(Constants.MY_PREFERENCES, Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(langPref, lang);
+        editor.commit();
+    }*/
+
+    public void changeLang(String lang)
+    {
+        if (lang.equalsIgnoreCase(""))
+            return;
+        myLocale = new Locale(lang);
+        //saveLocale(lang);
+        Locale.setDefault(myLocale);
+        android.content.res.Configuration config = new android.content.res.Configuration();
+        config.locale = myLocale;
+        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+    }
+
+    @Override
+    public void onConfigurationChanged(android.content.res.Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (myLocale != null){
+            newConfig.locale = myLocale;
+            Locale.setDefault(myLocale);
+            getBaseContext().getResources().updateConfiguration(newConfig, getBaseContext().getResources().getDisplayMetrics());
+        }
     }
 
     @Override
@@ -189,6 +254,7 @@ public class TabsFragmentActivity extends FragmentActivity {
         for (int i = 0; i < tabs.getTabWidget().getChildCount(); i++) {
             TextView tv = (TextView) tabs.getTabWidget().getChildAt(i).findViewById(android.R.id.title);
             tv.setTextColor(Color.parseColor("#FFFFFF"));
+            tv.setGravity(Gravity.CENTER);
         }
     }
 

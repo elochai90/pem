@@ -14,15 +14,18 @@
 
     <Button
         android:id="@+id/itemActionButton"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
         android:layout_alignParentEnd="true"
         android:focusable="false"
         android:text="@string/wishlist_button_not_selected"
         android:textColor="@color/accent"
         android:visibility="invisible"
-        style="?android:attr/borderlessButtonStyle"/>
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/firstLine"
+        android:gravity="top|right" />
 
 
 
@@ -52,16 +55,15 @@
 
     <TextView
         android:id="@+id/firstLine"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/secondLine"
-        android:layout_toStartOf="@id/itemActionButton"
         android:textColor="@android:color/black"
         android:layout_alignParentTop="true"
         android:layout_alignWithParentIfMissing="true"
-        android:layout_toEndOf="@id/imageView"
         android:gravity="center_vertical"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:layout_above="@+id/secondLine"
+        android:layout_toEndOf="@+id/imageView" />
 
     <RatingBar
         android:id="@+id/listItemRatingBar"

@@ -3,7 +3,7 @@
 
     <CheckBoxPreference
         android:key="show_wishlist_item_in_compare"
-        android:title="@string/show_wishlist_item_in_compare"
+        android:title="@string/showWishlistItems"
         android:defaultValue="false"
         />
 

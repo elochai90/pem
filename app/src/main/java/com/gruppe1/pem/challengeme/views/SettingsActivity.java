@@ -16,6 +16,7 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.gruppe1.pem.challengeme.Color;
 import com.gruppe1.pem.challengeme.R;
@@ -23,6 +24,7 @@ import com.gruppe1.pem.challengeme.helpers.Constants;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 /**
@@ -40,6 +42,7 @@ public class SettingsActivity extends PreferenceActivity {
 
     private static SharedPreferences sharedPreferences;
     private static SharedPreferences.Editor editor;
+    private Locale myLocale;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,18 +94,24 @@ public class SettingsActivity extends PreferenceActivity {
 
         addPreferencesFromResource(R.xml.pref_general);
 
+
         PreferenceCategory fakeHeader = new PreferenceCategory(this);
-        fakeHeader.setTitle("Standard Sizes:");
+        fakeHeader.setTitle(getString(R.string.language));
+        getPreferenceScreen().addPreference(fakeHeader);
+        addPreferencesFromResource(R.xml.pref_language);
+
+        fakeHeader = new PreferenceCategory(this);
+        fakeHeader.setTitle(getString(R.string.standardSizes));
         getPreferenceScreen().addPreference(fakeHeader);
         addPreferencesFromResource(R.xml.pref_default_sizes);
 
         fakeHeader = new PreferenceCategory(this);
-        fakeHeader.setTitle("Favourite Colors:");
+        fakeHeader.setTitle(getString(R.string.favColors));
         getPreferenceScreen().addPreference(fakeHeader);
         addPreferencesFromResource(R.xml.pref_fav_colors);
 
         fakeHeader = new PreferenceCategory(this);
-        fakeHeader.setTitle("Show Wishlist Items in Compares:");
+        fakeHeader.setTitle(getString(R.string.showWishlistItems));
         getPreferenceScreen().addPreference(fakeHeader);
         addPreferencesFromResource(R.xml.pref_view);
 
@@ -156,6 +165,17 @@ public class SettingsActivity extends PreferenceActivity {
         }
         bindPreferenceSummaryToValue(findPreference("Shoes"), shoes_default);
 
+        String language_def;
+        if (sharedPreferences.contains(Constants.KEY_DS_4_NAME)) {
+            language_def = sharedPreferences.getString(Constants.KEY_DS_4_NAME, "");
+        } else {
+            language_def = PreferenceManager
+                    .getDefaultSharedPreferences(findPreference("Language").getContext())
+                    .getString(findPreference("Language").getKey(), "");
+        }
+        System.out.println("Language: " + language_def);
+        bindPreferenceSummaryToValue(findPreference("Language"), language_def);
+
         Set<String> favorite_colors;
         if (sharedPreferences.contains(Constants.KEY_FAVORITE_COLORS)) {
             favorite_colors = sharedPreferences.getStringSet(Constants.KEY_FAVORITE_COLORS, new HashSet<String>());
@@ -201,7 +221,7 @@ public class SettingsActivity extends PreferenceActivity {
      * A preference value change listener that updates the preference's summary
      * to reflect its new value.
      */
-    private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
+    private Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
 
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
@@ -226,6 +246,24 @@ public class SettingsActivity extends PreferenceActivity {
                 } else if(preference.getKey().equals("Shoes")) {
                     editor.putString(Constants.KEY_DS_3_NAME, stringValue);
                     editor.apply();
+                }
+                else if(preference.getKey().equals("Language")) {
+                    System.out.println(stringValue);
+                    String lang = "en";
+                    switch (stringValue) {
+                        case "German":
+                            lang = "de";
+                            break;
+                        case "English":
+                            lang = "en";
+                            break;
+                        default:
+                            break;
+                    }
+                    editor.putString(Constants.KEY_DS_4_NAME, stringValue);
+                    editor.apply();
+
+                    changeLang(lang);
                 }
             } else if (preference instanceof CheckBoxPreference) {
                 if(preference.getKey().equals("show_wishlist_item_in_compare")) {
@@ -257,7 +295,7 @@ public class SettingsActivity extends PreferenceActivity {
      *
      * @see #sBindPreferenceSummaryToValueListener
      */
-    private static void bindPreferenceSummaryToValue(Preference preference, Object initialValue) {
+    private void bindPreferenceSummaryToValue(Preference preference, Object initialValue) {
         // Set the listener to watch for value changes.
         preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
 
@@ -265,4 +303,26 @@ public class SettingsActivity extends PreferenceActivity {
         // current value.
         sBindPreferenceSummaryToValueListener.onPreferenceChange(preference, initialValue);
     }
+
+    public void changeLang(String lang)
+    {
+        if (lang.equalsIgnoreCase(""))
+            return;
+        myLocale = new Locale(lang);
+        Locale.setDefault(myLocale);
+        android.content.res.Configuration config = new android.content.res.Configuration();
+        config.locale = myLocale;
+        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+    }
+
+    @Override
+    public void onConfigurationChanged(android.content.res.Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (myLocale != null){
+            newConfig.locale = myLocale;
+            Locale.setDefault(myLocale);
+            getBaseContext().getResources().updateConfiguration(newConfig, getBaseContext().getResources().getDisplayMetrics());
+        }
+    }
+
 }
