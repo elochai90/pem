@@ -1,0 +1,94 @@
+<resources>
+    <string name="app_name">OrgaNice</string>
+
+
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+
+    <!--titles-->
+    <string name="title_activity_categories">Kategorien</string>
+    <string name="title_activity_compare">Vergleich</string>
+    <string name="title_activity_wishlist">Wunsch-liste</string>
+    <string name="title_activity_wishlist2">Wunschliste</string>
+    <string name="title_activity_settings">Einstellungen</string>
+    <string name="title_activity_saved_compares">Neuer Vergleich</string>
+    <string name="title_activity_saved_compares_detail">Gespeicherter Vergleich</string>
+    <string name="title_activity_new_item">Neues Item</string>
+    <string name="title_activity_new_Wishlistitem">Neues Wunschlisten Item</string>
+    <string name="title_activity_edit_item">Bearbeiten</string>
+    <string name="title_activity_new_category">Neue Kategorie</string>
+    <string name="title_activity_items_list">Items</string>
+
+    <!--Switch text-->
+    <string name="switch_true">&#10003;</string>
+    <string name="switch_false">&#10007;</string>
+
+    <!--empty list text-->
+    <string name="no_items">Du hast noch keine Items in dieser Kategorie. Du kannst eines mit dem Button erstellen.</string>
+    <string name="no_compares">Du hast noch keinen Vergleich gemacht. Du kannst einen mit dem Button erstellen.</string>
+    <string name="no_wishlist_items">Du hast noch kein Item in deiner Wunschliste. Du kannst eines mit dem Button erstellen.</string>
+
+    <!--For Wishlist Fragment-->
+    <string name="wishlist_button_not_selected">Zur Kategorie hinzufügen</string>
+    <string name="wishlist_button_selected">Zur Wunschliste hinzufügen</string>
+
+    <!--For new compare activity-->
+    <string name="save_compare">Vergleich speichern</string>
+    <string name="compare_name">Name des Vergleichs</string>
+
+
+    <!--For detail compare activity-->
+    <string name="compare_saved">Gespeichert</string>
+    <string name="compare_desc_image1">Erstes Bild</string>
+    <string name="compare_desc_image2">Zweites Bild</string>
+
+    <!--For new/edit item activity-->
+    <string name="no_buy_date_selected">Wähle ein Datum</string>
+    <string name="no_exact_color_selected">Wähle eine Farbe</string>
+    <string name="new_item_label_name">Name:</string>
+    <string name="new_item_hint_name">Item Name hinzufügen</string>
+
+    <!--For new category activity-->
+    <string name="new_category_label_name">Name:</string>
+    <string name="new_category_hint_name">Kategorie Name hinzufügen</string>
+    <string name="new_category_label_defaultSize">Default Größe:</string>
+    <string name="new_category_label_icon">Icon:</string>
+    <string name="new_category_desc_icon">Kategorie Icon</string>
+    <string name="new_category_overlay_title">Wähle ein Icon</string>
+
+
+    <!--ActionBar Menu titles-->
+    <string name="menu_title_listGridView">List/Grid Ansicht</string>
+    <string name="menu_title_editCategory">Kategorie bearbeiten</string>
+    <string name="menu_title_deleteCategory">Kategorie löschen</string>
+    <string name="menu_title_saveCategory">Kategorie speichern</string>
+    <string name="menu_title_deleteCompare">Vergleich löschen</string>
+
+    <!--List/Grid view-->
+    <string name="list_grid_view_desc_arrowImage">arrow_no_items</string>
+    <string name="list_grid_item_desc_image">Image</string>
+
+    <!--navigation drawer-->
+    <string name="nav_drawer_item_desc_icon">Icon</string>
+    <string name="nav_drawer_desc_weatherImage">Weather image</string>
+
+
+    <string name="abort">Abort</string>
+    <string name="save">Speichern</string>
+    <string name="edit">Bearbeiten</string>
+    <string name="delete">Löschen</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="new_item_desc_itemImage">Item Image</string>
+
+    <!-- Settings -->
+    <string name="language">Sprache:</string>
+    <string name="chooseLanguage">Wähle deine Sprache:</string>
+    <string name="standardSizes">Standardgrößen:</string>
+    <string name="tops">Topgröße:</string>
+    <string name="bottoms">Hosengröße:</string>
+    <string name="shoes">Schuhgröße:</string>
+    <string name="favColors">Lieblingsfarben:</string>
+    <string name="chooseColor">Wähle deine Lieblingsfarben:</string>
+    <string name="showWishlistItems">Zeige Wunschlisten Items im Compare</string>
+
+</resources>
