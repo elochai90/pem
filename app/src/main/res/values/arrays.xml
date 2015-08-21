@@ -72,4 +72,260 @@
 
     </string-array>
 
+
+    <array name="initial_cats">
+        <item>@array/initial_cat_sweater</item>
+        <item>@array/initial_cat_trousers</item>
+        <item>@array/initial_cat_skirts</item>
+        <item>@array/initial_cat_coats</item>
+        <item>@array/initial_cat_tops</item>
+        <item>@array/initial_cat_socks</item>
+        <item>@array/initial_cat_pants</item>
+        <item>@array/initial_cat_swimwear</item>
+        <item>@array/initial_cat_underwear</item>
+        <item>@array/initial_cat_suits</item>
+        <item>@array/initial_cat_shoes</item>
+        <item>@array/initial_cat_dresses</item>
+        <item>@array/initial_cat_accessoires</item>
+    </array>
+    <!--<name></name>-->
+    <!--<parent_categorie_id></parent_categorie_id>-->
+    <!--<default_attribute_type></default_attribute_type>-->
+    <!--<icon></icon>-->
+    <string-array name="initial_cat_sweater">
+        <item>@string/cat_sweater</item>
+        <item>0</item>
+        <item>0</item>
+        <item>pulli</item>
+    </string-array>
+    <string-array name="initial_cat_trousers">
+        <item>@string/cat_trousers</item>
+        <item>0</item>
+        <item>1</item>
+        <item>hose</item>
+    </string-array>
+    <string-array name="initial_cat_skirts">
+        <item>@string/cat_skirts</item>
+        <item>0</item>
+        <item>1</item>
+        <item>rock</item>
+    </string-array>
+    <string-array name="initial_cat_coats">
+        <item>@string/cat_coats</item>
+        <item>0</item>
+        <item>0</item>
+        <item>mantel</item>
+    </string-array>
+    <string-array name="initial_cat_tops">
+        <item>@string/cat_tops</item>
+        <item>0</item>
+        <item>0</item>
+        <item>top</item>
+    </string-array>
+    <string-array name="initial_cat_socks">
+        <item>@string/cat_socks</item>
+        <item>0</item>
+        <item>2</item>
+        <item>socken</item>
+    </string-array>
+    <string-array name="initial_cat_pants">
+        <item>@string/cat_pants</item>
+        <item>0</item>
+        <item>1</item>
+        <item>shorts</item>
+    </string-array>
+    <string-array name="initial_cat_swimwear">
+        <item>@string/cat_swimwear</item>
+        <item>0</item>
+        <item>1</item>
+        <item>bademode</item>
+    </string-array>
+    <string-array name="initial_cat_underwear">
+        <item>@string/cat_underwear</item>
+        <item>0</item>
+        <item>1</item>
+        <item>unterwaesche</item>
+    </string-array>
+    <string-array name="initial_cat_suits">
+        <item>@string/cat_suits</item>
+        <item>0</item>
+        <item>1</item>
+        <item>anzug</item>
+    </string-array>
+    <string-array name="initial_cat_shoes">
+        <item>@string/cat_shoes</item>
+        <item>0</item>
+        <item>2</item>
+        <item>sneaker</item>
+    </string-array>
+    <string-array name="initial_cat_dresses">
+        <item>@string/cat_dresses</item>
+        <item>0</item>
+        <item>0</item>
+        <item>kleid</item>
+    </string-array>
+    <string-array name="initial_cat_accessoires">
+        <item>@string/cat_accessoires</item>
+        <item>0</item>
+        <item>-1</item>
+        <item>accessoires</item>
+    </string-array>
+
+
+
+    <array name="initial_colors">
+        <item>@array/initial_color_black</item>
+        <item>@array/initial_color_grey</item>
+        <item>@array/initial_color_white</item>
+        <item>@array/initial_color_beige</item>
+        <item>@array/initial_color_brown</item>
+        <item>@array/initial_color_gold</item>
+        <item>@array/initial_color_silver</item>
+        <item>@array/initial_color_bronze</item>
+        <item>@array/initial_color_blue</item>
+        <item>@array/initial_color_petrol</item>
+        <item>@array/initial_color_turqouise</item>
+        <item>@array/initial_color_green</item>
+        <item>@array/initial_color_olive</item>
+        <item>@array/initial_color_purple</item>
+        <item>@array/initial_color_red</item>
+        <item>@array/initial_color_pink</item>
+        <item>@array/initial_color_orange</item>
+        <item>@array/initial_color_yellow</item>
+    </array>
+    <string-array name="initial_color_black">
+        <item>@string/color_black</item>
+        <item>#000000</item>
+    </string-array>
+    <string-array name="initial_color_grey">
+        <item>@string/color_grey</item>
+        <item>#888888</item>
+    </string-array>
+    <string-array name="initial_color_white">
+        <item>@string/color_white</item>
+        <item>#FFFFFF</item>
+    </string-array>
+    <string-array name="initial_color_beige">
+        <item>@string/color_beige</item>
+        <item>#F5DEB3</item>
+    </string-array>
+    <string-array name="initial_color_brown">
+        <item>@string/color_brown</item>
+        <item>#8B4513</item>
+    </string-array>
+    <string-array name="initial_color_gold">
+        <item>@string/color_gold</item>
+        <item>#FFD700</item>
+    </string-array>
+    <string-array name="initial_color_silver">
+        <item>@string/color_silver</item>
+        <item>#C0C0C0</item>
+    </string-array>
+    <string-array name="initial_color_bronze">
+        <item>@string/color_bronze</item>
+        <item>#904E3B</item>
+    </string-array>
+    <string-array name="initial_color_blue">
+        <item>@string/color_blue</item>
+        <item>#0000FF</item>
+    </string-array>
+    <string-array name="initial_color_petrol">
+        <item>@string/color_petrol</item>
+        <item>#5F9EA0</item>
+    </string-array>
+    <string-array name="initial_color_turqouise">
+        <item>@string/color_turquoise</item>
+        <item>#40E0D0</item>
+    </string-array>
+    <string-array name="initial_color_green">
+        <item>@string/color_green</item>
+        <item>#00FF00</item>
+    </string-array>
+    <string-array name="initial_color_olive">
+        <item>@string/color_olive</item>
+        <item>#556B2F</item>
+    </string-array>
+    <string-array name="initial_color_purple">
+        <item>@string/color_purple</item>
+        <item>#800080</item>
+    </string-array>
+    <string-array name="initial_color_red">
+        <item>@string/color_red</item>
+        <item>#FF0000</item>
+    </string-array>
+    <string-array name="initial_color_pink">
+        <item>@string/color_pink</item>
+        <item>#FFC0CB</item>
+    </string-array>
+    <string-array name="initial_color_orange">
+        <item>@string/color_orange</item>
+        <item>#FFA500</item>
+    </string-array>
+    <string-array name="initial_color_yellow">
+        <item>@string/color_yellow</item>
+        <item>#FFFF00</item>
+    </string-array>
+
+
+
+    <array name="initial_attr_types">
+        <item>@array/initial_attr_type_size</item>
+        <item>@array/initial_attr_type_ex_color</item>
+        <item>@array/initial_attr_type_brand</item>
+        <item>@array/initial_attr_type_material</item>
+        <item>@array/initial_attr_type_price</item>
+        <item>@array/initial_attr_type_store</item>
+        <item>@array/initial_attr_type_buy_date</item>
+        <item>@array/initial_attr_type_pattern</item>
+        <item>@array/initial_attr_type_other</item>
+    </array>
+    <!--<name></name>-->
+    <!--<value_type></value_type>-->
+    <!--<is_unique></is_unique>-->
+    <string-array name="initial_attr_type_size">
+        <item>@string/attr_type_size</item>
+        <item>1</item>
+        <item>1</item>
+    </string-array>
+    <string-array name="initial_attr_type_ex_color">
+        <item>@string/attr_type_ex_color</item>
+        <item>3</item>
+        <item>1</item>
+    </string-array>
+    <string-array name="initial_attr_type_brand">
+        <item>@string/attr_type_brand</item>
+        <item>1</item>
+        <item>1</item>
+    </string-array>
+    <string-array name="initial_attr_type_material">
+        <item>@string/attr_type_material</item>
+        <item>1</item>
+        <item>1</item>
+    </string-array>
+    <string-array name="initial_attr_type_price">
+        <item>@string/attr_type_price</item>
+        <item>1</item>
+        <item>1</item>
+    </string-array>
+    <string-array name="initial_attr_type_store">
+        <item>@string/attr_type_store</item>
+        <item>1</item>
+        <item>1</item>
+    </string-array>
+    <string-array name="initial_attr_type_buy_date">
+        <item>@string/attr_type_buy_date</item>
+        <item>4</item>
+        <item>1</item>
+    </string-array>
+    <string-array name="initial_attr_type_pattern">
+        <item>@string/attr_type_pattern</item>
+        <item>2</item>
+        <item>1</item>
+    </string-array>
+    <string-array name="initial_attr_type_other">
+        <item>@string/attr_type_other</item>
+        <item>1</item>
+        <item>1</item>
+    </string-array>
+
 </resources>

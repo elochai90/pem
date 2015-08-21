@@ -266,9 +266,12 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
      * Starts the NewItemActivity to show detail informations of an item
      * @param itemid the id of the selected item
      */
-    private void selectItem(int itemid) {
+    private void selectItem(int itemid, int position) {
         Intent intent = new Intent();
-        intent.setClassName(getPackageName(), getPackageName() + ".views.NewItemActivity");
+        intent.setClassName(getPackageName(), getPackageName() + ".views.CollectionItemsActivity");
+
+        intent.putExtra("EXTRA_CATEGORY_ID", categoryId);
+        intent.putExtra("EXTRA_CLICKED_ITEM_POSITION", position);
         Bundle b = new Bundle();
         b.putInt(Constants.EXTRA_ITEM_ID, itemid);
         intent.putExtras(b);
@@ -280,7 +283,7 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         int itemid = list ? listAdapter.getItem(position).getElementId() : gridAdapter.getItem(position).getElementId();
-        selectItem(itemid);
+        selectItem(itemid, position);
     }
 
 

@@ -4,70 +4,70 @@
     <categories>
 
         <categorie>
-            <name>Sweater</name>
+            <name>@string/cat_sweater</name>
             <parent_categorie_id>0</parent_categorie_id>
             <default_attribute_type>0</default_attribute_type>
             <icon>pulli</icon>
         </categorie>
 
         <categorie>
-            <name>Trousers</name>
+            <name>@string/cat_trousers</name>
             <parent_categorie_id>0</parent_categorie_id>
             <default_attribute_type>1</default_attribute_type>
             <icon>hose</icon>
         </categorie>
 
         <categorie>
-            <name>Skirts</name>
+            <name>@string/cat_skirts</name>
             <parent_categorie_id>0</parent_categorie_id>
             <default_attribute_type>1</default_attribute_type>
             <icon>rock</icon>
         </categorie>
 
         <categorie>
-            <name>Coats</name>
+            <name>@string/cat_coats</name>
             <parent_categorie_id>0</parent_categorie_id>
             <default_attribute_type>0</default_attribute_type>
             <icon>mantel</icon>
         </categorie>
 
         <categorie>
-            <name>Tops</name>
+            <name>@string/cat_tops</name>
             <parent_categorie_id>0</parent_categorie_id>
             <default_attribute_type>0</default_attribute_type>
             <icon>top</icon>
         </categorie>
 
         <categorie>
-            <name>Socks</name>
+            <name>@string/cat_socks</name>
             <parent_categorie_id>0</parent_categorie_id>
             <default_attribute_type>2</default_attribute_type>
             <icon>socken</icon>
         </categorie>
 
         <categorie>
-            <name>Pants</name>
+            <name>@string/cat_pants</name>
             <parent_categorie_id>0</parent_categorie_id>
             <default_attribute_type>1</default_attribute_type>
             <icon>shorts</icon>
         </categorie>
 
         <categorie>
-            <name>Swimwear</name>
+            <name>@string/cat_swimwear</name>
             <parent_categorie_id>0</parent_categorie_id>
             <default_attribute_type>1</default_attribute_type>
             <icon>bademode</icon>
         </categorie>
 
         <categorie>
-            <name>Underwear</name>
+            <name>@string/cat_underwear</name>
             <parent_categorie_id>0</parent_categorie_id>
             <default_attribute_type>1</default_attribute_type>
             <icon>unterwaesche</icon>
         </categorie>
 
         <categorie>
-            <name>Suits</name>
+            <name>cat_suits</name>
             <parent_categorie_id>0</parent_categorie_id>
             <default_attribute_type>1</default_attribute_type>
             <icon>anzug</icon>
@@ -99,7 +99,7 @@
     <attribute_types>
 
         <attribute_type>
-            <name>Size</name>
+            <name></name>
             <value_type>1</value_type>
             <is_unique>1</is_unique>
         </attribute_type>

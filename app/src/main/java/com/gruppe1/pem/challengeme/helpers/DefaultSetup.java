@@ -1,11 +1,14 @@
 package com.gruppe1.pem.challengeme.helpers;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
 
 import com.gruppe1.pem.challengeme.AttributeType;
 import com.gruppe1.pem.challengeme.Category;
 import com.gruppe1.pem.challengeme.Color;
 import com.gruppe1.pem.challengeme.Item;
+import com.gruppe1.pem.challengeme.R;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -28,7 +31,11 @@ public class DefaultSetup {
         this.m_dbHelper.init();
 
         if(!initated) {
-            this.setup("setup_values.xml");
+            this.setupCategoriesNew();
+            this.setupColorsNew();
+            this.setupAttributeTypesNew();
+//            this.setup("setup_values.xml");
+            this.m_dbHelper.close();
             initated = true;
         }
         this.m_dbHelper.close();
@@ -49,19 +56,19 @@ public class DefaultSetup {
 
                 //no category -> no items!
                 if (m_setupList.containsKey("categories")) {
-                    setupCategories(m_setupList.get(("categories")));
+//                    setupCategories(m_setupList.get(("categories")));
+//
+//                    if (m_setupList.containsKey("attribute_types")) {
+//                        setupAttributeTypes(m_setupList.get("attribute_types"));
+//                    }
+//
+//                    if (m_setupList.containsKey("items")) {
+//                        setupItems(m_setupList.get("items"));
+//                    }
 
-                    if (m_setupList.containsKey("attribute_types")) {
-                        setupAttributeTypes(m_setupList.get("attribute_types"));
-                    }
-
-                    if (m_setupList.containsKey("items")) {
-                        setupItems(m_setupList.get("items"));
-                    }
-
-                    if (m_setupList.containsKey("colors")) {
-                        setupColors(m_setupList.get("colors"));
-                    }
+//                    if (m_setupList.containsKey("colors")) {
+//                        setupColors(m_setupList.get("colors"));
+//                    }
                 }
 
             } catch (XmlPullParserException e) {
@@ -126,5 +133,72 @@ public class DefaultSetup {
             color.edit(colorAttributes);
             color.save();
         }
+    }
+
+    private void setupCategoriesNew() {
+        Resources res = m_context.getResources();
+        TypedArray initial_cats_array = res.obtainTypedArray(R.array.initial_cats);
+        for (int i = 0; i < initial_cats_array.length(); ++i) {
+            int id = initial_cats_array.getResourceId(i, 0);
+            if (id > 0) {
+                String[] initial_cat = res.getStringArray(id);
+                HashMap<String, String> cat_attributes = new HashMap<>();
+                cat_attributes.put("name", initial_cat[0]);
+                cat_attributes.put("parent_category_id", initial_cat[1]);
+                cat_attributes.put("default_attribute_type", initial_cat[2]);
+                cat_attributes.put("icon", initial_cat[3]);
+
+                Category defaultCategory = new Category(m_context, 0, this.m_dbHelper);
+                defaultCategory.edit(cat_attributes);
+                defaultCategory.save();
+            } else {
+                // something wrong with the XML
+            }
+        }
+        initial_cats_array.recycle(); // Important!
+    }
+
+
+    private void setupColorsNew() {
+        Resources res = m_context.getResources();
+        TypedArray initial_colors_array = res.obtainTypedArray(R.array.initial_colors);
+        for (int i = 0; i < initial_colors_array.length(); ++i) {
+            int id = initial_colors_array.getResourceId(i, 0);
+            if (id > 0) {
+                String[] initial_color = res.getStringArray(id);
+                HashMap<String, String> colors_attributes = new HashMap<>();
+                colors_attributes.put("name", initial_color[0]);
+                colors_attributes.put("hex", initial_color[1]);
+
+                Color color = new Color(m_context, 0, this.m_dbHelper);
+                color.edit(colors_attributes);
+                color.save();
+            } else {
+                // something wrong with the XML
+            }
+        }
+        initial_colors_array.recycle(); // Important!
+    }
+
+    private void setupAttributeTypesNew() {
+        Resources res = m_context.getResources();
+        TypedArray initial_attr_types_array = res.obtainTypedArray(R.array.initial_attr_types);
+        for (int i = 0; i < initial_attr_types_array.length(); ++i) {
+            int id = initial_attr_types_array.getResourceId(i, 0);
+            if (id > 0) {
+                String[] initial_attr_type = res.getStringArray(id);
+                HashMap<String, String> attr_types_attributes = new HashMap<>();
+                attr_types_attributes.put("name", initial_attr_type[0]);
+                attr_types_attributes.put("value_type", initial_attr_type[1]);
+                attr_types_attributes.put("is_unique", initial_attr_type[2]);
+
+                AttributeType defaultAttributeType = new AttributeType(m_context, 0, this.m_dbHelper);
+                defaultAttributeType.edit(attr_types_attributes);
+                defaultAttributeType.save();
+            } else {
+                // something wrong with the XML
+            }
+        }
+        initial_attr_types_array.recycle(); // Important!
     }
 }

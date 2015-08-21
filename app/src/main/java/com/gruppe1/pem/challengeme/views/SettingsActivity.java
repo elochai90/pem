@@ -324,5 +324,4 @@ public class SettingsActivity extends PreferenceActivity {
             getBaseContext().getResources().updateConfiguration(newConfig, getBaseContext().getResources().getDisplayMetrics());
         }
     }
-
 }

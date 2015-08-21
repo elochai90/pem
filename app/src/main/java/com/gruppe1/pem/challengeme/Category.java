@@ -137,7 +137,7 @@ public class Category {
                     this.setName(dbColumnValue);
                     break;
 
-                case "parent_categorie_id":
+                case "parent_category_id":
                     this.setParentCategoryId(Integer.parseInt(dbColumnValue));
                     break;
 
