@@ -16,7 +16,6 @@ import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -249,6 +248,7 @@ public class NewItemActivity extends Activity {
             setItemData();
         }
         setupAttributeViews();
+
     }
 
     /**
@@ -538,8 +538,13 @@ public class NewItemActivity extends Activity {
      * creates and shows an AlertDialog with options to choose/take an image
      */
     private void selectImage() {
-        final CharSequence[] options = {"Take Photo", "Choose from Gallery", "Cancel"};
+        final CharSequence[] options;
+        if(item_imageFile != null) {
+            options = new CharSequence[] {"Show Fullscreen", "Take Photo", "Choose from Gallery", "Cancel"};
 
+        } else {
+            options = new CharSequence[] {"Take Photo", "Choose from Gallery", "Cancel"};
+        }
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setItems(options, new DialogInterface.OnClickListener() {
 
@@ -555,6 +560,10 @@ public class NewItemActivity extends Activity {
                     startActivityForResult(intent, 2);
                 } else if (options[item].equals("Cancel")) {
                     dialog.dismiss();
+                } else if (options[item].equals("Show Fullscreen")) {
+                    Intent i = new Intent(NewItemActivity.this, FullscreenImageActivity.class);
+                    i.putExtra("imageurl", item_imageFile);
+                    startActivity(i);
                 }
             }
 

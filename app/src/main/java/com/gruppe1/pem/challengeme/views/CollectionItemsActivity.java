@@ -13,6 +13,7 @@ import com.gruppe1.pem.challengeme.Item;
 import com.gruppe1.pem.challengeme.ListItemIconName;
 import com.gruppe1.pem.challengeme.R;
 import com.gruppe1.pem.challengeme.adapters.ItemsCollectionPagerAdapter;
+import com.gruppe1.pem.challengeme.helpers.ImageDominantColorExtractor;
 
 import java.util.ArrayList;
 
@@ -83,8 +84,6 @@ import java.util.ArrayList;
                 return true;
 
             case R.id.action_item_save:
-                System.out.println(mItemsCollectionPagerAdapter.getItem(currentItemPosition));
-                System.out.println("save item: " + mDataset.get(currentItemPosition).getName());
                 saveItem((CollectionItemsFragment) mItemsCollectionPagerAdapter.getItem(currentItemPosition));
                 setResult(RESULT_OK);
                 this.finish();

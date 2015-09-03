@@ -43,6 +43,7 @@ import com.gruppe1.pem.challengeme.adapters.CategoriesGridOverlayAdapter;
 import com.gruppe1.pem.challengeme.adapters.ColorsGridOverlayAdapter;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
+import com.gruppe1.pem.challengeme.helpers.ImageDominantColorExtractor;
 import com.gruppe1.pem.challengeme.helpers.ImageLoader;
 
 import java.io.ByteArrayOutputStream;
@@ -388,7 +389,13 @@ public class CollectionItemsFragment extends Fragment {
      * creates and shows an AlertDialog with options to choose/take an image
      */
     private void selectImage() {
-        final CharSequence[] options = {"Take Photo", "Choose from Gallery", "Cancel"};
+        final CharSequence[] options;
+        if(item_imageFile != null) {
+            options = new CharSequence[] {"Show Fullscreen", "Take Photo", "Choose from Gallery", "Cancel"};
+
+        } else {
+            options = new CharSequence[] {"Take Photo", "Choose from Gallery", "Cancel"};
+        }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setItems(options, new DialogInterface.OnClickListener() {
@@ -405,6 +412,10 @@ public class CollectionItemsFragment extends Fragment {
                     activity.startActivityForResult(intent, 2);
                 } else if (options[item].equals("Cancel")) {
                     dialog.dismiss();
+                } else if (options[item].equals("Show Fullscreen")) {
+                    Intent i = new Intent(getActivity(), FullscreenImageActivity.class);
+                    i.putExtra("imageurl", item_imageFile);
+                    startActivity(i);
                 }
             }
 
@@ -568,6 +579,7 @@ public class CollectionItemsFragment extends Fragment {
             String imgPath = editItem.getImageFile();
             File imgFile = new File(imgPath);
             if (imgFile.exists()) {
+                item_imageFile = imgPath;
                 Bitmap tmpBitmap = ImageLoader.getPicFromFile(editItem.getImageFile(), 500, 500);
                 ImgPhoto.setImageBitmap(tmpBitmap);
             }
@@ -680,6 +692,8 @@ public class CollectionItemsFragment extends Fragment {
         File finalFile = new File(getRealPathFromURI(tempUri));
         item_imageFile = finalFile.getAbsolutePath();
         editItem.setImageFile(item_imageFile);
+        exactColorId = ImageDominantColorExtractor.getInstance().getDominantColor(photo);
+        attrValueColorPicker.setBackgroundColor(exactColorId);
     }
 
     public void setImageUri(Uri selectedImage) {
@@ -696,6 +710,8 @@ public class CollectionItemsFragment extends Fragment {
 
         Bitmap tmpBitmap = ImageLoader.getPicFromFile(editItem.getImageFile(), 500, 500);
         ImgPhoto.setImageBitmap(tmpBitmap);
+        exactColorId = ImageDominantColorExtractor.getInstance().getDominantColor(tmpBitmap);
+        attrValueColorPicker.setBackgroundColor(exactColorId);
     }
 
 }
