@@ -124,6 +124,8 @@ public class NewItemActivity extends Activity {
             }
         });
 
+
+
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
         LayerDrawable stars = (LayerDrawable) ratingBar.getProgressDrawable();
         stars.getDrawable(2).setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
@@ -248,6 +250,26 @@ public class NewItemActivity extends Activity {
             setItemData();
         }
         setupAttributeViews();
+
+
+        Intent intentImage = getIntent();
+        Bundle extrasImage = intentImage.getExtras();
+        String action = intentImage.getAction();
+        if(Intent.ACTION_SEND.equals(action)) {
+            if(extrasImage.containsKey(Intent.EXTRA_STREAM)) {
+                Uri uri = (Uri) extrasImage.getParcelable(Intent.EXTRA_STREAM);
+                String filename = parseUriToFilename(uri);
+                if(filename != null) {
+                    item_imageFile = filename;
+                    editItem.setImageFile(item_imageFile);
+                    Bitmap tmpBitmap = ImageLoader.getPicFromFile(editItem.getImageFile(), 500, 500);
+                    ImgPhoto.setImageBitmap(tmpBitmap);
+                    exactColorId = ImageDominantColorExtractor.getInstance().getDominantColor(tmpBitmap);
+                    attrValueColorPicker.setBackgroundColor(exactColorId);
+
+                }
+            }
+        }
 
     }
 
@@ -742,4 +764,27 @@ public class NewItemActivity extends Activity {
         return db_helper;
     }
 
+    public String parseUriToFilename(Uri uri) {
+        String selectedImagePath = null;
+        String filemanagerPath = uri.getPath();
+
+        String[] projection = { MediaStore.Images.Media.DATA };
+        Cursor cursor = managedQuery(uri, projection, null, null, null);
+
+        if (cursor != null) {
+            // Here you will get a null pointer if cursor is null
+            // This can be if you used OI file manager for picking the media
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            selectedImagePath = cursor.getString(column_index);
+        }
+
+        if (selectedImagePath != null) {
+            return selectedImagePath;
+        }
+        else if (filemanagerPath != null) {
+            return filemanagerPath;
+        }
+        return null;
+    }
 }

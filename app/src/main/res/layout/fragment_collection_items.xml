@@ -41,7 +41,7 @@
             android:gravity="center_horizontal"
             android:layout_below="@id/itemDetailImage"
             android:layout_gravity="center_horizontal"
-            android:background="@color/background_floating_material_dark"
+            android:background="@color/primary"
             android:weightSum="1">
 
             <RatingBar
