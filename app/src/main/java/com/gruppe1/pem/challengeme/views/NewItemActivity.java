@@ -45,6 +45,7 @@ import com.gruppe1.pem.challengeme.adapters.CategoriesGridOverlayAdapter;
 import com.gruppe1.pem.challengeme.adapters.ColorsGridOverlayAdapter;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
+import com.gruppe1.pem.challengeme.helpers.ImageDominantColorExtractor;
 import com.gruppe1.pem.challengeme.helpers.ImageLoader;
 
 import java.io.ByteArrayOutputStream;
@@ -570,6 +571,8 @@ public class NewItemActivity extends Activity {
                 try {
                     Bitmap photo = (Bitmap) data.getExtras().get("data");
                     ImgPhoto.setImageBitmap(photo);
+                    exactColorId = ImageDominantColorExtractor.getInstance().getDominantColor(photo);
+                    attrValueColorPicker.setBackgroundColor(exactColorId);
 
                     // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
                     Uri tempUri = getImageUri(getApplicationContext(), photo);
@@ -596,6 +599,9 @@ public class NewItemActivity extends Activity {
 
                 Bitmap tmpBitmap = ImageLoader.getPicFromFile(editItem.getImageFile(), 500, 500);
                 ImgPhoto.setImageBitmap(tmpBitmap);
+                exactColorId = ImageDominantColorExtractor.getInstance().getDominantColor(tmpBitmap);
+                attrValueColorPicker.setBackgroundColor(exactColorId);
+
             }
         }
     }
