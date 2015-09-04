@@ -44,6 +44,7 @@ public class TabsFragmentActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tabs);
 
+        loadLocale();
         menuItems[0] = getString(R.string.title_activity_categories);
         menuItems[1] = getString(R.string.title_activity_compare);
         menuItems[2] = getString(R.string.title_activity_wishlist2);
@@ -56,7 +57,6 @@ public class TabsFragmentActivity extends FragmentActivity {
             getActionBar().setTitle(mTitle);
         }
 
-        loadLocale();
         setupTabHost(savedInstanceState);
         setupNavigationDrawer();
 
@@ -261,7 +261,7 @@ public class TabsFragmentActivity extends FragmentActivity {
     @Override
     public void onBackPressed() {
         new AlertDialog.Builder(this)
-                .setTitle("Do you really want to exit '" + getResources().getString(R.string.app_name) + "'?")
+                .setTitle(getResources().getString(R.string.title_exit1) + " " + getResources().getString(R.string.app_name) + " " + getResources().getString(R.string.title_exit2))
                 .setNegativeButton(android.R.string.no, null)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 

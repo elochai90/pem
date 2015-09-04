@@ -2,8 +2,10 @@ package com.gruppe1.pem.challengeme.views;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -15,6 +17,7 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
+import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.widget.TextView;
 
@@ -286,6 +289,7 @@ public class SettingsActivity extends PreferenceActivity {
         }
     };
 
+
     /**
      * Binds a preference's summary to its value. More specifically, when the
      * preference's value is changed, its summary (line of text below the
@@ -309,6 +313,7 @@ public class SettingsActivity extends PreferenceActivity {
         if (lang.equalsIgnoreCase(""))
             return;
         myLocale = new Locale(lang);
+
         Locale.setDefault(myLocale);
         android.content.res.Configuration config = new android.content.res.Configuration();
         config.locale = myLocale;
@@ -324,4 +329,5 @@ public class SettingsActivity extends PreferenceActivity {
             getBaseContext().getResources().updateConfiguration(newConfig, getBaseContext().getResources().getDisplayMetrics());
         }
     }
+
 }
