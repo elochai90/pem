@@ -7,6 +7,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,30 +25,50 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 public class WeatherRequest {
 
-    String etResponse;
-    String tvIsConnected;
-    Context context;
+    private String etResponse;
+    private String tvIsConnected;
+    private Context context;
 
-    ImageView weatherImageView;
-    ImageView weatherImg1;
-    ImageView weatherImg2;
-    ImageView weatherImg3;
-    TextView weatherDescView;
-    TextView weatherTempView;
-    TextView day1;
-    TextView day2;
-    TextView day3;
-    TextView temp1;
-    TextView temp2;
-    TextView temp3;
+    private ImageView weatherImageView;
+    private ImageView weatherImg1;
+    private ImageView weatherImg2;
+    private ImageView weatherImg3;
+    private TextView weatherDescView;
+    private TextView weatherTempView;
+    private TextView day1;
+    private TextView day2;
+    private TextView day3;
+    private TextView temp1;
+    private TextView temp2;
+    private TextView temp3;
+    private TextView navDrawerWeatherDate;
+
+    private String weather_today_desc = "";
+    private String weather_today_temp = "";
+    private int weather_today_image = 0;
+    private String weather_1_day = "";
+    private String weather_1_temp = "";
+    private int weather_1_image = 0;
+    private String weather_2_day = "";
+    private String weather_2_temp = "";
+    private int weather_2_image = 0;
+    private String weather_3_day = "";
+    private String weather_3_temp = "";
+    private int weather_3_image = 0;
+    private String weather_date;
+
+    private LocationManager locationManager;
 
 
     SharedPreferences sharedPreferences;
@@ -55,7 +76,7 @@ public class WeatherRequest {
 
 
     public WeatherRequest(Context context, ImageView weatherImageView, TextView weatherDescView, TextView weatherTempView, ImageView weatherImg1, ImageView weatherImg2, ImageView weatherImg3, TextView day1, TextView day2,
-                          TextView day3, TextView temp1, TextView temp2,TextView temp3) {
+                          TextView day3, TextView temp1, TextView temp2, TextView temp3 ,TextView navDrawerWeatherDate) {
         this.context = context;
         this.weatherImageView = weatherImageView;
         this.weatherDescView = weatherDescView;
@@ -69,27 +90,62 @@ public class WeatherRequest {
         this.temp1 = temp1;
         this.temp2 = temp2;
         this.temp3 = temp3;
+        this.navDrawerWeatherDate = navDrawerWeatherDate;
 
         this.sharedPreferences = context.getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
         this.editor = sharedPreferences.edit();
 
         // check if you are connected or not
-        if(isConnected()){
-            tvIsConnected = "You are conncted";
+        if(isConnected() && isGPSactivated()){
+            tvIsConnected = "You are connected and GPS is activated";
+
+            try {
+                DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH);
+                String lastLocationRequest = sharedPreferences.getString(Constants.KEY_W_DATE,"");
+                Date lastLocationRequestDate = format.parse(lastLocationRequest);
+                Date now = new Date();
+                long diffInMillies = now.getTime() - lastLocationRequestDate.getTime();
+                long differenceInMinutes = TimeUnit.MINUTES.convert(diffInMillies, TimeUnit.MILLISECONDS);
+                // only catch new weather, when the last request was at least 30 min before
+                if(differenceInMinutes > 30) {
+                    doNewWeatherRequest();
+                } else {
+                    getLastWeather();
+                    setWeather();
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+                getLastWeather();
+                setWeather();
+            }
         }
         else{
-            tvIsConnected = "You are NOT conncted";
+            tvIsConnected = "You are NOT connected or your GPS is not activated";
+            getLastWeather();
+            setWeather();
         }
-        String[] location = getGPS();
+        System.out.println(tvIsConnected);
+    }
 
+    private void doNewWeatherRequest() {
+        String[] location = getGPS();
         // call AsynTask to perform network operation on separate thread
-        new HttpAsyncTask().execute("http://api.openweathermap.org/data/2.5/weather?q=" + location[0] + "," + location[1]);
-        new HttpAsyncTask().execute("http://api.openweathermap.org/data/2.5/forecast?q=" + location[0] + "," + location[1]);
+        new HttpAsyncTask().execute("http://api.openweathermap.org/data/2.5/weather?q=" + location[0] + "," + location[1] + "&APPID=" + Constants.OWM_API_KEY);
+        new HttpAsyncTask().execute("http://api.openweathermap.org/data/2.5/forecast?q=" + location[0] + "," + location[1] + "&APPID=" + Constants.OWM_API_KEY);
+    }
+
+    private boolean isGPSactivated() {
+        if(locationManager == null) {
+            locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        }
+        return locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER );
     }
 
     private String[]  getGPS() {
         // Get GPS location
-        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        if(locationManager == null) {
+            locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        }
         MyLocationListener locationListener = new MyLocationListener(context, locationManager);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3600000, 1000, locationListener); // all 1h, more than 1000 meters
         return new String[]{locationListener.getCityName(), locationListener.getCountryCode()};
@@ -99,16 +155,12 @@ public class WeatherRequest {
         InputStream inputStream;
         String result = "";
         try {
-
             // create HttpClient
             HttpClient httpclient = new DefaultHttpClient();
-
             // make GET request to the given URL
             HttpResponse httpResponse = httpclient.execute(new HttpGet(url));
-
             // receive response as inputStream
             inputStream = httpResponse.getEntity().getContent();
-
             // convert inputstream to string
             if(inputStream != null)
                 result = convertInputStreamToString(inputStream);
@@ -135,7 +187,6 @@ public class WeatherRequest {
 
         inputStream.close();
         return result;
-
     }
 
 
@@ -205,6 +256,87 @@ public class WeatherRequest {
         }
     }
 
+    private void getLastWeather() {
+        weather_today_desc = sharedPreferences.getString(Constants.KEY_W_TODAY_DESC, "");
+        weather_today_temp = sharedPreferences.getString(Constants.KEY_W_TODAY_TEMP, "");
+        weather_today_image = sharedPreferences.getInt(Constants.KEY_W_TODAY_IMAGE, 0);
+        weather_1_day = sharedPreferences.getString(Constants.KEY_W_1_DAY, "");
+        weather_1_temp = sharedPreferences.getString(Constants.KEY_W_1_TEMP, "");
+        weather_1_image = sharedPreferences.getInt(Constants.KEY_W_1_IMAGE, 0);
+        weather_2_day = sharedPreferences.getString(Constants.KEY_W_2_DAY, "");
+        weather_2_temp = sharedPreferences.getString(Constants.KEY_W_2_TEMP, "");
+        weather_2_image = sharedPreferences.getInt(Constants.KEY_W_2_IMAGE, 0);
+        weather_3_day = sharedPreferences.getString(Constants.KEY_W_3_DAY, "");
+        weather_3_temp = sharedPreferences.getString(Constants.KEY_W_3_TEMP, "");
+        weather_3_image = sharedPreferences.getInt(Constants.KEY_W_3_IMAGE, 0);
+        weather_date = sharedPreferences.getString(Constants.KEY_W_DATE,"");
+    }
+
+    private void saveWeatherToday() {
+        editor.putInt(Constants.KEY_W_TODAY_IMAGE, weather_today_image);
+        editor.putString(Constants.KEY_W_TODAY_DESC, weather_today_desc);
+        editor.putString(Constants.KEY_W_TODAY_TEMP, weather_today_temp);
+        editor.apply();
+    }
+    private void saveWeatherForecast() {
+        editor.putString(Constants.KEY_W_1_DAY, weather_1_day);
+        editor.putInt(Constants.KEY_W_1_IMAGE, weather_1_image);
+        editor.putString(Constants.KEY_W_1_TEMP, weather_1_temp);
+
+        editor.putString(Constants.KEY_W_2_DAY, weather_2_day);
+        editor.putInt(Constants.KEY_W_2_IMAGE, weather_2_image);
+        editor.putString(Constants.KEY_W_2_TEMP, weather_2_temp);
+
+        editor.putString(Constants.KEY_W_3_DAY, weather_3_day);
+        editor.putInt(Constants.KEY_W_3_IMAGE, weather_3_image);
+        editor.putString(Constants.KEY_W_3_TEMP, weather_3_temp);
+
+        editor.putString(Constants.KEY_W_DATE, weather_date);
+
+        editor.apply();
+    }
+
+    private void setWeatherToday() {
+        weatherImageView.setImageResource(weather_today_image);
+        weatherDescView.setText(weather_today_desc);
+        weatherTempView.setText(weather_today_temp);
+    }
+    private void setWeatherForecast() {
+        weatherImg1.setImageResource(weather_1_image);
+        day1.setText(weather_1_day);
+        temp1.setText(weather_1_temp);
+
+        weatherImg2.setImageResource(weather_2_image);
+        day2.setText(weather_2_day);
+        temp2.setText(weather_2_temp);
+
+        weatherImg3.setImageResource(weather_3_image);
+        day3.setText(weather_3_day);
+        temp3.setText(weather_3_temp);
+
+        try {
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH);
+            Date lastLocationRequestDate = format.parse(weather_date);
+            Date now = new Date();
+            long diffInMillies = now.getTime() - lastLocationRequestDate.getTime();
+            long differenceInDays = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+            if(differenceInDays >= 0) {
+                navDrawerWeatherDate.setVisibility(View.VISIBLE);
+                navDrawerWeatherDate.setText("This weather is " + differenceInDays + " day" + ((differenceInDays==1) ? "s" : "") + " old.");
+            } else {
+                navDrawerWeatherDate.setVisibility(View.GONE);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+    }
+    private void setWeather() {
+        setWeatherToday();
+        setWeatherForecast();
+    }
+
+
     private class HttpAsyncTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... urls) {
@@ -215,18 +347,6 @@ public class WeatherRequest {
         @Override
         protected void onPostExecute(String result) {
             JSONObject json; // convert String to JSONObject
-            String weather_today_desc = "";
-            String weather_today_temp = "";
-            int weather_today_image = 0;
-            String weather_1_day = "";
-            String weather_1_temp = "";
-            int weather_1_image = 0;
-            String weather_2_day = "";
-            String weather_2_temp = "";
-            int weather_2_image = 0;
-            String weather_3_day = "";
-            String weather_3_temp = "";
-            int weather_3_image = 0;
 
             boolean weatherAvailable = false;
             boolean todayWeather = false;
@@ -286,59 +406,28 @@ public class WeatherRequest {
                     weather_3_day = days.get(2);
                     weather_3_temp = temps.get(2);
                     weather_3_image = getImage(codes.get(2));
-
+                    Date date_to_save = new Date();
+                    DateFormat sdf_to_save = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH);
+                    weather_date = sdf_to_save.format(date_to_save);
                 }
 
             } catch (JSONException e) {
+                e.printStackTrace();
                 weatherAvailable = false;
-                weather_today_desc = sharedPreferences.getString(Constants.KEY_W_TODAY_DESC, "");
-                weather_today_temp = sharedPreferences.getString(Constants.KEY_W_TODAY_TEMP, "");
-                weather_today_image = sharedPreferences.getInt(Constants.KEY_W_TODAY_IMAGE, 0);
-                weather_1_day = sharedPreferences.getString(Constants.KEY_W_1_DAY, "");
-                weather_1_temp = sharedPreferences.getString(Constants.KEY_W_1_TEMP, "");
-                weather_1_image = sharedPreferences.getInt(Constants.KEY_W_1_IMAGE, 0);
-                weather_2_day = sharedPreferences.getString(Constants.KEY_W_2_DAY, "");
-                weather_2_temp = sharedPreferences.getString(Constants.KEY_W_2_TEMP, "");
-                weather_2_image = sharedPreferences.getInt(Constants.KEY_W_2_IMAGE, 0);
-                weather_3_day = sharedPreferences.getString(Constants.KEY_W_3_DAY, "");
-                weather_3_temp = sharedPreferences.getString(Constants.KEY_W_3_TEMP, "");
-                weather_3_image = sharedPreferences.getInt(Constants.KEY_W_3_IMAGE, 0);
             }
 
 
-            if(!weatherAvailable || todayWeather) {
-                weatherImageView.setImageResource(weather_today_image);
-                weatherDescView.setText(weather_today_desc);
-                weatherTempView.setText(weather_today_temp);
-                editor.putInt(Constants.KEY_W_TODAY_IMAGE, weather_today_image);
-                editor.putString(Constants.KEY_W_TODAY_DESC, weather_today_desc);
-                editor.putString(Constants.KEY_W_TODAY_TEMP, weather_today_temp);
+            if(!weatherAvailable) {
+                System.out.println("No weather available");
+                getLastWeather();
+                setWeather();
+            } else if(todayWeather) {
+                setWeatherToday();
+                saveWeatherToday();
+            } else if(!todayWeather){
+                setWeatherForecast();
+                saveWeatherForecast();
             }
-            if(!weatherAvailable || !todayWeather){
-                weatherImg1.setImageResource(weather_1_image);
-                day1.setText(weather_1_day);
-                temp1.setText(weather_1_temp);
-                editor.putString(Constants.KEY_W_1_DAY, weather_1_day);
-                editor.putInt(Constants.KEY_W_1_IMAGE, weather_1_image);
-                editor.putString(Constants.KEY_W_1_TEMP, weather_1_temp);
-
-                weatherImg2.setImageResource(weather_2_image);
-                day2.setText(weather_2_day);
-                temp2.setText(weather_2_temp);
-                editor.putString(Constants.KEY_W_2_DAY, weather_2_day);
-                editor.putInt(Constants.KEY_W_2_IMAGE, weather_2_image);
-                editor.putString(Constants.KEY_W_2_TEMP, weather_2_temp);
-
-                weatherImg3.setImageResource(weather_3_image);
-                day3.setText(weather_3_day);
-                temp3.setText(weather_3_temp);
-                editor.putString(Constants.KEY_W_3_DAY, weather_3_day);
-                editor.putInt(Constants.KEY_W_3_IMAGE, weather_3_image);
-                editor.putString(Constants.KEY_W_3_TEMP, weather_3_temp);
-            }
-
-            editor.apply();
-
             etResponse = result;
         }
     }

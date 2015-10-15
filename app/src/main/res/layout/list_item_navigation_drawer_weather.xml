@@ -4,14 +4,26 @@
     android:layout_height="wrap_content"
     android:weightSum="1">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="#E0F2F7"
+        android:orientation="vertical"
+        android:background="@color/blue01"
         android:layout_weight="0.43">
+
+        <TextView
+            android:id="@+id/navDrawerWeatherDate"
+            android:visibility="gone"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:textAppearance="@android:style/TextAppearance.Small"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <LinearLayout
             android:orientation="horizontal"
+            android:id="@+id/weather"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -20,14 +32,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
-                android:background="#E0F2F7"
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:layout_weight="0.5">
 
                 <TextView
                     android:id="@+id/navDrawerWeatherTemp"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/gray05"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
@@ -35,7 +46,7 @@
 
                 <TextView
                     android:id="@+id/navDrawerWeatherDescription"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/gray05"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
@@ -48,20 +59,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:adjustViewBounds="true"
-                android:background="#E0F2F7"
                 android:contentDescription="@string/nav_drawer_desc_weatherImage"
                 android:layout_gravity="center"
-                android:layout_alignParentEnd="true"
                 android:layout_marginEnd="10dp"
                 android:layout_weight="0.5" />
         </LinearLayout>
 
-    </RelativeLayout>
+
+    </LinearLayout>
 
     <View
         android:layout_width="fill_parent"
         android:layout_height="1dp"
-        android:background="@color/button_material_light"/>
+        android:background="@color/gray02"/>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -73,7 +83,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.33"
-            android:background="#E0F2F7">
+            android:background="@color/blue01">
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -104,21 +114,20 @@
                 android:layout_height="match_parent"
                 android:contentDescription="@string/nav_drawer_desc_weatherImage"
                 android:id="@+id/imgView1"
-                android:background="#E0F2F7"
                 android:layout_gravity="center" />
         </LinearLayout>
 
         <View
             android:layout_width="1dp"
             android:layout_height="fill_parent"
-            android:background="@color/button_material_light"/>
+            android:background="@color/gray02"/>
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.33"
-            android:background="#E0F2F7"
+            android:background="@color/blue01"
             android:layout_gravity="center">
 
             <LinearLayout
@@ -150,21 +159,20 @@
                 android:layout_height="match_parent"
                 android:contentDescription="@string/nav_drawer_desc_weatherImage"
                 android:id="@+id/imgView2"
-                android:background="#E0F2F7"
                 android:layout_gravity="center" />
         </LinearLayout>
 
         <View
             android:layout_width="1dp"
             android:layout_height="fill_parent"
-            android:background="@color/button_material_light"/>
+            android:background="@color/gray02"/>
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.33"
-            android:background="#E0F2F7">
+            android:background="@color/blue01">
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -195,7 +203,6 @@
                 android:layout_height="match_parent"
                 android:contentDescription="@string/nav_drawer_desc_weatherImage"
                 android:id="@+id/imgView3"
-                android:background="#E0F2F7"
                 android:layout_gravity="center" />
         </LinearLayout>
 

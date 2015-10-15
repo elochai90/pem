@@ -99,6 +99,7 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
         gridView.setVisibility(View.INVISIBLE);
 
         FloatingActionMenu menu = (FloatingActionMenu) findViewById(R.id.menu);
+        menu.setVisibility(View.VISIBLE);
         menu.setClosedOnTouchOutside(true);
         com.github.clans.fab.FloatingActionButton fab_add_compare = (FloatingActionButton) findViewById(R.id.add_compare);
         com.github.clans.fab.FloatingActionButton fab_add_wishlist_item = (FloatingActionButton) findViewById(R.id.add_wishlist_item);

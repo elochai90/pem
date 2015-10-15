@@ -104,7 +104,7 @@
                 <TextView
                     android:id="@+id/attrCategoryValue"
                     android:textColor="@android:color/black"
-                    android:background="@color/color_picker_initial"
+                    android:background="@color/gray01"
                     android:textSize="18sp"
                     android:layout_gravity="center_vertical"
                     android:gravity="center"
@@ -128,7 +128,7 @@
                 <TextView
                     android:id="@+id/attrColorValue"
                     android:textColor="@android:color/black"
-                    android:background="@color/color_picker_initial"
+                    android:background="@color/gray01"
                     android:textSize="18sp"
                     android:layout_gravity="center_vertical"
                     android:gravity="center"

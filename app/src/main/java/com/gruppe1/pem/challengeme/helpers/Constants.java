@@ -55,6 +55,9 @@ public class Constants {
     public static final String KEY_W_3_IMAGE = "Weather3Image";
     public static final String KEY_W_3_DAY = "Weather3Day";
     public static final String KEY_W_3_TEMP = "Weather3Temperature";
+    public static final String KEY_W_DATE = "WeatherDate";
+
+    public static final String OWM_API_KEY = "1a3a39cc17be544f3ea143d6bce1ab65";
 
     public static final String DEFAULT_CAT_ICON = "kleiderbuegel";
 

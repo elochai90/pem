@@ -9,6 +9,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -28,10 +29,7 @@ public class MyLocationListener implements LocationListener {
         this.context = context;
         this.locationManager = locationManager;
 
-        if(!getLastGPS()){
-            this.cityName = "Muenchen"; // TODO: get default location from sharedPreferences
-            this.countryCode = "DE"; // TODO: get default location from sharedPreferences
-        }
+        getLastGPS();
     }
 
     private boolean getLastGPS() {

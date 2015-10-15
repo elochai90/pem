@@ -21,6 +21,10 @@
     <string name="title_exit1">Do you really want to exit </string>
     <string name="title_exit2">\?</string>
 
+    <!--Search-->
+    <string name="search_title">Search</string>
+    <string name="search_hint">Search...</string>
+
     <!--Switch text-->
     <string name="switch_true">&#10003;</string>
     <string name="switch_false">&#10007;</string>

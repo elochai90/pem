@@ -46,9 +46,11 @@
         android:horizontalSpacing="3dp"
         android:focusable="true"
         android:clickable="true"/>
+
     <com.github.clans.fab.FloatingActionMenu
         xmlns:fab="http://schemas.android.com/apk/res-auto"
         android:id="@+id/menu"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
@@ -99,5 +101,4 @@
             fab:fab_label="@string/title_activity_new_item" />
 
     </com.github.clans.fab.FloatingActionMenu>
-
 </RelativeLayout>

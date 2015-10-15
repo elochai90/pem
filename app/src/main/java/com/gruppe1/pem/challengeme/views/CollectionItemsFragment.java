@@ -484,7 +484,7 @@ public class CollectionItemsFragment extends Fragment {
                 exactColorId = Integer.parseInt(attributeValue.toString());
             } else {
                 attrValueColorPicker.setText(R.string.no_exact_color_selected);
-                exactColorId = getResources().getColor(R.color.color_picker_initial);
+                exactColorId = getResources().getColor(R.color.gray01);
             }
             attrValueColorPicker.setBackgroundColor(exactColorId);
             // 0xFF4488CC
@@ -525,7 +525,7 @@ public class CollectionItemsFragment extends Fragment {
             }
 
 
-            attrValueDatePicker.setBackgroundColor(getResources().getColor(R.color.color_picker_initial));
+            attrValueDatePicker.setBackgroundColor(getResources().getColor(R.color.gray01));
             attrValueDatePicker.setText(buyDate);
             attrValueDatePicker.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -5,4 +5,9 @@
         android:icon="@drawable/ic_view_grid"
         android:title="@string/menu_title_listGridView"
         android:showAsAction="always"/>
+    <item android:id="@+id/search"
+        android:title="@string/search_title"
+        android:icon="@drawable/ic_search"
+        android:showAsAction="collapseActionView|ifRoom"
+        android:actionViewClass="android.widget.SearchView" />
 </menu>

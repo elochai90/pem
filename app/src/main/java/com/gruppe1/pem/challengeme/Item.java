@@ -300,4 +300,28 @@ public class Item {
 
         Compare.deleteComparesByItemId(this.m_context, this.m_id);
     }
+
+    public ArrayList<Item> getSearchResults(String query) {
+        this.m_dbHelper.setWhere("", new String[] {"_id=" + this.m_id});
+        DataBaseHelper dbHelper = new DataBaseHelper(m_context);
+        dbHelper.init();
+        dbHelper.setTable(Constants.ITEMS_DB_TABLE);
+        dbHelper.setColumns(new String[]{"*"});
+        dbHelper.setWhere("", new String[]{"name MATCH '" + query + "*'"});
+
+        Cursor cursor = dbHelper.select();
+
+        ArrayList<Item> searchItems = new ArrayList<>();
+
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            searchItems.add(new Item(m_context, cursor.getInt(0), dbHelper));
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+        dbHelper.close();
+        return searchItems;
+    }
 }

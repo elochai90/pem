@@ -17,8 +17,11 @@
     <color name="fab_color_2">#9c27b0</color>
     <color name="fab_color_2_muted">#a56ab0</color>
 
-    <!--default color of color picker-->
-    <color name="color_picker_initial">#e9e9e9</color>
+    <color name="blue01">#ffccecf8</color>
 
-    <color name="black_overlay">#66000000</color>
+    <color name="gray01">#e9e9e9</color>
+    <color name="gray02">#d4d4d4</color>
+    <color name="gray03">#ffaeaeae</color>
+    <color name="gray04">#8f8f8f</color>
+    <color name="gray05">#5d5d5d</color>
 </resources>

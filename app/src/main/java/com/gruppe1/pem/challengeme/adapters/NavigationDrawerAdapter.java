@@ -22,6 +22,21 @@ public class NavigationDrawerAdapter extends ArrayAdapter<ListItemIconName>
     private final int layoutResourceId;
     private ListItemIconName data[] = null;
 
+
+    private ImageView imageView;
+    private ImageView img1;
+    private ImageView img2;
+    private ImageView img3;
+    private TextView descTextView;
+    private TextView tempTextView;
+    private TextView day1;
+    private TextView day2;
+    private TextView day3;
+    private TextView temp1;
+    private TextView temp2;
+    private TextView temp3;
+    private TextView navDrawerWeatherDate;
+
     /**
      * Constructor of the NavigationDrawerAdapter
      * @param context the context
@@ -45,21 +60,22 @@ public class NavigationDrawerAdapter extends ArrayAdapter<ListItemIconName>
 
             v = inflater.inflate(R.layout.list_item_navigation_drawer_weather, parent, false);
 
-            ImageView imageView = (ImageView) v.findViewById(R.id.navDrawerWeatherImage);
-            ImageView img1 = (ImageView) v.findViewById(R.id.imgView1);
-            ImageView img2 = (ImageView) v.findViewById(R.id.imgView2);
-            ImageView img3 = (ImageView) v.findViewById(R.id.imgView3);
-            TextView descTextView = (TextView) v.findViewById(R.id.navDrawerWeatherDescription);
-            TextView tempTextView = (TextView) v.findViewById(R.id.navDrawerWeatherTemp);
-            TextView day1 = (TextView) v.findViewById(R.id.day1);
-            TextView day2 = (TextView) v.findViewById(R.id.day2);
-            TextView day3 = (TextView) v.findViewById(R.id.day3);
-            TextView temp1 = (TextView) v.findViewById(R.id.temp1);
-            TextView temp2 = (TextView) v.findViewById(R.id.temp2);
-            TextView temp3 = (TextView) v.findViewById(R.id.temp3);
+            imageView = (ImageView) v.findViewById(R.id.navDrawerWeatherImage);
+            img1 = (ImageView) v.findViewById(R.id.imgView1);
+            img2 = (ImageView) v.findViewById(R.id.imgView2);
+            img3 = (ImageView) v.findViewById(R.id.imgView3);
+            descTextView = (TextView) v.findViewById(R.id.navDrawerWeatherDescription);
+            tempTextView = (TextView) v.findViewById(R.id.navDrawerWeatherTemp);
+            day1 = (TextView) v.findViewById(R.id.day1);
+            day2 = (TextView) v.findViewById(R.id.day2);
+            day3 = (TextView) v.findViewById(R.id.day3);
+            temp1 = (TextView) v.findViewById(R.id.temp1);
+            temp2 = (TextView) v.findViewById(R.id.temp2);
+            temp3 = (TextView) v.findViewById(R.id.temp3);
+            navDrawerWeatherDate = (TextView) v.findViewById(R.id.navDrawerWeatherDate);
 
-            new WeatherRequest(context, imageView, descTextView, tempTextView, img1, img2, img3, day1, day2, day3, temp1, temp2, temp3);
 
+            new WeatherRequest(context, imageView, descTextView, tempTextView, img1, img2, img3, day1, day2, day3, temp1, temp2, temp3, navDrawerWeatherDate);
         } else {
 
             v = inflater.inflate(layoutResourceId, parent, false);
