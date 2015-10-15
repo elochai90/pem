@@ -23,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -110,6 +111,10 @@ public class NewItemActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_collection_items);
+        getActionBar().setTitle(R.string.title_activity_new_item);
+
+        getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         sharedPreferences = getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
 
@@ -142,9 +147,9 @@ public class NewItemActivity extends Activity {
         attrWishlistName = (TextView) findViewById(R.id.attrWishlistName);
         attrWishlistValue = (Switch) findViewById(R.id.attrWishlistValue);
 
-        attrCategoryName.setText("Category:");
-        attrColorName.setText("Color:");
-        attrWishlistName.setText("In Wishlist:");
+        attrCategoryName.setText(getString(R.string.item_cateory_label));
+        attrColorName.setText(getString(R.string.item_color_label));
+        attrWishlistName.setText(getString(R.string.item_wishlist_label));
 
         // Setup Categories Adapter
         ArrayList<Category> allCategories = Category.getAllCategories(this);
@@ -437,7 +442,7 @@ public class NewItemActivity extends Activity {
                             attrValueColorPicker.setText("");
                         }
                     });
-                    cpd.setTitle("Pick the exact color");
+                    cpd.setTitle(getString(R.string.item_select_exact_color_overlay_title));
                     cpd.show();
                 }
             });
@@ -562,10 +567,10 @@ public class NewItemActivity extends Activity {
     private void selectImage() {
         final CharSequence[] options;
         if(item_imageFile != null) {
-            options = new CharSequence[] {"Show Fullscreen", "Take Photo", "Choose from Gallery", "Cancel"};
+            options = new CharSequence[] {getString(R.string.item_show_image_fullscreen), getString(R.string.item_take_photo), getString(R.string.item_choose_gellery), getString(R.string.cancel)};
 
         } else {
-            options = new CharSequence[] {"Take Photo", "Choose from Gallery", "Cancel"};
+            options = new CharSequence[] {getString(R.string.item_take_photo), getString(R.string.item_choose_gellery), getString(R.string.cancel)};
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setItems(options, new DialogInterface.OnClickListener() {
@@ -574,15 +579,15 @@ public class NewItemActivity extends Activity {
 
             public void onClick(DialogInterface dialog, int item) {
 
-                if (options[item].equals("Take Photo")){
+                if (options[item].equals(getString(R.string.item_take_photo))){
                     Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                     startActivityForResult(intent, 1);
-                } else if (options[item].equals("Choose from Gallery")) {
+                } else if (options[item].equals(getString(R.string.item_choose_gellery))) {
                     Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     startActivityForResult(intent, 2);
-                } else if (options[item].equals("Cancel")) {
+                } else if (options[item].equals(getString(R.string.cancel))) {
                     dialog.dismiss();
-                } else if (options[item].equals("Show Fullscreen")) {
+                } else if (options[item].equals(getString(R.string.item_show_image_fullscreen))) {
                     Intent i = new Intent(NewItemActivity.this, FullscreenImageActivity.class);
                     i.putExtra("imageurl", item_imageFile);
                     startActivity(i);
@@ -696,7 +701,7 @@ public class NewItemActivity extends Activity {
 
         final View dialogView = inflater.inflate(R.layout.dialog_grid, null);
         TextView headline = (TextView)dialogView.findViewById(R.id.dialog_headline);
-        headline.setText("Select a category");
+        headline.setText(getString(R.string.item_select_category_overlay_title));
         GridView gridView = (GridView) dialogView.findViewById(R.id.gridView);
 
         gridView.setAdapter(gridCateoriesAdapter);
@@ -727,7 +732,7 @@ public class NewItemActivity extends Activity {
 
         final View dialogView = inflater.inflate(R.layout.dialog_grid, null);
         TextView headline = (TextView)dialogView.findViewById(R.id.dialog_headline);
-        headline.setText("Select a color");
+        headline.setText(getString(R.string.item_select_color_overlay_title));
         GridView gridView = (GridView) dialogView.findViewById(R.id.gridView);
 
         gridView.setAdapter(gridColorsAdapter);

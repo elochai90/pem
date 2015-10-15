@@ -82,64 +82,9 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
         gridView.setOnItemClickListener(this);
         gridView.setOnItemLongClickListener(this);
 
-//        FloatingActionMenu menu = (FloatingActionMenu) rootView.findViewById(R.id.menu);
-//        menu.setClosedOnTouchOutside(true);
-//        com.github.clans.fab.FloatingActionButton fab_add_compare = (FloatingActionButton) rootView.findViewById(R.id.add_compare);
-//        com.github.clans.fab.FloatingActionButton fab_add_wishlist_item = (FloatingActionButton) rootView.findViewById(R.id.add_wishlist_item);
-//        com.github.clans.fab.FloatingActionButton fab_add_category = (FloatingActionButton) rootView.findViewById(R.id.add_category);
-//        com.github.clans.fab.FloatingActionButton fab_add_item = (FloatingActionButton) rootView.findViewById(R.id.add_item);
-//        fab_add_compare.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent();
-//                intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".views.NewCompareActivity");
-//                startActivityForResult(intent, 0);
-//
-//            }
-//        });
-//
-//        fab_add_wishlist_item.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent();
-//                intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".views.NewItemActivity");
-//                intent.putExtra("is_wishlist", true);
-//                startActivityForResult(intent, 0);
-//
-//            }
-//        });
-//        fab_add_category.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent();
-//                intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".views.NewCategoryActivity");
-//                startActivityForResult(intent, 0);
-//
-//            }
-//        });
-//
-//        fab_add_item.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent();
-//                intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".views.NewItemActivity");
-//                startActivity(intent);
-//
-//            }
-//        });
-        handleIntent(getActivity().getIntent());
         return rootView;
     }
 
-
-    public static void handleIntent(Intent intent) {
-
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            System.out.println("in CompareFragment query: " + query);
-            //use the query to search your data somehow
-        }
-    }
 
 
     @Override
@@ -188,7 +133,30 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
 
         // Associate searchable configuration with the SearchView
         SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        final SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        final Menu optionMenu =  menu;
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean queryTextFocused) {
+                if (!queryTextFocused) {
+                    searchView.clearFocus();
+                    optionMenu.findItem(R.id.search).collapseActionView();
+                }
+            }
+        });
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                searchView.clearFocus();
+                optionMenu.findItem(R.id.search).collapseActionView();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
     }
 

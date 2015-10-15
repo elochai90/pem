@@ -18,12 +18,15 @@
     <string name="title_activity_edit_item">Edit Item</string>
     <string name="title_activity_new_category">New Category</string>
     <string name="title_activity_items_list">Items</string>
+    <string name="title_activity_fullscreen_image">Fullscreen Image</string>
+    <string name="title_activity_search_results">Search Results</string>
     <string name="title_exit1">Do you really want to exit </string>
     <string name="title_exit2">\?</string>
 
     <!--Search-->
     <string name="search_title">Search</string>
     <string name="search_hint">Search...</string>
+    <string name="no_search_results">Unfortunately there are no results for the search \'%1$s\'.</string>
 
     <!--Switch text-->
     <string name="switch_true">&#10003;</string>
@@ -41,6 +44,7 @@
     <!--For new compare activity-->
     <string name="save_compare">Save compare</string>
     <string name="compare_name">name of compare</string>
+    <string name="compare_choose_cat_overlay_title">Choose a category</string>
 
 
     <!--For detail compare activity-->
@@ -53,6 +57,15 @@
     <string name="no_exact_color_selected">Select a color</string>
     <string name="new_item_label_name">Name:</string>
     <string name="new_item_hint_name">Add Item Name</string>
+    <string name="item_show_image_fullscreen">Show Fullscreen</string>
+    <string name="item_take_photo">Take Photo</string>
+    <string name="item_choose_gellery">Choose from Gallery</string>
+    <string name="item_select_color_overlay_title">Select a color</string>
+    <string name="item_select_exact_color_overlay_title">Pick the exact color</string>
+    <string name="item_select_category_overlay_title">Select a category</string>
+    <string name="item_cateory_label">Category:</string>
+    <string name="item_color_label">Color:</string>
+    <string name="item_wishlist_label">In Wishlist:</string>
 
     <!--For new category activity-->
     <string name="new_category_label_name">Name:</string>
@@ -61,6 +74,10 @@
     <string name="new_category_label_icon">Icon:</string>
     <string name="new_category_desc_icon">category icon</string>
     <string name="new_category_overlay_title">Select an icon</string>
+    <string name="default_size_tops">Tops</string>
+    <string name="default_size_bottoms">Bottoms</string>
+    <string name="default_size_shoes">Shoes</string>
+    <string name="default_size_none">None</string>
 
 
     <!--ActionBar Menu titles-->

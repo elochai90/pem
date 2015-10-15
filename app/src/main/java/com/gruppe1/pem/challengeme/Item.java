@@ -2,6 +2,8 @@ package com.gruppe1.pem.challengeme;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
@@ -11,7 +13,7 @@ import java.util.HashMap;
 import java.util.Set;
 
 
-public class Item {
+public class Item implements Parcelable{
     private int m_id;
     private String m_name;
     private String m_imageFile;
@@ -301,13 +303,12 @@ public class Item {
         Compare.deleteComparesByItemId(this.m_context, this.m_id);
     }
 
-    public ArrayList<Item> getSearchResults(String query) {
-        this.m_dbHelper.setWhere("", new String[] {"_id=" + this.m_id});
-        DataBaseHelper dbHelper = new DataBaseHelper(m_context);
+    public static ArrayList<Item> getSearchResults(Context p_context, String query) {
+        DataBaseHelper dbHelper = new DataBaseHelper(p_context);
         dbHelper.init();
         dbHelper.setTable(Constants.ITEMS_DB_TABLE);
         dbHelper.setColumns(new String[]{"*"});
-        dbHelper.setWhere("", new String[]{"name MATCH '" + query + "*'"});
+        dbHelper.setWhere("", new String[]{"name LIKE '%" + query + "%'"});
 
         Cursor cursor = dbHelper.select();
 
@@ -316,7 +317,7 @@ public class Item {
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
-            searchItems.add(new Item(m_context, cursor.getInt(0), dbHelper));
+            searchItems.add(new Item(p_context, cursor.getInt(0), dbHelper));
             cursor.moveToNext();
         }
 
@@ -324,4 +325,44 @@ public class Item {
         dbHelper.close();
         return searchItems;
     }
+
+    public Item(Parcel in) {
+        String[] data = new String[7];
+
+        in.readStringArray(data);
+        this.m_id = Integer.parseInt(data[0]);
+        this.m_name = data[1];
+        this.m_imageFile = data[2];
+        this.m_categoryId = Integer.parseInt(data[3]);
+        this.m_isWish = Integer.parseInt(data[4]);
+        this.m_primaryColorId = Integer.parseInt(data[5]);
+        this.m_rating = Float.parseFloat(data[6]);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeStringArray(new String[] {
+                this.m_id + "",
+                this.m_name,
+                this.m_imageFile,
+                this.m_categoryId + "",
+                this.m_isWish + "",
+                this.m_primaryColorId + "",
+                this.m_rating + ""
+        });
+    }
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public Item createFromParcel(Parcel in) {
+            return new Item(in);
+        }
+
+        public Item[] newArray(int size) {
+            return new Item[size];
+        }
+    };
 }

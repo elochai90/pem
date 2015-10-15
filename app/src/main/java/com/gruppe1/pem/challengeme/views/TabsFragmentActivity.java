@@ -3,6 +3,8 @@ package com.gruppe1.pem.challengeme.views;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.SearchManager;
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -20,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.SearchView;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -35,9 +38,13 @@ public class TabsFragmentActivity extends FragmentActivity  {
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
+
+    private FloatingActionMenu menu;
+
     private String mTitle;
     private String[] menuItems = new String[4];
     private Locale myLocale;
+
     private MainViewsPagerAdapter mainViewsPagerAdapter;
     private ViewPager mainViewsPager;
     private ActionBar.Tab tab0;
@@ -69,6 +76,7 @@ public class TabsFragmentActivity extends FragmentActivity  {
             public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
                 mainViewsPager.setCurrentItem(tab.getPosition());
                 setSelectedNavigationDrawerItem(tab.getPosition());
+                mDrawerLayout.closeDrawer(mDrawerList);
             }
 
             public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
@@ -124,24 +132,6 @@ public class TabsFragmentActivity extends FragmentActivity  {
 
     }
 
-//    @Override
-//    protected void onNewIntent(Intent intent) {
-//        switch (tabs.getCurrentTab()) {
-//            case 0:
-//                CategoriesFragment.handleIntent(intent);
-//                break;
-//            case 1:
-//                CompareFragment.handleIntent(intent);
-//                        break;
-//            case 2:
-//                WishlistFragment.handleIntent(intent);
-//                break;
-//            default:
-//                CategoriesFragment.handleIntent(intent);
-//
-//        }
-//    }
-
 
     public void loadLocale()
     {
@@ -193,11 +183,6 @@ public class TabsFragmentActivity extends FragmentActivity  {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        return false;
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -229,7 +214,7 @@ public class TabsFragmentActivity extends FragmentActivity  {
 
     private void setupFloatingActionMenu() {
 
-        FloatingActionMenu menu = (FloatingActionMenu) findViewById(R.id.menu);
+        menu = (FloatingActionMenu) findViewById(R.id.menu);
         menu.setClosedOnTouchOutside(true);
         com.github.clans.fab.FloatingActionButton fab_add_compare = (FloatingActionButton) findViewById(R.id.add_compare);
         com.github.clans.fab.FloatingActionButton fab_add_wishlist_item = (FloatingActionButton) findViewById(R.id.add_wishlist_item);
@@ -241,6 +226,7 @@ public class TabsFragmentActivity extends FragmentActivity  {
                 Intent intent = new Intent();
                 intent.setClassName(getPackageName(), getPackageName() + ".views.NewCompareActivity");
                 startActivity(intent);
+                menu.close(false);
 
             }
         });
@@ -252,6 +238,7 @@ public class TabsFragmentActivity extends FragmentActivity  {
                 intent.setClassName(getPackageName(), getPackageName() + ".views.NewItemActivity");
                 intent.putExtra("is_wishlist", true);
                 startActivityForResult(intent, 0);
+                menu.close(false);
 
             }
         });
@@ -261,6 +248,7 @@ public class TabsFragmentActivity extends FragmentActivity  {
                 Intent intent = new Intent();
                 intent.setClassName(getPackageName(), getPackageName() + ".views.NewCategoryActivity");
                 startActivityForResult(intent, 0);
+                menu.close(false);
 
             }
         });
@@ -271,6 +259,7 @@ public class TabsFragmentActivity extends FragmentActivity  {
                 Intent intent = new Intent();
                 intent.setClassName(getPackageName(), getPackageName() + ".views.NewItemActivity");
                 startActivity(intent);
+                menu.close(false);
 
             }
         });

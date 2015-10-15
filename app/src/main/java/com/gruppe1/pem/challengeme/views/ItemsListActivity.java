@@ -41,6 +41,8 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
     private DefaultListAdapter listAdapter;
     private Boolean list;
 
+    private FloatingActionMenu menu;
+
     private RelativeLayout noItemLayout;
 
     private int categoryId;
@@ -98,7 +100,7 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
         gridView.setOnItemLongClickListener(this);
         gridView.setVisibility(View.INVISIBLE);
 
-        FloatingActionMenu menu = (FloatingActionMenu) findViewById(R.id.menu);
+        menu = (FloatingActionMenu) findViewById(R.id.menu);
         menu.setVisibility(View.VISIBLE);
         menu.setClosedOnTouchOutside(true);
         com.github.clans.fab.FloatingActionButton fab_add_compare = (FloatingActionButton) findViewById(R.id.add_compare);
@@ -111,6 +113,7 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
                 Intent intent = new Intent();
                 intent.setClassName(getPackageName(), getPackageName() + ".views.NewCompareActivity");
                 startActivity(intent);
+                menu.close(false);
 
             }
         });
@@ -122,6 +125,7 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
                 intent.setClassName(getPackageName(), getPackageName() + ".views.NewItemActivity");
                 intent.putExtra("is_wishlist", true);
                 startActivity(intent);
+                menu.close(false);
 
             }
         });
@@ -131,6 +135,7 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
                 Intent intent = new Intent();
                 intent.setClassName(getPackageName(), getPackageName() + ".views.NewCategoryActivity");
                 startActivity(intent);
+                menu.close(false);
 
             }
         });
@@ -142,6 +147,7 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
                 intent.setClassName(getPackageName(), getPackageName() + ".views.NewItemActivity");
                 intent.putExtra("category_id", categoryId);
                 startActivityForResult(intent, 1);
+                menu.close(false);
             }
         });
     }
@@ -271,10 +277,11 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
         Intent intent = new Intent();
         intent.setClassName(getPackageName(), getPackageName() + ".views.CollectionItemsActivity");
 
-        intent.putExtra("EXTRA_CATEGORY_ID", categoryId);
-        intent.putExtra("EXTRA_CLICKED_ITEM_POSITION", position);
+        ArrayList<Item> allCategoryItems = Item.getItemsByCategoryId(this, categoryId, false);
+        intent.putExtra(Constants.EXTRA_CLICKED_ITEM_POSITION, position);
         Bundle b = new Bundle();
         b.putInt(Constants.EXTRA_ITEM_ID, itemid);
+        b.putParcelableArrayList(Constants.EXTRA_ITEM_COLLECTION, allCategoryItems);
         intent.putExtras(b);
         startActivityForResult(intent, 1);
     }

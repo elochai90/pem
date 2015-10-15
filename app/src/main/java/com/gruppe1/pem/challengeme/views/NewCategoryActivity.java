@@ -46,6 +46,7 @@ public class NewCategoryActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_category);
+        getActionBar().setTitle(R.string.title_activity_new_category);
         extras = getIntent().getExtras();
 
         sharedPreferences = getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
@@ -62,10 +63,10 @@ public class NewCategoryActivity extends Activity {
         String defaultSize3Value = sharedPreferences.getString(Constants.KEY_DS_3_NAME, "");
 
         ArrayList<DefaultSize> defaultSizes = new ArrayList<>();
-        defaultSizes.add(new DefaultSize(Constants.KEY_DS_NONE, ""));
-        defaultSizes.add(new DefaultSize(Constants.KEY_DS_1_NAME, defaultSize1Value));
-        defaultSizes.add(new DefaultSize(Constants.KEY_DS_2_NAME, defaultSize2Value));
-        defaultSizes.add(new DefaultSize(Constants.KEY_DS_3_NAME, defaultSize3Value));
+        defaultSizes.add(new DefaultSize(getString(R.string.default_size_none), ""));
+        defaultSizes.add(new DefaultSize(getString(R.string.default_size_tops), defaultSize1Value));
+        defaultSizes.add(new DefaultSize(getString(R.string.default_size_bottoms), defaultSize2Value));
+        defaultSizes.add(new DefaultSize(getString(R.string.default_size_shoes), defaultSize3Value));
 
 
         ArrayAdapter<DefaultSize> adapter = new DefaultSizesAdapter(getBaseContext(), android.R.layout.simple_spinner_item,
@@ -102,16 +103,16 @@ public class NewCategoryActivity extends Activity {
             String defaultSizeTypeString;
             switch(editCategory.getDefaultSizeType()) {
                 case 0:
-                    defaultSizeTypeString = Constants.KEY_DS_1_NAME;
+                    defaultSizeTypeString = getString(R.string.default_size_tops);
                     break;
                 case 1:
-                    defaultSizeTypeString = Constants.KEY_DS_2_NAME;
+                    defaultSizeTypeString = getString(R.string.default_size_bottoms);
                     break;
                 case 2:
-                    defaultSizeTypeString = Constants.KEY_DS_3_NAME;
+                    defaultSizeTypeString = getString(R.string.default_size_shoes);
                     break;
                 default:
-                    defaultSizeTypeString = Constants.KEY_DS_NONE;
+                    defaultSizeTypeString = getString(R.string.default_size_none);
                     break;
             }
             int indexOfDefaultSize = defaultSizes.indexOf(new DefaultSize(defaultSizeTypeString, sharedPreferences.getString(defaultSizeTypeString, "")));

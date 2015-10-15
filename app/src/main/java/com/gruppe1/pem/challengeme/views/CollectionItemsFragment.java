@@ -135,9 +135,9 @@ public class CollectionItemsFragment extends Fragment {
         attrWishlistName = (TextView) rootView.findViewById(R.id.attrWishlistName);
         attrWishlistValue = (Switch) rootView.findViewById(R.id.attrWishlistValue);
 
-        attrCategoryName.setText("Category:");
-        attrColorName.setText("Color:");
-        attrWishlistName.setText("In Wishlist:");
+        attrCategoryName.setText(getString(R.string.item_cateory_label));
+        attrColorName.setText(getString(R.string.item_color_label));
+        attrWishlistName.setText(getString(R.string.item_wishlist_label));
 
         // Setup Categories Adapter
         ArrayList<Category> allCategories = Category.getAllCategories(activity);
@@ -288,7 +288,7 @@ public class CollectionItemsFragment extends Fragment {
 
         final View dialogView = inflater.inflate(R.layout.dialog_grid, null);
         TextView headline = (TextView)dialogView.findViewById(R.id.dialog_headline);
-        headline.setText("Select a category");
+        headline.setText(getString(R.string.item_select_category_overlay_title));
         GridView gridView = (GridView) dialogView.findViewById(R.id.gridView);
 
         gridView.setAdapter(gridCateoriesAdapter);
@@ -318,7 +318,7 @@ public class CollectionItemsFragment extends Fragment {
 
         final View dialogView = inflater.inflate(R.layout.dialog_grid, null);
         TextView headline = (TextView)dialogView.findViewById(R.id.dialog_headline);
-        headline.setText("Select a color");
+        headline.setText(getString(R.string.item_select_color_overlay_title));
         GridView gridView = (GridView) dialogView.findViewById(R.id.gridView);
 
         gridView.setAdapter(gridColorsAdapter);
@@ -391,10 +391,10 @@ public class CollectionItemsFragment extends Fragment {
     private void selectImage() {
         final CharSequence[] options;
         if(item_imageFile != null) {
-            options = new CharSequence[] {"Show Fullscreen", "Take Photo", "Choose from Gallery", "Cancel"};
+            options = new CharSequence[] {getString(R.string.item_show_image_fullscreen), getString(R.string.item_take_photo), getString(R.string.item_choose_gellery), getString(R.string.cancel)};
 
         } else {
-            options = new CharSequence[] {"Take Photo", "Choose from Gallery", "Cancel"};
+            options = new CharSequence[] {getString(R.string.item_take_photo), getString(R.string.item_choose_gellery), getString(R.string.cancel)};
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -404,15 +404,15 @@ public class CollectionItemsFragment extends Fragment {
 
             public void onClick(DialogInterface dialog, int item) {
 
-                if (options[item].equals("Take Photo")){
+                if (options[item].equals(getString(R.string.item_take_photo))){
                     Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                     activity.startActivityForResult(intent, 1);
-                } else if (options[item].equals("Choose from Gallery")) {
+                } else if (options[item].equals(getString(R.string.item_choose_gellery))) {
                     Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     activity.startActivityForResult(intent, 2);
-                } else if (options[item].equals("Cancel")) {
+                } else if (options[item].equals(getString(R.string.cancel))) {
                     dialog.dismiss();
-                } else if (options[item].equals("Show Fullscreen")) {
+                } else if (options[item].equals(getString(R.string.item_show_image_fullscreen))) {
                     Intent i = new Intent(getActivity(), FullscreenImageActivity.class);
                     i.putExtra("imageurl", item_imageFile);
                     startActivity(i);
@@ -500,7 +500,7 @@ public class CollectionItemsFragment extends Fragment {
                             attrValueColorPicker.setText("");
                         }
                     });
-                    cpd.setTitle("Pick the exact color");
+                    cpd.setTitle(getString(R.string.item_select_exact_color_overlay_title));
                     cpd.show();
                 }
             });

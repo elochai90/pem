@@ -14,6 +14,7 @@ import com.gruppe1.pem.challengeme.Item;
 import com.gruppe1.pem.challengeme.ListItemIconName;
 import com.gruppe1.pem.challengeme.R;
 import com.gruppe1.pem.challengeme.adapters.ItemsCollectionPagerAdapter;
+import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.ImageDominantColorExtractor;
 
 import java.util.ArrayList;
@@ -27,8 +28,8 @@ import java.util.ArrayList;
 
 
     private int currentItemPosition;
-    private int categoryId;
     private ArrayList<ListItemIconName> mDataset = new ArrayList<>();
+    private ArrayList<Item> itemCollection;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,8 +39,8 @@ import java.util.ArrayList;
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            categoryId = extras.getInt("EXTRA_CATEGORY_ID");
-            currentItemPosition = extras.getInt("EXTRA_CLICKED_ITEM_POSITION");
+            currentItemPosition = extras.getInt(Constants.EXTRA_CLICKED_ITEM_POSITION);
+            itemCollection = extras.getParcelableArrayList(Constants.EXTRA_ITEM_COLLECTION);
         }
 
         initDataset();
@@ -48,7 +49,7 @@ import java.util.ArrayList;
         // fragments, so use getSupportFragmentManager.
         mItemsCollectionPagerAdapter =
                 new ItemsCollectionPagerAdapter(
-                        getSupportFragmentManager(), this, categoryId);
+                        getSupportFragmentManager(), this, itemCollection);
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mItemsCollectionPagerAdapter);
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -61,7 +62,7 @@ import java.util.ArrayList;
             public void onPageSelected(int position) {
                 currentItemPosition = position;
                 mItemsCollectionPagerAdapter.getItem(position);
-                getActionBar().setTitle(getResources().getString(R.string.edit) + ": " + mDataset.get(position).getName());
+                getActionBar().setTitle(mDataset.get(position).getName());
             }
 
             @Override
@@ -95,13 +96,12 @@ import java.util.ArrayList;
     }
 
     /**
-     * initializes the dataset of compares
+     * initializes the dataset of items
      */
     private void initDataset() {
         mDataset.clear();
-        ArrayList<Item> allCategoryItems = Item.getItemsByCategoryId(this, categoryId, false);
 
-        for (Item tmpItem : allCategoryItems) {
+        for (Item tmpItem : itemCollection) {
             int iconId = getResources().getIdentifier("kleiderbuegel", "drawable", "com.gruppe1.pem.challengeme");
             mDataset.add(new ListItemIconName(tmpItem.getId(), iconId, tmpItem.getName(), tmpItem.getImageFile()));
         }

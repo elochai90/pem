@@ -51,6 +51,7 @@ public class NewCompareActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_compare);
+        getActionBar().setTitle(R.string.title_activity_compare);
 
         sharedPreferences = getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
 
@@ -141,7 +142,7 @@ public class NewCompareActivity extends Activity {
 
         final View dialogView = inflater.inflate(R.layout.dialog_grid, null);
         TextView headline = (TextView)dialogView.findViewById(R.id.dialog_headline);
-        headline.setText("Choose category");
+        headline.setText(getString(R.string.compare_choose_cat_overlay_title));
         GridView gridView = (GridView) dialogView.findViewById(R.id.gridView);
 
         ArrayList<ListItemIconName> catArray = new ArrayList<>();
@@ -212,7 +213,7 @@ public class NewCompareActivity extends Activity {
                     if(name.equals("")) {
                         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
                         String currentDateandTime = sdf.format(new Date());
-                        name = "Compare " + currentDateandTime;
+                        name = getString(R.string.title_activity_compare) + " " + currentDateandTime;
                     }
 
                     DataBaseHelper dbHelper = new DataBaseHelper(getApplicationContext());

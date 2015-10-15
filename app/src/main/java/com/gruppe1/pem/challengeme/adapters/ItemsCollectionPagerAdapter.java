@@ -26,13 +26,13 @@ public class ItemsCollectionPagerAdapter extends FragmentStatePagerAdapter {
     private FragmentManager fragmentManager;
     private ArrayList<ListItemIconName> mDataset = new ArrayList<>();
     private ArrayList<CollectionItemsFragment> mFragments = new ArrayList<>();
-    private int categoryId;
+    private ArrayList<Item> itemCollection = new ArrayList<>();
 
-    public ItemsCollectionPagerAdapter(FragmentManager fm, CollectionItemsActivity context, int categoryId) {
+    public ItemsCollectionPagerAdapter(FragmentManager fm, CollectionItemsActivity context, ArrayList<Item> itemCollection) {
         super(fm);
         this.fragmentManager = fm;
         this.context = context;
-        this.categoryId = categoryId;
+        this.itemCollection = itemCollection;
         initDataset();
         initFragments();
     }
@@ -69,15 +69,9 @@ public class ItemsCollectionPagerAdapter extends FragmentStatePagerAdapter {
     private void initDataset() {
         mDataset.clear();
 
-        DataBaseHelper db_helper = new DataBaseHelper(context);
-        db_helper.init();
-
-        ArrayList<Item> allCategoryItems = Item.getItemsByCategoryId(context, categoryId, false);
-
-        for (Item tmpItem : allCategoryItems) {
+        for (Item tmpItem : itemCollection) {
             int iconId = context.getResources().getIdentifier("kleiderbuegel", "drawable", "com.gruppe1.pem.challengeme");
             mDataset.add(new ListItemIconName(tmpItem.getId(), iconId, tmpItem.getName(), tmpItem.getImageFile()));
         }
-        db_helper.close();
     }
 }

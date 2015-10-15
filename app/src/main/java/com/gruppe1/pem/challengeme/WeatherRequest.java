@@ -320,7 +320,7 @@ public class WeatherRequest {
             Date now = new Date();
             long diffInMillies = now.getTime() - lastLocationRequestDate.getTime();
             long differenceInDays = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
-            if(differenceInDays >= 0) {
+            if(differenceInDays > 0) {
                 navDrawerWeatherDate.setVisibility(View.VISIBLE);
                 navDrawerWeatherDate.setText("This weather is " + differenceInDays + " day" + ((differenceInDays==1) ? "s" : "") + " old.");
             } else {

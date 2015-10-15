@@ -83,18 +83,9 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
         gridView.setOnItemClickListener(this);
         gridView.setOnItemLongClickListener(this);
 
-        handleIntent(getActivity().getIntent());
         return rootView;
     }
 
-    public static void handleIntent(Intent intent) {
-
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            System.out.println("in CategoriesFragment query: " + query);
-            //use the query to search your data somehow
-        }
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -138,7 +129,30 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
 
         // Associate searchable configuration with the SearchView
         SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        final SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        final Menu optionMenu =  menu;
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean queryTextFocused) {
+                if (!queryTextFocused) {
+                    searchView.clearFocus();
+                    optionMenu.findItem(R.id.search).collapseActionView();
+                }
+            }
+        });
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                searchView.clearFocus();
+                optionMenu.findItem(R.id.search).collapseActionView();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
 
     }

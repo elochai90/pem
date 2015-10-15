@@ -8,7 +8,7 @@
     <!--titles-->
     <string name="title_activity_categories">Kategorien</string>
     <string name="title_activity_compare">Vergleich</string>
-    <string name="title_activity_wishlist">Wunsch-liste</string>
+    <string name="title_activity_wishlist">Wunschliste</string>
     <string name="title_activity_wishlist2">Wunschliste</string>
     <string name="title_activity_settings">Einstellungen</string>
     <string name="title_activity_saved_compares">Neuer Vergleich</string>
@@ -18,12 +18,15 @@
     <string name="title_activity_edit_item">Bearbeiten</string>
     <string name="title_activity_new_category">Neue Kategorie</string>
     <string name="title_activity_items_list">Items</string>
+    <string name="title_activity_fullscreen_image">Vollbild</string>
+    <string name="title_activity_search_results">Suchergebnisse</string>
     <string name="title_exit1">Möchtest du </string>
     <string name="title_exit2"> wirklich beenden? </string>
 
     <!--Search-->
     <string name="search_title">Suchen</string>
     <string name="search_hint">Suchen...</string>
+    <string name="no_search_results">Die Suche hat leider keine Ergebnisse zur Anfrage \'%1$s\' geliefert.</string>
 
     <!--Switch text-->
     <string name="switch_true">&#10003;</string>
@@ -41,6 +44,7 @@
     <!--For new compare activity-->
     <string name="save_compare">Vergleich speichern</string>
     <string name="compare_name">Name des Vergleichs</string>
+    <string name="compare_choose_cat_overlay_title">Wähle eine Kategorie</string>
 
 
     <!--For detail compare activity-->
@@ -53,14 +57,27 @@
     <string name="no_exact_color_selected">Wähle eine Farbe</string>
     <string name="new_item_label_name">Name:</string>
     <string name="new_item_hint_name">Item Name hinzufügen</string>
+    <string name="item_show_image_fullscreen">Zeige Vollbild</string>
+    <string name="item_take_photo">Neues Foto aufnehmen</string>
+    <string name="item_choose_gellery">Bild aus der Galerie auswählen</string>
+    <string name="item_select_color_overlay_title">Farbe auswählen</string>
+    <string name="item_select_exact_color_overlay_title">Genaue Farbe auswählen</string>
+    <string name="item_select_category_overlay_title">Kategorie auswählen</string>
+    <string name="item_cateory_label">Kategorie:</string>
+    <string name="item_color_label">Farbe:</string>
+    <string name="item_wishlist_label">In Wunschliste:</string>
 
     <!--For new category activity-->
     <string name="new_category_label_name">Name:</string>
     <string name="new_category_hint_name">Kategorie Name hinzufügen</string>
-    <string name="new_category_label_defaultSize">Default Größe:</string>
+    <string name="new_category_label_defaultSize">Standardgröße:</string>
     <string name="new_category_label_icon">Icon:</string>
     <string name="new_category_desc_icon">Kategorie Icon</string>
     <string name="new_category_overlay_title">Wähle ein Icon</string>
+    <string name="default_size_tops">Oberteile</string>
+    <string name="default_size_bottoms">Unterteile</string>
+    <string name="default_size_shoes">Schuhe</string>
+    <string name="default_size_none">Keine</string>
 
 
     <!--ActionBar Menu titles-->
@@ -85,6 +102,7 @@
     <string name="delete">Löschen</string>
     <string name="cancel">Abbrechen</string>
     <string name="new_item_desc_itemImage">Item Bild</string>
+
 
     <!-- Settings -->
     <string name="language">Sprache:</string>
