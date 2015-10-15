@@ -2,12 +2,17 @@ package com.gruppe1.pem.challengeme.views;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.SearchManager;
 import android.content.Context;
+import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.Loader;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +57,7 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
 
     private Object[] selectedItem;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -76,54 +83,18 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
         gridView.setOnItemClickListener(this);
         gridView.setOnItemLongClickListener(this);
 
-        FloatingActionMenu menu = (FloatingActionMenu) rootView.findViewById(R.id.menu);
-        menu.setClosedOnTouchOutside(true);
-        com.github.clans.fab.FloatingActionButton fab_add_compare = (FloatingActionButton) rootView.findViewById(R.id.add_compare);
-        com.github.clans.fab.FloatingActionButton fab_add_wishlist_item = (FloatingActionButton) rootView.findViewById(R.id.add_wishlist_item);
-        com.github.clans.fab.FloatingActionButton fab_add_category = (FloatingActionButton) rootView.findViewById(R.id.add_category);
-        com.github.clans.fab.FloatingActionButton fab_add_item = (FloatingActionButton) rootView.findViewById(R.id.add_item);
-        fab_add_compare.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".views.NewCompareActivity");
-                startActivity(intent);
-
-            }
-        });
-
-        fab_add_wishlist_item.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".views.NewItemActivity");
-                intent.putExtra("is_wishlist", true);
-                startActivityForResult(intent, 0);
-
-            }
-        });
-        fab_add_category.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".views.NewCategoryActivity");
-                startActivityForResult(intent, 0);
-
-            }
-        });
-
-        fab_add_item.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".views.NewItemActivity");
-                startActivity(intent);
-
-            }
-        });
+        handleIntent(getActivity().getIntent());
         return rootView;
     }
 
+    public static void handleIntent(Intent intent) {
+
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            System.out.println("in CategoriesFragment query: " + query);
+            //use the query to search your data somehow
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -164,6 +135,12 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
         // Inflate the menu; this adds items to the action bar if it is present.
         menu.clear();
         inflater.inflate(R.menu.menu_categories_fragment, menu);
+
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+
     }
 
     /**
