@@ -51,6 +51,7 @@
     <string name="compare_saved">Gespeichert</string>
     <string name="compare_desc_image1">Erstes Bild</string>
     <string name="compare_desc_image2">Zweites Bild</string>
+    <string name="compare_delete_overlay">Vergleich \'%1$s\' wirklich löschen?</string>
 
     <!--For new/edit item activity-->
     <string name="no_buy_date_selected">Wähle ein Datum</string>

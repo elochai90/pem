@@ -90,8 +90,11 @@ public class SavedComparesDetailActivity extends Activity {
         switch (item.getItemId()) {
             case R.id.delete:
 
+                String strDelCompareTitleFormat = getResources().getString(R.string.compare_delete_overlay);
+                String strDelCompareTitle = String.format(strDelCompareTitleFormat, compareItem.getName());
+
                 new AlertDialog.Builder(this)
-                        .setTitle("Do you really want to delete '" + compareItem.getName() + "'?")
+                        .setTitle(strDelCompareTitle)
                         .setNegativeButton(android.R.string.no, null)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
