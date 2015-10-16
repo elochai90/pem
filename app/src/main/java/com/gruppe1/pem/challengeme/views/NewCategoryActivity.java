@@ -3,6 +3,7 @@ package com.gruppe1.pem.challengeme.views;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -146,6 +147,12 @@ public class NewCategoryActivity extends Activity {
                 int iconId = getResources().getIdentifier(gridAdapter.getItem(position), "drawable", "com.gruppe1.pem.challengeme");
                 categoryIcon.setImageResource(iconId);
                 iconName = gridAdapter.getItem(position);
+                alert.dismiss();
+            }
+        });
+        alert.setButton(DialogInterface.BUTTON_NEGATIVE, getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
                 alert.dismiss();
             }
         });

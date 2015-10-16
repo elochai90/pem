@@ -157,6 +157,12 @@ public class NewCompareActivity extends Activity {
         final CategoriesGridOverlayAdapter gridAdapter = new CategoriesGridOverlayAdapter(this, R.layout.grid_item_overlay, catArray);
         gridView.setAdapter(gridAdapter);
         gridView.setOnItemClickListener(onItemClickListener);
+        alert.setButton(DialogInterface.BUTTON_NEGATIVE, getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                alert.dismiss();
+            }
+        });
 
         return alert;
     }

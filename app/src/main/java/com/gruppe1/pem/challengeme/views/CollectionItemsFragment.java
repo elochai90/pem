@@ -121,9 +121,7 @@ public class CollectionItemsFragment extends Fragment {
 
         ratingBar = (RatingBar) rootView.findViewById(R.id.ratingBar);
         LayerDrawable stars = (LayerDrawable) ratingBar.getProgressDrawable();
-        stars.getDrawable(2).setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
-        stars.getDrawable(1).setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
-        stars.getDrawable(0).setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+        stars.getDrawable(0).setColorFilter(getResources().getColor(R.color.gray02), PorterDuff.Mode.SRC_ATOP);
 
         attributeTypesList = new ArrayList<>();
         itemNameExitText = (EditText) rootView.findViewById(R.id.itemName);
@@ -306,6 +304,12 @@ public class CollectionItemsFragment extends Fragment {
                 alert.dismiss();
             }
         });
+        alert.setButton(DialogInterface.BUTTON_NEGATIVE, getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                alert.dismiss();
+            }
+        });
         alert.show();
     }
 
@@ -336,6 +340,12 @@ public class CollectionItemsFragment extends Fragment {
                 if(!gridColorsAdapter.isColorLight(Color.parseColor(attrColorSelected.getHexColor()))) {
                     attrColorValue.setTextColor(getResources().getColor(android.R.color.white));
                 }
+                alert.dismiss();
+            }
+        });
+        alert.setButton(DialogInterface.BUTTON_NEGATIVE, getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
                 alert.dismiss();
             }
         });
@@ -491,7 +501,7 @@ public class CollectionItemsFragment extends Fragment {
             attrValueColorPicker.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final HSVColorPickerDialog cpd = new HSVColorPickerDialog(activity, exactColorId, new HSVColorPickerDialog.OnColorSelectedListener() {
+                    new HSVColorPickerDialog(activity, exactColorId, new HSVColorPickerDialog.OnColorSelectedListener() {
                         @Override
                         public void colorSelected(Integer color) {
                             // Do something with the selected color
@@ -499,9 +509,7 @@ public class CollectionItemsFragment extends Fragment {
                             attrValueColorPicker.setBackgroundColor(exactColorId);
                             attrValueColorPicker.setText("");
                         }
-                    });
-                    cpd.setTitle(getString(R.string.item_select_exact_color_overlay_title));
-                    cpd.show();
+                    }).show();
                 }
             });
             attributeValueView = attrValueColorPicker;

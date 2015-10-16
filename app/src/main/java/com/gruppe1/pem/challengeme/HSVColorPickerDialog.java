@@ -13,19 +13,21 @@ import android.graphics.Rect;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.FloatMath;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 
 public class HSVColorPickerDialog extends AlertDialog {
 
-    private static final int PADDING_DP = 20;
+    private static final int PADDING_DP = 15;
 
     private static final int CONTROL_SPACING_DP = 20;
-    private static final int SELECTED_COLOR_HEIGHT_DP = 50;
+    private static final int SELECTED_COLOR_HEIGHT_DP = 40;
     private static final int BORDER_DP = 1;
     private static final int BORDER_COLOR = Color.BLACK;
 
@@ -49,14 +51,25 @@ public class HSVColorPickerDialog extends AlertDialog {
         this.selectedColor = initialColor;
         this.listener = listener;
 
+
         colorWheel = new HSVColorWheel( context );
         valueSlider = new HSVValueSlider( context );
         int padding = (int) (context.getResources().getDisplayMetrics().density * PADDING_DP);
         int borderSize = (int) (context.getResources().getDisplayMetrics().density * BORDER_DP);
         RelativeLayout layout = new RelativeLayout( context );
 
+
+        RelativeLayout.LayoutParams lp_headline = new RelativeLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        LayoutInflater li = LayoutInflater.from(context);
+        View headlineView = li.inflate(R.layout.dialog_edit, null);
+        TextView headline = (TextView) headlineView.findViewById(R.id.dialog_headline);
+        headline.setText(context.getString(R.string.item_select_exact_color_overlay_title));
+        headlineView.setId(R.id.overlayHeadlineId);
+        layout.addView(headlineView, lp_headline);
+
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT );
-        lp.bottomMargin = (int) (context.getResources().getDisplayMetrics().density * CONTROL_SPACING_DP);
+        lp.setMargins(padding, padding, padding, padding);
+        lp.addRule(RelativeLayout.BELOW, R.id.overlayHeadlineId);
         colorWheel.setListener( new OnColorSelectedListener() {
             public void colorSelected(Integer color) {
                 valueSlider.setColor( color, true );
@@ -69,11 +82,11 @@ public class HSVColorPickerDialog extends AlertDialog {
         int selectedColorHeight = (int) (context.getResources().getDisplayMetrics().density * SELECTED_COLOR_HEIGHT_DP);
 
         FrameLayout valueSliderBorder = new FrameLayout( context );
-        valueSliderBorder.setBackgroundColor( BORDER_COLOR );
-        valueSliderBorder.setPadding( borderSize, borderSize, borderSize, borderSize );
+        valueSliderBorder.setBackgroundColor(BORDER_COLOR);
+        valueSliderBorder.setPadding(borderSize, borderSize, borderSize, borderSize);
         valueSliderBorder.setId(R.id.colorSlider);
         lp = new RelativeLayout.LayoutParams( LayoutParams.MATCH_PARENT, selectedColorHeight + 2 * borderSize );
-        lp.bottomMargin = (int) (context.getResources().getDisplayMetrics().density * CONTROL_SPACING_DP);
+        lp.setMargins(padding, 0, padding, padding);
         lp.addRule( RelativeLayout.BELOW, R.id.colorWheel );
         layout.addView( valueSliderBorder, lp );
 
@@ -91,6 +104,7 @@ public class HSVColorPickerDialog extends AlertDialog {
         selectedColorborder.setBackgroundColor( BORDER_COLOR );
         lp = new RelativeLayout.LayoutParams( LayoutParams.MATCH_PARENT, selectedColorHeight + 2 * borderSize );
         selectedColorborder.setPadding( borderSize, borderSize, borderSize, borderSize );
+        lp.setMargins(padding, 0, padding, 0);
         lp.addRule( RelativeLayout.BELOW, R.id.colorSlider );
         layout.addView( selectedColorborder, lp );
 
@@ -117,7 +131,7 @@ public class HSVColorPickerDialog extends AlertDialog {
         setButton( BUTTON_NEGATIVE, context.getString( android.R.string.cancel ), clickListener);
         setButton( BUTTON_POSITIVE, context.getString( android.R.string.ok ), clickListener);
 
-        setView( layout, padding, padding, padding, padding );
+        setView( layout );
     }
 
 
