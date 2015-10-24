@@ -174,7 +174,8 @@ public class NewCategoryActivity extends Activity {
         db_helper.init();
 
         Category editCategory = new Category(getApplicationContext(), categoryId, db_helper);
-        editCategory.setName(newCategory_name.getText().toString());
+        editCategory.setNameEn(newCategory_name.getText().toString());
+        editCategory.setNameDe(newCategory_name.getText().toString());
         editCategory.setDefaultSizeType(categoryDefaultSize.getSelectedItemPosition() - 1);
         editCategory.setIcon(iconName);
         editCategory.save();

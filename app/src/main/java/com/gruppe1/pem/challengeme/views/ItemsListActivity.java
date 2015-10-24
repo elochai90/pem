@@ -104,9 +104,13 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
         menu.setVisibility(View.VISIBLE);
         menu.setClosedOnTouchOutside(true);
         com.github.clans.fab.FloatingActionButton fab_add_compare = (FloatingActionButton) findViewById(R.id.add_compare);
+        fab_add_compare.setLabelText(getString(R.string.title_activity_saved_compares));
         com.github.clans.fab.FloatingActionButton fab_add_wishlist_item = (FloatingActionButton) findViewById(R.id.add_wishlist_item);
+        fab_add_wishlist_item.setLabelText(getString(R.string.title_activity_new_Wishlistitem));
         com.github.clans.fab.FloatingActionButton fab_add_category = (FloatingActionButton) findViewById(R.id.add_category);
+        fab_add_category.setLabelText(getString(R.string.title_activity_new_category));
         com.github.clans.fab.FloatingActionButton fab_add_item = (FloatingActionButton) findViewById(R.id.add_item);
+        fab_add_item.setLabelText(getString(R.string.title_activity_new_item));
         fab_add_compare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

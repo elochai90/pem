@@ -31,6 +31,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
@@ -101,17 +102,21 @@ public class WeatherRequest {
 
             try {
                 DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH);
-                String lastLocationRequest = sharedPreferences.getString(Constants.KEY_W_DATE,"");
-                Date lastLocationRequestDate = format.parse(lastLocationRequest);
-                Date now = new Date();
-                long diffInMillies = now.getTime() - lastLocationRequestDate.getTime();
-                long differenceInMinutes = TimeUnit.MINUTES.convert(diffInMillies, TimeUnit.MILLISECONDS);
-                // only catch new weather, when the last request was at least 30 min before
-                if(differenceInMinutes > 30) {
-                    doNewWeatherRequest();
+                String lastLocationRequest = sharedPreferences.getString(Constants.KEY_W_DATE, "");
+                if(!Objects.equals(lastLocationRequest, "")) {
+                    Date lastLocationRequestDate = format.parse(lastLocationRequest);
+                    Date now = new Date();
+                    long diffInMillies = now.getTime() - lastLocationRequestDate.getTime();
+                    long differenceInMinutes = TimeUnit.MINUTES.convert(diffInMillies, TimeUnit.MILLISECONDS);
+                    // only catch new weather, when the last request was at least 30 min before
+                    if(differenceInMinutes > 30) {
+                        doNewWeatherRequest();
+                    } else {
+                        getLastWeather();
+                        setWeather();
+                    }
                 } else {
-                    getLastWeather();
-                    setWeather();
+                    doNewWeatherRequest();
                 }
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -315,16 +320,18 @@ public class WeatherRequest {
         temp3.setText(weather_3_temp);
 
         try {
-            DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH);
-            Date lastLocationRequestDate = format.parse(weather_date);
-            Date now = new Date();
-            long diffInMillies = now.getTime() - lastLocationRequestDate.getTime();
-            long differenceInDays = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
-            if(differenceInDays > 0) {
-                navDrawerWeatherDate.setVisibility(View.VISIBLE);
-                navDrawerWeatherDate.setText("This weather is " + differenceInDays + " day" + ((differenceInDays==1) ? "s" : "") + " old.");
-            } else {
-                navDrawerWeatherDate.setVisibility(View.GONE);
+            if(!Objects.equals(weather_date, "")) {
+                DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH);
+                Date lastLocationRequestDate = format.parse(weather_date);
+                Date now = new Date();
+                long diffInMillies = now.getTime() - lastLocationRequestDate.getTime();
+                long differenceInDays = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+                if (differenceInDays > 0) {
+                    navDrawerWeatherDate.setVisibility(View.VISIBLE);
+                    navDrawerWeatherDate.setText("This weather is " + differenceInDays + " day" + ((differenceInDays > 1) ? "s" : "") + " old.");
+                } else {
+                    navDrawerWeatherDate.setVisibility(View.GONE);
+                }
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -381,8 +388,8 @@ public class WeatherRequest {
                         String forecastDateandTime = sdf2.format(converteddate);
                         String[] segs = forecastDateandTime.split( Pattern.quote("-") );
 
-                        if(!segs[0].equals(currentDateandTime)){
-                            if(segs[1].equals("14")){
+//                        if(!segs[0].equals(currentDateandTime)){
+//                            if(segs[1].equals("14")){
 
                                 JSONArray weather = forecast.getJSONObject(i).getJSONArray("weather"); // get articles array
                                 String temp = Math.round(forecast.getJSONObject(i).getJSONObject("main").getDouble("temp") - 273.15) + "°C";
@@ -392,8 +399,8 @@ public class WeatherRequest {
                                 temps.add(temp);
                                 codes.add(code);
 
-                            }
-                        }
+//                            }
+//                        }
 
                     }
 

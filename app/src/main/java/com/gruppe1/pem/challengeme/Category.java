@@ -1,6 +1,8 @@
 package com.gruppe1.pem.challengeme;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 
 import com.gruppe1.pem.challengeme.helpers.Constants;
@@ -15,7 +17,8 @@ import java.util.Set;
  */
 public class Category {
     private int m_id;
-    private String m_name;
+    private String m_name_en;
+    private String m_name_de;
     private int m_parent_category_id = Constants.DEFAULT_CATEGORY_ID;
     private String m_icon;
     // TODO add default size to sql init
@@ -36,10 +39,11 @@ public class Category {
 
             if(categoryData.moveToFirst()) {
                 this.m_id = categoryData.getInt(0);
-                this.m_name = categoryData.getString(1);
-                this.m_parent_category_id = categoryData.getInt(2);
-                this.m_defaultSizeType = categoryData.getInt(3);
-                this.m_icon = categoryData.getString(4);
+                this.m_name_en = categoryData.getString(1);
+                this.m_name_de = categoryData.getString(2);
+                this.m_parent_category_id = categoryData.getInt(3);
+                this.m_defaultSizeType = categoryData.getInt(4);
+                this.m_icon = categoryData.getString(5);
             }
             categoryData.close();
         }
@@ -60,11 +64,25 @@ public class Category {
     }
 
     public String getName() {
-        return m_name;
+        SharedPreferences prefs = context.getSharedPreferences(Constants.MY_PREFERENCES, Activity.MODE_PRIVATE);
+        String language = prefs.getString(Constants.KEY_LANGUAGE, "");
+        System.out.println("Cat lang: " + language);
+        switch (language) {
+            case "en":
+                return m_name_en;
+            case "de":
+                return m_name_de;
+            default:
+                return m_name_en;
+        }
     }
 
-    public void setName(String m_name) {
-        this.m_name = m_name;
+    public void setNameEn(String m_name) {
+        this.m_name_en = m_name;
+    }
+
+    public void setNameDe(String m_name) {
+        this.m_name_de = m_name;
     }
 
     public int getParentCategoryId() {
@@ -100,7 +118,16 @@ public class Category {
         helper.init();
         helper.setTable(Constants.CATEGORIES_DB_TABLE);
         helper.setColumns(new String[]{"*"});
-        helper.setOrderBy("name ASC");
+        SharedPreferences prefs = p_context.getSharedPreferences(Constants.MY_PREFERENCES, Activity.MODE_PRIVATE);
+        String language = prefs.getString(Constants.KEY_LANGUAGE, "");
+        switch (language) {
+            case "en":
+                helper.setOrderBy("name_en ASC");
+            case "de":
+                helper.setOrderBy("name_de ASC");
+            default:
+                helper.setOrderBy("name_en ASC");
+        }
         ArrayList<Category> allCategories = new ArrayList<>();
 
         Cursor allCategoriesIterator = helper.select();
@@ -108,11 +135,12 @@ public class Category {
 
         while (!allCategoriesIterator.isAfterLast()) {
             Category category = new Category(p_context, allCategoriesIterator.getInt(0), helper);
-            category.setName(allCategoriesIterator.getString(1));
-            category.setParentCategoryId(allCategoriesIterator.getInt(2));
-            category.setDefaultSizeType(allCategoriesIterator.getInt(3));
+            category.setNameEn(allCategoriesIterator.getString(1));
+            category.setNameDe(allCategoriesIterator.getString(2));
+            category.setParentCategoryId(allCategoriesIterator.getInt(3));
+            category.setDefaultSizeType(allCategoriesIterator.getInt(4));
 
-            category.setIcon(allCategoriesIterator.getString(4));
+            category.setIcon(allCategoriesIterator.getString(5));
             allCategories.add(category);
             allCategoriesIterator.moveToNext();
         }
@@ -133,8 +161,12 @@ public class Category {
             String dbColumnValue = p_values.get(key);
 
             switch (key) {
-                case "name":
-                    this.setName(dbColumnValue);
+                case "name_en":
+                    this.setNameEn(dbColumnValue);
+                    break;
+
+                case "name_de":
+                    this.setNameDe(dbColumnValue);
                     break;
 
                 case "parent_category_id":
@@ -161,7 +193,7 @@ public class Category {
     public void save() {
         if(this.m_id == 0) {
             // insert as new categoy
-            this.m_dbHelper.setWhere("", new String[]{"name='" + this.m_name + "'"});
+            this.m_dbHelper.setWhere("", new String[]{"name_en='" + this.m_name_en + "'"});
             Cursor existingRowCursor = this.m_dbHelper.select();
             existingRowCursor.moveToFirst();
             int rowId;
@@ -198,7 +230,8 @@ public class Category {
      */
     private void setAllValuesToDbHelper(){
         this.m_dbHelper.deleteValues();
-        this.m_dbHelper.setStringValue("name", this.m_name);
+        this.m_dbHelper.setStringValue("name_en", this.m_name_en);
+        this.m_dbHelper.setStringValue("name_de", this.m_name_de);
         this.m_dbHelper.setIntegerValue("parent_category_id", this.m_parent_category_id);
         this.m_dbHelper.setIntegerValue("default_attribute_type", this.m_defaultSizeType);
         String iconValue = (this.m_icon != null) ? this.m_icon : Constants.DEFAULT_CAT_ICON;

@@ -56,6 +56,8 @@ public class TabsFragmentActivity extends FragmentActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tabs);
 
+        loadLocale();
+
         menuItems[0] = getString(R.string.title_activity_categories);
         menuItems[1] = getString(R.string.title_activity_compare);
         menuItems[2] = getString(R.string.title_activity_wishlist2);
@@ -64,7 +66,6 @@ public class TabsFragmentActivity extends FragmentActivity  {
         setupNavigationDrawer();
         setupFloatingActionMenu();
 
-        loadLocale();
 
         mTitle = getString(R.string.app_name);
         if(getActionBar() != null) {
@@ -135,31 +136,10 @@ public class TabsFragmentActivity extends FragmentActivity  {
 
     public void loadLocale()
     {
-        String langPref = "Language";
         SharedPreferences prefs = getSharedPreferences(Constants.MY_PREFERENCES, Activity.MODE_PRIVATE);
-        String language = prefs.getString(Constants.KEY_DS_4_NAME, "");
-        System.out.println("laaang: " + language);
-        String lang = "en";
-        switch (language) {
-            case "German":
-                lang = "de";
-                break;
-            case "English":
-                lang = "en";
-                break;
-            default:
-                break;
-        }
-        changeLang(lang);
+        String language = prefs.getString(Constants.KEY_LANGUAGE, "");
+        changeLang(language);
     }
-    /* public void saveLocale(String lang)
-    {
-        String langPref = "Language";
-        SharedPreferences prefs = getSharedPreferences(Constants.MY_PREFERENCES, Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(langPref, lang);
-        editor.commit();
-    }*/
 
     public void changeLang(String lang)
     {
@@ -168,7 +148,7 @@ public class TabsFragmentActivity extends FragmentActivity  {
         myLocale = new Locale(lang);
         //saveLocale(lang);
         Locale.setDefault(myLocale);
-        android.content.res.Configuration config = new android.content.res.Configuration();
+        android.content.res.Configuration config = getBaseContext().getResources().getConfiguration();
         config.locale = myLocale;
         getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
     }
@@ -193,11 +173,19 @@ public class TabsFragmentActivity extends FragmentActivity  {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         mDrawerToggle.syncState();
+        loadLocale();
     }
 
     @Override
     protected void onPostResume() {
         super.onResume();
+        loadLocale();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadLocale();
     }
 
     @Override
@@ -217,9 +205,13 @@ public class TabsFragmentActivity extends FragmentActivity  {
         menu = (FloatingActionMenu) findViewById(R.id.menu);
         menu.setClosedOnTouchOutside(true);
         com.github.clans.fab.FloatingActionButton fab_add_compare = (FloatingActionButton) findViewById(R.id.add_compare);
+        fab_add_compare.setLabelText(getString(R.string.title_activity_saved_compares));
         com.github.clans.fab.FloatingActionButton fab_add_wishlist_item = (FloatingActionButton) findViewById(R.id.add_wishlist_item);
+        fab_add_wishlist_item.setLabelText(getString(R.string.title_activity_new_Wishlistitem));
         com.github.clans.fab.FloatingActionButton fab_add_category = (FloatingActionButton) findViewById(R.id.add_category);
+        fab_add_category.setLabelText(getString(R.string.title_activity_new_category));
         com.github.clans.fab.FloatingActionButton fab_add_item = (FloatingActionButton) findViewById(R.id.add_item);
+        fab_add_item.setLabelText(getString(R.string.title_activity_new_item));
         fab_add_compare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -310,7 +302,7 @@ public class TabsFragmentActivity extends FragmentActivity  {
                     case 4:
                         Intent intent = new Intent();
                         intent.setClassName(getPackageName(), getPackageName() + ".views.SettingsActivity");
-                        startActivity(intent);
+                        startActivityForResult(intent, 0);
                         break;
                     default:
                 }
@@ -323,14 +315,14 @@ public class TabsFragmentActivity extends FragmentActivity  {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                getActionBar().setTitle("Menu");
+                getActionBar().setTitle(getString(R.string.nav_drawer_title));
                 invalidateOptionsMenu();
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                getActionBar().setTitle(mTitle);
+                getActionBar().setTitle(getString(R.string.app_name));
                 invalidateOptionsMenu();
             }
         };

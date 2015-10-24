@@ -143,10 +143,11 @@ public class DefaultSetup {
             if (id > 0) {
                 String[] initial_cat = res.getStringArray(id);
                 HashMap<String, String> cat_attributes = new HashMap<>();
-                cat_attributes.put("name", initial_cat[0]);
-                cat_attributes.put("parent_category_id", initial_cat[1]);
-                cat_attributes.put("default_attribute_type", initial_cat[2]);
-                cat_attributes.put("icon", initial_cat[3]);
+                cat_attributes.put("name_en", initial_cat[0]);
+                cat_attributes.put("name_de", initial_cat[1]);
+                cat_attributes.put("parent_category_id", initial_cat[2]);
+                cat_attributes.put("default_attribute_type", initial_cat[3]);
+                cat_attributes.put("icon", initial_cat[4]);
 
                 Category defaultCategory = new Category(m_context, 0, this.m_dbHelper);
                 defaultCategory.edit(cat_attributes);
@@ -167,8 +168,9 @@ public class DefaultSetup {
             if (id > 0) {
                 String[] initial_color = res.getStringArray(id);
                 HashMap<String, String> colors_attributes = new HashMap<>();
-                colors_attributes.put("name", initial_color[0]);
-                colors_attributes.put("hex", initial_color[1]);
+                colors_attributes.put("name_en", initial_color[0]);
+                colors_attributes.put("name_de", initial_color[1]);
+                colors_attributes.put("hex", initial_color[2]);
 
                 Color color = new Color(m_context, 0, this.m_dbHelper);
                 color.edit(colors_attributes);

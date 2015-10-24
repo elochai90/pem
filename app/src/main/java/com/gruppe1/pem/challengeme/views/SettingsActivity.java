@@ -1,6 +1,7 @@
 package com.gruppe1.pem.challengeme.views;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -53,7 +54,9 @@ public class SettingsActivity extends PreferenceActivity {
         setupActionBar();
         sharedPreferences = getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
+        setTitle(getString(R.string.title_activity_settings));
     }
+
 
     /**
      * Set up the {@link android.app.ActionBar}, if the API is available.
@@ -72,6 +75,9 @@ public class SettingsActivity extends PreferenceActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
+//            setResult(RESULT_OK);
+//            super.onBackPressed();
+//            return true;
             NavUtils.navigateUpFromSameTask(this);
             return true;
         }
@@ -169,14 +175,13 @@ public class SettingsActivity extends PreferenceActivity {
         bindPreferenceSummaryToValue(findPreference("Shoes"), shoes_default);
 
         String language_def;
-        if (sharedPreferences.contains(Constants.KEY_DS_4_NAME)) {
-            language_def = sharedPreferences.getString(Constants.KEY_DS_4_NAME, "");
+        if (sharedPreferences.contains(Constants.KEY_LANGUAGE)) {
+            language_def = sharedPreferences.getString(Constants.KEY_LANGUAGE, "");
         } else {
             language_def = PreferenceManager
                     .getDefaultSharedPreferences(findPreference("Language").getContext())
                     .getString(findPreference("Language").getKey(), "");
         }
-        System.out.println("Language: " + language_def);
         bindPreferenceSummaryToValue(findPreference("Language"), language_def);
 
         Set<String> favorite_colors;
@@ -251,19 +256,38 @@ public class SettingsActivity extends PreferenceActivity {
                     editor.apply();
                 }
                 else if(preference.getKey().equals("Language")) {
-                    System.out.println(stringValue);
-                    String lang = "en";
+                    String lang_in_correct_lang;
+                    String lang;
+                    int index_lang;
                     switch (stringValue) {
                         case "German":
+                        case "Deutsch":
+                        case "de":
                             lang = "de";
+                            index_lang = 0;
+                            lang_in_correct_lang = getString(R.string.settings_lang_de);
                             break;
                         case "English":
+                        case "Englisch":
+                        case "en":
                             lang = "en";
+                            index_lang = 1;
+                            lang_in_correct_lang = getString(R.string.settings_lang_en);
                             break;
                         default:
+                            lang = "en";
+                            index_lang = 1;
+                            lang_in_correct_lang = getString(R.string.settings_lang_en);
                             break;
                     }
-                    editor.putString(Constants.KEY_DS_4_NAME, stringValue);
+//                     Set the summary to reflect the new value.
+                    listPreference.setValueIndex(index_lang);
+                    preference.setSummary(
+                            index_lang >= 0
+                                    ? listPreference.getEntries()[index_lang]
+                                    : null);
+                    preference.setSummary(lang_in_correct_lang);
+                    editor.putString(Constants.KEY_LANGUAGE, lang);
                     editor.apply();
 
                     changeLang(lang);
@@ -315,7 +339,7 @@ public class SettingsActivity extends PreferenceActivity {
         myLocale = new Locale(lang);
 
         Locale.setDefault(myLocale);
-        android.content.res.Configuration config = new android.content.res.Configuration();
+        android.content.res.Configuration config = getBaseContext().getResources().getConfiguration();
         config.locale = myLocale;
         getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
     }

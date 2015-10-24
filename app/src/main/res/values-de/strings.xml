@@ -95,6 +95,7 @@
     <!--navigation drawer-->
     <string name="nav_drawer_item_desc_icon">Icon</string>
     <string name="nav_drawer_desc_weatherImage">Wetter Bild</string>
+    <string name="nav_drawer_title">Menü</string>
 
 
     <string name="abort">Abbrechen</string>
@@ -104,8 +105,9 @@
     <string name="cancel">Abbrechen</string>
     <string name="new_item_desc_itemImage">Item Bild</string>
 
-
     <!-- Settings -->
+    <string name="settings_lang_en">Englisch</string>
+    <string name="settings_lang_de">Deutsch</string>
     <string name="language">Sprache:</string>
     <string name="chooseLanguage">Wähle deine Sprache:</string>
     <string name="standardSizes">Standardgrößen:</string>
@@ -116,41 +118,6 @@
     <string name="chooseColor">Wähle deine Lieblingsfarben:</string>
     <string name="showWishlistItems">Zeige Wunschlisten Items im Compare</string>
 
-    <!--Categories-->
-    <string name="cat_sweater">Pullover</string>
-    <string name="cat_trousers">Hosen</string>
-    <string name="cat_skirts">Röcke</string>
-    <string name="cat_coats">Mäntel</string>
-    <string name="cat_tops">Tops</string>
-    <string name="cat_socks">Socken</string>
-    <string name="cat_pants">Kurze Hosen</string>
-    <string name="cat_swimwear">Bademode</string>
-    <string name="cat_underwear">Unterwäsche</string>
-    <string name="cat_suits">Anzüge</string>
-    <string name="cat_shoes">Schuhe</string>
-    <string name="cat_dresses">Kleider</string>
-    <string name="cat_accessoires">Accessoires</string>
-
-
-    <!--Colors-->
-    <string name="color_black">Schwarz</string>
-    <string name="color_grey">Grau</string>
-    <string name="color_white">Weiß</string>
-    <string name="color_beige">Beige</string>
-    <string name="color_brown">Braun</string>
-    <string name="color_gold">Gold</string>
-    <string name="color_silver">Silber</string>
-    <string name="color_bronze">Bronze</string>
-    <string name="color_blue">Blau</string>
-    <string name="color_petrol">Petrol</string>
-    <string name="color_turquoise">Türkis</string>
-    <string name="color_green">Grün</string>
-    <string name="color_olive">Olive</string>
-    <string name="color_purple">Lila</string>
-    <string name="color_red">Rot</string>
-    <string name="color_pink">Pink</string>
-    <string name="color_orange">Orange</string>
-    <string name="color_yellow">Gelb</string>
 
     <!--Attribute Types-->
     <string name="attr_type_size">Größe</string>

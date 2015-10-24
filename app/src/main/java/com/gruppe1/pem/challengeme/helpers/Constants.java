@@ -36,12 +36,12 @@ public class Constants {
     public static final String KEY_FIRST_DB_INIT = "FirstDbInit";
     public static final String KEY_WISHLIST_IN_COMPARE = "ShowWishlistItemsInCompares";
     public static final String KEY_FAVORITE_COLORS = "FavoriteColors";
+    public static final String KEY_LANGUAGE = "Language";
 
     // Shared Preferences Keys for default sizes
     public static final String KEY_DS_1_NAME = "Tops";
     public static final String KEY_DS_2_NAME = "Bottoms";
     public static final String KEY_DS_3_NAME = "Shoes";
-    public static final String KEY_DS_4_NAME = "Language";
     public static final String KEY_DS_NONE = "None";
 
     // Shared Preferences Keys for the weather

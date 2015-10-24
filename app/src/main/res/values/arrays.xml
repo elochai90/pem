@@ -67,8 +67,8 @@
 
     </string-array>
     <string-array name="language_text">
-        <item>German</item>
-        <item>English</item>
+        <item>@string/settings_lang_de</item>
+        <item>@string/settings_lang_en</item>
 
     </string-array>
 
@@ -93,79 +93,92 @@
     <!--<default_attribute_type></default_attribute_type>-->
     <!--<icon></icon>-->
     <string-array name="initial_cat_sweater">
-        <item>@string/cat_sweater</item>
+        <item>@string/cat_sweater_en</item>
+        <item>@string/cat_sweater_de</item>
         <item>0</item>
         <item>0</item>
         <item>pulli</item>
     </string-array>
     <string-array name="initial_cat_trousers">
-        <item>@string/cat_trousers</item>
+        <item>@string/cat_trousers_en</item>
+        <item>@string/cat_trousers_de</item>
         <item>0</item>
         <item>1</item>
         <item>hose</item>
     </string-array>
     <string-array name="initial_cat_skirts">
-        <item>@string/cat_skirts</item>
+        <item>@string/cat_skirts_en</item>
+        <item>@string/cat_skirts_de</item>
         <item>0</item>
         <item>1</item>
         <item>rock</item>
     </string-array>
     <string-array name="initial_cat_coats">
-        <item>@string/cat_coats</item>
+        <item>@string/cat_coats_en</item>
+        <item>@string/cat_coats_de</item>
         <item>0</item>
         <item>0</item>
         <item>mantel</item>
     </string-array>
     <string-array name="initial_cat_tops">
-        <item>@string/cat_tops</item>
+        <item>@string/cat_tops_en</item>
+        <item>@string/cat_tops_de</item>
         <item>0</item>
         <item>0</item>
         <item>top</item>
     </string-array>
     <string-array name="initial_cat_socks">
-        <item>@string/cat_socks</item>
+        <item>@string/cat_socks_en</item>
+        <item>@string/cat_socks_de</item>
         <item>0</item>
         <item>2</item>
         <item>socken</item>
     </string-array>
     <string-array name="initial_cat_pants">
-        <item>@string/cat_pants</item>
+        <item>@string/cat_pants_en</item>
+        <item>@string/cat_pants_de</item>
         <item>0</item>
         <item>1</item>
         <item>shorts</item>
     </string-array>
     <string-array name="initial_cat_swimwear">
-        <item>@string/cat_swimwear</item>
+        <item>@string/cat_swimwear_en</item>
+        <item>@string/cat_swimwear_de</item>
         <item>0</item>
         <item>1</item>
         <item>bademode</item>
     </string-array>
     <string-array name="initial_cat_underwear">
-        <item>@string/cat_underwear</item>
+        <item>@string/cat_underwear_en</item>
+        <item>@string/cat_underwear_de</item>
         <item>0</item>
         <item>1</item>
         <item>unterwaesche</item>
     </string-array>
     <string-array name="initial_cat_suits">
-        <item>@string/cat_suits</item>
+        <item>@string/cat_suits_en</item>
+        <item>@string/cat_suits_de</item>
         <item>0</item>
         <item>1</item>
         <item>anzug</item>
     </string-array>
     <string-array name="initial_cat_shoes">
-        <item>@string/cat_shoes</item>
+        <item>@string/cat_shoes_en</item>
+        <item>@string/cat_shoes_de</item>
         <item>0</item>
         <item>2</item>
         <item>sneaker</item>
     </string-array>
     <string-array name="initial_cat_dresses">
-        <item>@string/cat_dresses</item>
+        <item>@string/cat_dresses_en</item>
+        <item>@string/cat_dresses_de</item>
         <item>0</item>
         <item>0</item>
         <item>kleid</item>
     </string-array>
     <string-array name="initial_cat_accessoires">
-        <item>@string/cat_accessoires</item>
+        <item>@string/cat_accessoires_en</item>
+        <item>@string/cat_accessoires_de</item>
         <item>0</item>
         <item>-1</item>
         <item>accessoires</item>
@@ -194,75 +207,93 @@
         <item>@array/initial_color_yellow</item>
     </array>
     <string-array name="initial_color_black">
-        <item>@string/color_black</item>
+        <item>@string/color_black_en</item>
+        <item>@string/color_black_de</item>
         <item>#000000</item>
     </string-array>
     <string-array name="initial_color_grey">
-        <item>@string/color_grey</item>
+        <item>@string/color_grey_en</item>
+        <item>@string/color_grey_de</item>
         <item>#888888</item>
     </string-array>
     <string-array name="initial_color_white">
-        <item>@string/color_white</item>
+        <item>@string/color_white_en</item>
+        <item>@string/color_white_de</item>
         <item>#FFFFFF</item>
     </string-array>
     <string-array name="initial_color_beige">
-        <item>@string/color_beige</item>
+        <item>@string/color_beige_en</item>
+        <item>@string/color_beige_de</item>
         <item>#F5DEB3</item>
     </string-array>
     <string-array name="initial_color_brown">
-        <item>@string/color_brown</item>
+        <item>@string/color_brown_en</item>
+        <item>@string/color_brown_de</item>
         <item>#8B4513</item>
     </string-array>
     <string-array name="initial_color_gold">
-        <item>@string/color_gold</item>
+        <item>@string/color_gold_en</item>
+        <item>@string/color_gold_de</item>
         <item>#FFD700</item>
     </string-array>
     <string-array name="initial_color_silver">
-        <item>@string/color_silver</item>
+        <item>@string/color_silver_en</item>
+        <item>@string/color_silver_de</item>
         <item>#C0C0C0</item>
     </string-array>
     <string-array name="initial_color_bronze">
-        <item>@string/color_bronze</item>
+        <item>@string/color_bronze_en</item>
+        <item>@string/color_bronze_de</item>
         <item>#904E3B</item>
     </string-array>
     <string-array name="initial_color_blue">
-        <item>@string/color_blue</item>
+        <item>@string/color_blue_en</item>
+        <item>@string/color_blue_de</item>
         <item>#0000FF</item>
     </string-array>
     <string-array name="initial_color_petrol">
-        <item>@string/color_petrol</item>
+        <item>@string/color_petrol_en</item>
+        <item>@string/color_petrol_de</item>
         <item>#5F9EA0</item>
     </string-array>
     <string-array name="initial_color_turqouise">
-        <item>@string/color_turquoise</item>
+        <item>@string/color_turquoise_en</item>
+        <item>@string/color_turquoise_de</item>
         <item>#40E0D0</item>
     </string-array>
     <string-array name="initial_color_green">
-        <item>@string/color_green</item>
-        <item>#00FF00</item>
+        <item>@string/color_green_en</item>
+        <item>@string/color_green_de</item>
+        <item>#ff00ab00</item>
     </string-array>
     <string-array name="initial_color_olive">
-        <item>@string/color_olive</item>
+        <item>@string/color_olive_en</item>
+        <item>@string/color_olive_de</item>
         <item>#556B2F</item>
     </string-array>
     <string-array name="initial_color_purple">
-        <item>@string/color_purple</item>
+        <item>@string/color_purple_en</item>
+        <item>@string/color_purple_de</item>
         <item>#800080</item>
     </string-array>
     <string-array name="initial_color_red">
-        <item>@string/color_red</item>
+        <item>@string/color_red_en</item>
+        <item>@string/color_red_de</item>
         <item>#FF0000</item>
     </string-array>
     <string-array name="initial_color_pink">
-        <item>@string/color_pink</item>
+        <item>@string/color_pink_en</item>
+        <item>@string/color_pink_de</item>
         <item>#FFC0CB</item>
     </string-array>
     <string-array name="initial_color_orange">
-        <item>@string/color_orange</item>
+        <item>@string/color_orange_en</item>
+        <item>@string/color_orange_de</item>
         <item>#FFA500</item>
     </string-array>
     <string-array name="initial_color_yellow">
-        <item>@string/color_yellow</item>
+        <item>@string/color_yellow_en</item>
+        <item>@string/color_yellow_de</item>
         <item>#FFFF00</item>
     </string-array>
 

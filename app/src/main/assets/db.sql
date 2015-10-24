@@ -1,6 +1,7 @@
 CREATE TABLE `orga_nice_categories` (
     `_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    `name` VARCHAR(50) NOT NULL DEFAULT "MyCategory",
+    `name_en` VARCHAR(50) NOT NULL DEFAULT "",
+    `name_de` VARCHAR(50) NOT NULL DEFAULT "",
     `parent_category_id` INT(5) NOT NULL DEFAULT 0,
     `default_attribute_type` INT (3) NOT NULL DEFAULT -1,
     `icon` VARCHAR(50) DEFAULT "kleiderbuegel"
@@ -50,6 +51,7 @@ CREATE TABLE `orga_nice_compares` (
 
 CREATE TABLE `orga_nice_colors` (
     `_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    `name` VARCHAR(50) NOT NULL DEFAULT "",
+    `name_en` VARCHAR(50) NOT NULL DEFAULT "",
+    `name_de` VARCHAR(50) NOT NULL DEFAULT "",
     `hex` VARCHAR(50) NOT NULL DEFAULT ""
 );

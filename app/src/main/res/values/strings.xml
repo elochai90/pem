@@ -1,3 +1,74 @@
 <resources>
 
+    <!--Categories German-->
+    <string name="cat_sweater_de">Pullover</string>
+    <string name="cat_trousers_de">Hosen</string>
+    <string name="cat_skirts_de">Röcke</string>
+    <string name="cat_coats_de">Mäntel</string>
+    <string name="cat_tops_de">Tops</string>
+    <string name="cat_socks_de">Socken</string>
+    <string name="cat_pants_de">Kurze Hosen</string>
+    <string name="cat_swimwear_de">Bademode</string>
+    <string name="cat_underwear_de">Unterwäsche</string>
+    <string name="cat_suits_de">Anzüge</string>
+    <string name="cat_shoes_de">Schuhe</string>
+    <string name="cat_dresses_de">Kleider</string>
+    <string name="cat_accessoires_de">Accessoires</string>
+
+    <!--Colors German-->
+    <string name="color_black_de">Schwarz</string>
+    <string name="color_grey_de">Grau</string>
+    <string name="color_white_de">Weiß</string>
+    <string name="color_beige_de">Beige</string>
+    <string name="color_brown_de">Braun</string>
+    <string name="color_gold_de">Gold</string>
+    <string name="color_silver_de">Silber</string>
+    <string name="color_bronze_de">Bronze</string>
+    <string name="color_blue_de">Blau</string>
+    <string name="color_petrol_de">Petrol</string>
+    <string name="color_turquoise_de">Türkis</string>
+    <string name="color_green_de">Grün</string>
+    <string name="color_olive_de">Olive</string>
+    <string name="color_purple_de">Lila</string>
+    <string name="color_red_de">Rot</string>
+    <string name="color_pink_de">Pink</string>
+    <string name="color_orange_de">Orange</string>
+    <string name="color_yellow_de">Gelb</string>
+
+
+
+    <!--Categories English-->
+    <string name="cat_sweater_en">Sweater</string>
+    <string name="cat_trousers_en">Trousers</string>
+    <string name="cat_skirts_en">Skirts</string>
+    <string name="cat_coats_en">Coats</string>
+    <string name="cat_tops_en">Tops</string>
+    <string name="cat_socks_en">Socks</string>
+    <string name="cat_pants_en">Pants</string>
+    <string name="cat_swimwear_en">Swimwear</string>
+    <string name="cat_underwear_en">Underwear</string>
+    <string name="cat_suits_en">Suits</string>
+    <string name="cat_shoes_en">Shoes</string>
+    <string name="cat_dresses_en">Dresses</string>
+    <string name="cat_accessoires_en">Accessoires</string>
+
+    <!--Colors English-->
+    <string name="color_black_en">Black</string>
+    <string name="color_grey_en">Grey</string>
+    <string name="color_white_en">White</string>
+    <string name="color_beige_en">Beige</string>
+    <string name="color_brown_en">Brown</string>
+    <string name="color_gold_en">Gold</string>
+    <string name="color_silver_en">Silver</string>
+    <string name="color_bronze_en">Bronze</string>
+    <string name="color_blue_en">Blue</string>
+    <string name="color_petrol_en">Petrol</string>
+    <string name="color_turquoise_en">Turquoise</string>
+    <string name="color_green_en">Green</string>
+    <string name="color_olive_en">Olive</string>
+    <string name="color_purple_en">Purple</string>
+    <string name="color_red_en">Red</string>
+    <string name="color_pink_en">Pink</string>
+    <string name="color_orange_en">Orange</string>
+    <string name="color_yellow_en">Yellow</string>
 </resources>
