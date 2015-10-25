@@ -314,47 +314,56 @@
     <!--<value_type></value_type>-->
     <!--<is_unique></is_unique>-->
     <string-array name="initial_attr_type_size">
-        <item>@string/attr_type_size</item>
+        <item>@string/attr_type_size_en</item>
+        <item>@string/attr_type_size_de</item>
         <item>1</item>
         <item>1</item>
     </string-array>
     <string-array name="initial_attr_type_ex_color">
-        <item>@string/attr_type_ex_color</item>
+        <item>@string/attr_type_ex_color_en</item>
+        <item>@string/attr_type_ex_color_de</item>
         <item>3</item>
         <item>1</item>
     </string-array>
     <string-array name="initial_attr_type_brand">
-        <item>@string/attr_type_brand</item>
+        <item>@string/attr_type_brand_en</item>
+        <item>@string/attr_type_brand_de</item>
         <item>1</item>
         <item>1</item>
     </string-array>
     <string-array name="initial_attr_type_material">
-        <item>@string/attr_type_material</item>
+        <item>@string/attr_type_material_en</item>
+        <item>@string/attr_type_material_de</item>
         <item>1</item>
         <item>1</item>
     </string-array>
     <string-array name="initial_attr_type_price">
-        <item>@string/attr_type_price</item>
+        <item>@string/attr_type_price_en</item>
+        <item>@string/attr_type_price_de</item>
         <item>1</item>
         <item>1</item>
     </string-array>
     <string-array name="initial_attr_type_store">
-        <item>@string/attr_type_store</item>
+        <item>@string/attr_type_store_en</item>
+        <item>@string/attr_type_store_de</item>
         <item>1</item>
         <item>1</item>
     </string-array>
     <string-array name="initial_attr_type_buy_date">
-        <item>@string/attr_type_buy_date</item>
+        <item>@string/attr_type_buy_date_en</item>
+        <item>@string/attr_type_buy_date_de</item>
         <item>4</item>
         <item>1</item>
     </string-array>
     <string-array name="initial_attr_type_pattern">
-        <item>@string/attr_type_pattern</item>
+        <item>@string/attr_type_pattern_en</item>
+        <item>@string/attr_type_pattern_de</item>
         <item>2</item>
         <item>1</item>
     </string-array>
     <string-array name="initial_attr_type_other">
-        <item>@string/attr_type_other</item>
+        <item>@string/attr_type_other_en</item>
+        <item>@string/attr_type_other_de</item>
         <item>1</item>
         <item>1</item>
     </string-array>

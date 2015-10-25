@@ -145,12 +145,6 @@ public class CollectionItemsFragment extends Fragment {
             catArray.add(new ListItemIconName(tmpCat.getId(), iconId, tmpCat.getName(), null));
         }
         gridCateoriesAdapter = new CategoriesGridOverlayAdapter(activity, R.layout.grid_item_overlay, catArray);
-        attrCategoryValue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setupCategoryOverlay();
-            }
-        });
 
         // Setup Colors Adapter
         ArrayList<com.gruppe1.pem.challengeme.Color> allColors = com.gruppe1.pem.challengeme.Color.getAllColors(activity);
@@ -232,6 +226,12 @@ public class CollectionItemsFragment extends Fragment {
             setItemData();
         }
         setupAttributeViews();
+        attrCategoryValue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setupCategoryOverlay();
+            }
+        });
 
         return rootView;
     }
@@ -441,7 +441,7 @@ public class CollectionItemsFragment extends Fragment {
      */
     private void setAttributeLayout(AttributeType attributeType, Object attributeValue) {
 
-        int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics());
+        int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 150, getResources().getDisplayMetrics());
         int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, getResources().getDisplayMetrics());
         int with_background_height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, getResources().getDisplayMetrics());
 
@@ -554,12 +554,13 @@ public class CollectionItemsFragment extends Fragment {
             textAttributeValue.setLayoutParams(attibuteValueLayoutParams);
             textAttributeValue.setId(R.id.stringAttrField);
 
-            if(attributeType.getName().equals("Size")) {
+            if(attributeType.getName().equals(getResources().getString(R.string.attr_type_size_en)) || attributeType.getName().equals(getResources().getString(R.string.attr_type_size_de))) {
                 textAttributeValue.setTag("size");
+                System.out.println("Tag size set");
             }
             if(attributeValue != null) {
                 textAttributeValue.setText(attributeValue.toString());
-            } else if(attributeType.getName().equals("Size")) {
+            } else if(attributeType.getName().equals(getString(R.string.attr_type_size_en)) || attributeType.getName().equals(getResources().getString(R.string.attr_type_size_de))) {
                 textAttributeValue.setText(getSizeValueBySizeType(attrCategorySelected.getDefaultSizeType()));
             }
 

@@ -119,15 +119,4 @@
     <string name="showWishlistItems">Zeige Wunschlisten Items im Compare</string>
 
 
-    <!--Attribute Types-->
-    <string name="attr_type_size">Größe</string>
-    <string name="attr_type_ex_color">Exakte Farbe</string>
-    <string name="attr_type_brand">Marke</string>
-    <string name="attr_type_material">Material</string>
-    <string name="attr_type_price">Preis</string>
-    <string name="attr_type_store">Geschäft</string>
-    <string name="attr_type_buy_date">Kaufsdatum</string>
-    <string name="attr_type_pattern">Hat Muster</string>
-    <string name="attr_type_other">Sonstiges</string>
-
 </resources>

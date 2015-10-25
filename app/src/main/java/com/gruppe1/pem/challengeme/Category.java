@@ -66,7 +66,6 @@ public class Category {
     public String getName() {
         SharedPreferences prefs = context.getSharedPreferences(Constants.MY_PREFERENCES, Activity.MODE_PRIVATE);
         String language = prefs.getString(Constants.KEY_LANGUAGE, "");
-        System.out.println("Cat lang: " + language);
         switch (language) {
             case "en":
                 return m_name_en;

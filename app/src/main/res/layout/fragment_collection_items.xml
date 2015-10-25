@@ -63,7 +63,7 @@
             android:paddingRight="10dp">
             <TextView
                 android:text="@string/new_item_label_name"
-                android:layout_width="100dp"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"/>
             <EditText
@@ -98,7 +98,7 @@
                 android:paddingRight="10dp">
                 <TextView
                     android:id="@+id/attrCategoryName"
-                    android:layout_width="100dp"
+                    android:layout_width="150dp"
                     android:layout_height="40dp"
                     android:layout_gravity="center_vertical"
                     android:gravity="center_vertical"
@@ -122,7 +122,7 @@
                 android:paddingRight="10dp">
                 <TextView
                     android:id="@+id/attrColorName"
-                    android:layout_width="100dp"
+                    android:layout_width="150dp"
                     android:layout_height="40dp"
                     android:layout_gravity="center_vertical"
                     android:gravity="center_vertical"
@@ -146,7 +146,7 @@
                 android:paddingRight="10dp">
                 <TextView
                     android:id="@+id/attrWishlistName"
-                    android:layout_width="100dp"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:textSize="18sp"/>
                 <Switch

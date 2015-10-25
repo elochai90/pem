@@ -20,7 +20,8 @@ CREATE TABLE `orga_nice_items` (
 
 CREATE TABLE `orga_nice_attribute_types` (
      `_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-     `name` VARCHAR(50) NOT NULL DEFAULT "",
+     `name_en` VARCHAR(50) NOT NULL DEFAULT "",
+     `name_de` VARCHAR(50) NOT NULL DEFAULT "",
      `value_type` INT(3) NOT NULL DEFAULT 0,
      `is_unique` INT(1) DEFAULT 0
 );

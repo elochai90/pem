@@ -138,14 +138,22 @@ public class TabsFragmentActivity extends FragmentActivity  {
     {
         SharedPreferences prefs = getSharedPreferences(Constants.MY_PREFERENCES, Activity.MODE_PRIVATE);
         String language = prefs.getString(Constants.KEY_LANGUAGE, "");
+
+//        System.out.println("Load Language: " + Locale.getDefault());
         changeLang(language);
     }
 
     public void changeLang(String lang)
     {
-        if (lang.equalsIgnoreCase(""))
-            return;
-        myLocale = new Locale(lang);
+        if (lang.equalsIgnoreCase("")) {
+            myLocale = Locale.getDefault();
+            SharedPreferences sharedPreferences = getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(Constants.KEY_LANGUAGE, myLocale.getCountry().toLowerCase());
+            editor.apply();
+        } else {
+            myLocale = new Locale(lang);
+        }
         //saveLocale(lang);
         Locale.setDefault(myLocale);
         android.content.res.Configuration config = getBaseContext().getResources().getConfiguration();

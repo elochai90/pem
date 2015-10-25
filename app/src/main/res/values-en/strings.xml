@@ -119,15 +119,4 @@
     <string name="showWishlistItems">Show Wishlist Item in Compares:</string>
 
 
-    <!--Attribute Types-->
-    <string name="attr_type_size">Size</string>
-    <string name="attr_type_ex_color">Exact Color</string>
-    <string name="attr_type_brand">Brand</string>
-    <string name="attr_type_material">Material</string>
-    <string name="attr_type_price">Price</string>
-    <string name="attr_type_store">Store</string>
-    <string name="attr_type_buy_date">Buy Date</string>
-    <string name="attr_type_pattern">Has Pattern</string>
-    <string name="attr_type_other">Other</string>
-
 </resources>

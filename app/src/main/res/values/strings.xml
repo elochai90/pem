@@ -71,4 +71,30 @@
     <string name="color_pink_en">Pink</string>
     <string name="color_orange_en">Orange</string>
     <string name="color_yellow_en">Yellow</string>
+
+
+
+    <!--Attribute Types German-->
+    <string name="attr_type_size_de">Größe</string>
+    <string name="attr_type_ex_color_de">Exakte Farbe</string>
+    <string name="attr_type_brand_de">Marke</string>
+    <string name="attr_type_material_de">Material</string>
+    <string name="attr_type_price_de">Preis</string>
+    <string name="attr_type_store_de">Geschäft</string>
+    <string name="attr_type_buy_date_de">Kaufsdatum</string>
+    <string name="attr_type_pattern_de">Hat Muster</string>
+    <string name="attr_type_other_de">Sonstiges</string>
+
+
+    <!--Attribute Types English-->
+    <string name="attr_type_size_en">Size</string>
+    <string name="attr_type_ex_color_en">Exact Color</string>
+    <string name="attr_type_brand_en">Brand</string>
+    <string name="attr_type_material_en">Material</string>
+    <string name="attr_type_price_en">Price</string>
+    <string name="attr_type_store_en">Store</string>
+    <string name="attr_type_buy_date_en">Buy Date</string>
+    <string name="attr_type_pattern_en">Has Pattern</string>
+    <string name="attr_type_other_en">Other</string>
+
 </resources>

@@ -1,6 +1,8 @@
 package com.gruppe1.pem.challengeme.views;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,6 +20,7 @@ import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.ImageDominantColorExtractor;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * Created by bianka on 20.08.2015.
@@ -25,6 +28,8 @@ import java.util.ArrayList;
 
     ItemsCollectionPagerAdapter mItemsCollectionPagerAdapter;
     ViewPager mViewPager;
+
+    private Locale myLocale;
 
 
     private int currentItemPosition;
@@ -34,6 +39,9 @@ import java.util.ArrayList;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_collection_items);
+
+        loadLocale();
+
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
@@ -128,6 +136,35 @@ import java.util.ArrayList;
                 Uri selectedImage = data.getData();
                 ((CollectionItemsFragment) mItemsCollectionPagerAdapter.getItem(currentItemPosition)).setImageUri(selectedImage);
             }
+        }
+    }
+
+    public void loadLocale()
+    {
+        SharedPreferences prefs = getSharedPreferences(Constants.MY_PREFERENCES, Activity.MODE_PRIVATE);
+        String language = prefs.getString(Constants.KEY_LANGUAGE, "");
+        changeLang(language);
+    }
+
+    public void changeLang(String lang)
+    {
+        if (lang.equalsIgnoreCase(""))
+            return;
+        myLocale = new Locale(lang);
+        //saveLocale(lang);
+        Locale.setDefault(myLocale);
+        android.content.res.Configuration config = getBaseContext().getResources().getConfiguration();
+        config.locale = myLocale;
+        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+    }
+
+    @Override
+    public void onConfigurationChanged(android.content.res.Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (myLocale != null){
+            newConfig.locale = myLocale;
+            Locale.setDefault(myLocale);
+            getBaseContext().getResources().updateConfiguration(newConfig, getBaseContext().getResources().getDisplayMetrics());
         }
     }
 

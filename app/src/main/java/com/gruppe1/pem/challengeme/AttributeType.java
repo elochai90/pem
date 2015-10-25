@@ -1,6 +1,8 @@
 package com.gruppe1.pem.challengeme;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 
 import com.gruppe1.pem.challengeme.helpers.Constants;
@@ -15,7 +17,8 @@ import java.util.Set;
  */
 public class AttributeType {
     private int m_id;
-    private String m_name;
+    private String m_name_en;
+    private String m_name_de;
     private int m_valueType;
     private int m_isUnique;
     private Context m_context;
@@ -40,9 +43,10 @@ public class AttributeType {
 
             if(attrTypeData.moveToFirst()) {
                 this.m_id = attrTypeData.getInt(0);
-                this.m_name = attrTypeData.getString(1);
-                this.m_valueType = attrTypeData.getInt(2);
-                this.m_isUnique = attrTypeData.getInt(3);
+                this.m_name_en = attrTypeData.getString(1);
+                this.m_name_de = attrTypeData.getString(2);
+                this.m_valueType = attrTypeData.getInt(3);
+                this.m_isUnique = attrTypeData.getInt(4);
             }
             attrTypeData.close();
 
@@ -58,11 +62,25 @@ public class AttributeType {
     }
 
     public String getName() {
-        return m_name;
+        SharedPreferences prefs = m_context.getSharedPreferences(Constants.MY_PREFERENCES, Activity.MODE_PRIVATE);
+        String language = prefs.getString(Constants.KEY_LANGUAGE, "");
+        switch (language) {
+            case "en":
+                return m_name_en;
+            case "de":
+                return m_name_de;
+            default:
+                return m_name_en;
+        }
     }
 
-    public void setName(String m_name) {
-        this.m_name = m_name;
+
+    public void setNameEn(String m_name) {
+        this.m_name_en = m_name;
+    }
+
+    public void setNameDe(String m_name) {
+        this.m_name_de = m_name;
     }
 
     public int getValueType() {
@@ -147,7 +165,7 @@ public class AttributeType {
         helper.init();
         helper.setTable(Constants.ATTRIBUTE_TYPES_DB_TABLE);
         helper.setColumns(new String[]{"*"});
-        helper.setWhere("", new String[]{"name='" + attrName + "'"});
+        helper.setWhere("", new String[]{"name_en='" + attrName + "'"});
         AttributeType attributeType;
 
         Cursor allAttrTypesIterator = helper.select();
@@ -175,8 +193,12 @@ public class AttributeType {
             String dbColumnValue = p_values.get(key);
 
             switch (key) {
-                case "name":
-                    this.setName(dbColumnValue);
+                case "name_en":
+                    this.setNameEn(dbColumnValue);
+                    break;
+
+                case "name_de":
+                    this.setNameDe(dbColumnValue);
                     break;
 
                 case "value_type":
@@ -200,7 +222,7 @@ public class AttributeType {
         if(this.m_id == 0) {
             // insert as new attribute type
             m_dbHelper.deleteValues();
-            this.m_dbHelper.setWhere("", new String[]{"name='" + this.m_name + "'"});
+            this.m_dbHelper.setWhere("", new String[]{"name_en='" + this.m_name_en + "'"});
             Cursor existingRowCursor = this.m_dbHelper.select();
             existingRowCursor.moveToFirst();
             int rowId;
@@ -212,7 +234,8 @@ public class AttributeType {
             }
             existingRowCursor.close();
             if(rowId == 0) {
-                this.m_dbHelper.setStringValue("name", this.m_name);
+                this.m_dbHelper.setStringValue("name_en", this.m_name_en);
+                this.m_dbHelper.setStringValue("name_de", this.m_name_de);
                 this.m_dbHelper.setIntegerValue("value_type", this.m_valueType);
                 this.m_dbHelper.setIntegerValue("is_unique", this.m_isUnique);
 

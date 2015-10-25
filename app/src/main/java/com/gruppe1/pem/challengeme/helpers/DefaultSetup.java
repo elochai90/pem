@@ -190,9 +190,10 @@ public class DefaultSetup {
             if (id > 0) {
                 String[] initial_attr_type = res.getStringArray(id);
                 HashMap<String, String> attr_types_attributes = new HashMap<>();
-                attr_types_attributes.put("name", initial_attr_type[0]);
-                attr_types_attributes.put("value_type", initial_attr_type[1]);
-                attr_types_attributes.put("is_unique", initial_attr_type[2]);
+                attr_types_attributes.put("name_en", initial_attr_type[0]);
+                attr_types_attributes.put("name_de", initial_attr_type[1]);
+                attr_types_attributes.put("value_type", initial_attr_type[2]);
+                attr_types_attributes.put("is_unique", initial_attr_type[3]);
 
                 AttributeType defaultAttributeType = new AttributeType(m_context, 0, this.m_dbHelper);
                 defaultAttributeType.edit(attr_types_attributes);
