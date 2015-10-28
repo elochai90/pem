@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gruppe1.pem.challengeme.helpers.Constants;
@@ -41,6 +42,8 @@ public class WeatherRequest {
     private String tvIsConnected;
     private Context context;
 
+    private LinearLayout noWeatherAvailabeView;
+    private LinearLayout weatherAvailabeView;
     private ImageView weatherImageView;
     private ImageView weatherImg1;
     private ImageView weatherImg2;
@@ -71,14 +74,19 @@ public class WeatherRequest {
 
     private LocationManager locationManager;
 
+    private String language;
+    private String language_weather;
+
 
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
 
 
-    public WeatherRequest(Context context, ImageView weatherImageView, TextView weatherDescView, TextView weatherTempView, ImageView weatherImg1, ImageView weatherImg2, ImageView weatherImg3, TextView day1, TextView day2,
+    public WeatherRequest(Context context, LinearLayout noWeatherAvailableView, LinearLayout weatherAvailableView, ImageView weatherImageView, TextView weatherDescView, TextView weatherTempView, ImageView weatherImg1, ImageView weatherImg2, ImageView weatherImg3, TextView day1, TextView day2,
                           TextView day3, TextView temp1, TextView temp2, TextView temp3 ,TextView navDrawerWeatherDate) {
         this.context = context;
+        this.noWeatherAvailabeView = noWeatherAvailableView;
+        this.weatherAvailabeView = weatherAvailableView;
         this.weatherImageView = weatherImageView;
         this.weatherDescView = weatherDescView;
         this.weatherTempView = weatherTempView;
@@ -96,38 +104,44 @@ public class WeatherRequest {
         this.sharedPreferences = context.getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
         this.editor = sharedPreferences.edit();
 
+        this.language = sharedPreferences.getString(Constants.KEY_LANGUAGE, "");
+        this.language_weather = sharedPreferences.getString(Constants.KEY_LANGUAGE_WEATHER, "");
+
+
         // check if you are connected or not
         if(isConnected() && isGPSactivated()){
             tvIsConnected = "You are connected and GPS is activated";
-
-            try {
-                DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH);
-                String lastLocationRequest = sharedPreferences.getString(Constants.KEY_W_DATE, "");
-                if(!Objects.equals(lastLocationRequest, "")) {
-                    Date lastLocationRequestDate = format.parse(lastLocationRequest);
-                    Date now = new Date();
-                    long diffInMillies = now.getTime() - lastLocationRequestDate.getTime();
-                    long differenceInMinutes = TimeUnit.MINUTES.convert(diffInMillies, TimeUnit.MILLISECONDS);
-                    // only catch new weather, when the last request was at least 30 min before
-                    if(differenceInMinutes > 30) {
-                        doNewWeatherRequest();
+            // if language changed actualize weather
+            if(!language_weather.equals(language)) {
+                editor.putString(Constants.KEY_LANGUAGE_WEATHER, language);
+                doNewWeatherRequest();
+            } else {
+                try {
+                    DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH);
+                    String lastLocationRequest = sharedPreferences.getString(Constants.KEY_W_DATE, "");
+                    if (!Objects.equals(lastLocationRequest, "")) {
+                        Date lastLocationRequestDate = format.parse(lastLocationRequest);
+                        Date now = new Date();
+                        long diffInMillies = now.getTime() - lastLocationRequestDate.getTime();
+                        long differenceInMinutes = TimeUnit.MINUTES.convert(diffInMillies, TimeUnit.MILLISECONDS);
+                        // only catch new weather, when the last request was at least 30 min before
+                        if (differenceInMinutes > 30) {
+                            doNewWeatherRequest();
+                        } else {
+                            getAndSetLastWeather();
+                        }
                     } else {
-                        getLastWeather();
-                        setWeather();
+                        doNewWeatherRequest();
                     }
-                } else {
-                    doNewWeatherRequest();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                    getAndSetLastWeather();
                 }
-            } catch (ParseException e) {
-                e.printStackTrace();
-                getLastWeather();
-                setWeather();
             }
         }
         else{
             tvIsConnected = "You are NOT connected or your GPS is not activated";
-            getLastWeather();
-            setWeather();
+            getAndSetLastWeather();
         }
         System.out.println(tvIsConnected);
     }
@@ -135,8 +149,8 @@ public class WeatherRequest {
     private void doNewWeatherRequest() {
         String[] location = getGPS();
         // call AsynTask to perform network operation on separate thread
-        new HttpAsyncTask().execute("http://api.openweathermap.org/data/2.5/weather?q=" + location[0] + "," + location[1] + "&APPID=" + Constants.OWM_API_KEY);
-        new HttpAsyncTask().execute("http://api.openweathermap.org/data/2.5/forecast?q=" + location[0] + "," + location[1] + "&APPID=" + Constants.OWM_API_KEY);
+        new HttpAsyncTask().execute("http://api.openweathermap.org/data/2.5/weather?q=" + location[0] + "," + location[1] + "&lang=" + language + "&APPID=" + Constants.OWM_API_KEY);
+        new HttpAsyncTask().execute("http://api.openweathermap.org/data/2.5/forecast?q=" + location[0] + "," + location[1] + "&lang=" + language + "&APPID=" + Constants.OWM_API_KEY);
     }
 
     private boolean isGPSactivated() {
@@ -154,6 +168,19 @@ public class WeatherRequest {
         MyLocationListener locationListener = new MyLocationListener(context, locationManager);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3600000, 1000, locationListener); // all 1h, more than 1000 meters
         return new String[]{locationListener.getCityName(), locationListener.getCountryCode()};
+    }
+
+    private void getAndSetLastWeather() {
+        getLastWeather();
+        // If there is no last weather, hide the weather info and show text to put internet and GPS on
+        if(weather_today_temp.equals("")) {
+           weatherAvailabeView.setVisibility(View.GONE);
+           noWeatherAvailabeView.setVisibility(View.VISIBLE);
+        } else {
+            setWeather();
+            weatherAvailabeView.setVisibility(View.VISIBLE);
+            noWeatherAvailabeView.setVisibility(View.GONE);
+        }
     }
 
     public static String GET(String url){
@@ -261,6 +288,8 @@ public class WeatherRequest {
         }
     }
 
+
+
     private void getLastWeather() {
         weather_today_desc = sharedPreferences.getString(Constants.KEY_W_TODAY_DESC, "");
         weather_today_temp = sharedPreferences.getString(Constants.KEY_W_TODAY_TEMP, "");
@@ -366,7 +395,7 @@ public class WeatherRequest {
                 if(json.has("weather")){
                     todayWeather = true;
                     JSONArray weather = json.getJSONArray("weather");
-                    weather_today_desc = weather.getJSONObject(0).getString("main");
+                    weather_today_desc = weather.getJSONObject(0).getString("description");
                     weather_today_temp = Math.round(json.getJSONObject("main").getDouble("temp") - 273.15) + "°C";
                     weather_today_image = getImage(weather.getJSONObject(0).getString("id"));
 
@@ -381,10 +410,15 @@ public class WeatherRequest {
                     ArrayList<String> temps = new ArrayList<>();
                     ArrayList<String> codes = new ArrayList<>();
 
-                    for(int i = 0; i < forecast.length()-8; i++){
+                    for(int i = 0; i < 3; i++){
                         int weather_dt = Integer.parseInt(forecast.getJSONObject(i).getString("dt"));
                         Date converteddate = new Date(weather_dt*1000L);
-                        SimpleDateFormat sdf2 = new SimpleDateFormat("EEE-HH", Locale.ENGLISH);
+                        SimpleDateFormat sdf2;
+                        if(language.equals("de")) {
+                           sdf2 = new SimpleDateFormat("EEE-HH", Locale.GERMAN);
+                        } else {
+                            sdf2 = new SimpleDateFormat("EEE-HH", Locale.ENGLISH);
+                        }
                         String forecastDateandTime = sdf2.format(converteddate);
                         String[] segs = forecastDateandTime.split( Pattern.quote("-") );
 
@@ -426,8 +460,7 @@ public class WeatherRequest {
 
             if(!weatherAvailable) {
                 System.out.println("No weather available");
-                getLastWeather();
-                setWeather();
+                getAndSetLastWeather();
             } else if(todayWeather) {
                 setWeatherToday();
                 saveWeatherToday();

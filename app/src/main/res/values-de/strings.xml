@@ -96,6 +96,7 @@
     <string name="nav_drawer_item_desc_icon">Icon</string>
     <string name="nav_drawer_desc_weatherImage">Wetter Bild</string>
     <string name="nav_drawer_title">Menü</string>
+    <string name="noWeatherAvailableText">Wenn Sie Internet und GPS aktivieren, können Sie hier das Wetter der nächsten 3 Tage sehen.</string>
 
 
     <string name="abort">Abbrechen</string>

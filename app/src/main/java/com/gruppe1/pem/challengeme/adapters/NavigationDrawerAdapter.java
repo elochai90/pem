@@ -2,16 +2,19 @@ package com.gruppe1.pem.challengeme.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gruppe1.pem.challengeme.ListItemIconName;
 import com.gruppe1.pem.challengeme.R;
 import com.gruppe1.pem.challengeme.WeatherRequest;
+import com.gruppe1.pem.challengeme.helpers.Constants;
 
 /**
  * Array adapter to fill the navigation drawer
@@ -22,7 +25,8 @@ public class NavigationDrawerAdapter extends ArrayAdapter<ListItemIconName>
     private final int layoutResourceId;
     private ListItemIconName data[] = null;
 
-
+    private LinearLayout noWeatherAvailable;
+    private LinearLayout weatherAvailable;
     private ImageView imageView;
     private ImageView img1;
     private ImageView img2;
@@ -37,6 +41,8 @@ public class NavigationDrawerAdapter extends ArrayAdapter<ListItemIconName>
     private TextView temp3;
     private TextView navDrawerWeatherDate;
 
+    private SharedPreferences sharedPreferences;
+
     /**
      * Constructor of the NavigationDrawerAdapter
      * @param context the context
@@ -49,6 +55,8 @@ public class NavigationDrawerAdapter extends ArrayAdapter<ListItemIconName>
         this.context = context;
         this.layoutResourceId = layoutResourceId;
         this.data = data;
+        this.sharedPreferences = context.getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
+
     }
 
     @Override
@@ -60,6 +68,8 @@ public class NavigationDrawerAdapter extends ArrayAdapter<ListItemIconName>
 
             v = inflater.inflate(R.layout.list_item_navigation_drawer_weather, parent, false);
 
+            noWeatherAvailable = (LinearLayout) v.findViewById(R.id.noWeatherAvailable);
+            weatherAvailable = (LinearLayout) v.findViewById(R.id.weatherAvailable);
             imageView = (ImageView) v.findViewById(R.id.navDrawerWeatherImage);
             img1 = (ImageView) v.findViewById(R.id.imgView1);
             img2 = (ImageView) v.findViewById(R.id.imgView2);
@@ -74,8 +84,9 @@ public class NavigationDrawerAdapter extends ArrayAdapter<ListItemIconName>
             temp3 = (TextView) v.findViewById(R.id.temp3);
             navDrawerWeatherDate = (TextView) v.findViewById(R.id.navDrawerWeatherDate);
 
+            new WeatherRequest(context, noWeatherAvailable, weatherAvailable, imageView, descTextView, tempTextView, img1, img2, img3, day1, day2, day3, temp1, temp2, temp3, navDrawerWeatherDate);
 
-            new WeatherRequest(context, imageView, descTextView, tempTextView, img1, img2, img3, day1, day2, day3, temp1, temp2, temp3, navDrawerWeatherDate);
+
         } else {
 
             v = inflater.inflate(layoutResourceId, parent, false);

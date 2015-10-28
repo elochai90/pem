@@ -147,9 +147,13 @@ public class TabsFragmentActivity extends FragmentActivity  {
     {
         if (lang.equalsIgnoreCase("")) {
             myLocale = Locale.getDefault();
+            String defaultLang = myLocale.getCountry().toLowerCase();
+            if(!(defaultLang.equals("en") || defaultLang.equals("de"))) {
+                defaultLang = "en";
+            }
             SharedPreferences sharedPreferences = getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString(Constants.KEY_LANGUAGE, myLocale.getCountry().toLowerCase());
+            editor.putString(Constants.KEY_LANGUAGE, defaultLang);
             editor.apply();
         } else {
             myLocale = new Locale(lang);
