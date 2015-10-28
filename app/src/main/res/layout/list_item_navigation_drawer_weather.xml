@@ -32,7 +32,6 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="vertical"
-            android:background="@color/blue01"
             android:layout_weight="0.43">
 
             <TextView
@@ -42,54 +41,50 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:textAppearance="@android:style/TextAppearance.Small"
+                android:background="@color/grey_transparent"
+                android:textColor="@color/gray01"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <LinearLayout
-                android:orientation="horizontal"
-                android:id="@+id/weather"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
 
-                <LinearLayout
-                    android:orientation="vertical"
+                <RelativeLayout
+                    android:id="@+id/weather"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="10dp"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:layout_weight="0.5">
+                    android:layout_height="150dp">
 
-                    <TextView
-                        android:id="@+id/navDrawerWeatherTemp"
-                        android:textColor="@color/gray05"
+                    <ImageView
+                        android:id="@+id/navDrawerWeatherImage"
                         android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:contentDescription="@string/nav_drawer_desc_weatherImage" />
+
+                    <RelativeLayout
+                        android:padding="10dp"
+                        android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:layout_gravity="center" />
+                        android:background="@color/grey_transparent">
 
-                    <TextView
-                        android:id="@+id/navDrawerWeatherDescription"
-                        android:textColor="@color/gray05"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:layout_gravity="center" />
+                        <TextView
+                            android:id="@+id/navDrawerWeatherTemp"
+                            android:textColor="@color/gray01"
+                            android:layout_alignParentEnd="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:layout_gravity="center" />
 
-                </LinearLayout>
+                        <TextView
+                            android:id="@+id/navDrawerWeatherDescription"
+                            android:textColor="@color/gray01"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_toStartOf="@id/navDrawerWeatherTemp"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:layout_gravity="center" />
+                    </RelativeLayout>
 
-                <ImageView
-                    android:id="@+id/navDrawerWeatherImage"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:adjustViewBounds="true"
-                    android:contentDescription="@string/nav_drawer_desc_weatherImage"
-                    android:layout_gravity="center"
-                    android:layout_marginEnd="10dp"
-                    android:layout_weight="0.5" />
-            </LinearLayout>
-
-
+                </RelativeLayout>
         </LinearLayout>
 
         <View
@@ -102,133 +97,129 @@
             android:layout_width="match_parent"
             android:layout_height="50dp">
 
-            <LinearLayout
-                android:orientation="vertical"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="0.33"
-                android:background="@color/blue01">
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/day1"
-                        android:layout_gravity="center"
-                        android:textAppearance="@android:style/TextAppearance.Small"
-                        />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/temp1"
-                        android:layout_gravity="center"
-                        android:textAppearance="@android:style/TextAppearance.Small"
-                        android:layout_marginStart="5dp"
-                        />
-                </LinearLayout>
+                android:layout_weight="0.3333">
 
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:contentDescription="@string/nav_drawer_desc_weatherImage"
                     android:id="@+id/imgView1"
+                    android:scaleType="centerCrop"
                     android:layout_gravity="center" />
-            </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:background="@color/grey_transparent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/day1"
+                        android:textColor="@color/gray01"
+                        android:textAppearance="@android:style/TextAppearance.Small" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/temp1"
+                        android:textColor="@color/gray01"
+                        android:textAppearance="@android:style/TextAppearance.Small" />
+                </LinearLayout>
+
+            </RelativeLayout>
 
             <View
                 android:layout_width="1dp"
                 android:layout_height="fill_parent"
                 android:background="@color/gray02"/>
 
-            <LinearLayout
-                android:orientation="vertical"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="0.33"
-                android:background="@color/blue01"
+                android:layout_weight="0.3333"
                 android:layout_gravity="center">
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/day2"
-                        android:layout_gravity="center"
-                        android:textAppearance="@android:style/TextAppearance.Small"
-                        />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/temp2"
-                        android:layout_gravity="center"
-                        android:textAppearance="@android:style/TextAppearance.Small"
-                        android:layout_marginStart="5dp"
-                        />
-                </LinearLayout>
 
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:contentDescription="@string/nav_drawer_desc_weatherImage"
                     android:id="@+id/imgView2"
+                    android:scaleType="centerCrop"
                     android:layout_gravity="center" />
-            </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:background="@color/grey_transparent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/gray01"
+                        android:id="@+id/day2"
+                        android:textAppearance="@android:style/TextAppearance.Small" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/gray01"
+                        android:id="@+id/temp2"
+                        android:textAppearance="@android:style/TextAppearance.Small"
+                        android:layout_marginStart="5dp" />
+                </LinearLayout>
+
+            </RelativeLayout>
 
             <View
                 android:layout_width="1dp"
                 android:layout_height="fill_parent"
                 android:background="@color/gray02"/>
 
-            <LinearLayout
-                android:orientation="vertical"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="0.33"
-                android:background="@color/blue01">
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/day3"
-                        android:layout_gravity="center"
-                        android:textAppearance="@android:style/TextAppearance.Small"
-                        />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/temp3"
-                        android:layout_gravity="center"
-                        android:textAppearance="@android:style/TextAppearance.Small"
-                        android:layout_marginStart="5dp"
-                        />
-                </LinearLayout>
+                android:layout_weight="0.3333">
 
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
                     android:contentDescription="@string/nav_drawer_desc_weatherImage"
                     android:id="@+id/imgView3"
                     android:layout_gravity="center" />
-            </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:background="@color/grey_transparent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/gray01"
+                        android:id="@+id/day3"
+                        android:textAppearance="@android:style/TextAppearance.Small" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/gray01"
+                        android:id="@+id/temp3"
+                        android:textAppearance="@android:style/TextAppearance.Small"
+                        android:layout_marginStart="5dp" />
+                </LinearLayout>
+
+            </RelativeLayout>
 
         </LinearLayout>
 
