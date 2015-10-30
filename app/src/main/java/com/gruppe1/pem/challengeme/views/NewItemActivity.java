@@ -681,7 +681,13 @@ public class NewItemActivity extends Activity {
 
             case R.id.action_item_save:
                 saveItem();
-                setResult(RESULT_OK);
+                // sending new Item back to CompareDetailView for actualizing the item there
+                Intent i = new Intent();
+                i.putExtra("itemId", editItem.getId());
+                i.putExtra("itemImage", editItem.getImageFile());
+                i.putExtra("itemName",editItem.getName());
+
+                setResult(Activity.RESULT_OK, i);
                 this.finish();
         }
         return super.onOptionsItemSelected(item);

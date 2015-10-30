@@ -235,7 +235,7 @@ public class NewCompareActivity extends Activity {
 
                     dbHelper.close();
 
-                    setResult(RESULT_OK);
+                    thisActivity.setResult(RESULT_OK);
                     thisActivity.finish();
                 }
             })

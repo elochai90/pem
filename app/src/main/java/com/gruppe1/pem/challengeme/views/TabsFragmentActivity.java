@@ -23,6 +23,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -31,6 +32,7 @@ import com.gruppe1.pem.challengeme.R;
 import com.gruppe1.pem.challengeme.adapters.NavigationDrawerAdapter;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 public class TabsFragmentActivity extends FragmentActivity  {
@@ -50,6 +52,10 @@ public class TabsFragmentActivity extends FragmentActivity  {
     private ActionBar.Tab tab0;
     private ActionBar.Tab tab1;
     private ActionBar.Tab tab2;
+
+    private Fragment categoriesFragment;
+    private Fragment compareFragment;
+    private Fragment wishlistFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +96,14 @@ public class TabsFragmentActivity extends FragmentActivity  {
         };
 
 
-        mainViewsPagerAdapter = new MainViewsPagerAdapter(getSupportFragmentManager());
+        categoriesFragment = new CategoriesFragment();
+        compareFragment = new CompareFragment();
+        wishlistFragment = new WishlistFragment();
+        ArrayList<Fragment> fragments = new ArrayList<>();
+        fragments.add(categoriesFragment);
+        fragments.add(compareFragment);
+        fragments.add(wishlistFragment);
+        mainViewsPagerAdapter = new MainViewsPagerAdapter(getSupportFragmentManager(), fragments);
         mainViewsPager =(ViewPager) findViewById(R.id.pagerMainViews);
         mainViewsPager.setAdapter(mainViewsPagerAdapter);
         mainViewsPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -229,7 +242,7 @@ public class TabsFragmentActivity extends FragmentActivity  {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClassName(getPackageName(), getPackageName() + ".views.NewCompareActivity");
-                startActivity(intent);
+                startActivityForResult(intent, 0);
                 menu.close(false);
 
             }
@@ -262,7 +275,7 @@ public class TabsFragmentActivity extends FragmentActivity  {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClassName(getPackageName(), getPackageName() + ".views.NewItemActivity");
-                startActivity(intent);
+                startActivityForResult(intent, 0);
                 menu.close(false);
 
             }
@@ -356,27 +369,46 @@ public class TabsFragmentActivity extends FragmentActivity  {
     }
 
 
+    // for actualizing the categories list on coming back from new category
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        System.out.println("TabsFragmentActivity onActivtiyResult");
+        try {
+            super.onActivityResult(requestCode, resultCode, data);
+
+            if (requestCode == 0) {
+                if(resultCode == Activity.RESULT_OK) {
+                    categoriesFragment.onActivityResult(requestCode,resultCode,data);
+                    compareFragment.onActivityResult(requestCode,resultCode,data);
+                    wishlistFragment.onActivityResult(requestCode,resultCode,data);
+                }
+            }
+        } catch (Exception ex) {
+        }
+    }
 
 
 
 
 
     public static class MainViewsPagerAdapter extends FragmentPagerAdapter {
-        public MainViewsPagerAdapter(FragmentManager fm) {
+        private ArrayList<Fragment> fragments;
+        public MainViewsPagerAdapter(FragmentManager fm, ArrayList<Fragment> fragments) {
             super(fm);
+            this.fragments = fragments;
         }
 
         @Override
         public android.support.v4.app.Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return new CategoriesFragment();
+                    return fragments.get(0);
                 case 1:
-                    return new CompareFragment();
+                    return fragments.get(1);
                 case 2:
-                    return new WishlistFragment();
+                    return fragments.get(2);
                 default:
-                    return new CategoriesFragment();
+                    return fragments.get(0);
             }
         }
 

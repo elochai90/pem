@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.view.Menu;
@@ -29,18 +30,26 @@ public class SavedComparesDetailActivity extends Activity {
 
     private Compare compareItem;
 
+    private ImageView detail1;
+    private ImageView detail2;
+    private TextView nameitem1;
+    private TextView nameitem2;
+    private CardView card_view_item1;
+    private CardView card_view_item2;
+    private TextView timeStampSavedCompare;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_saved_compares_detail);
 
-        ImageView detail1 = (ImageView) findViewById(R.id.detail1oben);
-        ImageView detail2 = (ImageView) findViewById(R.id.detail2unten);
-        TextView nameitem1 = (TextView) findViewById(R.id.nameItem1);
-        TextView nameitem2 = (TextView) findViewById(R.id.nameItem2);
-        CardView card_view_item1 = (CardView) findViewById(R.id.card_view_item1);
-        CardView card_view_item2 = (CardView) findViewById(R.id.card_view_item2);
-        TextView timeStampSavedCompare = (TextView) findViewById(R.id.timeStampSavedCompare);
+        detail1 = (ImageView) findViewById(R.id.detail1oben);
+        detail2 = (ImageView) findViewById(R.id.detail2unten);
+        nameitem1 = (TextView) findViewById(R.id.nameItem1);
+        nameitem2 = (TextView) findViewById(R.id.nameItem2);
+        card_view_item1 = (CardView) findViewById(R.id.card_view_item1);
+        card_view_item2 = (CardView) findViewById(R.id.card_view_item2);
+        timeStampSavedCompare = (TextView) findViewById(R.id.timeStampSavedCompare);
 
         DataBaseHelper dbHelper = new DataBaseHelper(this);
         dbHelper.init();
@@ -62,13 +71,13 @@ public class SavedComparesDetailActivity extends Activity {
         card_view_item1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectItem(item1.getId());
+                selectItem(item1.getId(), 0);
             }
         });
         card_view_item2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectItem(item2.getId());
+                selectItem(item2.getId(), 1);
             }
         });
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy", Locale.ENGLISH);
@@ -120,23 +129,37 @@ public class SavedComparesDetailActivity extends Activity {
      * Starts the NewItemActivity to show detail information of an item
      * @param itemid the id of the selected item
      */
-    private void selectItem(int itemid) {
+    private void selectItem(int itemid, int detailViewIndex) {
         Intent intent = new Intent();
         intent.setClassName(getPackageName(), getPackageName() + ".views.NewItemActivity");
         Bundle b = new Bundle();
         b.putInt(Constants.EXTRA_ITEM_ID, itemid);
         intent.putExtras(b);
-        startActivityForResult(intent, 1);
+        startActivityForResult(intent, detailViewIndex);
     }
 
 
     @Override
     public void onActivityResult(int p_requestCode, int p_resultCode, Intent p_data) {
-        super.onActivityResult(p_requestCode, p_resultCode, p_data);
+        try {
+            super.onActivityResult(p_requestCode, p_resultCode, p_data);
 
-        if(p_requestCode == 1) {
-            // TODO: update item
+            if(p_resultCode == Activity.RESULT_OK) {
+                if(p_requestCode == 0) {
+                    int itemId = p_data.getIntExtra("itemId", -1);
+                    String itemImageFile = p_data.getStringExtra("itemImage");
+                    String itemName = p_data.getStringExtra("itemName");
+                    detail1.setImageBitmap(ImageLoader.getPicFromFile(itemImageFile, 500, 500));
+                    nameitem1.setText(itemName);
+                } else if(p_requestCode == 1) {
+                    int itemId = p_data.getIntExtra("itemId", -1);
+                    String itemImageFile = p_data.getStringExtra("itemImage");
+                    String itemName = p_data.getStringExtra("itemName");
+                    detail2.setImageBitmap(ImageLoader.getPicFromFile(itemImageFile, 500, 500));
+                    nameitem2.setText(itemName);
+                }
+            }
+        } catch (Exception ex) {
         }
     }
-
 }
