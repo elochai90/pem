@@ -87,6 +87,7 @@
     <string name="menu_title_deleteCategory">Kategorie löschen</string>
     <string name="menu_title_saveCategory">Kategorie speichern</string>
     <string name="menu_title_deleteCompare">Vergleich löschen</string>
+    <string name="menu_title_editCompare">Vergleich bearbeiten</string>
 
     <!--List/Grid view-->
     <string name="list_grid_view_desc_arrowImage">arrow_no_items</string>

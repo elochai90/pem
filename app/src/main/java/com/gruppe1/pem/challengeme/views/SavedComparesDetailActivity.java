@@ -97,6 +97,10 @@ public class SavedComparesDetailActivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+                setResult(RESULT_OK);
+                finish();
+                return true;
             case R.id.delete:
 
                 String strDelCompareTitleFormat = getResources().getString(R.string.compare_delete_overlay);
@@ -119,6 +123,14 @@ public class SavedComparesDetailActivity extends Activity {
                                 SavedComparesDetailActivity.this.finish();
                             }
                         }).create().show();
+                return true;
+            case R.id.edit:
+                Intent intent = new Intent();
+                intent.setClassName(getPackageName(), getPackageName() + ".views.NewCompareActivity");
+                Bundle b = new Bundle();
+                b.putInt(Constants.EXTRA_COMPARE_ID, compareItem.getId());
+                intent.putExtras(b);
+                startActivityForResult(intent, 2);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -157,6 +169,30 @@ public class SavedComparesDetailActivity extends Activity {
                     String itemName = p_data.getStringExtra("itemName");
                     detail2.setImageBitmap(ImageLoader.getPicFromFile(itemImageFile, 500, 500));
                     nameitem2.setText(itemName);
+                } else if(p_requestCode == 2) {
+                    int compareId = p_data.getIntExtra("compareId", -1);
+                    int compareItemId1 = p_data.getIntExtra("compareItemId1", -1);
+                    int compareItemId2 = p_data.getIntExtra("compareItemId2", -1);
+                    String compareTimestamp = p_data.getStringExtra("compareTimestamp");
+                    String compareName = p_data.getStringExtra("compareName");
+
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy", Locale.ENGLISH);
+                    String compareCreatedTimestamp = sdf.format(new Date(Long.parseLong(compareTimestamp)));
+                    timeStampSavedCompare.setText(getResources().getString(R.string.compare_saved) + ":  " + compareCreatedTimestamp);
+                    getActionBar().setTitle(compareName);
+
+                    DataBaseHelper dbHelper = new DataBaseHelper(this);
+                    dbHelper.init();
+                    Item item1 = new Item(this, compareItemId1, dbHelper);
+                    Item item2 = new Item(this, compareItemId2, dbHelper);
+                    Compare compare = new Compare(this, compareId, dbHelper);
+                    dbHelper.close();
+                    detail1.setImageBitmap(ImageLoader.getPicFromFile(item1.getImageFile(), 500, 500));
+                    nameitem1.setText(item1.getName());
+                    detail2.setImageBitmap(ImageLoader.getPicFromFile(item2.getImageFile(), 500, 500));
+                    nameitem2.setText(item2.getName());
+
+
                 }
             }
         } catch (Exception ex) {

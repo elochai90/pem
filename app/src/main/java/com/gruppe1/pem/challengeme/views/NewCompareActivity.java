@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -29,6 +30,7 @@ import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 
 
@@ -47,6 +49,10 @@ public class NewCompareActivity extends Activity {
     private AlertDialog builder2;
     private SharedPreferences sharedPreferences;
 
+    private int editCompareId;
+    private Compare editCompare;
+    private DataBaseHelper db_helper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +60,20 @@ public class NewCompareActivity extends Activity {
         getActionBar().setTitle(R.string.title_activity_compare);
 
         sharedPreferences = getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
+
+        db_helper = new DataBaseHelper(this);
+        db_helper.init();
+
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if(extras == null) {
+                editCompareId = -1;
+            } else {
+                editCompareId = extras.getInt(Constants.EXTRA_COMPARE_ID);
+            }
+        } else {
+            editCompareId = -1;
+        }
 
         viewPager1 = (ViewPager) findViewById(R.id.view_pager1);
         viewPager2 = (ViewPager) findViewById(R.id.view_pager2);
@@ -80,55 +100,97 @@ public class NewCompareActivity extends Activity {
                 }
             }
         }
+        builder1 = createCategoryOverlay(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                firstCatItems = Item.getItemsByCategoryId(getApplicationContext(), upperCategoriesList.get(position).getId(), sharedPreferences.getBoolean(Constants.KEY_WISHLIST_IN_COMPARE, false));
+
+                for (int i = 0; i < firstCatItems.size(); i++) {
+                    String imageFile = firstCatItems.get(i).getImageFile();
+                    if (imageFile == null) {
+                        firstCatItems.remove(i);
+                    }
+                }
+                CompareImageAdapter adapter = new CompareImageAdapter(thisActivity, firstCatItems, 1);
+                viewPager1.setAdapter(adapter);
+                img1.setVisibility(View.INVISIBLE);
+                viewPager1.setVisibility(View.VISIBLE);
+                builder1.dismiss();
+            }
+        });
         img1.setOnClickListener(new AdapterView.OnClickListener() {
             @Override
             public void onClick(View view) {
-                builder1 = createCategoryOverlay(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        firstCatItems = Item.getItemsByCategoryId(getApplicationContext(), upperCategoriesList.get(position).getId(), sharedPreferences.getBoolean(Constants.KEY_WISHLIST_IN_COMPARE, false));
-
-                        for (int i = 0; i < firstCatItems.size(); i++) {
-                            String imageFile = firstCatItems.get(i).getImageFile();
-                            if (imageFile == null) {
-                                firstCatItems.remove(i);
-                            }
-                        }
-                        CompareImageAdapter adapter = new CompareImageAdapter(thisActivity, firstCatItems, 1);
-                        viewPager1.setAdapter(adapter);
-                        img1.setVisibility(View.INVISIBLE);
-                        viewPager1.setVisibility(View.VISIBLE);
-                        builder1.dismiss();
-                    }
-                });
                 builder1.show();
             }
         });
 
+        builder2 = createCategoryOverlay(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                secontCatItems = Item.getItemsByCategoryId(getApplicationContext(), upperCategoriesList.get(position).getId(), sharedPreferences.getBoolean(Constants.KEY_WISHLIST_IN_COMPARE, false));
+
+                for (int i = 0; i < secontCatItems.size(); i++) {
+                    String imageFile = secontCatItems.get(i).getImageFile();
+                    if (imageFile == null) {
+                        secontCatItems.remove(i);
+                    }
+                }
+                CompareImageAdapter adapter = new CompareImageAdapter(thisActivity, secontCatItems, 2);
+                viewPager2.setAdapter(adapter);
+                img2.setVisibility(View.INVISIBLE);
+                viewPager2.setVisibility(View.VISIBLE);
+                builder2.dismiss();
+            }
+        });
         img2.setOnClickListener(new AdapterView.OnClickListener() {
             @Override
             public void onClick(View view) {
-                builder2 = createCategoryOverlay(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        secontCatItems = Item.getItemsByCategoryId(getApplicationContext(), upperCategoriesList.get(position).getId(), sharedPreferences.getBoolean(Constants.KEY_WISHLIST_IN_COMPARE, false));
-
-                        for (int i = 0; i < secontCatItems.size(); i++) {
-                            String imageFile = secontCatItems.get(i).getImageFile();
-                            if (imageFile == null) {
-                                secontCatItems.remove(i);
-                            }
-                        }
-                        CompareImageAdapter adapter = new CompareImageAdapter(thisActivity, secontCatItems, 2);
-                        viewPager2.setAdapter(adapter);
-                        img2.setVisibility(View.INVISIBLE);
-                        viewPager2.setVisibility(View.VISIBLE);
-                        builder2.dismiss();
-                    }
-                });
                 builder2.show();
             }
         });
+        if(editCompareId >= 0) {
+            setViewsWithEditCompare();
+        }
+    }
+
+    private void setViewsWithEditCompare() {
+        getDb_helper().setTable(Constants.COMPARES_DB_TABLE);
+        editCompare = new Compare(this, editCompareId, getDb_helper());
+
+        getActionBar().setTitle(editCompare.getName());
+
+        ArrayList<Integer> itemIds = editCompare.getItemIds();
+        getDb_helper().close();
+        getDb_helper().setTable(Constants.ITEMS_DB_TABLE);
+        Item item1 = new Item(this, itemIds.get(0), getDb_helper());
+        Item item2 = new Item(this, itemIds.get(1), getDb_helper());
+
+        firstCatItems = Item.getItemsByCategoryId(getApplicationContext(), item1.getCategoryId(), sharedPreferences.getBoolean(Constants.KEY_WISHLIST_IN_COMPARE, false));
+        for (int i = 0; i < firstCatItems.size(); i++) {
+            String imageFile = firstCatItems.get(i).getImageFile();
+            if (imageFile == null) {
+                firstCatItems.remove(i);
+            }
+        }
+        CompareImageAdapter adapterFirstItem = new CompareImageAdapter(thisActivity, firstCatItems, 1);
+        viewPager1.setAdapter(adapterFirstItem);
+        img1.setVisibility(View.INVISIBLE);
+        viewPager1.setVisibility(View.VISIBLE);
+        viewPager1.setCurrentItem(adapterFirstItem.getItemPosition(item1));
+
+        secontCatItems = Item.getItemsByCategoryId(getApplicationContext(), item2.getCategoryId(), sharedPreferences.getBoolean(Constants.KEY_WISHLIST_IN_COMPARE, false));
+        for (int i = 0; i < secontCatItems.size(); i++) {
+            String imageFile = secontCatItems.get(i).getImageFile();
+            if (imageFile == null) {
+                secontCatItems.remove(i);
+            }
+        }
+        CompareImageAdapter adapterSecondItem = new CompareImageAdapter(thisActivity, secontCatItems, 2);
+        viewPager2.setAdapter(adapterSecondItem);
+        img2.setVisibility(View.INVISIBLE);
+        viewPager2.setVisibility(View.VISIBLE);
+        viewPager2.setCurrentItem(adapterSecondItem.getItemPosition(item2));
     }
 
     /**
@@ -194,7 +256,7 @@ public class NewCompareActivity extends Activity {
         if(firstCatItems.size() > 0 && secontCatItems.size() > 0) {
 
             final int firstItemID = firstCatItems.get(firstElementPosition).getId();
-            final int secondtItemID = secontCatItems.get(secondElementPosition).getId();
+            final int secondItemID = secontCatItems.get(secondElementPosition).getId();
 
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -208,7 +270,11 @@ public class NewCompareActivity extends Activity {
             headline.setText(R.string.save_compare);
 
             final TextView inputField = (TextView)dialogView.findViewById(R.id.dialog_text);
-            inputField.setHint(R.string.compare_name);
+            if(editCompareId >= 0) {
+                inputField.setText(editCompare.getName());
+            } else {
+                inputField.setHint(R.string.compare_name);
+            }
 
 
             builder.setView(dialogView).setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
@@ -225,18 +291,51 @@ public class NewCompareActivity extends Activity {
                     DataBaseHelper dbHelper = new DataBaseHelper(getApplicationContext());
                     dbHelper.init();
 
+                    // Update compare
+                    if (editCompareId >= 0) {
+                        Compare editCompareLocal = new Compare(getApplicationContext(), editCompareId, dbHelper);
+                        HashMap<String, String> compareAttributes = new HashMap<>();
+                        compareAttributes.put("name", name);
+                        compareAttributes.put("item_id_1", firstItemID + "");
+                        compareAttributes.put("item_id_2", secondItemID + "");
 
-                    Compare newCompare = new Compare(getApplicationContext(), -1, dbHelper);
-                    newCompare.setName(name);
-                    newCompare.addItemId(firstItemID);
-                    newCompare.addItemId(secondtItemID);
-                    newCompare.insert();
-                    newCompare.closeDBConnection();
+                        editCompareLocal.edit(compareAttributes);
+                        editCompareLocal.save();
+                        editCompareLocal.closeDBConnection();
 
-                    dbHelper.close();
+                        dbHelper.close();
 
-                    thisActivity.setResult(RESULT_OK);
-                    thisActivity.finish();
+                        // sending new Item back to CompareDetailView for actualizing the item there
+                        Intent i = new Intent();
+                        i.putExtra("compareId", editCompareId);
+                        i.putExtra("compareItemId1", firstItemID);
+                        i.putExtra("compareItemId2", secondItemID);
+                        i.putExtra("compareTimestamp", editCompareLocal.getTimestamp());
+                        i.putExtra("compareName", editCompareLocal.getName());
+
+                        thisActivity.setResult(RESULT_OK, i);
+                        thisActivity.finish();
+                    }
+                    // Create new compare
+                    else {
+                        Compare newCompare = new Compare(getApplicationContext(), -1, dbHelper);
+                        HashMap<String, String> compareAttributes = new HashMap<>();
+                        compareAttributes.put("name", name);
+                        compareAttributes.put("item_id_1", firstItemID + "");
+                        compareAttributes.put("item_id_2", secondItemID + "");
+
+                        newCompare.edit(compareAttributes);
+//                        newCompare.setName(name);
+//                        newCompare.addItemId(firstItemID);
+//                        newCompare.addItemId(secondItemID);
+                        newCompare.save();
+                        newCompare.closeDBConnection();
+                        dbHelper.close();
+                        thisActivity.setResult(RESULT_OK);
+                        thisActivity.finish();
+                    }
+
+
                 }
             })
             .setNegativeButton(R.string.abort,null);
@@ -256,5 +355,18 @@ public class NewCompareActivity extends Activity {
            case 2:
                builder2.show();
        }
+    }
+
+    /**
+     * Get the db_helper instance for this class
+     * @return DataBaseHelper instance
+     */
+    private DataBaseHelper getDb_helper() {
+        if(!db_helper.isOpen()) {
+            System.out.println("db helper was closed");
+            db_helper = new DataBaseHelper(this);
+            db_helper.init();
+        }
+        return db_helper;
     }
 }

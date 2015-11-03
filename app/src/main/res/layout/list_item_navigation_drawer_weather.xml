@@ -34,18 +34,6 @@
             android:orientation="vertical"
             android:layout_weight="0.43">
 
-            <TextView
-                android:id="@+id/navDrawerWeatherDate"
-                android:visibility="gone"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:textAppearance="@android:style/TextAppearance.Small"
-                android:background="@color/grey_transparent"
-                android:textColor="@color/gray01"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
 
                 <RelativeLayout
                     android:id="@+id/weather"
@@ -66,12 +54,22 @@
                         android:background="@color/grey_transparent">
 
                         <TextView
+                            android:id="@+id/navDrawerWeatherDate"
+                            android:visibility="gone"
+                            android:textAppearance="@android:style/TextAppearance.Small"
+                            android:textColor="@color/gray01"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+
+                        <TextView
                             android:id="@+id/navDrawerWeatherTemp"
                             android:textColor="@color/gray01"
                             android:layout_alignParentEnd="true"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:layout_below="@id/navDrawerWeatherDate"
                             android:layout_gravity="center" />
 
                         <TextView
@@ -80,6 +78,7 @@
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:layout_toStartOf="@id/navDrawerWeatherTemp"
+                            android:layout_below="@id/navDrawerWeatherDate"
                             android:textAppearance="?android:attr/textAppearanceLarge"
                             android:layout_gravity="center" />
                     </RelativeLayout>

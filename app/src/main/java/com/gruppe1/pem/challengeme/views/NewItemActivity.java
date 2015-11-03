@@ -361,7 +361,7 @@ public class NewItemActivity extends Activity {
             itemAttribute.edit(itemAttributeValue);
             itemAttribute.save();
         }
-        this.db_helper.close();
+        this.getDb_helper().close();
     }
 
     /**

@@ -25,6 +25,7 @@ public class Constants {
     public static String EXTRA_ITEM_ID = "extra_item_id";
     public static String EXTRA_ITEM_COLLECTION = "extra_item_collection";
     public static String EXTRA_CLICKED_ITEM_POSITION = "extra_clicked_item_position";
+    public static String EXTRA_COMPARE_ID = "extra_compare_id";
 
     // Shared Preferences File
     public static final String MY_PREFERENCES = "Preferences_File";

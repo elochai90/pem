@@ -83,10 +83,11 @@
 
     <!--ActionBar Menu titles-->
     <string name="menu_title_listGridView">List/Grid View</string>
-    <string name="menu_title_editCategory">Edit Category</string>
-    <string name="menu_title_deleteCategory">Delete Category</string>
-    <string name="menu_title_saveCategory">Save Category</string>
-    <string name="menu_title_deleteCompare">Delete Compare</string>
+    <string name="menu_title_editCategory">Edit this category</string>
+    <string name="menu_title_deleteCategory">Delete this category</string>
+    <string name="menu_title_saveCategory">Save category</string>
+    <string name="menu_title_deleteCompare">Delete this compare</string>
+    <string name="menu_title_editCompare">Edit this compare</string>
 
     <!--List/Grid view-->
     <string name="list_grid_view_desc_arrowImage">arrow_no_items</string>

@@ -8,7 +8,9 @@ import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 /**
@@ -59,8 +61,15 @@ public class Compare implements Serializable{
         return this.id;
     }
 
-    public void addItemId(int p_id) {
+    private void addItemId(int p_id) {
+        if(itemIds.size() >= 2) {
+            itemIds.clear();
+        }
         this.itemIds.add(p_id);
+    }
+
+    public void setItemIds(ArrayList<Integer> newItems) {
+        this.itemIds = newItems;
     }
 
     public ArrayList<Integer> getItemIds() {
@@ -82,7 +91,61 @@ public class Compare implements Serializable{
     /**
      * inserts new compare
      */
-    public void insert() {
+    public void save() {
+        if(this.id < 0) {
+            // insert as new item
+//            this.dbHelper.setWhere("", new String[]{"name='" + this.name + "'"});
+//            Cursor existingRowCursor = this.dbHelper.select();
+//            existingRowCursor.moveToFirst();
+//            int rowId;
+//
+//            try {
+//                rowId = existingRowCursor.getInt(0);
+//            } catch (Exception e) {
+//                rowId = 0;
+//            }
+//
+//            existingRowCursor.close();
+//
+//            if(rowId == 0) {
+                this.setAllValuesToDbHelper();
+                int id = this.dbHelper.insert();
+
+//                if (id > -1) {
+//                    this.id = id;
+//                }
+//            }
+        } else {
+            //save changes to existing compare
+            this.dbHelper.setWhere("", new String[] {"_id=" + this.id});
+            this.setAllValuesToDbHelper();
+            this.dbHelper.update();
+        }
+
+
+
+//        getDbHelper().setStringValue("name", this.name);
+//        String idConcat = "";
+//
+//        Iterator idIterator = itemIds.iterator();
+//
+//        while (idIterator.hasNext()) {
+//            idConcat += idIterator.next().toString();
+//
+//            if(idIterator.hasNext()) {
+//                idConcat += "|";
+//            }
+//        }
+//        this.dbHelper.setStringValue("item_ids", idConcat);
+//        this.dbHelper.setStringValue("save_date", timestamp);
+//        this.dbHelper.insert();
+    }
+
+    /**
+     * sets all values to database helper
+     */
+    private void setAllValuesToDbHelper() {
+        this.dbHelper.deleteValues();
         getDbHelper().setStringValue("name", this.name);
         String idConcat = "";
 
@@ -97,8 +160,34 @@ public class Compare implements Serializable{
         }
         this.dbHelper.setStringValue("item_ids", idConcat);
         this.dbHelper.setStringValue("save_date", timestamp);
-        this.dbHelper.insert();
     }
+
+
+    /**
+     * edit the item
+     * @param p_values value to be edited
+     */
+    public void edit(HashMap<String, String> p_values) {
+        Set<String> keys = p_values.keySet();
+
+        for (String key : keys) {
+            String dbColumnValue = p_values.get(key);
+
+            switch (key) {
+                case "name":
+                    this.setName(dbColumnValue);
+                    break;
+                case "item_id_1":
+                    this.addItemId(Integer.parseInt(dbColumnValue));
+                    break;
+                case "item_id_2":
+                    this.addItemId(Integer.parseInt(dbColumnValue));
+                    break;
+            }
+            this.timestamp = (System.currentTimeMillis()) + "";
+        }
+    }
+
 
     /**
      * gets all compares

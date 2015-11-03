@@ -410,7 +410,7 @@ public class WeatherRequest {
                     ArrayList<String> temps = new ArrayList<>();
                     ArrayList<String> codes = new ArrayList<>();
 
-                    for(int i = 0; i < 3; i++){
+                    for(int i = 0; i < forecast.length(); i++){
                         int weather_dt = Integer.parseInt(forecast.getJSONObject(i).getString("dt"));
                         Date converteddate = new Date(weather_dt*1000L);
                         SimpleDateFormat sdf2;
@@ -420,10 +420,11 @@ public class WeatherRequest {
                             sdf2 = new SimpleDateFormat("EEE-HH", Locale.ENGLISH);
                         }
                         String forecastDateandTime = sdf2.format(converteddate);
+//                        System.out.println(forecastDateandTime);
                         String[] segs = forecastDateandTime.split( Pattern.quote("-") );
 
-//                        if(!segs[0].equals(currentDateandTime)){
-//                            if(segs[1].equals("14")){
+                        if(!segs[0].equals(currentDateandTime)){
+                            if(segs[1].equals("13")){
 
                                 JSONArray weather = forecast.getJSONObject(i).getJSONArray("weather"); // get articles array
                                 String temp = Math.round(forecast.getJSONObject(i).getJSONObject("main").getDouble("temp") - 273.15) + "°C";
@@ -433,8 +434,8 @@ public class WeatherRequest {
                                 temps.add(temp);
                                 codes.add(code);
 
-//                            }
-//                        }
+                            }
+                        }
 
                     }
 

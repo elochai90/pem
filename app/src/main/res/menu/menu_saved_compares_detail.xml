@@ -2,6 +2,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.gruppe1.pem.challengeme.views.SavedComparesDetailActivity">
     <item
+        android:id="@+id/edit"
+        android:title="@string/menu_title_editCompare"
+        android:showAsAction="always"
+        android:icon="@drawable/ic_edit"/>
+    <item
         android:id="@+id/delete"
         android:title="@string/menu_title_deleteCompare"
         android:showAsAction="always"

@@ -365,4 +365,9 @@ public class Item implements Parcelable{
             return new Item[size];
         }
     };
+
+    @Override
+    public boolean equals(Object o) {
+        return (o instanceof Item && getId() == ((Item) o).getId());
+    }
 }
