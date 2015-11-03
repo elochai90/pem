@@ -85,6 +85,11 @@ public class SettingsActivity extends PreferenceActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        NavUtils.navigateUpFromSameTask(this);
+    }
+
+    @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
