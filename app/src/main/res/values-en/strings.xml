@@ -98,6 +98,11 @@
     <string name="nav_drawer_desc_weatherImage">Weather image</string>
     <string name="nav_drawer_title">Menu</string>
     <string name="noWeatherAvailableText">When you activate the internet and GPS, you can see here the weather of the next three days.</string>
+    <string name="weatherold">This weather is </string>
+    <string name="weatherold2"> day </string>
+    <string name="weatherold22"> s </string>
+    <string name="weatherold3"> old </string>
+
 
 
     <string name="abort">Abort</string>

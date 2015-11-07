@@ -36,6 +36,7 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
+
 public class WeatherRequest {
 
     private String etResponse;
@@ -357,7 +358,7 @@ public class WeatherRequest {
                 long differenceInDays = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
                 if (differenceInDays > 0) {
                     navDrawerWeatherDate.setVisibility(View.VISIBLE);
-                    navDrawerWeatherDate.setText("This weather is " + differenceInDays + " day" + ((differenceInDays > 1) ? "s" : "") + " old.");
+                    navDrawerWeatherDate.setText(context.getString(R.string.weatherold) + " " +  differenceInDays + " " + context.getString(R.string.weatherold2) + ((differenceInDays > 1) ? context.getString(R.string.weatherold22) : "") + " " + context.getString(R.string.weatherold3) + ".");
                 } else {
                     navDrawerWeatherDate.setVisibility(View.GONE);
                 }
@@ -400,59 +401,60 @@ public class WeatherRequest {
                     weather_today_image = getImage(weather.getJSONObject(0).getString("id"));
 
                 }
-                else{ // get weather forecast
-                    JSONArray forecast = json.getJSONArray("list");
-                    Date date = new Date();
-                    SimpleDateFormat sdf = new SimpleDateFormat("EEE", Locale.ENGLISH);
-                    String currentDateandTime = sdf.format(date);
+                else { // get weather forecast
+                    if (json.has("list")) {
+                        JSONArray forecast = json.getJSONArray("list");
+                        Date date = new Date();
+                        SimpleDateFormat sdf = new SimpleDateFormat("EEE", Locale.ENGLISH);
+                        String currentDateandTime = sdf.format(date);
 
-                    ArrayList<String> days = new ArrayList<>();
-                    ArrayList<String> temps = new ArrayList<>();
-                    ArrayList<String> codes = new ArrayList<>();
+                        ArrayList<String> days = new ArrayList<>();
+                        ArrayList<String> temps = new ArrayList<>();
+                        ArrayList<String> codes = new ArrayList<>();
 
-                    for(int i = 0; i < forecast.length(); i++){
-                        int weather_dt = Integer.parseInt(forecast.getJSONObject(i).getString("dt"));
-                        Date converteddate = new Date(weather_dt*1000L);
-                        SimpleDateFormat sdf2;
-                        if(language.equals("de")) {
-                           sdf2 = new SimpleDateFormat("EEE-HH", Locale.GERMAN);
-                        } else {
-                            sdf2 = new SimpleDateFormat("EEE-HH", Locale.ENGLISH);
-                        }
-                        String forecastDateandTime = sdf2.format(converteddate);
-//                        System.out.println(forecastDateandTime);
-                        String[] segs = forecastDateandTime.split( Pattern.quote("-") );
-
-                        if(!segs[0].equals(currentDateandTime)){
-                            if(segs[1].equals("13")){
-
-                                JSONArray weather = forecast.getJSONObject(i).getJSONArray("weather"); // get articles array
-                                String temp = Math.round(forecast.getJSONObject(i).getJSONObject("main").getDouble("temp") - 273.15) + "°C";
-                                String code = weather.getJSONObject(0).getString("id");
-
-                                days.add(segs[0]);
-                                temps.add(temp);
-                                codes.add(code);
-
+                        for (int i = 0; i < forecast.length(); i++) {
+                            int weather_dt = Integer.parseInt(forecast.getJSONObject(i).getString("dt"));
+                            Date converteddate = new Date(weather_dt * 1000L);
+                            SimpleDateFormat sdf2;
+                            if (language.equals("de")) {
+                                sdf2 = new SimpleDateFormat("EEE-HH", Locale.GERMAN);
+                            } else {
+                                sdf2 = new SimpleDateFormat("EEE-HH", Locale.ENGLISH);
                             }
+                            String forecastDateandTime = sdf2.format(converteddate);
+//                        System.out.println(forecastDateandTime);
+                            String[] segs = forecastDateandTime.split(Pattern.quote("-"));
+
+                            if (!segs[0].equals(currentDateandTime)) {
+                                if (segs[1].equals("13")) {
+
+                                    JSONArray weather = forecast.getJSONObject(i).getJSONArray("weather"); // get articles array
+                                    String temp = Math.round(forecast.getJSONObject(i).getJSONObject("main").getDouble("temp") - 273.15) + "°C";
+                                    String code = weather.getJSONObject(0).getString("id");
+
+                                    days.add(segs[0]);
+                                    temps.add(temp);
+                                    codes.add(code);
+
+                                }
+                            }
+
                         }
 
+                        weather_1_day = days.get(0);
+                        weather_1_temp = temps.get(0);
+                        weather_1_image = getImage(codes.get(0));
+                        weather_2_day = days.get(1);
+                        weather_2_temp = temps.get(1);
+                        weather_2_image = getImage(codes.get(1));
+                        weather_3_day = days.get(2);
+                        weather_3_temp = temps.get(2);
+                        weather_3_image = getImage(codes.get(2));
+                        Date date_to_save = new Date();
+                        DateFormat sdf_to_save = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH);
+                        weather_date = sdf_to_save.format(date_to_save);
                     }
-
-                    weather_1_day = days.get(0);
-                    weather_1_temp = temps.get(0);
-                    weather_1_image = getImage(codes.get(0));
-                    weather_2_day = days.get(1);
-                    weather_2_temp = temps.get(1);
-                    weather_2_image = getImage(codes.get(1));
-                    weather_3_day = days.get(2);
-                    weather_3_temp = temps.get(2);
-                    weather_3_image = getImage(codes.get(2));
-                    Date date_to_save = new Date();
-                    DateFormat sdf_to_save = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH);
-                    weather_date = sdf_to_save.format(date_to_save);
                 }
-
             } catch (JSONException e) {
                 e.printStackTrace();
                 weatherAvailable = false;
