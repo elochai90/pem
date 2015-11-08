@@ -99,6 +99,10 @@
     <string name="nav_drawer_desc_weatherImage">Wetter Bild</string>
     <string name="nav_drawer_title">Menü</string>
     <string name="noWeatherAvailableText">Wenn Sie Internet und GPS aktivieren, können Sie hier das Wetter der nächsten 3 Tage sehen.</string>
+    <string name="weatherold">Diese Wetterdaten sind</string>
+    <string name="weatherold2"> Tag</string>
+    <string name="weatherold22"> e</string>
+    <string name="weatherold3"> alt</string>
 
 
     <string name="abort">Abbrechen</string>
