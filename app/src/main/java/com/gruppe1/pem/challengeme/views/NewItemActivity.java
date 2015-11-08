@@ -16,6 +16,8 @@ import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -55,7 +57,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 
-public class NewItemActivity extends Activity {
+public class NewItemActivity extends AppCompatActivity {
 
     private DataBaseHelper db_helper;
 
@@ -111,11 +113,12 @@ public class NewItemActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_collection_items);
-        getActionBar().setTitle(R.string.title_activity_new_item);
+//        getActionBar().setTitle(R.string.title_activity_new_item);
 
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
+        setupToolbar();
         sharedPreferences = getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
 
         db_helper = new DataBaseHelper(this);
@@ -274,6 +277,14 @@ public class NewItemActivity extends Activity {
             }
         }
 
+    }
+
+    private void setupToolbar(){
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     /**

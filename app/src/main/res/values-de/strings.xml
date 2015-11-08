@@ -70,7 +70,7 @@
 
     <!--For new category activity-->
     <string name="new_category_label_name">Name:</string>
-    <string name="new_category_hint_name">Kategorie Name hinzufügen</string>
+    <string name="new_category_hint_name">Kategorie Name</string>
     <string name="new_category_label_defaultSize">Standardgröße:</string>
     <string name="new_category_label_icon">Icon:</string>
     <string name="new_category_desc_icon">Kategorie Icon</string>
@@ -88,6 +88,7 @@
     <string name="menu_title_saveCategory">Kategorie speichern</string>
     <string name="menu_title_deleteCompare">Vergleich löschen</string>
     <string name="menu_title_editCompare">Vergleich bearbeiten</string>
+    <string name="menu_title_saveItem">Item speichern</string>
 
     <!--List/Grid view-->
     <string name="list_grid_view_desc_arrowImage">arrow_no_items</string>

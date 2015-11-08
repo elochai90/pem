@@ -1,41 +1,35 @@
 package com.gruppe1.pem.challengeme.views;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.SearchManager;
 import android.content.Context;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.view.Menu;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.SearchView;
-import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.gruppe1.pem.challengeme.ListItemIconName;
 import com.gruppe1.pem.challengeme.R;
 import com.gruppe1.pem.challengeme.adapters.NavigationDrawerAdapter;
+import com.gruppe1.pem.challengeme.adapters.ViewPagerAdapter;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 
-import java.util.ArrayList;
 import java.util.Locale;
 
-public class TabsFragmentActivity extends FragmentActivity  {
+public class TabsFragmentActivity extends ActionBarActivity {
 
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
@@ -47,15 +41,20 @@ public class TabsFragmentActivity extends FragmentActivity  {
     private String[] menuItems = new String[4];
     private Locale myLocale;
 
-    private MainViewsPagerAdapter mainViewsPagerAdapter;
     private ViewPager mainViewsPager;
-    private ActionBar.Tab tab0;
-    private ActionBar.Tab tab1;
-    private ActionBar.Tab tab2;
+    private TabLayout tabLayout;
 
     private Fragment categoriesFragment;
     private Fragment compareFragment;
     private Fragment wishlistFragment;
+
+    private void setupToolbar(){
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,90 +68,77 @@ public class TabsFragmentActivity extends FragmentActivity  {
         menuItems[2] = getString(R.string.title_activity_wishlist2);
         menuItems[3] = getString(R.string.title_activity_settings);
 
+        setupToolbar();
+
         setupNavigationDrawer();
         setupFloatingActionMenu();
 
 
         mTitle = getString(R.string.app_name);
-        if(getActionBar() != null) {
-            getActionBar().setTitle(mTitle);
+
+        mainViewsPager =(ViewPager) findViewById(R.id.pagerMainViews);
+        setupViewPager(mainViewsPager);
+        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        tabLayout.setupWithViewPager(mainViewsPager);
+
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(mTitle);
         }
 
         // Create a tab listener that is called when the user changes tabs.
-        ActionBar.TabListener tabListener = new ActionBar.TabListener() {
-            public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
                 mainViewsPager.setCurrentItem(tab.getPosition());
                 setSelectedNavigationDrawerItem(tab.getPosition());
                 mDrawerLayout.closeDrawer(mDrawerList);
             }
 
-            public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
-                // hide the given tab
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
             }
 
-            public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
-                // probably ignore this event
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
             }
-        };
+        });
 
 
         categoriesFragment = new CategoriesFragment();
         compareFragment = new CompareFragment();
         wishlistFragment = new WishlistFragment();
-        ArrayList<Fragment> fragments = new ArrayList<>();
-        fragments.add(categoriesFragment);
-        fragments.add(compareFragment);
-        fragments.add(wishlistFragment);
-        mainViewsPagerAdapter = new MainViewsPagerAdapter(getSupportFragmentManager(), fragments);
-        mainViewsPager =(ViewPager) findViewById(R.id.pagerMainViews);
-        mainViewsPager.setAdapter(mainViewsPagerAdapter);
-        mainViewsPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                getActionBar().setSelectedNavigationItem(position);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-
-        ActionBar actionBar = getActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        actionBar.setDisplayShowTitleEnabled(true);
-
-        tab0 = actionBar.newTab()
-                .setText(R.string.title_activity_categories)
-                .setTabListener(tabListener);
-        actionBar.addTab(tab0);
-
-        tab1 = actionBar.newTab()
-                .setText(R.string.title_activity_compare)
-                .setTabListener(tabListener);
-        actionBar.addTab(tab1);
-
-
-        tab2 = actionBar.newTab()
-                .setText(R.string.title_activity_wishlist)
-                .setTabListener(tabListener);
-        actionBar.addTab(tab2);
-
-
+//        mainViewsPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//            @Override
+//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//            }
+//
+//            @Override
+//            public void onPageSelected(int position) {
+//                tabLayout.getTabAt(position).select();
+//            }
+//
+//            @Override
+//            public void onPageScrollStateChanged(int state) {
+//
+//            }
+//        });
     }
 
+    private void setupViewPager(ViewPager viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFrag(new CategoriesFragment(), getString(R.string.title_activity_categories));
+        adapter.addFrag(new CompareFragment(), getString(R.string.title_activity_compare));
+        adapter.addFrag(new WishlistFragment(), getString(R.string.title_activity_wishlist));
+        viewPager.setAdapter(adapter);
+    }
 
     public void loadLocale()
     {
         SharedPreferences prefs = getSharedPreferences(Constants.MY_PREFERENCES, Activity.MODE_PRIVATE);
         String language = prefs.getString(Constants.KEY_LANGUAGE, "");
-
-//        System.out.println("Load Language: " + Locale.getDefault());
         changeLang(language);
     }
 
@@ -288,9 +274,6 @@ public class TabsFragmentActivity extends FragmentActivity  {
      * sets up the navigation drawer
      */
     private void setupNavigationDrawer() {
-        if(getActionBar() != null) {
-            getActionBar().setDisplayHomeAsUpEnabled(true);
-        }
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
@@ -316,13 +299,13 @@ public class TabsFragmentActivity extends FragmentActivity  {
                         // TODO: actualizeWeather();
                         break;
                     case 1:
-                        getActionBar().selectTab(tab0);
+                        tabLayout.getTabAt(0).select();
                         break;
                     case 2:
-                        getActionBar().selectTab(tab1);
+                        tabLayout.getTabAt(1).select();
                         break;
                     case 3:
-                        getActionBar().selectTab(tab2);
+                        tabLayout.getTabAt(2).select();
                         break;
                     case 4:
                         Intent intent = new Intent();
@@ -340,14 +323,12 @@ public class TabsFragmentActivity extends FragmentActivity  {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                getActionBar().setTitle(getString(R.string.nav_drawer_title));
                 invalidateOptionsMenu();
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                getActionBar().setTitle(getString(R.string.app_name));
                 invalidateOptionsMenu();
             }
         };
@@ -372,7 +353,6 @@ public class TabsFragmentActivity extends FragmentActivity  {
     // for actualizing the categories list on coming back from new category
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        System.out.println("TabsFragmentActivity onActivtiyResult");
         try {
             super.onActivityResult(requestCode, resultCode, data);
 
@@ -384,45 +364,10 @@ public class TabsFragmentActivity extends FragmentActivity  {
                 }
             }
         } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
-
-
-
-
-    public static class MainViewsPagerAdapter extends FragmentPagerAdapter {
-        private ArrayList<Fragment> fragments;
-        public MainViewsPagerAdapter(FragmentManager fm, ArrayList<Fragment> fragments) {
-            super(fm);
-            this.fragments = fragments;
-        }
-
-        @Override
-        public android.support.v4.app.Fragment getItem(int position) {
-            switch (position) {
-                case 0:
-                    return fragments.get(0);
-                case 1:
-                    return fragments.get(1);
-                case 2:
-                    return fragments.get(2);
-                default:
-                    return fragments.get(0);
-            }
-        }
-
-
-        @Override
-        public int getCount() {
-            return 3;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return "OBJECT " + (position + 1);
-        }
-    }
 }
 
 

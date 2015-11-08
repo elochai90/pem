@@ -1,7 +1,0 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <MultiSelectListPreference
-        android:key="favorite_colors"
-        android:title="@string/chooseColor"/>
-
-</PreferenceScreen>

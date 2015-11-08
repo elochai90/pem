@@ -76,5 +76,9 @@
         android:layout_marginTop="17dp"
         style="?android:attr/ratingBarStyleSmall"/>
 
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray02"/>
 
 </RelativeLayout>

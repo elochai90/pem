@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
@@ -24,7 +25,7 @@ import java.util.Locale;
 
 /**
  * Created by bianka on 20.08.2015.
- */public class CollectionItemsActivity extends FragmentActivity {
+ */public class CollectionItemsActivity extends ActionBarActivity {
 
     ItemsCollectionPagerAdapter mItemsCollectionPagerAdapter;
     ViewPager mViewPager;
@@ -70,7 +71,7 @@ import java.util.Locale;
             public void onPageSelected(int position) {
                 currentItemPosition = position;
                 mItemsCollectionPagerAdapter.getItem(position);
-                getActionBar().setTitle(mDataset.get(position).getName());
+//                getSupportActionBar().setTitle(mDataset.get(position).getName());
             }
 
             @Override

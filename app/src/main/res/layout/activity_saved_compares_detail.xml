@@ -1,94 +1,116 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="10dp"
-    android:dividerPadding="20dp"
-    tools:context="com.gruppe1.pem.challengeme.views.SavedComparesDetailActivity">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/timeStampSavedCompare"
-        android:layout_width="wrap_content"
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="10dp"
-        android:textSize="18sp"/>
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:layout_marginBottom="10dp"
-        android:background="#c0c0c0"/>
-
-    <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/card_view_item1"
-        android:background="@color/cardview_light_background"
-        android:layout_gravity="center"
-        android:layout_marginBottom="10dp"
-        android:layout_width="210dp"
-        android:layout_height="210dp"
-        card_view:cardCornerRadius="4dp">
-
-        <RelativeLayout
-            android:id="@+id/item1InfoLayout"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:id="@+id/detail1oben"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/primary"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp"
+        android:dividerPadding="20dp">
+
+        <TextView
+            android:id="@+id/timeStampSavedCompare"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="10dp"
+            android:textSize="18sp"/>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="10dp"
+            android:background="#c0c0c0"/>
+
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/card_view_item1"
+            android:background="@color/cardview_light_background"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            android:layout_width="210dp"
+            android:layout_height="210dp"
+            card_view:cardCornerRadius="4dp">
+
+            <RelativeLayout
+                android:id="@+id/item1InfoLayout"
                 android:layout_width="match_parent"
-                android:layout_height="220dp"
-                android:contentDescription="@string/compare_desc_image1"/>
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/detail1oben"
+                    android:layout_width="match_parent"
+                    android:layout_height="220dp"
+                    android:contentDescription="@string/compare_desc_image1"/>
 
 
-            <TextView
-                android:id="@+id/nameItem1"
-                android:layout_alignBottom="@id/detail1oben"
-                android:background="@color/grey_transparent"
-                android:textColor="@android:color/white"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:padding="10dp"
-                android:textSize="20sp"/>
+                <TextView
+                    android:id="@+id/nameItem1"
+                    android:layout_alignBottom="@id/detail1oben"
+                    android:background="@color/grey_transparent"
+                    android:textColor="@android:color/white"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:padding="10dp"
+                    android:textSize="20sp"/>
 
-        </RelativeLayout>
-    </android.support.v7.widget.CardView>
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
 
 
-    <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/card_view_item2"
-        android:background="@color/cardview_light_background"
-        android:layout_gravity="center"
-        android:layout_width="210dp"
-        android:layout_height="210dp"
-        card_view:cardCornerRadius="4dp">
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/card_view_item2"
+            android:background="@color/cardview_light_background"
+            android:layout_gravity="center"
+            android:layout_width="210dp"
+            android:layout_height="210dp"
+            card_view:cardCornerRadius="4dp">
 
-        <RelativeLayout
-            android:id="@+id/item2InfoLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:id="@+id/detail2unten"
+            <RelativeLayout
+                android:id="@+id/item2InfoLayout"
                 android:layout_width="match_parent"
-                android:layout_height="220dp"
-                android:contentDescription="@string/compare_desc_image2"/>
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/detail2unten"
+                    android:layout_width="match_parent"
+                    android:layout_height="220dp"
+                    android:contentDescription="@string/compare_desc_image2"/>
 
 
-            <TextView
-                android:id="@+id/nameItem2"
-                android:layout_alignBottom="@id/detail2unten"
-                android:background="@color/grey_transparent"
-                android:textColor="@android:color/white"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:padding="10dp"
-                android:textSize="20sp"/>
+                <TextView
+                    android:id="@+id/nameItem2"
+                    android:layout_alignBottom="@id/detail2unten"
+                    android:background="@color/grey_transparent"
+                    android:textColor="@android:color/white"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:padding="10dp"
+                    android:textSize="20sp"/>
 
-        </RelativeLayout>
-    </android.support.v7.widget.CardView>
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
 
-</LinearLayout>
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>

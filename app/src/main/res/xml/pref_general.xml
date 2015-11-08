@@ -1,2 +1,49 @@
-<PreferenceScreen>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="@string/language">
+        <ListPreference
+            android:key="Language"
+            android:title="@string/chooseLanguage"
+            android:entries="@array/language_text"
+            android:entryValues="@array/language_text" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/standardSizes">
+        <ListPreference
+            android:key="Tops"
+            android:title="@string/tops"
+            android:entries="@array/sizes_text"
+            android:entryValues="@array/sizes_text" />
+
+        <ListPreference
+            android:key="Bottoms"
+            android:title="@string/bottoms"
+            android:entries="@array/sizes_text"
+            android:entryValues="@array/sizes_text" />
+
+        <ListPreference
+            android:key="Shoes"
+            android:title="@string/shoes"
+            android:entries="@array/sizes_shoes_text"
+            android:entryValues="@array/sizes_shoes_text" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/favColors">
+        <MultiSelectListPreference
+            android:key="favorite_colors"
+            android:title="@string/chooseColor"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/showWishlistItems">
+        <CheckBoxPreference
+            android:key="show_wishlist_item_in_compare"
+            android:title="@string/showWishlistItems"
+            android:defaultValue="false"
+            />
+    </PreferenceCategory>
+
 </PreferenceScreen>

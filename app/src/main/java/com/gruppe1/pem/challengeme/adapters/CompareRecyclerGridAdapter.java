@@ -2,15 +2,16 @@ package com.gruppe1.pem.challengeme.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.gruppe1.pem.challengeme.Compare;
 import com.gruppe1.pem.challengeme.Item;
+import com.gruppe1.pem.challengeme.ListItemIconName;
 import com.gruppe1.pem.challengeme.R;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
@@ -20,23 +21,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Compare adapter to fill the grid view of the compare list
+ * Array adapter to fill a default list view
  */
-public class CompareGridAdapter extends ArrayAdapter {
+public class CompareRecyclerGridAdapter extends RecyclerView.Adapter<CompareRecyclerGridAdapter.ViewHolder>  {
     private Context context;
     private int layoutResourceId;
     private List<Compare> data = new ArrayList<>();
     private DataBaseHelper dbHelper;
     private PicassoSingleton picassoSingleton;
 
-    /**
-     * Constructor of the CompareGridAdapter
-     * @param context the context
-     * @param layoutResourceId Layout resource for a item
-     * @param data the list of compares to fill the grid list with
-     */
-    public CompareGridAdapter(Context context, int layoutResourceId, List<Compare> data) {
-        super(context, layoutResourceId, data);
+
+    public CompareRecyclerGridAdapter(Context context, int layoutResourceId, ArrayList<Compare> data) {
+        super();
         this.layoutResourceId = layoutResourceId;
         this.context = context;
         this.data = data;
@@ -46,22 +42,17 @@ public class CompareGridAdapter extends ArrayAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View row = convertView;
-        ViewHolder holder;
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(layoutResourceId, parent, false);
+        ViewHolder vh = new ViewHolder(v);
+        return vh;
 
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
         Compare item = data.get(position);
-        if (row == null || row.getTag() == null) {
-            LayoutInflater inflater = ((Activity) context).getLayoutInflater();
-            row = inflater.inflate(layoutResourceId, parent, false);
-            holder = new ViewHolder();
-            holder.compareName = (TextView) row.findViewById(R.id.compareName);
-            holder.imageItem1 = (ImageView) row.findViewById(R.id.imageItem1);
-            holder.imageItem2 = (ImageView) row.findViewById(R.id.imageItem2);
-            row.setTag(holder);
-        } else {
-            holder = (ViewHolder) row.getTag();
-        }
 
         holder.compareName.setText(item.getName());
 
@@ -71,7 +62,7 @@ public class CompareGridAdapter extends ArrayAdapter {
 
         picassoSingleton.setImage(item1.getImageFile(), Constants.LIST_VIEW_IMAGE_WIDTH, Constants.LIST_VIEW_IMAGE_HEIGHT, holder.imageItem1);
         picassoSingleton.setImage(item2.getImageFile(), Constants.LIST_VIEW_IMAGE_WIDTH, Constants.LIST_VIEW_IMAGE_HEIGHT, holder.imageItem2);
-        return row;
+
     }
 
     @Override
@@ -79,9 +70,23 @@ public class CompareGridAdapter extends ArrayAdapter {
         return this.data.get(p_position).getId();
     }
 
-    static class ViewHolder {
+    @Override
+    public int getItemCount() {
+        return data.size();
+    }
+
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView compareName;
         ImageView imageItem1;
         ImageView imageItem2;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            compareName = (TextView) itemView.findViewById(R.id.compareName);
+            imageItem1 = (ImageView)itemView.findViewById(R.id.imageItem1);
+            imageItem2 = (ImageView)itemView.findViewById(R.id.imageItem2);
+        }
     }
+
 }

@@ -1,0 +1,16 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.gruppe1.pem.challengeme.views.SearchResultsActivity"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/search"
+        android:title="@string/search_title"
+        android:icon="@drawable/ic_search"
+        app:showAsAction="always"
+        android:actionViewClass="android.widget.SearchView" />
+    <item
+        android:id="@+id/filter"
+        android:actionLayout="@layout/action_bar_search"
+        android:title="Badges"
+        app:showAsAction="always">
+    </item>d
+</menu>

@@ -6,7 +6,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,7 +28,7 @@ import java.util.Date;
 import java.util.Locale;
 
 
-public class SavedComparesDetailActivity extends Activity {
+public class SavedComparesDetailActivity extends AppCompatActivity {
 
     private Compare compareItem;
 
@@ -42,6 +44,8 @@ public class SavedComparesDetailActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_saved_compares_detail);
+
+        setupToolbar();
 
         detail1 = (ImageView) findViewById(R.id.detail1oben);
         detail2 = (ImageView) findViewById(R.id.detail2unten);
@@ -59,8 +63,8 @@ public class SavedComparesDetailActivity extends Activity {
         final Item item1 = new Item(this, itemIds.get(0), dbHelper);
         final Item item2 = new Item(this, itemIds.get(1), dbHelper);
 
-        if(getActionBar() != null) {
-            getActionBar().setTitle(compareItem.getName());
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(compareItem.getName());
         }
 
         detail1.setImageBitmap(ImageLoader.getPicFromFile(item1.getImageFile(), 500, 500));
@@ -85,6 +89,14 @@ public class SavedComparesDetailActivity extends Activity {
         timeStampSavedCompare.setText(getResources().getString(R.string.compare_saved) + ":  " + compareCreatedTimestamp);
 
         dbHelper.close();
+    }
+
+    private void setupToolbar(){
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -179,7 +191,7 @@ public class SavedComparesDetailActivity extends Activity {
                     SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy", Locale.ENGLISH);
                     String compareCreatedTimestamp = sdf.format(new Date(Long.parseLong(compareTimestamp)));
                     timeStampSavedCompare.setText(getResources().getString(R.string.compare_saved) + ":  " + compareCreatedTimestamp);
-                    getActionBar().setTitle(compareName);
+                    getSupportActionBar().setTitle(compareName);
 
                     DataBaseHelper dbHelper = new DataBaseHelper(this);
                     dbHelper.init();

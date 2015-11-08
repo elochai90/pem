@@ -2,64 +2,82 @@ package com.gruppe1.pem.challengeme.views;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.GridView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.SearchView;
 import android.widget.TextView;
 
-import com.github.clans.fab.FloatingActionButton;
-import com.github.clans.fab.FloatingActionMenu;
 import com.gruppe1.pem.challengeme.Item;
 import com.gruppe1.pem.challengeme.ListItemIconName;
 import com.gruppe1.pem.challengeme.R;
-import com.gruppe1.pem.challengeme.adapters.DefaultListAdapter;
+import com.gruppe1.pem.challengeme.adapters.DefaultRecyclerListAdapter;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
+import com.gruppe1.pem.challengeme.helpers.RecyclerItemClickListener;
 
 import java.util.ArrayList;
 
 
-public class WishlistFragment extends Fragment implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
+public class WishlistFragment extends Fragment {
+
     private ArrayList<ListItemIconName> mDataset;
-    private DefaultListAdapter listAdapter;
     private RelativeLayout noWishlistItemLayout;
     private Object[] selectedItem;
+    private RecyclerView listView;
+    private RecyclerView gridView;
+    private DefaultRecyclerListAdapter defaultRecyclerListAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        View rootView = inflater.inflate(R.layout.default_list_grid_view, container, false);
+        View rootView = inflater.inflate(R.layout.default_recycler_view, container, false);
 
         noWishlistItemLayout = (RelativeLayout) rootView.findViewById(R.id.noItemLayout);
+        listView = (RecyclerView) rootView.findViewById(R.id.listView);
+        gridView = (RecyclerView) rootView.findViewById(R.id.gridView);
+
+
         TextView noWishlistItemText = (TextView) rootView.findViewById(R.id.noItemText);
         noWishlistItemText.setText(R.string.no_wishlist_items);
 
         mDataset = new ArrayList<>();
         initDataset();
 
-        ListView listView = (ListView) rootView.findViewById(R.id.listView);
-        listAdapter = new DefaultListAdapter(getActivity(), R.layout.list_item_default, mDataset, false, true);
-        listView.setAdapter(listAdapter);
-        listView.setOnItemClickListener(this);
-        listView.setOnItemLongClickListener(this);
-        GridView gridView = (GridView) rootView.findViewById(R.id.gridView);
+
+        StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        gridView.setLayoutManager(gridLayoutManager);
+        gridView.setHasFixedSize(true);
         gridView.setVisibility(View.INVISIBLE);
+
+        LinearLayoutManager linearLayoutManagerList = new LinearLayoutManager(getActivity().getBaseContext());
+        listView.setLayoutManager(linearLayoutManagerList);
+        listView.setHasFixedSize(true);
+        defaultRecyclerListAdapter = new DefaultRecyclerListAdapter(getActivity(), R.layout.list_item_default, mDataset, false, true);
+        listView.setAdapter(defaultRecyclerListAdapter);
+        listView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                wishlistFragmentOnItemClick(view, position);
+            }
+
+            @Override
+            public void onItemLongClick(RecyclerView parent, View view, int position) {
+                wishlistFragmentOnItemLongClick(parent, view, position);
+            }
+        }));
 
         return rootView;
     }
@@ -82,8 +100,10 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
      */
     private void showNoWishlistItemLayout(boolean show) {
         if(show) {
+            listView.setVisibility(View.INVISIBLE);
             noWishlistItemLayout.setVisibility(View.VISIBLE);
         } else {
+            listView.setVisibility(View.VISIBLE);
             noWishlistItemLayout.setVisibility(View.INVISIBLE);
         }
     }
@@ -93,43 +113,17 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
         // Inflate the menu; this adds items to the action bar if it is present.
         menu.clear();
         inflater.inflate(R.menu.menu_wishlist_fragment, menu);
-
-        // Associate searchable configuration with the SearchView
-        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-        final SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-        final Menu optionMenu =  menu;
-        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean queryTextFocused) {
-                if (!queryTextFocused) {
-                    searchView.clearFocus();
-                    optionMenu.findItem(R.id.search).collapseActionView();
-                }
-            }
-        });
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                searchView.clearFocus();
-                optionMenu.findItem(R.id.search).collapseActionView();
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
     }
 
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_switchView) {
-            return true;
+        switch (item.getItemId()) {
+            case R.id.search:
+                Intent intent = new Intent();
+                intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".views.SearchResultsActivity");
+                startActivity(intent);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -167,9 +161,9 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
         startActivityForResult(intent, 1);
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        int itemid = listAdapter.getItem(position).getElementId();
+    private void wishlistFragmentOnItemClick(View view, int position) {
+        int itemid = (int) defaultRecyclerListAdapter.getItemId(position);
+//        getItem(position).getElementId();
         selectItem(itemid);
     }
 
@@ -182,7 +176,7 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
             if (requestCode == 0) {
                 if(resultCode == Activity.RESULT_OK) {
                     initDataset();
-                    listAdapter.notifyDataSetChanged();
+                    defaultRecyclerListAdapter.notifyDataSetChanged();
                 }
             }
         } catch(Exception e){
@@ -190,8 +184,7 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
         }
     }
 
-    @Override
-    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+    private boolean wishlistFragmentOnItemLongClick(RecyclerView parent, View view, int position) {
         selectedItem = new Object[2];
         selectedItem[0] = position;
         selectedItem[1] = view;
@@ -210,7 +203,7 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
         builder.setView(dialogView).setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                int wishlistItemId = (int) listAdapter.getItemId((int) selectedItem[0]);
+                int wishlistItemId = (int) defaultRecyclerListAdapter.getItemId((int) selectedItem[0]);
 
                 DataBaseHelper db_helper = new DataBaseHelper(getActivity().getApplicationContext());
                 db_helper.init();
@@ -220,7 +213,7 @@ public class WishlistFragment extends Fragment implements AdapterView.OnItemClic
                 db_helper.close();
 
                 initDataset();
-                listAdapter.notifyDataSetChanged();
+                defaultRecyclerListAdapter.notifyDataSetChanged();
             }
         }).setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override

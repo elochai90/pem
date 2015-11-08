@@ -1,6 +1,5 @@
 package com.gruppe1.pem.challengeme.views;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,13 +7,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.GridView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -24,21 +25,20 @@ import com.gruppe1.pem.challengeme.Category;
 import com.gruppe1.pem.challengeme.Item;
 import com.gruppe1.pem.challengeme.ListItemIconName;
 import com.gruppe1.pem.challengeme.R;
-import com.gruppe1.pem.challengeme.adapters.DefaultGridAdapter;
-import com.gruppe1.pem.challengeme.adapters.DefaultListAdapter;
+import com.gruppe1.pem.challengeme.adapters.DefaultRecyclerGridAdapter;
+import com.gruppe1.pem.challengeme.adapters.DefaultRecyclerListAdapter;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
+import com.gruppe1.pem.challengeme.helpers.RecyclerItemClickListener;
 
 import java.util.ArrayList;
 
 
-public class ItemsListActivity extends Activity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener  {
+public class ItemsListActivity extends AppCompatActivity {
     private ArrayList<ListItemIconName> mDataset;
 
-    private GridView gridView;
-    private DefaultGridAdapter gridAdapter;
-    private ListView listView;
-    private DefaultListAdapter listAdapter;
+    private RecyclerView gridView;
+    private RecyclerView listView;
     private Boolean list;
 
     private FloatingActionMenu menu;
@@ -52,12 +52,16 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
 
     private Object[] selectedItem;
 
+    private DefaultRecyclerListAdapter defaultRecyclerListAdapter;
+    private DefaultRecyclerGridAdapter defaultRecyclerGridAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.default_list_grid_view);
+        setContentView(R.layout.activity_items_list);
 
+        setupToolbar();
         noItemLayout = (RelativeLayout) findViewById(R.id.noItemLayout);
         TextView noItemText = (TextView) findViewById(R.id.noItemText);
         noItemText.setText(R.string.no_items);
@@ -83,22 +87,49 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
         db_helper.init();
         Category category = new Category(this, categoryId, db_helper);
         db_helper.close();
-        setTitle(category.getName());
+        getSupportActionBar().setTitle(category.getName());
+//        setTitle(category.getName());
         mDataset = new ArrayList<>();
 
         initDataset();
 
-        listView = (ListView) findViewById(R.id.listView);
-        listAdapter = new DefaultListAdapter(this, R.layout.list_item_default, mDataset, false, false);
-        listView.setAdapter(listAdapter);
-        listView.setOnItemClickListener(this);
-        listView.setOnItemLongClickListener(this);
-        gridView = (GridView) findViewById(R.id.gridView);
-        gridAdapter = new DefaultGridAdapter(this, R.layout.grid_item_default, mDataset, false);
-        gridView.setAdapter(gridAdapter);
-        gridView.setOnItemClickListener(this);
-        gridView.setOnItemLongClickListener(this);
+        listView = (RecyclerView) findViewById(R.id.listView);
+        defaultRecyclerListAdapter = new DefaultRecyclerListAdapter(this, R.layout.list_item_default, mDataset, false, false);
+
+        LinearLayoutManager linearLayoutManagerList = new LinearLayoutManager(this.getBaseContext());
+        listView.setLayoutManager(linearLayoutManagerList);
+        listView.setHasFixedSize(true);
+        listView.setAdapter(defaultRecyclerListAdapter);
+        listView.addOnItemTouchListener(new RecyclerItemClickListener(this, new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                itemListActivityOnItemClick(view, position);
+            }
+
+            @Override
+            public void onItemLongClick(RecyclerView parent, View view, int position) {
+                itemListActivityOnItemLongClick(parent, view, position);
+            }
+        }));
+        gridView = (RecyclerView) findViewById(R.id.gridView);
+        defaultRecyclerGridAdapter = new DefaultRecyclerGridAdapter(this, R.layout.grid_item_default, mDataset, false);
+        StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        gridView.setLayoutManager(gridLayoutManager);
+        gridView.setHasFixedSize(true);
+        gridView.setAdapter(defaultRecyclerGridAdapter);
         gridView.setVisibility(View.INVISIBLE);
+
+        gridView.addOnItemTouchListener(new RecyclerItemClickListener(this, new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                itemListActivityOnItemClick(view, position);
+            }
+
+            @Override
+            public void onItemLongClick(RecyclerView parent, View view, int position) {
+                itemListActivityOnItemLongClick(parent, view, position);
+            }
+        }));
 
         menu = (FloatingActionMenu) findViewById(R.id.menu);
         menu.setVisibility(View.VISIBLE);
@@ -156,6 +187,14 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
         });
     }
 
+    private void setupToolbar(){
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
 
     /**
      * shows/hides the noCompareLayout
@@ -183,8 +222,8 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
         if(p_requestCode == 1) {
             // item was updated
             initDataset();
-            listAdapter.notifyDataSetChanged();
-            gridAdapter.notifyDataSetChanged();
+            defaultRecyclerListAdapter.notifyDataSetChanged();
+            defaultRecyclerGridAdapter.notifyDataSetChanged();
         }
     }
 
@@ -292,15 +331,13 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
 
 
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        int itemid = list ? listAdapter.getItem(position).getElementId() : gridAdapter.getItem(position).getElementId();
+    private void itemListActivityOnItemClick(View view, int position) {
+        int itemid = list ? (int) defaultRecyclerListAdapter.getItemId(position) : (int)defaultRecyclerGridAdapter.getItemId(position);
         selectItem(itemid, position);
     }
 
 
-    @Override
-    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+    private boolean itemListActivityOnItemLongClick(RecyclerView parent, View view, int position) {
         selectedItem = new Object[2];
         selectedItem[0] = position;
         selectedItem[1] = view;
@@ -319,7 +356,7 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
         builder.setView(dialogView).setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                int itemId = (int)listAdapter.getItemId((int)selectedItem[0]);
+                int itemId = (int)defaultRecyclerListAdapter.getItemId((int)selectedItem[0]);
 
                 DataBaseHelper db_helper = new DataBaseHelper(getApplicationContext());
                 db_helper.init();
@@ -329,8 +366,8 @@ public class ItemsListActivity extends Activity implements AdapterView.OnItemCli
                 db_helper.close();
 
                 initDataset();
-                listAdapter.notifyDataSetChanged();
-                gridAdapter.notifyDataSetChanged();
+                defaultRecyclerListAdapter.notifyDataSetChanged();
+                defaultRecyclerGridAdapter.notifyDataSetChanged();
             }
         }).setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override

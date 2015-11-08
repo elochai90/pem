@@ -2,50 +2,44 @@ package com.gruppe1.pem.challengeme.views;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.GridView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.clans.fab.FloatingActionButton;
-import com.github.clans.fab.FloatingActionMenu;
 import com.gruppe1.pem.challengeme.Compare;
 import com.gruppe1.pem.challengeme.R;
-import com.gruppe1.pem.challengeme.adapters.CompareGridAdapter;
-import com.gruppe1.pem.challengeme.adapters.CompareListAdapter;
+import com.gruppe1.pem.challengeme.adapters.CompareRecyclerGridAdapter;
+import com.gruppe1.pem.challengeme.adapters.CompareRecyclerListAdapter;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
+import com.gruppe1.pem.challengeme.helpers.RecyclerItemClickListener;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
-public class CompareFragment extends Fragment  implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener{
+public class CompareFragment extends Fragment {
 
-    private List<Compare> mDataset;
+    private ArrayList<Compare> mDataset;
 
     private View rootView;
 
-    private GridView gridView;
-    private CompareGridAdapter gridAdapter;
-    private ListView listView;
-    private CompareListAdapter listAdapter;
+    private RecyclerView gridView;
+    private RecyclerView listView;
     private Boolean list;
 
     private RelativeLayout noComparesLayout;
@@ -55,32 +49,60 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
 
     private Object[] selectedItem;
 
+    private CompareRecyclerListAdapter compareRecyclerListAdapter;
+    private CompareRecyclerGridAdapter compareRecyclerGridAdapter;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        rootView = inflater.inflate(R.layout.default_list_grid_view, container, false);
+        rootView = inflater.inflate(R.layout.default_recycler_view, container, false);
 
         noComparesLayout = (RelativeLayout) rootView.findViewById(R.id.noItemLayout);
+        listView = (RecyclerView) rootView.findViewById(R.id.listView);
+        gridView = (RecyclerView) rootView.findViewById(R.id.gridView);
+
         TextView noComparesText = (TextView) rootView.findViewById(R.id.noItemText);
         noComparesText.setText(R.string.no_compares);
 
         mDataset = new ArrayList<>();
         initDataset();
 
-        listView = (ListView) rootView.findViewById(R.id.listView);
-        listAdapter = new CompareListAdapter(getActivity(), R.layout.list_item_compare, mDataset);
-        listView.setAdapter(listAdapter);
-        listView.setOnItemClickListener(this);
-        listView.setOnItemLongClickListener(this);
-        gridView = (GridView) rootView.findViewById(R.id.gridView);
-        gridView.setNumColumns(3);
-        gridAdapter = new CompareGridAdapter(getActivity(), R.layout.grid_item_compare, mDataset);
-        gridView.setAdapter(gridAdapter);
+        compareRecyclerListAdapter = new CompareRecyclerListAdapter(getActivity(), R.layout.list_item_compare, mDataset);
+
+        LinearLayoutManager linearLayoutManagerList = new LinearLayoutManager(getActivity().getBaseContext());
+        listView.setLayoutManager(linearLayoutManagerList);
+        listView.setHasFixedSize(true);
+        listView.setAdapter(compareRecyclerListAdapter);
+        listView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                compareFragmentOnItemClick(view, position);
+            }
+
+            @Override
+            public void onItemLongClick(RecyclerView parent, View view, int position) {
+                compareFragmentOnItemLongClick(parent, view, position);
+            }
+        }));
+        compareRecyclerGridAdapter = new CompareRecyclerGridAdapter(getActivity(), R.layout.grid_item_compare, mDataset);
+        StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+        gridView.setLayoutManager(gridLayoutManager);
+        gridView.setHasFixedSize(true);
+        gridView.setAdapter(compareRecyclerGridAdapter);
         gridView.setVisibility(View.INVISIBLE);
-        gridView.setOnItemClickListener(this);
-        gridView.setOnItemLongClickListener(this);
+        gridView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                compareFragmentOnItemClick(view, position);
+            }
+
+            @Override
+            public void onItemLongClick(RecyclerView parent, View view, int position) {
+                compareFragmentOnItemLongClick(parent, view, position);
+            }
+        }));
 
         return rootView;
     }
@@ -105,9 +127,16 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
      */
     private void showNoComparesLayout(boolean show) {
         if(show) {
+            gridView.setVisibility(View.INVISIBLE);
+            listView.setVisibility(View.INVISIBLE);
             noComparesLayout.setVisibility(View.VISIBLE);
         } else {
             noComparesLayout.setVisibility(View.INVISIBLE);
+            if(list) {
+                listView.setVisibility(View.VISIBLE);
+            } else {
+                gridView.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -131,33 +160,6 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
         menu.clear();
         inflater.inflate(R.menu.menu_compare_fragment, menu);
 
-        // Associate searchable configuration with the SearchView
-        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-        final SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-        final Menu optionMenu =  menu;
-        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean queryTextFocused) {
-                if (!queryTextFocused) {
-                    searchView.clearFocus();
-                    optionMenu.findItem(R.id.search).collapseActionView();
-                }
-            }
-        });
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                searchView.clearFocus();
-                optionMenu.findItem(R.id.search).collapseActionView();
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
     }
 
     /**
@@ -181,16 +183,20 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.action_switchView) {
-            switchListGridView(!list);
-            if(list) {
-                item.setIcon(R.drawable.ic_view_grid);
-            } else {
-                item.setIcon(R.drawable.ic_view_list);
-            }
-            return true;
+        switch (item.getItemId()) {
+            case R.id.action_switchView:
+                switchListGridView(!list);
+                if(list) {
+                    item.setIcon(R.drawable.ic_view_grid);
+                } else {
+                    item.setIcon(R.drawable.ic_view_list);
+                }
+                return true;
+            case R.id.search:
+                Intent intent = new Intent();
+                intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".views.SearchResultsActivity");
+                startActivity(intent);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -215,8 +221,7 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
         super.onSaveInstanceState(savedInstanceState);
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    private void compareFragmentOnItemClick(View view, int position) {
             Intent intent = new Intent();
             intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".views.SavedComparesDetailActivity");
             intent.putExtra("item", mDataset.get(position));
@@ -232,8 +237,8 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
             if (requestCode == 0) {
                 if(resultCode == Activity.RESULT_OK) {
                     initDataset();
-                    listAdapter.notifyDataSetChanged();
-                    gridAdapter.notifyDataSetChanged();
+                    compareRecyclerListAdapter.notifyDataSetChanged();
+                    compareRecyclerGridAdapter.notifyDataSetChanged();
                 }
             }
         } catch (Exception ex) {
@@ -241,8 +246,7 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
         }
     }
 
-    @Override
-    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+    private boolean compareFragmentOnItemLongClick(RecyclerView parent, View view, int position) {
         selectedItem = new Object[2];
         selectedItem[0] = position;
         selectedItem[1] = view;
@@ -261,7 +265,7 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
         builder.setView(dialogView).setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                int compareId = (int) listAdapter.getItemId((int) selectedItem[0]);
+                int compareId = (int) compareRecyclerListAdapter.getItemId((int) selectedItem[0]);
 
                 DataBaseHelper db_helper = new DataBaseHelper(getActivity().getApplicationContext());
                 db_helper.init();
@@ -271,8 +275,8 @@ public class CompareFragment extends Fragment  implements AdapterView.OnItemClic
                 db_helper.close();
 
                 initDataset();
-                listAdapter.notifyDataSetChanged();
-                gridAdapter.notifyDataSetChanged();
+                compareRecyclerListAdapter.notifyDataSetChanged();
+                compareRecyclerGridAdapter.notifyDataSetChanged();
             }
         }).setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override

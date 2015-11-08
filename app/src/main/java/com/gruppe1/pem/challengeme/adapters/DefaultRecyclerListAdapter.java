@@ -2,9 +2,11 @@ package com.gruppe1.pem.challengeme.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -26,7 +28,7 @@ import java.util.HashMap;
 /**
  * Array adapter to fill a default list view
  */
-public class DefaultListAdapter extends ArrayAdapter<ListItemIconName> {
+public class DefaultRecyclerListAdapter extends RecyclerView.Adapter<DefaultRecyclerListAdapter.ViewHolder>  {
     private Context context;
     private int layoutResourceId;
     private ArrayList<ListItemIconName> data = new ArrayList<>();
@@ -35,16 +37,9 @@ public class DefaultListAdapter extends ArrayAdapter<ListItemIconName> {
     private DataBaseHelper db_helper;
     private PicassoSingleton picassoSingleton;
 
-    /**
-     * Constructor of the DefaultListAdapter
-     * @param context the context
-     * @param layoutResourceId  Layout resource for a item
-     * @param data the list of ListItemIconNames to fill the list with
-     * @param isCategory boolean if the adapter should fill the category list view
-     * @param wishlist boolean if the adapter should fill the wishlist list view
-     */
-    public DefaultListAdapter(Context context, int layoutResourceId, ArrayList<ListItemIconName> data, boolean isCategory, boolean wishlist) {
-        super(context, layoutResourceId, data);
+    public DefaultRecyclerListAdapter(Context context, int layoutResourceId, ArrayList<ListItemIconName> data, boolean isCategory, boolean wishlist) {
+        super();
+
         this.layoutResourceId = layoutResourceId;
         this.context = context;
         this.data = data;
@@ -58,26 +53,17 @@ public class DefaultListAdapter extends ArrayAdapter<ListItemIconName> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View row = convertView;
-        ViewHolder holder;
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(layoutResourceId, parent, false);
+        ViewHolder vh = new ViewHolder(v);
+        return vh;
 
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
         final ListItemIconName item = data.get(position);
-        if (row == null || row.getTag() == null) {
-            LayoutInflater inflater = ((Activity) context).getLayoutInflater();
-           row = inflater.inflate(layoutResourceId, parent, false);
-            holder = new ViewHolder();
-            holder.firstLine = (TextView) row.findViewById(R.id.firstLine);
-            holder.secondLine = (TextView) row.findViewById(R.id.secondLine);
-            holder.rightTextView = (TextView) row.findViewById(R.id.rightTextView);
-            holder.image = (ImageView) row.findViewById(R.id.imageView);
-            holder.itemActionButton = (Button) row.findViewById(R.id.itemActionButton);
-            holder.listItemRatingBar = (RatingBar) row.findViewById(R.id.listItemRatingBar);
-            row.setTag(holder);
-        } else {
-            holder = (ViewHolder) row.getTag();
-        }
-
         holder.firstLine.setText(item.getName());
 
         if(isCategory || item.getItemFile() == null) {
@@ -168,7 +154,6 @@ public class DefaultListAdapter extends ArrayAdapter<ListItemIconName> {
             });
         }
 
-        return row;
     }
 
     @Override
@@ -176,13 +161,29 @@ public class DefaultListAdapter extends ArrayAdapter<ListItemIconName> {
         return this.data.get(p_position).getElementId();
     }
 
-    static class ViewHolder {
+    @Override
+    public int getItemCount() {
+        return data.size();
+    }
+
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView firstLine;
         TextView secondLine;
         TextView rightTextView;
         ImageView image;
         Button itemActionButton;
         RatingBar listItemRatingBar;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            firstLine = (TextView) itemView.findViewById(R.id.firstLine);
+            secondLine = (TextView)itemView.findViewById(R.id.secondLine);
+            rightTextView = (TextView)itemView.findViewById(R.id.rightTextView);
+            image = (ImageView)itemView.findViewById(R.id.imageView);
+            itemActionButton = (Button)itemView.findViewById(R.id.itemActionButton);
+            listItemRatingBar = (RatingBar)itemView.findViewById(R.id.listItemRatingBar);
+        }
     }
 
     /**

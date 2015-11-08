@@ -17,6 +17,8 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -104,6 +106,13 @@ public class CollectionItemsFragment extends Fragment {
                 R.layout.fragment_collection_items, container, false);
         activity = (CollectionItemsActivity) getActivity();
 
+
+        Toolbar toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
+        activity.setSupportActionBar(toolbar);
+        activity.getSupportActionBar().setDisplayShowHomeEnabled(true);
+        activity.getSupportActionBar().setHomeButtonEnabled(true);
+        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         sharedPreferences = getActivity().getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
 
 
@@ -184,6 +193,7 @@ public class CollectionItemsFragment extends Fragment {
             editItem = new Item(activity, editItemId, getDb_helper());
             parentCategoryId = editItem.getCategoryId();
             savedColorId = editItem.getPrimaryColorId();
+            activity.getSupportActionBar().setTitle(editItem.getName());
 
         } else {
             getDb_helper().setTable(Constants.ITEMS_DB_TABLE);

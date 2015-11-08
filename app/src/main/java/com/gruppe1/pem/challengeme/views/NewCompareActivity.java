@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,7 +36,7 @@ import java.util.HashMap;
 import java.util.Locale;
 
 
-public class NewCompareActivity extends Activity {
+public class NewCompareActivity extends AppCompatActivity {
 
     private ViewPager viewPager1;
     private ViewPager viewPager2;
@@ -57,7 +59,9 @@ public class NewCompareActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_compare);
-        getActionBar().setTitle(R.string.title_activity_compare);
+
+        setupToolbar();
+        getSupportActionBar().setTitle(R.string.title_activity_compare);
 
         sharedPreferences = getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
 
@@ -154,11 +158,20 @@ public class NewCompareActivity extends Activity {
         }
     }
 
+
+    private void setupToolbar(){
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
     private void setViewsWithEditCompare() {
         getDb_helper().setTable(Constants.COMPARES_DB_TABLE);
         editCompare = new Compare(this, editCompareId, getDb_helper());
 
-        getActionBar().setTitle(editCompare.getName());
+        getSupportActionBar().setTitle(editCompare.getName());
 
         ArrayList<Integer> itemIds = editCompare.getItemIds();
         getDb_helper().close();
@@ -239,7 +252,10 @@ public class NewCompareActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_item_save:
-                saveCompare();
+                if(!(firstCatItems == null || secontCatItems == null))
+                    saveCompare();
+                else
+                    finish();
         }
         return super.onOptionsItemSelected(item);
     }

@@ -1,5 +1,6 @@
 package com.gruppe1.pem.challengeme.views;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.SearchManager;
@@ -8,29 +9,24 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 
-import com.gruppe1.pem.challengeme.Category;
 import com.gruppe1.pem.challengeme.Item;
 import com.gruppe1.pem.challengeme.ListItemIconName;
 import com.gruppe1.pem.challengeme.R;
-import com.gruppe1.pem.challengeme.adapters.DefaultGridAdapter;
-import com.gruppe1.pem.challengeme.adapters.DefaultListAdapter;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 
 import java.util.ArrayList;
+
 
 /**
  * Created by bianka on 13.10.2015.
@@ -40,7 +36,7 @@ public class SearchResultsActivity extends Activity implements AdapterView.OnIte
     private ArrayList<ListItemIconName> mDataset;
 
     private ListView listView;
-    private DefaultListAdapter listAdapter;
+//    private DefaultListAdapter listAdapter;
     private ArrayList<Item> searchResultItems = new ArrayList<>();
     private String query;
 
@@ -55,7 +51,10 @@ public class SearchResultsActivity extends Activity implements AdapterView.OnIte
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.default_list_grid_view);
+        setContentView(R.layout.activity_search_results);
+
+
+
 
         noItemLayout = (RelativeLayout) findViewById(R.id.noItemLayout);
         noItemText = (TextView) findViewById(R.id.noItemText);
@@ -69,16 +68,68 @@ public class SearchResultsActivity extends Activity implements AdapterView.OnIte
         db_helper.close();
         mDataset = new ArrayList<>();
 
-        initDataset("");
 
         listView = (ListView) findViewById(R.id.listView);
-        listAdapter = new DefaultListAdapter(this, R.layout.list_item_default, mDataset, false, false);
-        listView.setAdapter(listAdapter);
+//        listAdapter = new DefaultListAdapter(this, R.layout.list_item_default, mDataset, false, false);
+//        listView.setAdapter(listAdapter);
         listView.setOnItemClickListener(this);
         listView.setOnItemLongClickListener(this);
 
-        handleIntent(getIntent());
+        initDataset("");
+
+//        handleIntent(getIntent());
     }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+
+        ActionBar actionBar = getActionBar();
+
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
+        LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = inflator.inflate(R.layout.action_bar_search, null);
+        actionBar.setCustomView(v);
+        return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_search_results_activity, menu);
+
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        final SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+
+        searchView.setIconified(false);
+
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean queryTextFocused) {
+            }
+        });
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                initDataset(query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                initDataset(newText);
+                return true;
+            }
+        });
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+
+        return true;
+    }
+
 
     @Override
     public void onActivityResult(int p_requestCode, int p_resultCode, Intent p_data) {
@@ -87,24 +138,10 @@ public class SearchResultsActivity extends Activity implements AdapterView.OnIte
         if(p_requestCode == 1) {
             // item was updated
             initDataset(query);
-            listAdapter.notifyDataSetChanged();
+//            listAdapter.notifyDataSetChanged();
         }
     }
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-        handleIntent(intent);
-    }
-
-    private void handleIntent(Intent intent) {
-
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            query = intent.getStringExtra(SearchManager.QUERY);
-            getActionBar().setTitle(getResources().getString(R.string.title_activity_search_results) + ": " + query);
-            initDataset(query);
-            listAdapter.notifyDataSetChanged();
-        }
-    }
 
     /**
      * shows/hides the noCompareLayout
@@ -127,6 +164,7 @@ public class SearchResultsActivity extends Activity implements AdapterView.OnIte
      * initializes the dataset of compares
      */
     private void initDataset(String query) {
+        this.query = query;
         mDataset.clear();
 
         DataBaseHelper db_helper = new DataBaseHelper(this);
@@ -144,6 +182,7 @@ public class SearchResultsActivity extends Activity implements AdapterView.OnIte
             showNoItemLayout(true);
         }
         db_helper.close();
+//        listAdapter.notifyDataSetChanged();
     }
 
 
@@ -165,8 +204,8 @@ public class SearchResultsActivity extends Activity implements AdapterView.OnIte
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        int itemid = listAdapter.getItem(position).getElementId();
-        selectItem(itemid, position);
+//        int itemid = listAdapter.getItem(position).getElementId();
+//        selectItem(itemid, position);
     }
 
     @Override
@@ -186,17 +225,17 @@ public class SearchResultsActivity extends Activity implements AdapterView.OnIte
         builder.setView(dialogView).setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                int itemId = (int)listAdapter.getItemId(position);
+//                int itemId = (int)listAdapter.getItemId(position);
 
                 DataBaseHelper db_helper = new DataBaseHelper(getApplicationContext());
                 db_helper.init();
 
-                Item deleteItem = new Item(getApplicationContext(), itemId, db_helper );
-                deleteItem.delete();
+//                Item deleteItem = new Item(getApplicationContext(), itemId, db_helper );
+//                deleteItem.delete();
                 db_helper.close();
 
                 initDataset(query);
-                listAdapter.notifyDataSetChanged();
+//                listAdapter.notifyDataSetChanged();
             }
         }).setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override

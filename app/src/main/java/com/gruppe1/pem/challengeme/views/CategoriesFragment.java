@@ -2,46 +2,39 @@ package com.gruppe1.pem.challengeme.views;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.SearchManager;
 import android.content.Context;
-import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.Loader;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.GridView;
-import android.widget.ListView;
-import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.clans.fab.FloatingActionButton;
-import com.github.clans.fab.FloatingActionMenu;
 import com.gruppe1.pem.challengeme.Category;
 import com.gruppe1.pem.challengeme.Item;
 import com.gruppe1.pem.challengeme.ListItemIconName;
 import com.gruppe1.pem.challengeme.R;
-import com.gruppe1.pem.challengeme.adapters.DefaultGridAdapter;
-import com.gruppe1.pem.challengeme.adapters.DefaultListAdapter;
+import com.gruppe1.pem.challengeme.adapters.DefaultRecyclerGridAdapter;
+import com.gruppe1.pem.challengeme.adapters.DefaultRecyclerListAdapter;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 import com.gruppe1.pem.challengeme.helpers.DefaultSetup;
+import com.gruppe1.pem.challengeme.helpers.RecyclerItemClickListener;
 
 import java.util.ArrayList;
 
 
-public class CategoriesFragment extends Fragment implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
+public class CategoriesFragment extends Fragment {
     private static final int REQUEST_CODE = 1;
 
     private SharedPreferences.Editor editor;
@@ -49,13 +42,14 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
 
     private ArrayList<ListItemIconName> mDataset;
     private View rootView;
-    private GridView gridView;
-    private DefaultGridAdapter gridAdapter;
-    private ListView listView;
-    private DefaultListAdapter listAdapter;
+    private RecyclerView gridView;
+    private RecyclerView listView;
     private Boolean list;
 
     private Object[] selectedItem;
+
+    private DefaultRecyclerListAdapter defaultRecyclerListAdapter;
+    private DefaultRecyclerGridAdapter defaultRecyclerGridAdapter;
 
 
     @Override
@@ -69,20 +63,46 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
         initDataset();
 
         list = savedInstanceState == null || savedInstanceState.getBoolean(Constants.KEY_VIEW_CATEGORIES_AS_LIST, true);
+        rootView = getActivity().getLayoutInflater().inflate(R.layout.default_recycler_view, container, false);
 
-        rootView = getActivity().getLayoutInflater().inflate(R.layout.default_list_grid_view, container, false);
-        listView = (ListView) rootView.findViewById(R.id.listView);
-        listAdapter = new DefaultListAdapter(getActivity(), R.layout.list_item_default, mDataset, true, false);
-        listView.setAdapter(listAdapter);
-        listView.setOnItemClickListener(this);
-        listView.setOnItemLongClickListener(this);
-        gridView = (GridView) rootView.findViewById(R.id.gridView);
-        gridAdapter = new DefaultGridAdapter(getActivity(), R.layout.grid_item_default, mDataset, true);
-        gridView.setAdapter(gridAdapter);
+
+        listView = (RecyclerView) rootView.findViewById(R.id.listView);
+        defaultRecyclerListAdapter = new DefaultRecyclerListAdapter(getActivity(), R.layout.list_item_default, mDataset, true, false);
+
+        LinearLayoutManager linearLayoutManagerList = new LinearLayoutManager(getActivity().getBaseContext());
+        listView.setLayoutManager(linearLayoutManagerList);
+        listView.setHasFixedSize(true);
+        listView.setAdapter(defaultRecyclerListAdapter);
+        listView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                categoryFragmentOnItemClick(view, position);
+            }
+
+            @Override
+            public void onItemLongClick(RecyclerView parent, View view, int position) {
+                categoryFragmentOnItemLongClick(parent, view, position);
+            }
+        }));
+        gridView = (RecyclerView) rootView.findViewById(R.id.gridView);
+        defaultRecyclerGridAdapter = new DefaultRecyclerGridAdapter(getActivity(), R.layout.grid_item_default, mDataset, true);
+        StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        gridView.setLayoutManager(gridLayoutManager);
+        gridView.setHasFixedSize(true);
+        gridView.setAdapter(defaultRecyclerGridAdapter);
         gridView.setVisibility(View.INVISIBLE);
-        gridView.setOnItemClickListener(this);
-        gridView.setOnItemLongClickListener(this);
 
+        gridView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                categoryFragmentOnItemClick(view, position);
+            }
+
+            @Override
+            public void onItemLongClick(RecyclerView parent, View view, int position) {
+                categoryFragmentOnItemLongClick(parent, view, position);
+            }
+        }));
         return rootView;
     }
 
@@ -126,35 +146,6 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
         // Inflate the menu; this adds items to the action bar if it is present.
         menu.clear();
         inflater.inflate(R.menu.menu_categories_fragment, menu);
-
-        // Associate searchable configuration with the SearchView
-        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-        final SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-        final Menu optionMenu =  menu;
-        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean queryTextFocused) {
-                if (!queryTextFocused) {
-                    searchView.clearFocus();
-                    optionMenu.findItem(R.id.search).collapseActionView();
-                }
-            }
-        });
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                searchView.clearFocus();
-                optionMenu.findItem(R.id.search).collapseActionView();
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
-
     }
 
     /**
@@ -177,17 +168,20 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_switchView) {
-            switchListGridView(!list);
-            if(list) {
-                item.setIcon(R.drawable.ic_view_grid);
-            } else {
-                item.setIcon(R.drawable.ic_view_list);
-            }
-            return true;
+        switch (item.getItemId()) {
+            case R.id.action_switchView:
+                switchListGridView(!list);
+                if(list) {
+                    item.setIcon(R.drawable.ic_view_grid);
+                } else {
+                    item.setIcon(R.drawable.ic_view_list);
+                }
+                return true;
+            case R.id.search:
+                Intent intent = new Intent();
+                intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".views.SearchResultsActivity");
+                startActivity(intent);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -226,8 +220,7 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
         db_helper.close();
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    private void categoryFragmentOnItemClick(View view, int position) {
         selectCategory(mDataset.get(position).getElementId());
     }
 
@@ -240,8 +233,8 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
             if (requestCode == 0) {
                 if(resultCode == Activity.RESULT_OK) {
                     initDataset();
-                    listAdapter.notifyDataSetChanged();
-                    gridAdapter.notifyDataSetChanged();
+                    defaultRecyclerListAdapter.notifyDataSetChanged();
+                    defaultRecyclerGridAdapter.notifyDataSetChanged();
                 }
             }
         } catch (Exception ex) {
@@ -249,8 +242,7 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
         }
     }
 
-    @Override
-    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+    private boolean categoryFragmentOnItemLongClick(RecyclerView parent, View view, int position) {
         selectedItem = new Object[2];
         selectedItem[0] = position;
         selectedItem[1] = view;
@@ -271,7 +263,7 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
             public void onClick(DialogInterface dialog, int which) {
                 Intent intent = new Intent();
                 intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".views.NewCategoryActivity");
-                int categoryId = (int)listAdapter.getItemId((int)selectedItem[0]);
+                int categoryId = (int)defaultRecyclerListAdapter.getItemId((int)selectedItem[0]);
                 intent.putExtra("category_id", categoryId);
 
                 startActivityForResult(intent, REQUEST_CODE);
@@ -279,7 +271,7 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
         }).setNegativeButton(R.string.delete, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                int categoryId = (int)listAdapter.getItemId((int)selectedItem[0]);
+                int categoryId = (int)defaultRecyclerListAdapter.getItemId((int)selectedItem[0]);
 
                 ArrayList<Item> items = Item.getItemsByCategoryId(getActivity().getApplicationContext(), categoryId, true);
                 for (Item c : items) {
@@ -294,8 +286,8 @@ public class CategoriesFragment extends Fragment implements AdapterView.OnItemCl
                 db_helper.close();
 
                 initDataset();
-                listAdapter.notifyDataSetChanged();
-                gridAdapter.notifyDataSetChanged();
+                defaultRecyclerListAdapter.notifyDataSetChanged();
+                defaultRecyclerGridAdapter.notifyDataSetChanged();
             }
         }).setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override

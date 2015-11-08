@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,7 +33,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 
-public class NewCategoryActivity extends Activity {
+public class NewCategoryActivity extends AppCompatActivity {
 
     private EditText newCategory_name;
     private Spinner categoryDefaultSize;
@@ -47,7 +49,8 @@ public class NewCategoryActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_category);
-        getActionBar().setTitle(R.string.title_activity_new_category);
+        setupToolbar();
+        getSupportActionBar().setTitle(R.string.title_activity_new_category);
         extras = getIntent().getExtras();
 
         sharedPreferences = getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
@@ -121,6 +124,14 @@ public class NewCategoryActivity extends Activity {
 
             dbHelper.close();
         }
+    }
+
+    private void setupToolbar(){
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     /**
