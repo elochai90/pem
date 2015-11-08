@@ -7,10 +7,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -48,7 +50,6 @@ public class CompareFragment extends Fragment {
     private SharedPreferences sharedPreferences;
 
     private Object[] selectedItem;
-
     private CompareRecyclerListAdapter compareRecyclerListAdapter;
     private CompareRecyclerGridAdapter compareRecyclerGridAdapter;
 
@@ -91,7 +92,7 @@ public class CompareFragment extends Fragment {
         gridView.setLayoutManager(gridLayoutManager);
         gridView.setHasFixedSize(true);
         gridView.setAdapter(compareRecyclerGridAdapter);
-        gridView.setVisibility(View.INVISIBLE);
+        gridView.setVisibility(View.GONE);
         gridView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -106,8 +107,6 @@ public class CompareFragment extends Fragment {
 
         return rootView;
     }
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -127,11 +126,11 @@ public class CompareFragment extends Fragment {
      */
     private void showNoComparesLayout(boolean show) {
         if(show) {
-            gridView.setVisibility(View.INVISIBLE);
-            listView.setVisibility(View.INVISIBLE);
+            gridView.setVisibility(View.GONE);
+            listView.setVisibility(View.GONE);
             noComparesLayout.setVisibility(View.VISIBLE);
         } else {
-            noComparesLayout.setVisibility(View.INVISIBLE);
+            noComparesLayout.setVisibility(View.GONE);
             if(list) {
                 listView.setVisibility(View.VISIBLE);
             } else {
@@ -168,10 +167,10 @@ public class CompareFragment extends Fragment {
      */
     private void switchListGridView(boolean shouldBeListView) {
         if(shouldBeListView) {
-            gridView.setVisibility(View.INVISIBLE);
+            gridView.setVisibility(View.GONE);
             listView.setVisibility(View.VISIBLE);
         } else {
-            listView.setVisibility(View.INVISIBLE);
+            listView.setVisibility(View.GONE);
             gridView.setVisibility(View.VISIBLE);
         }
 

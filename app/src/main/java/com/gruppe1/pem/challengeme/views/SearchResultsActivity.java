@@ -1,7 +1,5 @@
 package com.gruppe1.pem.challengeme.views;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
@@ -9,12 +7,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -22,8 +23,10 @@ import android.widget.TextView;
 import com.gruppe1.pem.challengeme.Item;
 import com.gruppe1.pem.challengeme.ListItemIconName;
 import com.gruppe1.pem.challengeme.R;
+import com.gruppe1.pem.challengeme.adapters.DefaultRecyclerListAdapter;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
+import com.gruppe1.pem.challengeme.helpers.RecyclerItemClickListener;
 
 import java.util.ArrayList;
 
@@ -31,12 +34,13 @@ import java.util.ArrayList;
 /**
  * Created by bianka on 13.10.2015.
  */
-public class SearchResultsActivity extends Activity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
+public class SearchResultsActivity extends AppCompatActivity {
 
     private ArrayList<ListItemIconName> mDataset;
 
-    private ListView listView;
-//    private DefaultListAdapter listAdapter;
+    private RecyclerView gridView;
+    private RecyclerView listView;
+    private DefaultRecyclerListAdapter defaultRecyclerListAdapter;
     private ArrayList<Item> searchResultItems = new ArrayList<>();
     private String query;
 
@@ -48,20 +52,23 @@ public class SearchResultsActivity extends Activity implements AdapterView.OnIte
     private SharedPreferences.Editor editor;
     private SharedPreferences sharedPreferences;
 
+    private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_results);
 
-
-
-
         noItemLayout = (RelativeLayout) findViewById(R.id.noItemLayout);
         noItemText = (TextView) findViewById(R.id.noItemText);
         noItemArrow = (ImageView) findViewById(R.id.noItemArrow);
+        listView = (RecyclerView) findViewById(R.id.listView);
+        gridView = (RecyclerView) findViewById(R.id.gridView);
 
         sharedPreferences = getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
+
+        setupToolbar();
 
         DataBaseHelper db_helper = new DataBaseHelper(this);
         db_helper.init();
@@ -69,30 +76,48 @@ public class SearchResultsActivity extends Activity implements AdapterView.OnIte
         mDataset = new ArrayList<>();
 
 
-        listView = (ListView) findViewById(R.id.listView);
-//        listAdapter = new DefaultListAdapter(this, R.layout.list_item_default, mDataset, false, false);
-//        listView.setAdapter(listAdapter);
-        listView.setOnItemClickListener(this);
-        listView.setOnItemLongClickListener(this);
+        defaultRecyclerListAdapter = new DefaultRecyclerListAdapter(this, R.layout.list_item_default, mDataset, false, false);
+
+        LinearLayoutManager linearLayoutManagerList = new LinearLayoutManager(getBaseContext());
+        listView.setLayoutManager(linearLayoutManagerList);
+        listView.setHasFixedSize(true);
+        listView.setAdapter(defaultRecyclerListAdapter);
+        listView.addOnItemTouchListener(new RecyclerItemClickListener(this, new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                searchResultsActivityOnItemClick(view, position);
+            }
+
+            @Override
+            public void onItemLongClick(RecyclerView parent, View view, int position) {
+                searchResultsActivityOnItemLongClick(parent, view, position);
+            }
+        }));
+
+        StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        gridView.setLayoutManager(gridLayoutManager);
+        gridView.setHasFixedSize(true);
+        gridView.setVisibility(View.INVISIBLE);
 
         initDataset("");
 
 //        handleIntent(getIntent());
     }
 
+    private void setupToolbar(){
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-
-        ActionBar actionBar = getActionBar();
-
-        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-
         LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = inflator.inflate(R.layout.action_bar_search, null);
-        actionBar.setCustomView(v);
+        getSupportActionBar().setCustomView(v);
         return true;
     }
 
@@ -138,7 +163,7 @@ public class SearchResultsActivity extends Activity implements AdapterView.OnIte
         if(p_requestCode == 1) {
             // item was updated
             initDataset(query);
-//            listAdapter.notifyDataSetChanged();
+            defaultRecyclerListAdapter.notifyDataSetChanged();
         }
     }
 
@@ -182,7 +207,7 @@ public class SearchResultsActivity extends Activity implements AdapterView.OnIte
             showNoItemLayout(true);
         }
         db_helper.close();
-//        listAdapter.notifyDataSetChanged();
+        defaultRecyclerListAdapter.notifyDataSetChanged();
     }
 
 
@@ -202,14 +227,12 @@ public class SearchResultsActivity extends Activity implements AdapterView.OnIte
         startActivityForResult(intent, 1);
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//        int itemid = listAdapter.getItem(position).getElementId();
-//        selectItem(itemid, position);
+    private void searchResultsActivityOnItemClick(View view, int position) {
+        int itemid = (int) defaultRecyclerListAdapter.getItemId(position);
+        selectItem(itemid, position);
     }
 
-    @Override
-    public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+    private boolean searchResultsActivityOnItemLongClick(RecyclerView parent, View view, final int position) {
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         // Get the layout inflater
@@ -225,17 +248,17 @@ public class SearchResultsActivity extends Activity implements AdapterView.OnIte
         builder.setView(dialogView).setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-//                int itemId = (int)listAdapter.getItemId(position);
+                int itemId = (int)defaultRecyclerListAdapter.getItemId(position);
 
                 DataBaseHelper db_helper = new DataBaseHelper(getApplicationContext());
                 db_helper.init();
 
-//                Item deleteItem = new Item(getApplicationContext(), itemId, db_helper );
-//                deleteItem.delete();
+                Item deleteItem = new Item(getApplicationContext(), itemId, db_helper );
+                deleteItem.delete();
                 db_helper.close();
 
                 initDataset(query);
-//                listAdapter.notifyDataSetChanged();
+                defaultRecyclerListAdapter.notifyDataSetChanged();
             }
         }).setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override

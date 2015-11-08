@@ -6,17 +6,48 @@
     xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:theme="@style/AppThemeSearch"
     android:orientation="vertical"
     tools:context=".MainActivity">
-    <android.support.v7.widget.Toolbar
-        style="@style/ToolBarStyle"
-        android:id="@+id/toolbar"
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBar"
+        app:elevation="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="4dp"
-        android:background="@color/primary"
-        android:minHeight="@dimen/abc_action_bar_default_height_material"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/primary"
+            android:minHeight="@dimen/abc_action_bar_default_height_material"/>
+
+        <LinearLayout
+            android:gravity="center_horizontal"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp">
+            <ImageButton
+                android:background="@drawable/icon_wishlist_circle"
+                android:layout_width="30dp"
+                android:layout_height="30dp" />
+            <ImageButton
+                android:background="@drawable/icon_wishlist_circle_filled"
+                android:layout_width="30dp"
+                android:layout_height="30dp" />
+            <ImageButton
+                android:background="@drawable/icon_rating_circle"
+                android:layout_width="30dp"
+                android:layout_height="30dp" />
+            <ImageButton
+                android:background="@drawable/icon_rating_circle_filled"
+                android:layout_width="30dp"
+                android:layout_height="30dp" />
+        </LinearLayout>
+    </android.support.design.widget.AppBarLayout>
     <include
         layout="@layout/default_recycler_view"/>
 </LinearLayout>

@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -44,12 +46,14 @@ public class TabsFragmentActivity extends ActionBarActivity {
     private ViewPager mainViewsPager;
     private TabLayout tabLayout;
 
-    private Fragment categoriesFragment;
-    private Fragment compareFragment;
-    private Fragment wishlistFragment;
+    private CategoriesFragment categoriesFragment;
+    private CompareFragment compareFragment;
+    private WishlistFragment wishlistFragment;
+    private AppBarLayout appBarLayout;
+    private Toolbar toolbar;
 
     private void setupToolbar(){
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -60,13 +64,14 @@ public class TabsFragmentActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tabs);
-
         loadLocale();
 
         menuItems[0] = getString(R.string.title_activity_categories);
         menuItems[1] = getString(R.string.title_activity_compare);
         menuItems[2] = getString(R.string.title_activity_wishlist2);
         menuItems[3] = getString(R.string.title_activity_settings);
+
+        appBarLayout  = (AppBarLayout) findViewById(R.id.appBar);
 
         setupToolbar();
 
@@ -75,6 +80,10 @@ public class TabsFragmentActivity extends ActionBarActivity {
 
 
         mTitle = getString(R.string.app_name);
+
+        categoriesFragment = new CategoriesFragment();
+        compareFragment = new CompareFragment();
+        wishlistFragment = new WishlistFragment();
 
         mainViewsPager =(ViewPager) findViewById(R.id.pagerMainViews);
         setupViewPager(mainViewsPager);
@@ -89,9 +98,7 @@ public class TabsFragmentActivity extends ActionBarActivity {
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                mainViewsPager.setCurrentItem(tab.getPosition());
-                setSelectedNavigationDrawerItem(tab.getPosition());
-                mDrawerLayout.closeDrawer(mDrawerList);
+                onTabClickedSwitched(tab);
             }
 
             @Override
@@ -106,32 +113,45 @@ public class TabsFragmentActivity extends ActionBarActivity {
         });
 
 
-        categoriesFragment = new CategoriesFragment();
-        compareFragment = new CompareFragment();
-        wishlistFragment = new WishlistFragment();
 
-//        mainViewsPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-//            @Override
-//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//            }
-//
-//            @Override
-//            public void onPageSelected(int position) {
-//                tabLayout.getTabAt(position).select();
-//            }
-//
-//            @Override
-//            public void onPageScrollStateChanged(int state) {
-//
-//            }
-//        });
+        mainViewsPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                onTabClickedSwitched(tabLayout.getTabAt(position));
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+    }
+    private void onTabClickedSwitched(TabLayout.Tab tab) {
+
+        mainViewsPager.setCurrentItem(tab.getPosition());
+        setSelectedNavigationDrawerItem(tab.getPosition());
+        mDrawerLayout.closeDrawer(mDrawerList);
+        expandToolbar();
+    }
+    public void expandToolbar(){
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
+        AppBarLayout.Behavior behavior = (AppBarLayout.Behavior) params.getBehavior();
+        if(behavior!=null) {
+            behavior.setTopAndBottomOffset(0);
+            behavior.onNestedPreScroll((CoordinatorLayout)findViewById(R.id.coordinatorLayout), appBarLayout, null, 0, 1, new int[2]);
+        }
+
     }
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFrag(new CategoriesFragment(), getString(R.string.title_activity_categories));
-        adapter.addFrag(new CompareFragment(), getString(R.string.title_activity_compare));
-        adapter.addFrag(new WishlistFragment(), getString(R.string.title_activity_wishlist));
+        adapter.addFrag(categoriesFragment, getString(R.string.title_activity_categories));
+        adapter.addFrag(compareFragment, getString(R.string.title_activity_compare));
+        adapter.addFrag(wishlistFragment, getString(R.string.title_activity_wishlist));
         viewPager.setAdapter(adapter);
     }
 

@@ -49,7 +49,6 @@ public class WishlistFragment extends Fragment {
         listView = (RecyclerView) rootView.findViewById(R.id.listView);
         gridView = (RecyclerView) rootView.findViewById(R.id.gridView);
 
-
         TextView noWishlistItemText = (TextView) rootView.findViewById(R.id.noItemText);
         noWishlistItemText.setText(R.string.no_wishlist_items);
 
@@ -100,11 +99,12 @@ public class WishlistFragment extends Fragment {
      */
     private void showNoWishlistItemLayout(boolean show) {
         if(show) {
+            gridView.setVisibility(View.INVISIBLE);
             listView.setVisibility(View.INVISIBLE);
             noWishlistItemLayout.setVisibility(View.VISIBLE);
         } else {
-            listView.setVisibility(View.VISIBLE);
             noWishlistItemLayout.setVisibility(View.INVISIBLE);
+            listView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -147,6 +147,7 @@ public class WishlistFragment extends Fragment {
             showNoWishlistItemLayout(true);
         }
     }
+
 
     /**
      * Starts the NewItemActivity to show detail information of an item

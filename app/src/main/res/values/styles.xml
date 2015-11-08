@@ -16,12 +16,15 @@
     <style name="AppThemeSearch" parent="AppTheme">
         <item name="actionBarSize">128dp</item>
         <item name="android:actionBarSize">128dp</item>
+        <item name="android:toolbarStyle">@style/ToolBarStyle</item>
         <!--<item name="android:height">90dip</item>-->
         <!--<item name="height">90dip</item>-->
 
     </style>
 
     <style name="ToolBarStyle" parent="">
+        <item name="android:height">128dp</item>
+        <item name="height">128dp</item>
         <!--<item name="popupTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>-->
         <!--<item name="theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>-->
     </style>
