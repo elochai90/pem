@@ -6,20 +6,27 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import com.gruppe1.pem.challengeme.Color;
 import com.gruppe1.pem.challengeme.Item;
 import com.gruppe1.pem.challengeme.ListItemIconName;
 import com.gruppe1.pem.challengeme.R;
@@ -48,6 +55,21 @@ public class SearchResultsActivity extends AppCompatActivity {
     private TextView noItemText;
     private ImageView noItemArrow;
 
+    private LinearLayout filterColorLayout;
+    private LinearLayout filterColorLayoutFirstLine;
+    private LinearLayout filterColorLayoutSecondLine;
+    private LinearLayout filterRatingLayout;
+    private ImageButton filterWishlist;
+    private ImageButton filterRating;
+    private ImageButton filterColor;
+    private boolean filterWishlistActivated;
+    private boolean filterRatingActivated;
+    private boolean filterColorActivated;
+
+    private ArrayList<Integer> filterColorIds;
+    private int filterRatingCount;
+
+
 
     private SharedPreferences.Editor editor;
     private SharedPreferences sharedPreferences;
@@ -64,6 +86,13 @@ public class SearchResultsActivity extends AppCompatActivity {
         noItemArrow = (ImageView) findViewById(R.id.noItemArrow);
         listView = (RecyclerView) findViewById(R.id.listView);
         gridView = (RecyclerView) findViewById(R.id.gridView);
+        filterColorLayout = (LinearLayout) findViewById(R.id.filterColorLayout);
+        filterColorLayoutFirstLine = (LinearLayout) findViewById(R.id.filterColorLayoutFirstLine);
+        filterColorLayoutSecondLine = (LinearLayout) findViewById(R.id.filterColorLayoutSecondLine);
+        filterRatingLayout = (LinearLayout) findViewById(R.id.filterRatingLayout);
+        filterWishlist = (ImageButton) findViewById(R.id.filterWishlist);
+        filterRating = (ImageButton) findViewById(R.id.filterRating);
+        filterColor = (ImageButton) findViewById(R.id.filterColor);
 
         sharedPreferences = getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
@@ -74,6 +103,10 @@ public class SearchResultsActivity extends AppCompatActivity {
         db_helper.init();
         db_helper.close();
         mDataset = new ArrayList<>();
+        query = "";
+        filterWishlistActivated = false;
+        filterRatingCount = -1;
+        filterColorIds = new ArrayList<>();
 
 
         defaultRecyclerListAdapter = new DefaultRecyclerListAdapter(this, R.layout.list_item_default, mDataset, false, false);
@@ -99,10 +132,159 @@ public class SearchResultsActivity extends AppCompatActivity {
         gridView.setHasFixedSize(true);
         gridView.setVisibility(View.INVISIBLE);
 
-        initDataset("");
+        initDataset();
+        setupFilterViews();
 
-//        handleIntent(getIntent());
     }
+
+    private void setRatingFilter(int rating) {
+        for(int i = 0; i < 5; i++) {
+            ImageButton tmpRatingButton = (ImageButton) filterRatingLayout.getChildAt(i);
+            if(i < rating) {
+                tmpRatingButton.setBackground(getDrawable(R.drawable.ic_star_white));
+            } else {
+                tmpRatingButton.setBackground(getDrawable(R.drawable.ic_star_border_white));
+            }
+        }
+    }
+    private void deselectAllColorFilter() {
+        for(int i = 0; i < filterColorLayoutFirstLine.getChildCount(); i++) {
+            ImageButton tmpColorButton = (ImageButton) filterColorLayoutFirstLine.getChildAt(i);
+            String tmpColor = (String)tmpColorButton.getTag();
+            tmpColorButton.setBackground(getDrawable(R.drawable.circle_color));
+            tmpColorButton.getBackground().setColorFilter(new
+                    PorterDuffColorFilter(android.graphics.Color.parseColor(tmpColor), PorterDuff.Mode.MULTIPLY));
+        }
+        for(int i = 0; i < filterColorLayoutSecondLine.getChildCount(); i++) {
+            ImageButton tmpColorButton = (ImageButton) filterColorLayoutSecondLine.getChildAt(i);
+            String tmpColor = (String)tmpColorButton.getTag();
+            tmpColorButton.setBackground(getDrawable(R.drawable.circle_color));
+            tmpColorButton.getBackground().setColorFilter(new
+                    PorterDuffColorFilter(android.graphics.Color.parseColor(tmpColor), PorterDuff.Mode.MULTIPLY));
+        }
+    }
+
+    private void setupFilterViews() {
+
+        int colorIconWidthHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, getResources().getDisplayMetrics());
+        int colorIconMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics());
+        ArrayList<Color> allColors = Color.getAllColors(getApplicationContext());
+        int positionColor = 0;
+        for (final Color tmpColor : allColors) {
+            ImageButton tmpColorButton = new ImageButton(this);
+            LinearLayout.LayoutParams attibuteNameLayoutParams = new LinearLayout.LayoutParams(colorIconWidthHeight, colorIconWidthHeight);
+            attibuteNameLayoutParams.setMargins(0, 0, colorIconMargin, 0);
+            tmpColorButton.setLayoutParams(attibuteNameLayoutParams);
+            tmpColorButton.setBackground(getDrawable(R.drawable.circle_color));
+            tmpColorButton.getBackground().setColorFilter(new
+                    PorterDuffColorFilter(android.graphics.Color.parseColor((tmpColor).getHexColor()), PorterDuff.Mode.MULTIPLY));
+            tmpColorButton.setTag(tmpColor.getHexColor());
+            tmpColorButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(filterColorIds.contains(tmpColor.getId())) {
+                        filterColorIds.remove(filterColorIds.indexOf(tmpColor.getId()));
+                        v.setBackground(getDrawable(R.drawable.circle_color));
+                        v.getBackground().setColorFilter(new
+                                PorterDuffColorFilter(android.graphics.Color.parseColor((tmpColor).getHexColor()), PorterDuff.Mode.MULTIPLY));
+                    } else {
+                        filterColorIds.add(tmpColor.getId());
+                        v.setBackground(getDrawable(R.drawable.circle_color_filled));
+                        ((LayerDrawable)v.getBackground()).getDrawable(0).setColorFilter(new
+                                PorterDuffColorFilter(android.graphics.Color.parseColor((tmpColor).getHexColor()), PorterDuff.Mode.MULTIPLY));
+                    }
+                    initDataset();
+                }
+            });
+            if(positionColor < allColors.size()/2) {
+                filterColorLayoutFirstLine.addView(tmpColorButton);
+            } else {
+                filterColorLayoutSecondLine.addView(tmpColorButton);
+            }
+            positionColor++;
+        }
+        for(int i = 1; i <= 5; i++) {
+            ImageButton tmpRatingButton = new ImageButton(this);
+            LinearLayout.LayoutParams attibuteNameLayoutParams = new LinearLayout.LayoutParams(colorIconWidthHeight, colorIconWidthHeight);
+            attibuteNameLayoutParams.setMargins(0, 0, colorIconMargin, 0);
+            tmpRatingButton.setLayoutParams(attibuteNameLayoutParams);
+            tmpRatingButton.setBackground(getDrawable(R.drawable.ic_star_border_white));
+            tmpRatingButton.setTag(i);
+            final int ratingWhenClicked = i;
+            tmpRatingButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    filterRatingCount = ratingWhenClicked;
+                    setRatingFilter(ratingWhenClicked);
+                    initDataset();
+                }
+            });
+            filterRatingLayout.addView(tmpRatingButton);
+        }
+        filterWishlist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(filterWishlistActivated) {
+                    filterWishlist.setBackground(getDrawable(R.drawable.icon_wishlist_circle));
+                } else {
+                    filterWishlist.setBackground(getDrawable(R.drawable.icon_wishlist_circle_filled));
+                }
+                filterWishlistActivated = !filterWishlistActivated;
+                initDataset();
+            }
+        });
+        filterRating.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(filterColorActivated) {
+                    if(filterColorIds.size() == 0) {
+                        filterColor.callOnClick();
+                    } else {
+                        filterColorLayout.setVisibility(View.GONE);
+                        filterColorActivated = false;
+                    }
+                }
+                if(filterRatingActivated) {
+                    filterRatingCount = -1;
+                    setRatingFilter(0);
+                    filterRating.setBackground(getDrawable(R.drawable.icon_rating_circle));
+                    filterRatingLayout.setVisibility(View.GONE);
+                    filterRatingActivated = false;
+                    initDataset();
+                } else {
+                    filterRating.setBackground(getDrawable(R.drawable.icon_rating_circle_filled));
+                    filterRatingLayout.setVisibility(View.VISIBLE);
+                    filterRatingActivated = true;
+                }
+            }
+        });
+        filterColor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(filterRatingActivated) {
+                    if(filterRatingCount == -1) {
+                        filterRating.callOnClick();
+                    } else {
+                        filterRatingLayout.setVisibility(View.GONE);
+                        filterRatingActivated = false;
+                    }
+                }
+                if(filterColorActivated) {
+                    filterColorIds.clear();
+                    deselectAllColorFilter();
+                    filterColor.setBackground(getDrawable(R.drawable.icon_color_circle));
+                    filterColorLayout.setVisibility(View.GONE);
+                    filterColorActivated = false;
+                    initDataset();
+                } else {
+                    filterColor.setBackground(getDrawable(R.drawable.icon_color_circle_filled));
+                    filterColorLayout.setVisibility(View.VISIBLE);
+                    filterColorActivated = true;
+                }
+            }
+        });
+    }
+
 
     private void setupToolbar(){
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -139,14 +321,16 @@ public class SearchResultsActivity extends AppCompatActivity {
         });
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
-                initDataset(query);
+            public boolean onQueryTextSubmit(String newQuery) {
+                query = newQuery;
+                initDataset();
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                initDataset(newText);
+                query = newText;
+                initDataset();
                 return true;
             }
         });
@@ -162,7 +346,7 @@ public class SearchResultsActivity extends AppCompatActivity {
 
         if(p_requestCode == 1) {
             // item was updated
-            initDataset(query);
+            initDataset();
             defaultRecyclerListAdapter.notifyDataSetChanged();
         }
     }
@@ -188,14 +372,13 @@ public class SearchResultsActivity extends AppCompatActivity {
     /**
      * initializes the dataset of compares
      */
-    private void initDataset(String query) {
-        this.query = query;
+    private void initDataset() {
         mDataset.clear();
 
         DataBaseHelper db_helper = new DataBaseHelper(this);
         db_helper.init();
 
-        searchResultItems = Item.getSearchResults(this, query);
+        searchResultItems = Item.getSearchResults(this, query, filterWishlistActivated, filterRatingCount, filterColorIds);
 
         for (Item tmpItem : searchResultItems) {
             int iconId = getResources().getIdentifier("kleiderbuegel", "drawable", "com.gruppe1.pem.challengeme");
@@ -257,7 +440,7 @@ public class SearchResultsActivity extends AppCompatActivity {
                 deleteItem.delete();
                 db_helper.close();
 
-                initDataset(query);
+                initDataset();
                 defaultRecyclerListAdapter.notifyDataSetChanged();
             }
         }).setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {

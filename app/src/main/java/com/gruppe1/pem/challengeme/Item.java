@@ -303,12 +303,21 @@ public class Item implements Parcelable{
         Compare.deleteComparesByItemId(this.m_context, this.m_id);
     }
 
-    public static ArrayList<Item> getSearchResults(Context p_context, String query) {
+    public static ArrayList<Item> getSearchResults(Context p_context, String query, boolean filterWishlist, int filterRating, ArrayList<Integer> filterColorIds) {
         DataBaseHelper dbHelper = new DataBaseHelper(p_context);
         dbHelper.init();
         dbHelper.setTable(Constants.ITEMS_DB_TABLE);
         dbHelper.setColumns(new String[]{"*"});
-        dbHelper.setWhere("", new String[]{"name LIKE '%" + query + "%'"});
+        String filterWishlistExpression = filterWishlist ? " AND is_wish=1" : "";
+        String filterRatingExpression = (filterRating != -1) ? (" AND rating=" + filterRating) : "";
+        String filterColorExpression = "";
+        if(filterColorIds.size() > 0) {
+            String filterColorIdsString = filterColorIds.toString();
+            filterColorIdsString = filterColorIdsString.replace("[","(");
+            filterColorIdsString = filterColorIdsString.replace("]",")");
+            filterColorExpression = (" AND primary_color in " + filterColorIdsString);
+        }
+        dbHelper.setWhere("", new String[]{"name LIKE '%" + query + "%'" + filterWishlistExpression + filterRatingExpression + filterColorExpression});
 
         Cursor cursor = dbHelper.select();
 

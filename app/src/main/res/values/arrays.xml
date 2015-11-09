@@ -249,7 +249,7 @@
     <string-array name="initial_color_blue">
         <item>@string/color_blue_en</item>
         <item>@string/color_blue_de</item>
-        <item>#0000FF</item>
+        <item>#0000a9</item>
     </string-array>
     <string-array name="initial_color_petrol">
         <item>@string/color_petrol_en</item>
@@ -264,7 +264,7 @@
     <string-array name="initial_color_green">
         <item>@string/color_green_en</item>
         <item>@string/color_green_de</item>
-        <item>#ff00ab00</item>
+        <item>#00ab00</item>
     </string-array>
     <string-array name="initial_color_olive">
         <item>@string/color_olive_en</item>
@@ -279,7 +279,7 @@
     <string-array name="initial_color_red">
         <item>@string/color_red_en</item>
         <item>@string/color_red_de</item>
-        <item>#FF0000</item>
+        <item>#c40000</item>
     </string-array>
     <string-array name="initial_color_pink">
         <item>@string/color_pink_en</item>
