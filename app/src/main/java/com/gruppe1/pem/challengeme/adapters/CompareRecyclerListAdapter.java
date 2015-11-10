@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.gruppe1.pem.challengeme.Attribute;
@@ -37,6 +38,8 @@ public class CompareRecyclerListAdapter extends RecyclerView.Adapter<CompareRecy
     private DataBaseHelper db_helper;
     private PicassoSingleton picassoSingleton;
 
+    private View.OnClickListener onItemClickListener;
+    private View.OnLongClickListener onItemLongClickListener;
 
     /**
      * Constructor of the CompareRecyclerListAdapter
@@ -52,6 +55,13 @@ public class CompareRecyclerListAdapter extends RecyclerView.Adapter<CompareRecy
         this.db_helper = new DataBaseHelper(context);
         this.db_helper.init();
         this.picassoSingleton = PicassoSingleton.getInstance(context);
+    }
+
+    public void setOnItemClickListener(View.OnClickListener onClickListener) {
+        this.onItemClickListener  = onClickListener;
+    }
+    public void setOnItemLongClickListener(View.OnLongClickListener onClickListener) {
+        this.onItemLongClickListener = onClickListener;
     }
 
     @Override
@@ -82,6 +92,8 @@ public class CompareRecyclerListAdapter extends RecyclerView.Adapter<CompareRecy
         picassoSingleton.setImage(item1.getImageFile(), Constants.LIST_VIEW_IMAGE_WIDTH, Constants.LIST_VIEW_IMAGE_HEIGHT, holder.imageItem1);
         picassoSingleton.setImage(item2.getImageFile(), Constants.LIST_VIEW_IMAGE_WIDTH, Constants.LIST_VIEW_IMAGE_HEIGHT, holder.imageItem2);
 
+        holder.itemView.setOnClickListener(onItemClickListener);
+        holder.itemView.setOnLongClickListener(onItemLongClickListener);
 
     }
 
@@ -97,6 +109,7 @@ public class CompareRecyclerListAdapter extends RecyclerView.Adapter<CompareRecy
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        RelativeLayout itemView;
         TextView itemName1;
         TextView itemName2;
         TextView compareName;
@@ -106,6 +119,7 @@ public class CompareRecyclerListAdapter extends RecyclerView.Adapter<CompareRecy
 
         public ViewHolder(View itemView) {
             super(itemView);
+            this.itemView = (RelativeLayout) itemView;
             itemName1 = (TextView) itemView.findViewById(R.id.item1Name);
             itemName2 = (TextView)itemView.findViewById(R.id.item2Name);
             compareName = (TextView)itemView.findViewById(R.id.compareName);

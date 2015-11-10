@@ -17,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,9 +28,9 @@ import com.gruppe1.pem.challengeme.R;
 import com.gruppe1.pem.challengeme.adapters.DefaultRecyclerListAdapter;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
-import com.gruppe1.pem.challengeme.helpers.RecyclerItemClickListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class WishlistFragment extends Fragment {
@@ -42,12 +43,17 @@ public class WishlistFragment extends Fragment {
     private FrameLayout frameLayout;
     private DefaultRecyclerListAdapter defaultRecyclerListAdapter;
 
+    private DataBaseHelper db_helper;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
         View rootView = inflater.inflate(R.layout.default_recycler_view, container, false);
+
+        db_helper = new DataBaseHelper(getActivity());
+        db_helper.init();
 
         noWishlistItemLayout = (RelativeLayout) rootView.findViewById(R.id.noItemLayout);
         listView = (RecyclerView) rootView.findViewById(R.id.listView);
@@ -71,18 +77,20 @@ public class WishlistFragment extends Fragment {
 
 
         defaultRecyclerListAdapter = new DefaultRecyclerListAdapter(getActivity(), R.layout.list_item_default, mDataset, false, true);
+        defaultRecyclerListAdapter.setOnItemClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                wishlistFragmentOnItemClick(v,listView.getChildPosition(v));
+            }
+        });
+        defaultRecyclerListAdapter.setOnItemLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                wishlistFragmentOnItemLongClick(listView,v,listView.getChildPosition(v));
+                return true;
+            }
+        });
         listView.setAdapter(defaultRecyclerListAdapter);
-        listView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                wishlistFragmentOnItemClick(view, position);
-            }
-
-            @Override
-            public void onItemLongClick(RecyclerView parent, View view, int position) {
-                wishlistFragmentOnItemLongClick(parent, view, position);
-            }
-        }));
 
         return rootView;
     }
@@ -215,6 +223,38 @@ public class WishlistFragment extends Fragment {
         }
     }
 
+    private void wishlistFragmentOnItemActionButtonClick(View view, int position) {
+
+
+        int itemid = (int) defaultRecyclerListAdapter.getItemId(position);
+
+        getDb_helper().setTable(Constants.ITEMS_DB_TABLE);
+
+        Item wishlistItem = new Item(getActivity(), itemid, getDb_helper());
+
+        HashMap<String, String> itemAttributes = new HashMap<>();
+        itemAttributes.put("name", wishlistItem.getName());
+        itemAttributes.put("image_file", wishlistItem.getImageFile());
+        itemAttributes.put("category_id", wishlistItem.getCategoryId() + "");
+        itemAttributes.put("primary_color", wishlistItem.getPrimaryColorId() + "");
+        itemAttributes.put("rating", wishlistItem.getRating() + "");
+
+
+        if(view.isSelected()) {
+            view.setSelected(false);
+            ((Button) view).setTextColor(getResources().getColor(R.color.accent));
+            ((Button) view).setText(R.string.wishlist_button_not_selected);
+            itemAttributes.put("is_wish", "1");
+        } else {
+            view.setSelected(true);
+            ((Button) view).setTextColor(getResources().getColor(R.color.primary_dark));
+            ((Button) view).setText(R.string.wishlist_button_selected);
+            itemAttributes.put("is_wish", "0");
+        }
+        wishlistItem.edit(itemAttributes);
+        wishlistItem.save();
+    }
+
     private boolean wishlistFragmentOnItemLongClick(RecyclerView parent, View view, int position) {
         selectedItem = new Object[2];
         selectedItem[0] = position;
@@ -254,5 +294,18 @@ public class WishlistFragment extends Fragment {
         });
         builder.create().show();
         return true;
+    }
+
+    /**
+     * Get the db_helper instance for this class
+     * @return DataBaseHelper instance
+     */
+    private DataBaseHelper getDb_helper() {
+        if(!db_helper.isOpen()) {
+            System.out.println("db helper was closed");
+            db_helper = new DataBaseHelper(getActivity());
+            db_helper.init();
+        }
+        return db_helper;
     }
 }

@@ -2,6 +2,7 @@ package com.gruppe1.pem.challengeme.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +34,9 @@ public class DefaultRecyclerGridAdapter extends RecyclerView.Adapter<DefaultRecy
     private boolean isCategory;
     private PicassoSingleton picassoSingleton;
 
+    private View.OnClickListener onItemClickListener;
+    private View.OnLongClickListener onItemLongClickListener;
+
     public DefaultRecyclerGridAdapter(Context context, int layoutResourceId, ArrayList<ListItemIconName> data, boolean isCategory) {
         super();
         this.layoutResourceId = layoutResourceId;
@@ -42,6 +46,13 @@ public class DefaultRecyclerGridAdapter extends RecyclerView.Adapter<DefaultRecy
         this.picassoSingleton = PicassoSingleton.getInstance(context);
     }
 
+
+    public void setOnItemClickListener(View.OnClickListener onClickListener) {
+        this.onItemClickListener  = onClickListener;
+    }
+    public void setOnItemLongClickListener(View.OnLongClickListener onClickListener) {
+        this.onItemLongClickListener = onClickListener;
+    }
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
@@ -69,6 +80,8 @@ public class DefaultRecyclerGridAdapter extends RecyclerView.Adapter<DefaultRecy
             holder.rightTextView.setText(Item.getItemsCountByCategoryId(context, item.getElementId(), false) + "");
         }
 
+        holder.itemView.setOnClickListener(onItemClickListener);
+        holder.itemView.setOnLongClickListener(onItemLongClickListener);
     }
 
     @Override
@@ -83,12 +96,14 @@ public class DefaultRecyclerGridAdapter extends RecyclerView.Adapter<DefaultRecy
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        CardView itemView;
         TextView imageTitle;
         TextView rightTextView;
         ImageView image;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            this.itemView = (CardView) itemView;
             imageTitle = (TextView) itemView.findViewById(R.id.textView);
             rightTextView = (TextView)itemView.findViewById(R.id.rightTextView);
             image = (ImageView)itemView.findViewById(R.id.imageView);

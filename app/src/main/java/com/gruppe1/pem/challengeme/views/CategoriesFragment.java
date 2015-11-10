@@ -29,7 +29,6 @@ import com.gruppe1.pem.challengeme.adapters.DefaultRecyclerListAdapter;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 import com.gruppe1.pem.challengeme.helpers.DefaultSetup;
-import com.gruppe1.pem.challengeme.helpers.RecyclerItemClickListener;
 
 import java.util.ArrayList;
 
@@ -68,41 +67,46 @@ public class CategoriesFragment extends Fragment {
 
         listView = (RecyclerView) rootView.findViewById(R.id.listView);
         defaultRecyclerListAdapter = new DefaultRecyclerListAdapter(getActivity(), R.layout.list_item_default, mDataset, true, false);
+        defaultRecyclerListAdapter.setOnItemClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                categoryFragmentOnItemClick(v, listView.getChildPosition(v));
+            }
+        });
+        defaultRecyclerListAdapter.setOnItemLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                categoryFragmentOnItemLongClick(listView, v, listView.getChildPosition(v));
+                return true;
+            }
+        });
 
         LinearLayoutManager linearLayoutManagerList = new LinearLayoutManager(getActivity().getBaseContext());
         listView.setLayoutManager(linearLayoutManagerList);
         listView.setHasFixedSize(true);
         listView.setAdapter(defaultRecyclerListAdapter);
-        listView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                categoryFragmentOnItemClick(view, position);
-            }
 
-            @Override
-            public void onItemLongClick(RecyclerView parent, View view, int position) {
-                categoryFragmentOnItemLongClick(parent, view, position);
-            }
-        }));
         gridView = (RecyclerView) rootView.findViewById(R.id.gridView);
         defaultRecyclerGridAdapter = new DefaultRecyclerGridAdapter(getActivity(), R.layout.grid_item_default, mDataset, true);
+        defaultRecyclerGridAdapter.setOnItemClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                categoryFragmentOnItemClick(v,listView.getChildPosition(v));
+            }
+        });
+        defaultRecyclerGridAdapter.setOnItemLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                categoryFragmentOnItemLongClick(listView,v,listView.getChildPosition(v));
+                return true;
+            }
+        });
         StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         gridView.setLayoutManager(gridLayoutManager);
         gridView.setHasFixedSize(true);
         gridView.setAdapter(defaultRecyclerGridAdapter);
         gridView.setVisibility(View.INVISIBLE);
 
-        gridView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                categoryFragmentOnItemClick(view, position);
-            }
-
-            @Override
-            public void onItemLongClick(RecyclerView parent, View view, int position) {
-                categoryFragmentOnItemLongClick(parent, view, position);
-            }
-        }));
         return rootView;
     }
 

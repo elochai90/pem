@@ -2,6 +2,7 @@ package com.gruppe1.pem.challengeme.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +31,8 @@ public class CompareRecyclerGridAdapter extends RecyclerView.Adapter<CompareRecy
     private DataBaseHelper dbHelper;
     private PicassoSingleton picassoSingleton;
 
+    private View.OnClickListener onItemClickListener;
+    private View.OnLongClickListener onItemLongClickListener;
 
     public CompareRecyclerGridAdapter(Context context, int layoutResourceId, ArrayList<Compare> data) {
         super();
@@ -39,6 +42,13 @@ public class CompareRecyclerGridAdapter extends RecyclerView.Adapter<CompareRecy
         this.dbHelper = new DataBaseHelper(context);
         this.dbHelper.init();
         this.picassoSingleton = PicassoSingleton.getInstance(context);
+    }
+
+    public void setOnItemClickListener(View.OnClickListener onClickListener) {
+        this.onItemClickListener  = onClickListener;
+    }
+    public void setOnItemLongClickListener(View.OnLongClickListener onClickListener) {
+        this.onItemLongClickListener = onClickListener;
     }
 
     @Override
@@ -63,6 +73,8 @@ public class CompareRecyclerGridAdapter extends RecyclerView.Adapter<CompareRecy
         picassoSingleton.setImage(item1.getImageFile(), Constants.LIST_VIEW_IMAGE_WIDTH, Constants.LIST_VIEW_IMAGE_HEIGHT, holder.imageItem1);
         picassoSingleton.setImage(item2.getImageFile(), Constants.LIST_VIEW_IMAGE_WIDTH, Constants.LIST_VIEW_IMAGE_HEIGHT, holder.imageItem2);
 
+        holder.itemView.setOnClickListener(onItemClickListener);
+        holder.itemView.setOnLongClickListener(onItemLongClickListener);
     }
 
     @Override
@@ -77,12 +89,14 @@ public class CompareRecyclerGridAdapter extends RecyclerView.Adapter<CompareRecy
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        CardView itemView;
         TextView compareName;
         ImageView imageItem1;
         ImageView imageItem2;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            this.itemView = (CardView) itemView;
             compareName = (TextView) itemView.findViewById(R.id.compareName);
             imageItem1 = (ImageView)itemView.findViewById(R.id.imageItem1);
             imageItem2 = (ImageView)itemView.findViewById(R.id.imageItem2);

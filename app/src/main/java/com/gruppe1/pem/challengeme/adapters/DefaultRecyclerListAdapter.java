@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.gruppe1.pem.challengeme.Attribute;
@@ -37,6 +38,9 @@ public class DefaultRecyclerListAdapter extends RecyclerView.Adapter<DefaultRecy
     private DataBaseHelper db_helper;
     private PicassoSingleton picassoSingleton;
 
+    private View.OnClickListener onItemClickListener;
+    private View.OnLongClickListener onItemLongClickListener;
+
     public DefaultRecyclerListAdapter(Context context, int layoutResourceId, ArrayList<ListItemIconName> data, boolean isCategory, boolean wishlist) {
         super();
 
@@ -46,12 +50,19 @@ public class DefaultRecyclerListAdapter extends RecyclerView.Adapter<DefaultRecy
         this.wishlist = wishlist;
         this.isCategory = isCategory;
 
+
         db_helper = new DataBaseHelper(context);
         db_helper.init();
 
         this.picassoSingleton = PicassoSingleton.getInstance(context);
     }
 
+    public void setOnItemClickListener(View.OnClickListener onClickListener) {
+        this.onItemClickListener  = onClickListener;
+    }
+    public void setOnItemLongClickListener(View.OnLongClickListener onClickListener) {
+        this.onItemLongClickListener = onClickListener;
+    }
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
@@ -137,7 +148,7 @@ public class DefaultRecyclerListAdapter extends RecyclerView.Adapter<DefaultRecy
                     itemAttributes.put("rating", wishlistItem.getRating() + "");
 
 
-                    if(v.isSelected()) {
+                    if (v.isSelected()) {
                         v.setSelected(false);
                         ((Button) v).setTextColor(context.getResources().getColor(R.color.accent));
                         ((Button) v).setText(R.string.wishlist_button_not_selected);
@@ -153,6 +164,8 @@ public class DefaultRecyclerListAdapter extends RecyclerView.Adapter<DefaultRecy
                 }
             });
         }
+        holder.itemView.setOnClickListener(onItemClickListener);
+        holder.itemView.setOnLongClickListener(onItemLongClickListener);
 
     }
 
@@ -168,6 +181,7 @@ public class DefaultRecyclerListAdapter extends RecyclerView.Adapter<DefaultRecy
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        RelativeLayout itemView;
         TextView firstLine;
         TextView secondLine;
         TextView rightTextView;
@@ -177,6 +191,7 @@ public class DefaultRecyclerListAdapter extends RecyclerView.Adapter<DefaultRecy
 
         public ViewHolder(View itemView) {
             super(itemView);
+            this.itemView = (RelativeLayout) itemView;
             firstLine = (TextView) itemView.findViewById(R.id.firstLine);
             secondLine = (TextView)itemView.findViewById(R.id.secondLine);
             rightTextView = (TextView)itemView.findViewById(R.id.rightTextView);

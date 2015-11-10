@@ -30,7 +30,6 @@ import com.gruppe1.pem.challengeme.adapters.CompareRecyclerGridAdapter;
 import com.gruppe1.pem.challengeme.adapters.CompareRecyclerListAdapter;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
-import com.gruppe1.pem.challengeme.helpers.RecyclerItemClickListener;
 
 import java.util.ArrayList;
 
@@ -81,32 +80,37 @@ public class CompareFragment extends Fragment {
         initDataset();
 
         compareRecyclerListAdapter = new CompareRecyclerListAdapter(getActivity(), R.layout.list_item_compare, mDataset);
+        compareRecyclerListAdapter.setOnItemClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                compareFragmentOnItemClick(v, listView.getChildPosition(v));
+            }
+        });
+        compareRecyclerListAdapter.setOnItemLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                compareFragmentOnItemLongClick(listView, v, listView.getChildPosition(v));
+                return true;
+            }
+        });
         listView.setAdapter(compareRecyclerListAdapter);
-        listView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                compareFragmentOnItemClick(view, position);
-            }
 
-            @Override
-            public void onItemLongClick(RecyclerView parent, View view, int position) {
-                compareFragmentOnItemLongClick(parent, view, position);
-            }
-        }));
         compareRecyclerGridAdapter = new CompareRecyclerGridAdapter(getActivity(), R.layout.grid_item_compare, mDataset);
+        compareRecyclerGridAdapter.setOnItemClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                compareFragmentOnItemClick(v,listView.getChildPosition(v));
+            }
+        });
+        compareRecyclerGridAdapter.setOnItemLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                compareFragmentOnItemLongClick(listView,v,listView.getChildPosition(v));
+                return true;
+            }
+        });
         gridView.setAdapter(compareRecyclerGridAdapter);
         gridView.setVisibility(View.GONE);
-        gridView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                compareFragmentOnItemClick(view, position);
-            }
-
-            @Override
-            public void onItemLongClick(RecyclerView parent, View view, int position) {
-                compareFragmentOnItemLongClick(parent, view, position);
-            }
-        }));
 
         return rootView;
     }

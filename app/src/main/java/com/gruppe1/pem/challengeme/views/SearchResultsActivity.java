@@ -33,7 +33,6 @@ import com.gruppe1.pem.challengeme.R;
 import com.gruppe1.pem.challengeme.adapters.DefaultRecyclerListAdapter;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
-import com.gruppe1.pem.challengeme.helpers.RecyclerItemClickListener;
 
 import java.util.ArrayList;
 
@@ -110,22 +109,24 @@ public class SearchResultsActivity extends AppCompatActivity {
 
 
         defaultRecyclerListAdapter = new DefaultRecyclerListAdapter(this, R.layout.list_item_default, mDataset, false, false);
+        defaultRecyclerListAdapter.setOnItemClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchResultsActivityOnItemClick(v,listView.getChildPosition(v));
+            }
+        });
+        defaultRecyclerListAdapter.setOnItemLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                searchResultsActivityOnItemLongClick(listView,v,listView.getChildPosition(v));
+                return true;
+            }
+        });
 
         LinearLayoutManager linearLayoutManagerList = new LinearLayoutManager(getBaseContext());
         listView.setLayoutManager(linearLayoutManagerList);
         listView.setHasFixedSize(true);
         listView.setAdapter(defaultRecyclerListAdapter);
-        listView.addOnItemTouchListener(new RecyclerItemClickListener(this, new RecyclerItemClickListener.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                searchResultsActivityOnItemClick(view, position);
-            }
-
-            @Override
-            public void onItemLongClick(RecyclerView parent, View view, int position) {
-                searchResultsActivityOnItemLongClick(parent, view, position);
-            }
-        }));
 
         StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         gridView.setLayoutManager(gridLayoutManager);
