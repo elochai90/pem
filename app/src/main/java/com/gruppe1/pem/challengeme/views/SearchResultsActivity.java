@@ -26,6 +26,7 @@ import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import com.gruppe1.pem.challengeme.Category;
 import com.gruppe1.pem.challengeme.Color;
 import com.gruppe1.pem.challengeme.Item;
 import com.gruppe1.pem.challengeme.ListItemIconName;
@@ -58,14 +59,20 @@ public class SearchResultsActivity extends AppCompatActivity {
     private LinearLayout filterColorLayoutFirstLine;
     private LinearLayout filterColorLayoutSecondLine;
     private LinearLayout filterRatingLayout;
+    private LinearLayout filterCategoryLayout;
+    private LinearLayout filterCategoryLayoutFirstLine;
+    private LinearLayout filterCategoryLayoutSecondLine;
     private ImageButton filterWishlist;
     private ImageButton filterRating;
     private ImageButton filterColor;
+    private ImageButton filterCategory;
     private boolean filterWishlistActivated;
     private boolean filterRatingActivated;
     private boolean filterColorActivated;
+    private boolean filterCategoryActivated;
 
     private ArrayList<Integer> filterColorIds;
+    private ArrayList<Integer> filterCategoryIds;
     private int filterRatingCount;
 
 
@@ -88,10 +95,14 @@ public class SearchResultsActivity extends AppCompatActivity {
         filterColorLayout = (LinearLayout) findViewById(R.id.filterColorLayout);
         filterColorLayoutFirstLine = (LinearLayout) findViewById(R.id.filterColorLayoutFirstLine);
         filterColorLayoutSecondLine = (LinearLayout) findViewById(R.id.filterColorLayoutSecondLine);
+        filterCategoryLayout = (LinearLayout) findViewById(R.id.filterCategoryLayout);
+        filterCategoryLayoutFirstLine = (LinearLayout) findViewById(R.id.filterCategoryLayoutFirstLine);
+        filterCategoryLayoutSecondLine = (LinearLayout) findViewById(R.id.filterCategoryLayoutSecondLine);
         filterRatingLayout = (LinearLayout) findViewById(R.id.filterRatingLayout);
         filterWishlist = (ImageButton) findViewById(R.id.filterWishlist);
         filterRating = (ImageButton) findViewById(R.id.filterRating);
         filterColor = (ImageButton) findViewById(R.id.filterColor);
+        filterCategory = (ImageButton) findViewById(R.id.filterCategory);
 
         sharedPreferences = getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
@@ -106,6 +117,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         filterWishlistActivated = false;
         filterRatingCount = -1;
         filterColorIds = new ArrayList<>();
+        filterCategoryIds = new ArrayList<>();
 
 
         defaultRecyclerListAdapter = new DefaultRecyclerListAdapter(this, R.layout.list_item_default, mDataset, false, false);
@@ -164,9 +176,109 @@ public class SearchResultsActivity extends AppCompatActivity {
                     PorterDuffColorFilter(android.graphics.Color.parseColor(tmpColor), PorterDuff.Mode.MULTIPLY));
         }
     }
+    private void deselectAllCategoryFilter() {
+        for(int i = 0; i < filterCategoryLayoutFirstLine.getChildCount(); i++) {
+            ImageButton tmpCategoryButton = (ImageButton) filterCategoryLayoutFirstLine.getChildAt(i);
+            String tmpIcon = (String)tmpCategoryButton.getTag();
+            int iconId = getResources().getIdentifier(tmpIcon + "_weiss", "drawable", "com.gruppe1.pem.challengeme");
+            LayerDrawable newDrawableIcon = (LayerDrawable) getDrawable(R.drawable.icon_category_circle);
+            newDrawableIcon.setDrawableByLayerId(R.id.circle_icon, getDrawable(iconId));
+            tmpCategoryButton.setBackground(newDrawableIcon);
+        }
+        for(int i = 0; i < filterCategoryLayoutSecondLine.getChildCount(); i++) {
+            ImageButton tmpCategoryButton = (ImageButton) filterCategoryLayoutSecondLine.getChildAt(i);
+            String tmpIcon = (String)tmpCategoryButton.getTag();
+            int iconId = getResources().getIdentifier(tmpIcon + "_weiss", "drawable", "com.gruppe1.pem.challengeme");
+            LayerDrawable newDrawableIcon = (LayerDrawable) getDrawable(R.drawable.icon_category_circle);
+            newDrawableIcon.setDrawableByLayerId(R.id.circle_icon, getDrawable(iconId));
+            tmpCategoryButton.setBackground(newDrawableIcon);
+        }
+    }
 
-    private void setupFilterViews() {
+    private void setupCategoryFilterViews() {
+        int colorIconWidthHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, getResources().getDisplayMetrics());
+        int colorIconMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics());
+        ArrayList<Category> allCategories = Category.getAllCategories(getApplicationContext());
+        int positionCategory = 0;
+        for (final Category tmpCat : allCategories) {
+            ImageButton tmpCategoryButton = new ImageButton(this);
+            LinearLayout.LayoutParams attibuteNameLayoutParams = new LinearLayout.LayoutParams(colorIconWidthHeight, colorIconWidthHeight);
+            attibuteNameLayoutParams.setMargins(0, 0, colorIconMargin, 0);
+            tmpCategoryButton.setLayoutParams(attibuteNameLayoutParams);
 
+            int iconId = getResources().getIdentifier(tmpCat.getIcon() + "_weiss", "drawable", "com.gruppe1.pem.challengeme");
+            LayerDrawable newDrawableIcon = (LayerDrawable) getDrawable(R.drawable.icon_category_circle);
+            newDrawableIcon.setDrawableByLayerId(R.id.circle_icon, getDrawable(iconId));
+            tmpCategoryButton.setBackground(newDrawableIcon);
+            tmpCategoryButton.setTag(tmpCat.getIcon());
+
+            tmpCategoryButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (filterCategoryIds.contains(tmpCat.getId())) {
+                        filterCategoryIds.remove(filterCategoryIds.indexOf(tmpCat.getId()));
+                        int iconId = getResources().getIdentifier(tmpCat.getIcon() + "_weiss", "drawable", "com.gruppe1.pem.challengeme");
+                        LayerDrawable newDrawableIcon = (LayerDrawable) getDrawable(R.drawable.icon_category_circle);
+                        newDrawableIcon.setDrawableByLayerId(R.id.circle_icon, getDrawable(iconId));
+                        v.setBackground(newDrawableIcon);
+                    } else {
+                        filterCategoryIds.add(tmpCat.getId());
+                        int iconId = getResources().getIdentifier(tmpCat.getIcon() + "_weiss", "drawable", "com.gruppe1.pem.challengeme");
+                        LayerDrawable newDrawableIcon = (LayerDrawable) getDrawable(R.drawable.icon_category_circle_filled);
+                        newDrawableIcon.setDrawableByLayerId(R.id.circle_icon, getDrawable(iconId));
+                        v.setBackground(newDrawableIcon);
+                    }
+                    initDataset();
+                }
+            });
+            if(allCategories.size() > 9) {
+                if(positionCategory < allCategories.size()/2) {
+                    filterCategoryLayoutFirstLine.addView(tmpCategoryButton);
+                } else {
+                    filterCategoryLayoutSecondLine.addView(tmpCategoryButton);
+                }
+            } else {
+                filterCategoryLayoutFirstLine.addView(tmpCategoryButton);
+            }
+            positionCategory++;
+        }
+        filterCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(filterRatingActivated) {
+                    if(filterRatingCount == -1) {
+                        filterRating.callOnClick();
+                    } else {
+                        filterRatingLayout.setVisibility(View.GONE);
+                        filterRatingActivated = false;
+                    }
+                }
+                if(filterColorActivated) {
+                    if(filterColorIds.size() == 0) {
+                        filterColor.callOnClick();
+                    } else {
+                        filterColorLayout.setVisibility(View.GONE);
+                        filterColorActivated = false;
+                    }
+                }
+                if(filterCategoryActivated) {
+                    filterCategoryIds.clear();
+                    deselectAllCategoryFilter();
+                    filterCategory.setBackground(getDrawable(R.drawable.icon_category_circle));
+                    filterCategoryLayout.setVisibility(View.GONE);
+                    filterCategoryActivated = false;
+                    initDataset();
+                } else {
+                    filterCategory.setBackground(getDrawable(R.drawable.icon_category_circle_filled));
+                    filterCategoryLayout.setVisibility(View.VISIBLE);
+                    filterCategoryActivated = true;
+                }
+            }
+        });
+    }
+
+
+    private void setupColorFilterViews() {
         int colorIconWidthHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, getResources().getDisplayMetrics());
         int colorIconMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics());
         ArrayList<Color> allColors = Color.getAllColors(getApplicationContext());
@@ -204,6 +316,59 @@ public class SearchResultsActivity extends AppCompatActivity {
             }
             positionColor++;
         }
+        filterColor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(filterRatingActivated) {
+                    if(filterRatingCount == -1) {
+                        filterRating.callOnClick();
+                    } else {
+                        filterRatingLayout.setVisibility(View.GONE);
+                        filterRatingActivated = false;
+                    }
+                }
+                if(filterCategoryActivated) {
+                    if(filterCategoryIds.size() == 0) {
+                        filterCategory.callOnClick();
+                    } else {
+                        filterCategoryLayout.setVisibility(View.GONE);
+                        filterCategoryActivated = false;
+                    }
+                }
+                if(filterColorActivated) {
+                    filterColorIds.clear();
+                    deselectAllColorFilter();
+                    filterColor.setBackground(getDrawable(R.drawable.icon_color_circle));
+                    filterColorLayout.setVisibility(View.GONE);
+                    filterColorActivated = false;
+                    initDataset();
+                } else {
+                    filterColor.setBackground(getDrawable(R.drawable.icon_color_circle_filled));
+                    filterColorLayout.setVisibility(View.VISIBLE);
+                    filterColorActivated = true;
+                }
+            }
+        });
+    }
+
+    private void setupWishlistFilterViews() {
+        filterWishlist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(filterWishlistActivated) {
+                    filterWishlist.setBackground(getDrawable(R.drawable.icon_wishlist_circle));
+                } else {
+                    filterWishlist.setBackground(getDrawable(R.drawable.icon_wishlist_circle_filled));
+                }
+                filterWishlistActivated = !filterWishlistActivated;
+                initDataset();
+            }
+        });
+    }
+
+    private void setupRatingFilterViews() {
+        int colorIconWidthHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, getResources().getDisplayMetrics());
+        int colorIconMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics());
         for(int i = 1; i <= 5; i++) {
             ImageButton tmpRatingButton = new ImageButton(this);
             LinearLayout.LayoutParams attibuteNameLayoutParams = new LinearLayout.LayoutParams(colorIconWidthHeight, colorIconWidthHeight);
@@ -222,18 +387,6 @@ public class SearchResultsActivity extends AppCompatActivity {
             });
             filterRatingLayout.addView(tmpRatingButton);
         }
-        filterWishlist.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(filterWishlistActivated) {
-                    filterWishlist.setBackground(getDrawable(R.drawable.icon_wishlist_circle));
-                } else {
-                    filterWishlist.setBackground(getDrawable(R.drawable.icon_wishlist_circle_filled));
-                }
-                filterWishlistActivated = !filterWishlistActivated;
-                initDataset();
-            }
-        });
         filterRating.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -243,6 +396,14 @@ public class SearchResultsActivity extends AppCompatActivity {
                     } else {
                         filterColorLayout.setVisibility(View.GONE);
                         filterColorActivated = false;
+                    }
+                }
+                if(filterCategoryActivated) {
+                    if(filterCategoryIds.size() == 0) {
+                        filterCategory.callOnClick();
+                    } else {
+                        filterCategoryLayout.setVisibility(View.GONE);
+                        filterCategoryActivated = false;
                     }
                 }
                 if(filterRatingActivated) {
@@ -259,31 +420,13 @@ public class SearchResultsActivity extends AppCompatActivity {
                 }
             }
         });
-        filterColor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(filterRatingActivated) {
-                    if(filterRatingCount == -1) {
-                        filterRating.callOnClick();
-                    } else {
-                        filterRatingLayout.setVisibility(View.GONE);
-                        filterRatingActivated = false;
-                    }
-                }
-                if(filterColorActivated) {
-                    filterColorIds.clear();
-                    deselectAllColorFilter();
-                    filterColor.setBackground(getDrawable(R.drawable.icon_color_circle));
-                    filterColorLayout.setVisibility(View.GONE);
-                    filterColorActivated = false;
-                    initDataset();
-                } else {
-                    filterColor.setBackground(getDrawable(R.drawable.icon_color_circle_filled));
-                    filterColorLayout.setVisibility(View.VISIBLE);
-                    filterColorActivated = true;
-                }
-            }
-        });
+    }
+
+    private void setupFilterViews() {
+        setupColorFilterViews();
+        setupRatingFilterViews();
+        setupWishlistFilterViews();
+        setupCategoryFilterViews();
     }
 
 
@@ -379,7 +522,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         DataBaseHelper db_helper = new DataBaseHelper(this);
         db_helper.init();
 
-        searchResultItems = Item.getSearchResults(this, query, filterWishlistActivated, filterRatingCount, filterColorIds);
+        searchResultItems = Item.getSearchResults(this, query,filterCategoryIds, filterWishlistActivated, filterRatingCount, filterColorIds);
 
         for (Item tmpItem : searchResultItems) {
             int iconId = getResources().getIdentifier("kleiderbuegel", "drawable", "com.gruppe1.pem.challengeme");
