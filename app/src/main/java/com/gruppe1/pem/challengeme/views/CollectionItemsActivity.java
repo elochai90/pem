@@ -80,6 +80,9 @@ import java.util.Locale;
             }
         });
         mViewPager.setCurrentItem(currentItemPosition);
+
+        getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
     }
 
     @Override

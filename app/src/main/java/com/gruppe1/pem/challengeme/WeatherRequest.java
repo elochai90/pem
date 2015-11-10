@@ -350,7 +350,7 @@ public class WeatherRequest {
         temp3.setText(weather_3_temp);
 
         try {
-            if(!Objects.equals(weather_date, "")) {
+            if(!Objects.equals(weather_date, "") && weather_date != null) {
                 DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH);
                 Date lastLocationRequestDate = format.parse(weather_date);
                 Date now = new Date();

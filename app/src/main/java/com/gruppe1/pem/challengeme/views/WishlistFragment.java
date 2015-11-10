@@ -5,16 +5,19 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -36,6 +39,7 @@ public class WishlistFragment extends Fragment {
     private Object[] selectedItem;
     private RecyclerView listView;
     private RecyclerView gridView;
+    private FrameLayout frameLayout;
     private DefaultRecyclerListAdapter defaultRecyclerListAdapter;
 
     @Override
@@ -48,13 +52,10 @@ public class WishlistFragment extends Fragment {
         noWishlistItemLayout = (RelativeLayout) rootView.findViewById(R.id.noItemLayout);
         listView = (RecyclerView) rootView.findViewById(R.id.listView);
         gridView = (RecyclerView) rootView.findViewById(R.id.gridView);
+        frameLayout = (FrameLayout) rootView.findViewById(R.id.frameLayout);
 
         TextView noWishlistItemText = (TextView) rootView.findViewById(R.id.noItemText);
         noWishlistItemText.setText(R.string.no_wishlist_items);
-
-        mDataset = new ArrayList<>();
-        initDataset();
-
 
         StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         gridView.setLayoutManager(gridLayoutManager);
@@ -64,6 +65,11 @@ public class WishlistFragment extends Fragment {
         LinearLayoutManager linearLayoutManagerList = new LinearLayoutManager(getActivity().getBaseContext());
         listView.setLayoutManager(linearLayoutManagerList);
         listView.setHasFixedSize(true);
+
+        mDataset = new ArrayList<>();
+        initDataset();
+
+
         defaultRecyclerListAdapter = new DefaultRecyclerListAdapter(getActivity(), R.layout.list_item_default, mDataset, false, true);
         listView.setAdapter(defaultRecyclerListAdapter);
         listView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
@@ -146,6 +152,30 @@ public class WishlistFragment extends Fragment {
         } else {
             showNoWishlistItemLayout(true);
         }
+        final LinearLayoutManager layoutManager = (LinearLayoutManager) listView.getLayoutManager();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                TypedValue tv = new TypedValue();
+                int actionBarHeight = 0;
+                if (getActivity().getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true))
+                {
+                    actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data,getResources().getDisplayMetrics());
+                }
+                //no items in the RecyclerView
+                if (listView.getAdapter().getItemCount() == 0) {
+                    listView.setNestedScrollingEnabled(false);
+                    frameLayout.setPadding(0, 0, 0, actionBarHeight);
+                    //if the first and the last item is visible
+                } else if (layoutManager.findFirstCompletelyVisibleItemPosition() == 0
+                        && layoutManager.findLastCompletelyVisibleItemPosition() == listView.getAdapter().getItemCount() - 1) {
+                    listView.setNestedScrollingEnabled(false);
+                    frameLayout.setPadding(0,0,0, actionBarHeight);
+                } else {
+                    listView.setNestedScrollingEnabled(true);
+                }
+            }
+        }, 5);
     }
 
 

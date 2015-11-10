@@ -2,7 +2,27 @@
 <FrameLayout
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:id="@+id/frameLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/listView"
+        android:scrollbars="vertical"
+        android:focusable="true"
+        android:clickable="true">
+    </android.support.v7.widget.RecyclerView>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/gridView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical"
+        android:focusable="true"
+        android:clickable="true">
+    </android.support.v7.widget.RecyclerView>
 
     <RelativeLayout
         android:id="@+id/noItemLayout"
@@ -27,23 +47,6 @@
             android:layout_marginEnd="?attr/actionBarSize"
             android:contentDescription="@string/list_grid_view_desc_arrowImage"/>
     </RelativeLayout>
-
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/listView"
-        android:scrollbars="vertical"
-        android:focusable="true"
-        android:clickable="true">
-    </android.support.v7.widget.RecyclerView>
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/gridView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="vertical"
-        android:focusable="true"
-        android:clickable="true">
-    </android.support.v7.widget.RecyclerView>
 
     <com.github.clans.fab.FloatingActionMenu
         xmlns:fab="http://schemas.android.com/apk/res-auto"

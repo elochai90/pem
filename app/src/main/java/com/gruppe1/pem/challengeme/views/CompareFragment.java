@@ -7,18 +7,19 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,6 +44,7 @@ public class CompareFragment extends Fragment {
     private RecyclerView gridView;
     private RecyclerView listView;
     private Boolean list;
+    private FrameLayout frameLayout;
 
     private RelativeLayout noComparesLayout;
 
@@ -63,18 +65,22 @@ public class CompareFragment extends Fragment {
         noComparesLayout = (RelativeLayout) rootView.findViewById(R.id.noItemLayout);
         listView = (RecyclerView) rootView.findViewById(R.id.listView);
         gridView = (RecyclerView) rootView.findViewById(R.id.gridView);
+        frameLayout = (FrameLayout) rootView.findViewById(R.id.frameLayout);
 
         TextView noComparesText = (TextView) rootView.findViewById(R.id.noItemText);
         noComparesText.setText(R.string.no_compares);
+
+        LinearLayoutManager linearLayoutManagerList = new LinearLayoutManager(getActivity().getBaseContext());
+        listView.setLayoutManager(linearLayoutManagerList);
+        listView.setHasFixedSize(true);
+        StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+        gridView.setLayoutManager(gridLayoutManager);
+        gridView.setHasFixedSize(true);
 
         mDataset = new ArrayList<>();
         initDataset();
 
         compareRecyclerListAdapter = new CompareRecyclerListAdapter(getActivity(), R.layout.list_item_compare, mDataset);
-
-        LinearLayoutManager linearLayoutManagerList = new LinearLayoutManager(getActivity().getBaseContext());
-        listView.setLayoutManager(linearLayoutManagerList);
-        listView.setHasFixedSize(true);
         listView.setAdapter(compareRecyclerListAdapter);
         listView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
             @Override
@@ -88,9 +94,6 @@ public class CompareFragment extends Fragment {
             }
         }));
         compareRecyclerGridAdapter = new CompareRecyclerGridAdapter(getActivity(), R.layout.grid_item_compare, mDataset);
-        StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
-        gridView.setLayoutManager(gridLayoutManager);
-        gridView.setHasFixedSize(true);
         gridView.setAdapter(compareRecyclerGridAdapter);
         gridView.setVisibility(View.GONE);
         gridView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
@@ -212,6 +215,29 @@ public class CompareFragment extends Fragment {
         } else {
             showNoComparesLayout(true);
         }
+        final RecyclerView mRecyclerView = list ? listView : gridView;
+        final LinearLayoutManager layoutManager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                TypedValue tv = new TypedValue();
+                int actionBarHeight = 0;
+                if (getActivity().getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true))
+                {
+                    actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data,getResources().getDisplayMetrics());
+                }
+                if (mRecyclerView.getAdapter().getItemCount() == 0) {
+                    mRecyclerView.setNestedScrollingEnabled(false);
+                    frameLayout.setPadding(0,0,0, actionBarHeight);
+                } else if (layoutManager.findFirstCompletelyVisibleItemPosition() == 0
+                        && layoutManager.findLastCompletelyVisibleItemPosition() == mRecyclerView.getAdapter().getItemCount() - 1) {
+                    mRecyclerView.setNestedScrollingEnabled(false);
+                    frameLayout.setPadding(0,0,0, actionBarHeight);
+                } else {
+                    mRecyclerView.setNestedScrollingEnabled(true);
+                }
+            }
+        }, 5);
     }
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {

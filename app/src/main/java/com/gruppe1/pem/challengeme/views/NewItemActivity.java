@@ -116,7 +116,7 @@ public class NewItemActivity extends AppCompatActivity {
 //        getActionBar().setTitle(R.string.title_activity_new_item);
 
         getWindow().setSoftInputMode(
-                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         setupToolbar();
         sharedPreferences = getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
