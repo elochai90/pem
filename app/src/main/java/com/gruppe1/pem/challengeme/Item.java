@@ -303,7 +303,7 @@ public class Item implements Parcelable{
         Compare.deleteComparesByItemId(this.m_context, this.m_id);
     }
 
-    public static ArrayList<Item> getSearchResults(Context p_context, String query, boolean filterWishlist, int filterRating, ArrayList<Integer> filterColorIds) {
+    public static ArrayList<Item> getSearchResults(Context p_context, String query, ArrayList<Integer> filterCategoryIds, boolean filterWishlist, int filterRating, ArrayList<Integer> filterColorIds) {
         DataBaseHelper dbHelper = new DataBaseHelper(p_context);
         dbHelper.init();
         dbHelper.setTable(Constants.ITEMS_DB_TABLE);
@@ -317,7 +317,14 @@ public class Item implements Parcelable{
             filterColorIdsString = filterColorIdsString.replace("]",")");
             filterColorExpression = (" AND primary_color in " + filterColorIdsString);
         }
-        dbHelper.setWhere("", new String[]{"name LIKE '%" + query + "%'" + filterWishlistExpression + filterRatingExpression + filterColorExpression});
+        String filterCategoryExpression = "";
+        if(filterCategoryIds.size() > 0) {
+            String filterCategoryIdsString = filterCategoryIds.toString();
+            filterCategoryIdsString = filterCategoryIdsString.replace("[","(");
+            filterCategoryIdsString = filterCategoryIdsString.replace("]",")");
+            filterCategoryExpression = (" AND category_id in " + filterCategoryIdsString);
+        }
+        dbHelper.setWhere("", new String[]{"name LIKE '%" + query + "%'" + filterCategoryExpression + filterWishlistExpression + filterRatingExpression + filterColorExpression});
 
         Cursor cursor = dbHelper.select();
 
