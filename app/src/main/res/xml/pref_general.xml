@@ -31,6 +31,15 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:title="App Layout">
+        <ListPreference
+            android:key="App Layout"
+            android:title="@string/chooseLayout"
+            android:entries="@array/layout_text"
+            android:entryValues="@array/layout_text" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="@string/favColors">
         <MultiSelectListPreference
             android:key="favorite_colors"

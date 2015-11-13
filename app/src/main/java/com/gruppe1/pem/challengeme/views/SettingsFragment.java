@@ -3,6 +3,7 @@ package com.gruppe1.pem.challengeme.views;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -12,8 +13,11 @@ import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.support.design.widget.TabLayout;
+import android.support.v7.widget.Toolbar;
 
 import com.gruppe1.pem.challengeme.Color;
+
 import com.gruppe1.pem.challengeme.R;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 
@@ -100,6 +104,17 @@ public class SettingsFragment extends PreferenceFragment  {
         }
         bindPreferenceSummaryToValue(findPreference("Shoes"), shoes_default);
 
+        String app_layout;
+        if (sharedPreferences.contains(Constants.KEY_DS_4_NAME)) {
+            app_layout = sharedPreferences.getString(Constants.KEY_DS_4_NAME, "");
+        } else {
+            app_layout = PreferenceManager
+                    .getDefaultSharedPreferences(findPreference("App Layout").getContext())
+                    .getString(findPreference("App Layout").getKey(), "");
+        }
+        bindPreferenceSummaryToValue(findPreference("App Layout"), app_layout);
+
+
         String language_def;
         if (sharedPreferences.contains(Constants.KEY_LANGUAGE)) {
             language_def = sharedPreferences.getString(Constants.KEY_LANGUAGE, "");
@@ -171,6 +186,27 @@ public class SettingsFragment extends PreferenceFragment  {
                     editor.apply();
                 } else if(preference.getKey().equals("Shoes")) {
                     editor.putString(Constants.KEY_DS_3_NAME, stringValue);
+                    editor.apply();
+                }
+                else if(preference.getKey().equals("App Layout")) {
+                    Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+                    switch (stringValue) {
+                        case "Red":
+                        case "Rot":
+                            toolbar.setBackgroundColor(android.graphics.Color.parseColor("#ffDA4336"));
+                            break;
+                        case "Blue":
+                        case "Blau":
+                            toolbar.setBackgroundColor(android.graphics.Color.parseColor("#ff1d4064"));
+                            break;
+                        case "Green":
+                        case "Grün":
+                            toolbar.setBackgroundColor(android.graphics.Color.parseColor("#ff088A08"));
+                            break;
+                        default:
+                            toolbar.setBackgroundColor(android.graphics.Color.parseColor("#ff1d4064"));
+                    }
+                    editor.putString(Constants.KEY_DS_4_NAME, stringValue);
                     editor.apply();
                 }
                 else if(preference.getKey().equals("Language")) {

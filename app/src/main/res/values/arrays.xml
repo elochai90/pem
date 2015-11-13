@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="sizes_text">
+        <item>S</item>
+        <item>M</item>
+        <item>L</item>
+        <item>XL</item>
+        <item>XXL</item>
         <item>32</item>
         <item>34</item>
         <item>36</item>
@@ -69,6 +74,13 @@
     <string-array name="language_text">
         <item>@string/settings_lang_de</item>
         <item>@string/settings_lang_en</item>
+
+    </string-array>
+
+    <string-array name="layout_text">
+        <item>@string/settings_layout_blue</item>
+        <item>@string/settings_layout_red</item>
+        <item>@string/settings_layout_green</item>
 
     </string-array>
 

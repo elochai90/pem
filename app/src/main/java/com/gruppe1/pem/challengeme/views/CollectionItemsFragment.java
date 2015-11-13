@@ -1,5 +1,6 @@
 package com.gruppe1.pem.challengeme.views;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -115,6 +116,28 @@ public class CollectionItemsFragment extends Fragment {
 
         sharedPreferences = getActivity().getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
 
+        String layout = sharedPreferences.getString(Constants.KEY_DS_4_NAME, "");
+        LinearLayout linlay = (LinearLayout) rootView.findViewById(R.id.itemDetailRating);
+        switch (layout) {
+            case "Red":
+            case "Rot":
+                toolbar.setBackgroundColor(android.graphics.Color.parseColor("#ffDA4336"));
+                linlay.setBackgroundColor(android.graphics.Color.parseColor("#ffDA4336"));
+                break;
+            case "Blue":
+            case "Blau":
+                toolbar.setBackgroundColor(android.graphics.Color.parseColor("#ff1d4064"));
+                linlay.setBackgroundColor(android.graphics.Color.parseColor("#ff1d4064"));
+                break;
+            case "Green":
+            case "Grün":
+                toolbar.setBackgroundColor(android.graphics.Color.parseColor("#ff088A08"));
+                linlay.setBackgroundColor(android.graphics.Color.parseColor("#ff088A08"));
+                break;
+            default:
+                toolbar.setBackgroundColor(android.graphics.Color.parseColor("#ff1d4064"));
+                linlay.setBackgroundColor(android.graphics.Color.parseColor("#ff1d4064"));
+        }
 
         db_helper = new DataBaseHelper(activity);
         db_helper.init();

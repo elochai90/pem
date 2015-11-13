@@ -165,6 +165,25 @@ public class NewCompareActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        SharedPreferences prefs = getSharedPreferences(Constants.MY_PREFERENCES, Activity.MODE_PRIVATE);
+        String layout = prefs.getString(Constants.KEY_DS_4_NAME, "");
+        switch (layout) {
+            case "Red":
+            case "Rot":
+                toolbar.setBackgroundColor(android.graphics.Color.parseColor("#ffDA4336"));
+                break;
+            case "Blue":
+            case "Blau":
+                toolbar.setBackgroundColor(android.graphics.Color.parseColor("#ff1d4064"));
+                break;
+            case "Green":
+            case "Grün":
+                toolbar.setBackgroundColor(android.graphics.Color.parseColor("#ff088A08"));
+                break;
+            default:
+                toolbar.setBackgroundColor(android.graphics.Color.parseColor("#ff1d4064"));
+        }
     }
 
     private void setViewsWithEditCompare() {
@@ -217,6 +236,26 @@ public class NewCompareActivity extends AppCompatActivity {
 
         final View dialogView = inflater.inflate(R.layout.dialog_grid, null);
         TextView headline = (TextView)dialogView.findViewById(R.id.dialog_headline);
+
+        SharedPreferences prefs = getSharedPreferences(Constants.MY_PREFERENCES, Activity.MODE_PRIVATE);
+        String layout = prefs.getString(Constants.KEY_DS_4_NAME, "");
+        switch (layout) {
+            case "Red":
+            case "Rot":
+                headline.setBackgroundColor(android.graphics.Color.parseColor("#ffDA4336"));
+                break;
+            case "Blue":
+            case "Blau":
+                headline.setBackgroundColor(android.graphics.Color.parseColor("#ff1d4064"));
+                break;
+            case "Green":
+            case "Grün":
+                headline.setBackgroundColor(android.graphics.Color.parseColor("#ff088A08"));
+                break;
+            default:
+                headline.setBackgroundColor(android.graphics.Color.parseColor("#ff1d4064"));
+        }
+
         headline.setText(getString(R.string.compare_choose_cat_overlay_title));
         GridView gridView = (GridView) dialogView.findViewById(R.id.gridView);
 
