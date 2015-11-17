@@ -158,7 +158,7 @@ public class NewItemActivity extends AppCompatActivity {
         ArrayList<ListItemIconName> catArray = new ArrayList<>();
         for (Category tmpCat : allCategories) {
             int iconId = getResources().getIdentifier(tmpCat.getIcon(), "drawable", "com.gruppe1.pem.challengeme");
-            catArray.add(new ListItemIconName(tmpCat.getId(), iconId, tmpCat.getName(), null));
+            catArray.add(new ListItemIconName("category", tmpCat.getId(), iconId, tmpCat.getName(), null));
         }
         gridCateoriesAdapter = new CategoriesGridOverlayAdapter(this, R.layout.grid_item_overlay, catArray);
         attrCategoryValue.setOnClickListener(new View.OnClickListener() {

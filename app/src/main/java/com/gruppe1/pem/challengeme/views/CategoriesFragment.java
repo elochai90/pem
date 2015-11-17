@@ -129,7 +129,7 @@ public class CategoriesFragment extends Fragment {
         Bundle b = new Bundle();
         b.putInt(Constants.EXTRA_CATEGORY_ID, categoryId);
         intent.putExtras(b);
-        startActivity(intent);
+        startActivityForResult(intent, 1);
     }
 
     @Override
@@ -216,11 +216,11 @@ public class CategoriesFragment extends Fragment {
             editor.commit();
         }
 
-        ArrayList<Category> allCategories = Category.getAllCategories(getActivity().getApplicationContext());
+        ArrayList<Category> allBaseCategories = Category.getCategoriesWithParentCategory(getActivity().getApplicationContext(), -1);
 
-        for (Category tmpCat : allCategories) {
+        for (Category tmpCat : allBaseCategories) {
             int iconId = getResources().getIdentifier(tmpCat.getIcon(), "drawable", "com.gruppe1.pem.challengeme");
-            mDataset.add(new ListItemIconName(tmpCat.getId(), iconId, tmpCat.getName(), null));
+            mDataset.add(new ListItemIconName("category", tmpCat.getId(), iconId, tmpCat.getName(), null));
         }
         db_helper.close();
     }
@@ -229,21 +229,15 @@ public class CategoriesFragment extends Fragment {
         selectCategory(mDataset.get(position).getElementId());
     }
 
-    // for actualizing the categories list on coming back from new category
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        try {
-            super.onActivityResult(requestCode, resultCode, data);
+    public void onActivityResult(int p_requestCode, int p_resultCode, Intent p_data) {
+        super.onActivityResult(p_requestCode, p_resultCode, p_data);
 
-            if (requestCode == 0) {
-                if(resultCode == Activity.RESULT_OK) {
-                    initDataset();
-                    defaultRecyclerListAdapter.notifyDataSetChanged();
-                    defaultRecyclerGridAdapter.notifyDataSetChanged();
-                }
-            }
-        } catch (Exception ex) {
-            Toast.makeText(getActivity(), ex.toString(), Toast.LENGTH_SHORT).show();
+        if(p_requestCode == 1 && p_resultCode == Activity.RESULT_OK) {
+            // item was updated
+            initDataset();
+            defaultRecyclerListAdapter.notifyDataSetChanged();
+            defaultRecyclerGridAdapter.notifyDataSetChanged();
         }
     }
 

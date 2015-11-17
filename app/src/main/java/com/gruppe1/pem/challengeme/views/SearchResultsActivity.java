@@ -552,7 +552,7 @@ public class SearchResultsActivity extends AppCompatActivity {
 
         for (Item tmpItem : searchResultItems) {
             int iconId = getResources().getIdentifier("kleiderbuegel", "drawable", "com.gruppe1.pem.challengeme");
-            mDataset.add(new ListItemIconName(tmpItem.getId(), iconId, tmpItem.getName(), tmpItem.getImageFile()));
+            mDataset.add(new ListItemIconName("item", tmpItem.getId(), iconId, tmpItem.getName(), tmpItem.getImageFile()));
         }
         if(mDataset.size() > 0) {
             showNoItemLayout(false);

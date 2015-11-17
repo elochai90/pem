@@ -189,11 +189,27 @@ public class Item implements Parcelable{
         dbHelper.setTable(Constants.ITEMS_DB_TABLE);
         dbHelper.setColumns(new String[]{"COUNT(*)"});
 
-        if (showAlsoWishlistItems) {
-            dbHelper.setWhere("", new String[]{"category_id='" + p_categoryId + "'"});
-        } else {
-            dbHelper.setWhere("", new String[]{"category_id='" + p_categoryId + "' AND is_wish=0"});
+        ArrayList<Integer> allUnderCategoriesIds = Category.getAllUnderCategoriesIds(p_context, p_categoryId);
+        allUnderCategoriesIds.add(p_categoryId);
+        String categoriesIdsExpression = "";
+        if(allUnderCategoriesIds.size() > 0) {
+            String categoriesIdsString = allUnderCategoriesIds.toString();
+            categoriesIdsString = categoriesIdsString.replace("[","(");
+            categoriesIdsString = categoriesIdsString.replace("]",")");
+            categoriesIdsExpression = ("category_id in " + categoriesIdsString);
         }
+        String wishlistExpression = "";
+        if(!showAlsoWishlistItems) {
+            wishlistExpression = (" AND is_wish=0");
+        }
+        dbHelper.setWhere("", new String[]{categoriesIdsExpression + wishlistExpression});
+
+
+//        if (showAlsoWishlistItems) {
+//            dbHelper.setWhere("", new String[]{"category_id='" + p_categoryId + "'"});
+//        } else {
+//            dbHelper.setWhere("", new String[]{"category_id='" + p_categoryId + "' AND is_wish=0"});
+//        }
 
         Cursor cursor = dbHelper.select();
 

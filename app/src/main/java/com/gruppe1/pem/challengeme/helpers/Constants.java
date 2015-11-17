@@ -4,7 +4,7 @@ package com.gruppe1.pem.challengeme.helpers;
  * holds multiple used constant values
  */
 public class Constants {
-    public static final int DEFAULT_CATEGORY_ID = 0;
+    public static final int DEFAULT_CATEGORY_ID = -1;
     public static String DB_TABLE_PREFIX = "orga_nice_";
     public static String XML_ELEMENT_EMPTY = "###empty###";
 

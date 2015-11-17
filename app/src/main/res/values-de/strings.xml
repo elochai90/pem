@@ -71,6 +71,7 @@
     <!--For new category activity-->
     <string name="new_category_label_name">Name:</string>
     <string name="new_category_hint_name">Kategorie Name</string>
+    <string name="new_category_label_parent">Oberkategorie:</string>
     <string name="new_category_label_defaultSize">Standardgröße:</string>
     <string name="new_category_label_icon">Icon:</string>
     <string name="new_category_desc_icon">Kategorie Icon</string>
@@ -79,6 +80,7 @@
     <string name="default_size_bottoms">Unterteile</string>
     <string name="default_size_shoes">Schuhe</string>
     <string name="default_size_none">Keine</string>
+    <string name="new_category_parent_none">Keine</string>
 
 
     <!--ActionBar Menu titles-->

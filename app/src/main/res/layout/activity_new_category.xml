@@ -53,10 +53,37 @@
             android:background="#c0c0c0"/>
 
         <LinearLayout
+            android:id="@+id/categoryParentLayout"
+            android:layout_below="@id/categoryNameDivider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+            <TextView
+                android:text="@string/new_category_label_parent"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"/>
+            <Spinner
+                android:id="@+id/categoryParent"
+                android:layout_width="fill_parent"
+                android:layout_height="60dp">
+            </Spinner>
+        </LinearLayout>
+
+        <View
+            android:id="@+id/categoryParentDivider"
+            android:layout_below="@id/categoryParentLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="#c0c0c0"/>
+
+        <LinearLayout
             android:id="@+id/categoryDefaultSizeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/categoryNameDivider"
+            android:layout_below="@id/categoryParentDivider"
             android:orientation="horizontal"
             android:paddingLeft="10dp"
             android:paddingRight="10dp">

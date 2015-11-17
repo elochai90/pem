@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.gruppe1.pem.challengeme.Attribute;
+import com.gruppe1.pem.challengeme.Category;
 import com.gruppe1.pem.challengeme.Color;
 import com.gruppe1.pem.challengeme.Item;
 import com.gruppe1.pem.challengeme.ListItemIconName;
@@ -77,13 +78,13 @@ public class DefaultRecyclerListAdapter extends RecyclerView.Adapter<DefaultRecy
         final ListItemIconName item = data.get(position);
         holder.firstLine.setText(item.getName());
 
-        if(isCategory || item.getItemFile() == null) {
+        if(isCategory || item.getItemFile() == null || item.isCategoryElement()) {
             holder.image.setImageResource(item.getIcon());
         } else {
             picassoSingleton.setImage(item.getItemFile(), Constants.LIST_VIEW_IMAGE_WIDTH, Constants.LIST_VIEW_IMAGE_HEIGHT, holder.image );
         }
 
-        if(isCategory) {
+        if(isCategory || item.isCategoryElement()) {
             holder.rightTextView.setText(Item.getItemsCountByCategoryId(context, item.getElementId(), false) + "");
             holder.listItemRatingBar.setVisibility(View.INVISIBLE);
         } else {
@@ -113,7 +114,7 @@ public class DefaultRecyclerListAdapter extends RecyclerView.Adapter<DefaultRecy
         }
 
 
-        if(wishlist) {
+        if(wishlist || item.isWishlistElement()) {
             holder.itemActionButton.setVisibility(View.VISIBLE);
             holder.rightTextView.setVisibility(View.INVISIBLE);
             holder.listItemRatingBar.setVisibility(View.INVISIBLE);
@@ -172,6 +173,10 @@ public class DefaultRecyclerListAdapter extends RecyclerView.Adapter<DefaultRecy
     @Override
     public long getItemId(int p_position){
         return this.data.get(p_position).getElementId();
+    }
+
+    public ListItemIconName getItem(int p_position){
+        return this.data.get(p_position);
     }
 
     @Override

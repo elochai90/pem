@@ -148,6 +148,47 @@ public class Category {
         helper.close();
         return allCategories;
     }
+    /**
+     * get all categories from database
+     * @return ArrayList<Category> all categories with parent category parentCatId
+     */
+    public static ArrayList<Category> getCategoriesWithParentCategory(Context p_context, int parentCatId) {
+        DataBaseHelper helper = new DataBaseHelper(p_context);
+        helper.init();
+        helper.setTable(Constants.CATEGORIES_DB_TABLE);
+        helper.setColumns(new String[]{"*"});
+        SharedPreferences prefs = p_context.getSharedPreferences(Constants.MY_PREFERENCES, Activity.MODE_PRIVATE);
+        String language = prefs.getString(Constants.KEY_LANGUAGE, "");
+        switch (language) {
+            case "en":
+                helper.setOrderBy("name_en ASC");
+            case "de":
+                helper.setOrderBy("name_de ASC");
+            default:
+                helper.setOrderBy("name_en ASC");
+        }
+        helper.setWhere("", new String[]{"parent_category_id=" + parentCatId});
+        ArrayList<Category> allCategories = new ArrayList<>();
+
+        Cursor allCategoriesIterator = helper.select();
+        allCategoriesIterator.moveToFirst();
+
+        while (!allCategoriesIterator.isAfterLast()) {
+            Category category = new Category(p_context, allCategoriesIterator.getInt(0), helper);
+            category.setNameEn(allCategoriesIterator.getString(1));
+            category.setNameDe(allCategoriesIterator.getString(2));
+            category.setParentCategoryId(allCategoriesIterator.getInt(3));
+            category.setDefaultSizeType(allCategoriesIterator.getInt(4));
+
+            category.setIcon(allCategoriesIterator.getString(5));
+            allCategories.add(category);
+            allCategoriesIterator.moveToNext();
+        }
+
+        allCategoriesIterator.close();
+        helper.close();
+        return allCategories;
+    }
 
     /**
      * Edit a Category
@@ -218,6 +259,70 @@ public class Category {
             this.m_dbHelper.update();
         }
     }
+    public static ArrayList<Integer> getAllUnderCategoriesIds(Context p_context, int parent_category) {
+
+        DataBaseHelper helper = new DataBaseHelper(p_context);
+        helper.init();
+        helper.setTable(Constants.CATEGORIES_DB_TABLE);
+        helper.setColumns(new String[]{"*"});
+        SharedPreferences prefs = p_context.getSharedPreferences(Constants.MY_PREFERENCES, Activity.MODE_PRIVATE);
+        String language = prefs.getString(Constants.KEY_LANGUAGE, "");
+        switch (language) {
+            case "en":
+                helper.setOrderBy("name_en ASC");
+            case "de":
+                helper.setOrderBy("name_de ASC");
+            default:
+                helper.setOrderBy("name_en ASC");
+        }
+        helper.setWhere("", new String[]{"parent_category_id=" + parent_category});
+        ArrayList<Integer> allCategoriesIds = new ArrayList<>();
+
+        Cursor allCategoriesIterator = helper.select();
+        allCategoriesIterator.moveToFirst();
+
+        while (!allCategoriesIterator.isAfterLast()) {
+            allCategoriesIds.add(allCategoriesIterator.getInt(0));
+            allCategoriesIds.addAll(getAllUnderCategoriesIds(p_context, allCategoriesIterator.getInt(0)));
+            allCategoriesIterator.moveToNext();
+        }
+
+        allCategoriesIterator.close();
+        helper.close();
+        return allCategoriesIds;
+    }
+//    public static int getUnderCategoriesCount(Context p_context, int parent_category) {
+//
+//        DataBaseHelper helper = new DataBaseHelper(p_context);
+//        helper.init();
+//        helper.setTable(Constants.CATEGORIES_DB_TABLE);
+//        helper.setColumns(new String[]{"_id"});
+//        SharedPreferences prefs = p_context.getSharedPreferences(Constants.MY_PREFERENCES, Activity.MODE_PRIVATE);
+//        String language = prefs.getString(Constants.KEY_LANGUAGE, "");
+//        switch (language) {
+//            case "en":
+//                helper.setOrderBy("name_en ASC");
+//            case "de":
+//                helper.setOrderBy("name_de ASC");
+//            default:
+//                helper.setOrderBy("name_en ASC");
+//        }
+//        helper.setWhere("", new String[]{"parent_category_id=" + parent_category});
+//        int allUnderCategoriesCount = 0;
+//
+//        Cursor allCategoriesIterator = helper.select();
+//        allCategoriesIterator.moveToFirst();
+//
+//        while (!allCategoriesIterator.isAfterLast()) {
+//            allUnderCategoriesCount += allCategoriesIterator.getCount();
+//            allUnderCategoriesCount += getUnderCategoriesCount(p_context, allCategoriesIterator.getInt(0));
+//            allCategoriesIterator.moveToNext();
+//        }
+//
+//        allCategoriesIterator.close();
+//        helper.close();
+//        return allUnderCategoriesCount;
+//    }
 
     @Override
     public boolean equals(Object o) {

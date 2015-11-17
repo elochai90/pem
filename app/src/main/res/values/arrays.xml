@@ -107,91 +107,91 @@
     <string-array name="initial_cat_sweater">
         <item>@string/cat_sweater_en</item>
         <item>@string/cat_sweater_de</item>
-        <item>0</item>
+        <item>-1</item>
         <item>0</item>
         <item>pulli</item>
     </string-array>
     <string-array name="initial_cat_trousers">
         <item>@string/cat_trousers_en</item>
         <item>@string/cat_trousers_de</item>
-        <item>0</item>
+        <item>-1</item>
         <item>1</item>
         <item>hose</item>
     </string-array>
     <string-array name="initial_cat_skirts">
         <item>@string/cat_skirts_en</item>
         <item>@string/cat_skirts_de</item>
-        <item>0</item>
+        <item>-1</item>
         <item>1</item>
         <item>rock</item>
     </string-array>
     <string-array name="initial_cat_coats">
         <item>@string/cat_coats_en</item>
         <item>@string/cat_coats_de</item>
-        <item>0</item>
+        <item>-1</item>
         <item>0</item>
         <item>mantel</item>
     </string-array>
     <string-array name="initial_cat_tops">
         <item>@string/cat_tops_en</item>
         <item>@string/cat_tops_de</item>
-        <item>0</item>
+        <item>-1</item>
         <item>0</item>
         <item>top</item>
     </string-array>
     <string-array name="initial_cat_socks">
         <item>@string/cat_socks_en</item>
         <item>@string/cat_socks_de</item>
-        <item>0</item>
+        <item>-1</item>
         <item>2</item>
         <item>socken</item>
     </string-array>
     <string-array name="initial_cat_pants">
         <item>@string/cat_pants_en</item>
         <item>@string/cat_pants_de</item>
-        <item>0</item>
+        <item>-1</item>
         <item>1</item>
         <item>shorts</item>
     </string-array>
     <string-array name="initial_cat_swimwear">
         <item>@string/cat_swimwear_en</item>
         <item>@string/cat_swimwear_de</item>
-        <item>0</item>
+        <item>-1</item>
         <item>1</item>
         <item>bademode</item>
     </string-array>
     <string-array name="initial_cat_underwear">
         <item>@string/cat_underwear_en</item>
         <item>@string/cat_underwear_de</item>
-        <item>0</item>
+        <item>-1</item>
         <item>1</item>
         <item>unterwaesche</item>
     </string-array>
     <string-array name="initial_cat_suits">
         <item>@string/cat_suits_en</item>
         <item>@string/cat_suits_de</item>
-        <item>0</item>
+        <item>-1</item>
         <item>1</item>
         <item>anzug</item>
     </string-array>
     <string-array name="initial_cat_shoes">
         <item>@string/cat_shoes_en</item>
         <item>@string/cat_shoes_de</item>
-        <item>0</item>
+        <item>-1</item>
         <item>2</item>
         <item>sneaker</item>
     </string-array>
     <string-array name="initial_cat_dresses">
         <item>@string/cat_dresses_en</item>
         <item>@string/cat_dresses_de</item>
-        <item>0</item>
+        <item>-1</item>
         <item>0</item>
         <item>kleid</item>
     </string-array>
     <string-array name="initial_cat_accessoires">
         <item>@string/cat_accessoires_en</item>
         <item>@string/cat_accessoires_de</item>
-        <item>0</item>
+        <item>-1</item>
         <item>-1</item>
         <item>accessoires</item>
     </string-array>

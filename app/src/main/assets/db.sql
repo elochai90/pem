@@ -2,7 +2,7 @@ CREATE TABLE `orga_nice_categories` (
     `_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     `name_en` VARCHAR(50) NOT NULL DEFAULT "",
     `name_de` VARCHAR(50) NOT NULL DEFAULT "",
-    `parent_category_id` INT(5) NOT NULL DEFAULT 0,
+    `parent_category_id` INT(5) NOT NULL DEFAULT -1,
     `default_attribute_type` INT (3) NOT NULL DEFAULT -1,
     `icon` VARCHAR(50) DEFAULT "kleiderbuegel"
 );

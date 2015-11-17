@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -176,7 +177,8 @@ public class ItemsListActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClassName(getPackageName(), getPackageName() + ".views.NewCategoryActivity");
-                startActivity(intent);
+                intent.putExtra("parent_category_id", categoryId);
+                startActivityForResult(intent, 1);
                 menu.close(false);
 
             }
@@ -290,10 +292,20 @@ public class ItemsListActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        Intent i = new Intent();
+        setResult(Activity.RESULT_OK, i);
+        this.finish();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_switchView) {
+        if (id == android.R.id.home) {
+            onBackPressed();
+            return true;
+        } else if (id == R.id.action_switchView) {
             switchListGridView(!list);
             if(list) {
                 item.setIcon(R.drawable.ic_view_grid);
@@ -324,11 +336,19 @@ public class ItemsListActivity extends AppCompatActivity {
         DataBaseHelper db_helper = new DataBaseHelper(this);
         db_helper.init();
 
+
+        ArrayList<Category> allBaseCategories = Category.getCategoriesWithParentCategory(this, categoryId);
+
+        for (Category tmpCat : allBaseCategories) {
+            int iconId = getResources().getIdentifier(tmpCat.getIcon(), "drawable", "com.gruppe1.pem.challengeme");
+            mDataset.add(new ListItemIconName("category", tmpCat.getId(), iconId, tmpCat.getName(), null));
+        }
+
         ArrayList<Item> allCategoryItems = Item.getItemsByCategoryId(this, categoryId, false);
 
         for (Item tmpItem : allCategoryItems) {
             int iconId = getResources().getIdentifier("kleiderbuegel", "drawable", "com.gruppe1.pem.challengeme");
-            mDataset.add(new ListItemIconName(tmpItem.getId(), iconId, tmpItem.getName(), tmpItem.getImageFile()));
+            mDataset.add(new ListItemIconName("item", tmpItem.getId(), iconId, tmpItem.getName(), tmpItem.getImageFile()));
         }
         if(mDataset.size() > 0) {
             showNoItemLayout(false);
@@ -358,13 +378,32 @@ public class ItemsListActivity extends AppCompatActivity {
 
 
 
-    private void itemListActivityOnItemClick(View view, int position) {
-        int itemid = list ? (int) defaultRecyclerListAdapter.getItemId(position) : (int)defaultRecyclerGridAdapter.getItemId(position);
-        selectItem(itemid, position);
+    /**
+     * Starts the ItemsListActivity of the category
+     * @param categoryId the id of the selected category
+     */
+    private void selectCategory(int categoryId) {
+        Intent intent = new Intent();
+        intent.setClassName(getPackageName(), getPackageName() + ".views.ItemsListActivity");
+        Bundle b = new Bundle();
+        b.putInt(Constants.EXTRA_CATEGORY_ID, categoryId);
+        intent.putExtras(b);
+        startActivityForResult(intent, 1);
     }
 
 
-    private boolean itemListActivityOnItemLongClick(RecyclerView parent, View view, int position) {
+    private void itemListActivityOnItemClick(View view, int position) {
+        boolean isCategory = list ? defaultRecyclerListAdapter.getItem(position).isCategoryElement() : defaultRecyclerGridAdapter.getItem(position).isCategoryElement();
+        boolean isItem = list ? defaultRecyclerListAdapter.getItem(position).isItemElement() : defaultRecyclerGridAdapter.getItem(position).isItemElement();
+        if(isCategory) {
+            int catId = list ? (int) defaultRecyclerListAdapter.getItemId(position) : (int)defaultRecyclerGridAdapter.getItemId(position);
+            selectCategory(catId);
+        } else if (isItem) {
+            int itemId = list ? (int) defaultRecyclerListAdapter.getItemId(position) : (int)defaultRecyclerGridAdapter.getItemId(position);
+            selectItem(itemId, position);
+        }
+    }
+    private boolean itemListActivityOnItemLongClick(RecyclerView parent, View view, final int position) {
         selectedItem = new Object[2];
         selectedItem[0] = position;
         selectedItem[1] = view;
@@ -380,30 +419,72 @@ public class ItemsListActivity extends AppCompatActivity {
         TextView headline = (TextView)dialogView.findViewById(R.id.dialog_headline);
         headline.setText(mDataset.get(position).getName());
 
-        builder.setView(dialogView).setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                int itemId = (int)defaultRecyclerListAdapter.getItemId((int)selectedItem[0]);
+        if(defaultRecyclerListAdapter.getItem(position).isItemElement()) {
+            builder.setView(dialogView).setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    int itemId = (int)defaultRecyclerListAdapter.getItemId((int)selectedItem[0]);
 
-                DataBaseHelper db_helper = new DataBaseHelper(getApplicationContext());
-                db_helper.init();
+                    DataBaseHelper db_helper = new DataBaseHelper(getApplicationContext());
+                    db_helper.init();
 
-                Item deleteItem = new Item(getApplicationContext(), itemId, db_helper );
-                deleteItem.delete();
-                db_helper.close();
+                    Item deleteItem = new Item(getApplicationContext(), itemId, db_helper );
+                    deleteItem.delete();
+                    db_helper.close();
 
-                initDataset();
-                defaultRecyclerListAdapter.notifyDataSetChanged();
-                defaultRecyclerGridAdapter.notifyDataSetChanged();
-            }
-        }).setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+                    initDataset();
+                    defaultRecyclerListAdapter.notifyDataSetChanged();
+                    defaultRecyclerGridAdapter.notifyDataSetChanged();
+                }
+            }).setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
 
-            }
-        });
+                }
+            });
 
-        builder.create().show();
+            builder.create().show();
+        } else if (defaultRecyclerListAdapter.getItem(position).isCategoryElement()) {
+            builder.setView(dialogView).setPositiveButton(R.string.edit, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent();
+                    intent.setClassName(getPackageName(), getPackageName() + ".views.NewCategoryActivity");
+                    int categoryId = (int)defaultRecyclerListAdapter.getItemId((int)selectedItem[0]);
+                    intent.putExtra("category_id", categoryId);
+
+                    startActivityForResult(intent, 1);
+                }
+            }).setNegativeButton(R.string.delete, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    int categoryId = (int) defaultRecyclerListAdapter.getItemId((int) selectedItem[0]);
+
+                    ArrayList<Item> items = Item.getItemsByCategoryId(getApplicationContext(), categoryId, true);
+                    for (Item c : items) {
+                        c.delete();
+                    }
+                    DataBaseHelper db_helper = new DataBaseHelper(getApplicationContext());
+                    db_helper.init();
+
+                    Category deleteCategory = new Category(getApplicationContext(), categoryId, db_helper);
+                    deleteCategory.delete();
+
+                    db_helper.close();
+
+                    initDataset();
+                    defaultRecyclerListAdapter.notifyDataSetChanged();
+                    defaultRecyclerGridAdapter.notifyDataSetChanged();
+                }
+            }).setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+
+            builder.create().show();
+        }
 
         return true;
     }

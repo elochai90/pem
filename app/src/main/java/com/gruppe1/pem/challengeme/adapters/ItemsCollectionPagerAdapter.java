@@ -71,7 +71,7 @@ public class ItemsCollectionPagerAdapter extends FragmentStatePagerAdapter {
 
         for (Item tmpItem : itemCollection) {
             int iconId = context.getResources().getIdentifier("kleiderbuegel", "drawable", "com.gruppe1.pem.challengeme");
-            mDataset.add(new ListItemIconName(tmpItem.getId(), iconId, tmpItem.getName(), tmpItem.getImageFile()));
+            mDataset.add(new ListItemIconName("item", tmpItem.getId(), iconId, tmpItem.getName(), tmpItem.getImageFile()));
         }
     }
 }
