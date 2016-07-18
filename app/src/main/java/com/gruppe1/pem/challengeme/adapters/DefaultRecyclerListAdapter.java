@@ -40,7 +40,7 @@ public class DefaultRecyclerListAdapter extends RecyclerView.Adapter<DefaultRecy
     private PicassoSingleton picassoSingleton;
 
     private View.OnClickListener onItemClickListener;
-    private View.OnLongClickListener onItemLongClickListener;
+    private View.OnClickListener onIcMoreClickListener;
 
     public DefaultRecyclerListAdapter(Context context, int layoutResourceId, ArrayList<ListItemIconName> data, boolean isCategory, boolean wishlist) {
         super();
@@ -61,8 +61,8 @@ public class DefaultRecyclerListAdapter extends RecyclerView.Adapter<DefaultRecy
     public void setOnItemClickListener(View.OnClickListener onClickListener) {
         this.onItemClickListener  = onClickListener;
     }
-    public void setOnItemLongClickListener(View.OnLongClickListener onClickListener) {
-        this.onItemLongClickListener = onClickListener;
+    public void setOnIcMoreClickListener(View.OnClickListener onClickListener) {
+        this.onIcMoreClickListener = onClickListener;
     }
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -165,8 +165,9 @@ public class DefaultRecyclerListAdapter extends RecyclerView.Adapter<DefaultRecy
                 }
             });
         }
+        holder.moreButton.setTag(position);
         holder.itemView.setOnClickListener(onItemClickListener);
-        holder.itemView.setOnLongClickListener(onItemLongClickListener);
+        holder.moreButton.setOnClickListener(onIcMoreClickListener);
 
     }
 
@@ -193,6 +194,7 @@ public class DefaultRecyclerListAdapter extends RecyclerView.Adapter<DefaultRecy
         ImageView image;
         Button itemActionButton;
         RatingBar listItemRatingBar;
+        ImageView moreButton;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -203,6 +205,7 @@ public class DefaultRecyclerListAdapter extends RecyclerView.Adapter<DefaultRecy
             image = (ImageView)itemView.findViewById(R.id.imageView);
             itemActionButton = (Button)itemView.findViewById(R.id.itemActionButton);
             listItemRatingBar = (RatingBar)itemView.findViewById(R.id.listItemRatingBar);
+            moreButton = (ImageView)itemView.findViewById(R.id.ic_more);
         }
     }
 

@@ -129,11 +129,10 @@ public class SearchResultsActivity extends AppCompatActivity {
                 searchResultsActivityOnItemClick(v,listView.getChildPosition(v));
             }
         });
-        defaultRecyclerListAdapter.setOnItemLongClickListener(new View.OnLongClickListener() {
+        defaultRecyclerListAdapter.setOnIcMoreClickListener(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View v) {
-                searchResultsActivityOnItemLongClick(listView,v,listView.getChildPosition(v));
-                return true;
+            public void onClick(View v) {
+                searchResultsActivityOnIcMoreClick(listView,v,(Integer) v.getTag());
             }
         });
 
@@ -561,7 +560,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         selectItem(itemid, position);
     }
 
-    private boolean searchResultsActivityOnItemLongClick(RecyclerView parent, View view, final int position) {
+    private boolean searchResultsActivityOnIcMoreClick(RecyclerView parent, View view, final int position) {
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         // Get the layout inflater

@@ -60,6 +60,10 @@
         "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.1/res/drawable-xxxhdpi/abc_btn_check_to_on_mtrl_015.png"
     },
     {
+        "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/ic_more.png",
+        "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/src/main/res/drawable-xxxhdpi/ic_more.png"
+    },
+    {
         "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/ic_view_grid.png",
         "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/src/main/res/drawable-xxxhdpi/ic_view_grid.png"
     },

@@ -103,11 +103,10 @@ public class ItemsListActivity extends AppCompatActivity {
                 itemListActivityOnItemClick(v, listView.getChildPosition(v));
             }
         });
-        defaultRecyclerListAdapter.setOnItemLongClickListener(new View.OnLongClickListener() {
+        defaultRecyclerListAdapter.setOnIcMoreClickListener(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View v) {
-                itemListActivityOnItemLongClick(listView, v, listView.getChildPosition(v));
-                return true;
+            public void onClick(View v) {
+                itemListActivityOnIcMoreClick(listView, v, (Integer) v.getTag());
             }
         });
 
@@ -128,7 +127,7 @@ public class ItemsListActivity extends AppCompatActivity {
         defaultRecyclerGridAdapter.setOnItemLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                itemListActivityOnItemLongClick(listView,v,listView.getChildPosition(v));
+                itemListActivityOnIcMoreClick(listView,v,listView.getChildPosition(v));
                 return true;
             }
         });
@@ -383,7 +382,7 @@ public class ItemsListActivity extends AppCompatActivity {
             selectItem(itemId, position);
         }
     }
-    private boolean itemListActivityOnItemLongClick(RecyclerView parent, View view, final int position) {
+    private boolean itemListActivityOnIcMoreClick(RecyclerView parent, View view, final int position) {
         selectedItem = new Object[2];
         selectedItem[0] = position;
         selectedItem[1] = view;

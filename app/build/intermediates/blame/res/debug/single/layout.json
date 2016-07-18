@@ -12,12 +12,12 @@
         "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/src/main/res/layout/activity_tabs.xml"
     },
     {
-        "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/layout/abc_screen_simple_overlay_action_mode.xml",
-        "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.1/res/layout/abc_screen_simple_overlay_action_mode.xml"
-    },
-    {
         "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/layout/abc_action_bar_up_container.xml",
         "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.1/res/layout/abc_action_bar_up_container.xml"
+    },
+    {
+        "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/layout/abc_screen_simple_overlay_action_mode.xml",
+        "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.1/res/layout/abc_screen_simple_overlay_action_mode.xml"
     },
     {
         "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/layout/abc_alert_dialog_material.xml",

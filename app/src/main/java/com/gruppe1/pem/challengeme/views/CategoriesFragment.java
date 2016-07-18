@@ -73,11 +73,10 @@ public class CategoriesFragment extends Fragment {
                 categoryFragmentOnItemClick(v, listView.getChildPosition(v));
             }
         });
-        defaultRecyclerListAdapter.setOnItemLongClickListener(new View.OnLongClickListener() {
+        defaultRecyclerListAdapter.setOnIcMoreClickListener(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View v) {
-                categoryFragmentOnItemLongClick(listView, v, listView.getChildPosition(v));
-                return true;
+            public void onClick(View v) {
+                categoryFragmentOnIcMoreClick(listView, v, (Integer) v.getTag());
             }
         });
 
@@ -97,7 +96,7 @@ public class CategoriesFragment extends Fragment {
         defaultRecyclerGridAdapter.setOnItemLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                categoryFragmentOnItemLongClick(listView,v,listView.getChildPosition(v));
+                categoryFragmentOnIcMoreClick(listView,v,listView.getChildPosition(v));
                 return true;
             }
         });
@@ -241,7 +240,7 @@ public class CategoriesFragment extends Fragment {
         }
     }
 
-    private boolean categoryFragmentOnItemLongClick(RecyclerView parent, View view, int position) {
+    private boolean categoryFragmentOnIcMoreClick(RecyclerView parent, View view, int position) {
         selectedItem = new Object[2];
         selectedItem[0] = position;
         selectedItem[1] = view;
