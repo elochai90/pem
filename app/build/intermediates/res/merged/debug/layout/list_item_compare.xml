@@ -1,71 +1,88 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:id="@+id/listItemView"
-    android:background="@color/listItems"
-    android:layout_height="wrap_content">
+<RelativeLayout android:id="@+id/listItemView"
+   xmlns:android="http://schemas.android.com/apk/res/android"
+   android:layout_width="fill_parent"
+   android:layout_height="wrap_content"
+   android:background="@drawable/selector_list_item">
 
-    <ImageView
-        android:id="@+id/imageItem1"
-        android:layout_width="?android:attr/listPreferredItemHeightSmall"
-        android:layout_height="?android:attr/listPreferredItemHeightSmall"
-        android:layout_marginEnd="10dp"
-        android:contentDescription="@string/compare_desc_image1"/>
-    <ImageView
-        android:id="@+id/imageItem2"
-        android:layout_width="?android:attr/listPreferredItemHeightSmall"
-        android:layout_height="?android:attr/listPreferredItemHeightSmall"
-        android:layout_below="@id/imageItem1"
-        android:layout_marginEnd="10dp"
-        android:contentDescription="@string/compare_desc_image2"/>
+   <ImageView
+      android:id="@+id/imageItem1"
+      android:layout_width="?android:attr/listPreferredItemHeightSmall"
+      android:layout_height="?android:attr/listPreferredItemHeightSmall"
+      android:layout_marginEnd="10dp"
+      android:contentDescription="@string/compare_desc_image1" />
 
+   <ImageView
+      android:id="@+id/imageItem2"
+      android:layout_width="?android:attr/listPreferredItemHeightSmall"
+      android:layout_height="?android:attr/listPreferredItemHeightSmall"
+      android:layout_below="@id/imageItem1"
+      android:layout_marginEnd="10dp"
+      android:contentDescription="@string/compare_desc_image2" />
 
-    <TextView
-        android:id="@+id/compareName"
-        android:layout_width="fill_parent"
-        android:layout_height="35dp"
-        android:layout_toEndOf="@id/imageItem1"
-        android:textColor="@android:color/black"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="10dp"
-        android:textSize="18sp" />
+   <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_toEndOf="@id/imageView"
+      android:layout_toRightOf="@id/imageItem1">
 
+      <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_centerVertical="true"
+         android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/item1Name"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/compareName"
-        android:gravity="bottom"
-        android:layout_alignStart="@id/compareName"
-        android:ellipsize="marquee"
-        android:singleLine="true"
-        android:textSize="15sp" />
+         <TextView
+            android:id="@+id/compareName"
+            android:layout_width="fill_parent"
+            android:layout_height="35dp"
+            android:layout_marginTop="10dp"
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
 
-    <TextView
-        android:id="@+id/item2Name"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/item1Name"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignStart="@id/compareName"
-        android:ellipsize="marquee"
-        android:paddingBottom="10dp"
-        android:singleLine="true"
-        android:textSize="15sp" />
+         <TextView
+            android:id="@+id/item1Name"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="marquee"
+            android:gravity="bottom"
+            android:singleLine="true"
+            android:textSize="15sp" />
 
-    <TextView
-        android:id="@+id/rightTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="10dp"
-        android:layout_alignTop="@id/compareName"
-        android:layout_alignWithParentIfMissing="true"
-        android:textSize="16sp" />
+         <TextView
+            android:id="@+id/item2Name"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="marquee"
+            android:paddingBottom="10dp"
+            android:singleLine="true"
+            android:textSize="15sp" />
+      </LinearLayout>
 
+      <TextView
+         android:id="@+id/rightTextView"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignParentTop="true"
+         android:layout_marginTop="10dp"
+         android:layout_toLeftOf="@+id/ic_more"
+         android:textSize="16sp" />
 
+      <ImageView
+         android:id="@+id/ic_more"
+         android:layout_width="40dp"
+         android:layout_height="match_parent"
+         android:layout_alignParentEnd="true"
+         android:layout_alignParentRight="true"
+         android:layout_centerVertical="true"
+         android:scaleType="centerInside"
+         android:src="@drawable/ic_more" />
 
-
-
+      <View
+         android:layout_width="match_parent"
+         android:layout_height="0.5dp"
+         android:layout_alignParentBottom="true"
+         android:layout_marginEnd="15dp"
+         android:layout_marginRight="15dp"
+         android:background="@color/divider" />
+   </RelativeLayout>
 </RelativeLayout>

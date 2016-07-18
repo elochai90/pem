@@ -72,7 +72,7 @@ public class CompareFragment extends Fragment {
         LinearLayoutManager linearLayoutManagerList = new LinearLayoutManager(getActivity().getBaseContext());
         listView.setLayoutManager(linearLayoutManagerList);
         listView.setHasFixedSize(true);
-        StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+        StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         gridView.setLayoutManager(gridLayoutManager);
         gridView.setHasFixedSize(true);
 
