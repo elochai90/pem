@@ -86,7 +86,8 @@ public class DefaultRecyclerListAdapter extends RecyclerView.Adapter<DefaultRecy
 
         if(isCategory || item.isCategoryElement()) {
             holder.rightTextView.setText(Item.getItemsCountByCategoryId(context, item.getElementId(), false) + "");
-            holder.listItemRatingBar.setVisibility(View.INVISIBLE);
+            holder.listItemRatingBar.setVisibility(View.GONE);
+            holder.secondLine.setVisibility(View.GONE);
         } else {
             getDb_helper().setTable(Constants.ITEMS_DB_TABLE);
             Item listItem = new Item(context, item.getElementId(), getDb_helper());

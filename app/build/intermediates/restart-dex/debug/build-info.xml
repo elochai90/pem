@@ -4,7 +4,7 @@
     api-level="23"
     density="xxhdpi"
     format="7"
-    timestamp="386190786545772" >
+    timestamp="387073188502963" >
 
     <task
         name="javac"
@@ -23,22 +23,36 @@
         location="/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/resources-debug.ap_"
         type="RESOURCES" />
 
-    <build timestamp="385386777107499" >
+    <build timestamp="386619226856637" >
         <artifact
             location="/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/outputs/apk/app-debug.apk"
             type="MAIN" />
     </build>
-    <build timestamp="385799426802561" >
+    <build
+        timestamp="386713091093510"
+        verifier="R_CLASS_CHANGE" >
         <artifact
             location="/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/transforms/dex/debug/folders/1000/5/slice_9/classes.dex"
             type="DEX" />
-    </build>
-    <build timestamp="386135117066203" >
         <artifact
-            location="/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/transforms/dex/debug/folders/1000/5/slice_1/classes.dex"
+            location="/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/transforms/dex/debug/folders/1000/5/slice_0/classes.dex"
             type="DEX" />
     </build>
-    <build timestamp="386190786545772" >
+    <build
+        timestamp="386869445639630"
+        verifier="COMPATIBLE" >
+        <artifact
+            location="/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/builds/debug/386869445639630/classes.dex"
+            type="RELOAD_DEX" />
+    </build>
+    <build
+        timestamp="386943276994096"
+        verifier="COMPATIBLE" >
+        <artifact
+            location="/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/builds/debug/386943276994096/classes.dex"
+            type="RELOAD_DEX" />
+    </build>
+    <build timestamp="387073188502963" >
         <artifact
             location="/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/resources-debug.ap_"
             type="RESOURCES" />

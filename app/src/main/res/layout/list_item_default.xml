@@ -43,7 +43,6 @@
                android:layout_height="26dip"
                android:ellipsize="marquee"
                android:singleLine="true"
-               android:text="Test text"
                android:textSize="12sp" />
 
             <RatingBar
