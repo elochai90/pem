@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--<categories>-->
+
+        <!--<categorie>-->
+            <!--<name_en>@string/cat_sweater_en</name_en>-->
+            <!--<name_de>@string/cat_sweater_de</name_de>-->
+            <!--<parent_categorie_id>0</parent_categorie_id>-->
+            <!--<default_attribute_type>0</default_attribute_type>-->
+            <!--<icon>pulli</icon>-->
+        <!--</categorie>-->
+
+        <!--<categorie>-->
+            <!--<name_en>@string/cat_trousers_en</name_en>-->
+            <!--<name_de>@string/cat_trousers_de</name_de>-->
+            <!--<parent_categorie_id>0</parent_categorie_id>-->
+            <!--<default_attribute_type>1</default_attribute_type>-->
+            <!--<icon>hose</icon>-->
+        <!--</categorie>-->
+
+        <!--<categorie>-->
+            <!--<name_en>@string/cat_skirts_en</name_en>-->
+            <!--<name_de>@string/cat_skirts_de</name_de>-->
+            <!--<parent_categorie_id>0</parent_categorie_id>-->
+            <!--<default_attribute_type>1</default_attribute_type>-->
+            <!--<icon>rock</icon>-->
+        <!--</categorie>-->
+
+        <!--<categorie>-->
+            <!--<name_en>@string/cat_coats_en</name_en>-->
+            <!--<name_de>@string/cat_coats_de</name_de>-->
+            <!--<parent_categorie_id>0</parent_categorie_id>-->
+            <!--<default_attribute_type>0</default_attribute_type>-->
+            <!--<icon>mantel</icon>-->
+        <!--</categorie>-->
+
+        <!--<categorie>-->
+            <!--<name_en>@string/cat_tops_en</name_en>-->
+            <!--<name_de>@string/cat_tops_de</name_de>-->
+            <!--<parent_categorie_id>0</parent_categorie_id>-->
+            <!--<default_attribute_type>0</default_attribute_type>-->
+            <!--<icon>top</icon>-->
+        <!--</categorie>-->
+
+        <!--<categorie>-->
+            <!--<name_en>@string/cat_socks_en</name_en>-->
+            <!--<name_de>@string/cat_socks_de</name_de>-->
+            <!--<parent_categorie_id>0</parent_categorie_id>-->
+            <!--<default_attribute_type>2</default_attribute_type>-->
+            <!--<icon>socken</icon>-->
+        <!--</categorie>-->
+
+        <!--<categorie>-->
+            <!--<name_en>@string/cat_pants_en</name_en>-->
+            <!--<name_de>@string/cat_pants_de</name_de>-->
+            <!--<parent_categorie_id>0</parent_categorie_id>-->
+            <!--<default_attribute_type>1</default_attribute_type>-->
+            <!--<icon>shorts</icon>-->
+        <!--</categorie>-->
+
+        <!--<categorie>-->
+            <!--<name_en>@string/cat_swimwear_en</name_en>-->
+            <!--<name_de>@string/cat_swimwear_de</name_de>-->
+            <!--<parent_categorie_id>0</parent_categorie_id>-->
+            <!--<default_attribute_type>1</default_attribute_type>-->
+            <!--<icon>bademode</icon>-->
+        <!--</categorie>-->
+
+        <!--<categorie>-->
+            <!--<name_en>@string/cat_underwear_en</name_en>-->
+            <!--<name_de>@string/cat_underwear_de</name_de>-->
+            <!--<parent_categorie_id>0</parent_categorie_id>-->
+            <!--<default_attribute_type>1</default_attribute_type>-->
+            <!--<icon>unterwaesche</icon>-->
+        <!--</categorie>-->
+
+        <!--<categorie>-->
+            <!--<name_en>cat_suits</name_en>-->
+            <!--<name_de>cat_suits</name_de>-->
+            <!--<parent_categorie_id>0</parent_categorie_id>-->
+            <!--<default_attribute_type>1</default_attribute_type>-->
+            <!--<icon>anzug</icon>-->
+        <!--</categorie>-->
+
+        <!--<categorie>-->
+            <!--<name>Shoes</name>-->
+            <!--<parent_categorie_id>0</parent_categorie_id>-->
+            <!--<default_attribute_type>2</default_attribute_type>-->
+            <!--<icon>sneaker</icon>-->
+        <!--</categorie>-->
+
+        <!--<categorie>-->
+            <!--<name>Dresses</name>-->
+            <!--<parent_categorie_id>0</parent_categorie_id>-->
+            <!--<default_attribute_type>0</default_attribute_type>-->
+            <!--<icon>kleid</icon>-->
+        <!--</categorie>-->
+
+        <!--<categorie>-->
+            <!--<name>Accessoires</name>-->
+            <!--<parent_categorie_id>0</parent_categorie_id>-->
+            <!--<default_attribute_type>-1</default_attribute_type>-->
+            <!--<icon>accessoires</icon>-->
+        <!--</categorie>-->
+
+    <!--</categories>-->
+
+    <!--<attribute_types>-->
+
+        <!--<attribute_type>-->
+            <!--<name></name>-->
+            <!--<value_type>1</value_type>-->
+            <!--<is_unique>1</is_unique>-->
+        <!--</attribute_type>-->
+
+        <!--<attribute_type>-->
+            <!--<name>Exact Color</name>-->
+            <!--<value_type>3</value_type>-->
+            <!--<is_unique>1</is_unique>-->
+        <!--</attribute_type>-->
+
+        <!--<attribute_type>-->
+            <!--<name>Brand</name>-->
+            <!--<value_type>1</value_type>-->
+            <!--<is_unique>1</is_unique>-->
+        <!--</attribute_type>-->
+
+        <!--<attribute_type>-->
+            <!--<name>Material</name>-->
+            <!--<value_type>1</value_type>-->
+            <!--<is_unique>1</is_unique>-->
+        <!--</attribute_type>-->
+
+        <!--<attribute_type>-->
+            <!--<name>Price</name>-->
+            <!--<value_type>1</value_type>-->
+            <!--<is_unique>1</is_unique>-->
+        <!--</attribute_type>-->
+
+        <!--<attribute_type>-->
+            <!--<name>Store</name>-->
+            <!--<value_type>1</value_type>-->
+            <!--<is_unique>1</is_unique>-->
+        <!--</attribute_type>-->
+
+        <!--<attribute_type>-->
+            <!--<name>Buy Date</name>-->
+            <!--<value_type>4</value_type>-->
+            <!--<is_unique>1</is_unique>-->
+        <!--</attribute_type>-->
+
+        <!--<attribute_type>-->
+            <!--<name>Has Pattern</name>-->
+            <!--<value_type>2</value_type>-->
+            <!--<is_unique>1</is_unique>-->
+        <!--</attribute_type>-->
+
+        <!--<attribute_type>-->
+            <!--<name>Other</name>-->
+            <!--<value_type>1</value_type>-->
+            <!--<is_unique>1</is_unique>-->
+        <!--</attribute_type>-->
+
+    <!--</attribute_types>-->
+
+    <!--<colors>-->
+        <!--<color>-->
+            <!--<name>Black</name>-->
+            <!--<hex>#000000</hex>-->
+        <!--</color>-->
+        <!--<color>-->
+            <!--<name>Grey</name>-->
+            <!--<hex>#888888</hex>-->
+        <!--</color>-->
+        <!--<color>-->
+            <!--<name>White</name>-->
+            <!--<hex>#FFFFFF</hex>-->
+        <!--</color>-->
+        <!--<color>-->
+            <!--<name>Beige</name>-->
+            <!--<hex>#F5DEB3</hex>-->
+        <!--</color>-->
+        <!--<color>-->
+            <!--<name>Brown</name>-->
+            <!--<hex>#8B4513</hex>-->
+        <!--</color>-->
+        <!--<color>-->
+            <!--<name>Gold</name>-->
+            <!--<hex>#FFD700</hex>-->
+        <!--</color>-->
+        <!--<color>-->
+            <!--<name>Silver</name>-->
+            <!--<hex>#C0C0C0</hex>-->
+        <!--</color>-->
+        <!--<color>-->
+            <!--<name>Bronze</name>-->
+            <!--<hex>#904E3B</hex>-->
+        <!--</color>-->
+        <!--<color>-->
+            <!--<name>Blue</name>-->
+            <!--<hex>#0000FF</hex>-->
+        <!--</color>-->
+        <!--<color>-->
+            <!--<name>Petrol</name>-->
+            <!--<hex>#5F9EA0</hex>-->
+        <!--</color>-->
+        <!--<color>-->
+            <!--<name>Turquoise</name>-->
+            <!--<hex>#40E0D0</hex>-->
+        <!--</color>-->
+        <!--<color>-->
+            <!--<name>Green</name>-->
+            <!--<hex>#00FF00</hex>-->
+        <!--</color>-->
+        <!--<color>-->
+            <!--<name>Olive</name>-->
+            <!--<hex>#556B2F</hex>-->
+        <!--</color>-->
+        <!--<color>-->
+            <!--<name>Purple</name>-->
+            <!--<hex>#800080</hex>-->
+        <!--</color>-->
+        <!--<color>-->
+            <!--<name>Red</name>-->
+            <!--<hex>#FF0000</hex>-->
+        <!--</color>-->
+        <!--<color>-->
+            <!--<name>Pink</name>-->
+            <!--<hex>#FFC0CB</hex>-->
+        <!--</color>-->
+        <!--<color>-->
+            <!--<name>Orange</name>-->
+            <!--<hex>#FFA500</hex>-->
+        <!--</color>-->
+        <!--<color>-->
+            <!--<name>Yellow</name>-->
+            <!--<hex>#FFFF00</hex>-->
+        <!--</color>-->
+    <!--</colors>-->
+
+</resources>

@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/xml/searchable.xml",
+        "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/src/main/res/xml/searchable.xml"
+    },
+    {
+        "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/xml/pref_general.xml",
+        "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/src/main/res/xml/pref_general.xml"
+    }
+]

@@ -438,30 +438,6 @@ public class SearchResultsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        AppBarLayout appbar = (AppBarLayout) findViewById(R.id.appBar);
-        SharedPreferences prefs = getSharedPreferences(Constants.MY_PREFERENCES, Activity.MODE_PRIVATE);
-        String layout = prefs.getString(Constants.KEY_DS_4_NAME, "");
-        switch (layout) {
-            case "Red":
-            case "Rot":
-                toolbar.setBackgroundColor(android.graphics.Color.parseColor("#ffDA4336"));
-                appbar.setBackgroundColor(android.graphics.Color.parseColor("#ffDA4336"));
-                break;
-            case "Blue":
-            case "Blau":
-                toolbar.setBackgroundColor(android.graphics.Color.parseColor("#ff1d4064"));
-                appbar.setBackgroundColor(android.graphics.Color.parseColor("#ff1d4064"));
-                break;
-            case "Green":
-            case "Grün":
-                toolbar.setBackgroundColor(android.graphics.Color.parseColor("#ff088A08"));
-                appbar.setBackgroundColor(android.graphics.Color.parseColor("#ff088A08"));
-                break;
-            default:
-                toolbar.setBackgroundColor(android.graphics.Color.parseColor("#ff1d4064"));
-                appbar.setBackgroundColor(android.graphics.Color.parseColor("#ff1d4064"));
-        }
     }
 
 

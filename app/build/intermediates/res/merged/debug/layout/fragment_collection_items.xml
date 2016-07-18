@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/primary"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+    </android.support.design.widget.AppBarLayout>
+
+    <RelativeLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <!--<ImageView-->
+        <!--android:background="@android:color/black"-->
+        <!--android:id="@+id/itemDetailImage"-->
+
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:contentDescription="@string/new_item_desc_itemImage"-->
+
+        <!--android:src="@mipmap/addcamera2" />-->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:background="@android:color/darker_gray"
+                    android:id="@+id/itemDetailImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:contentDescription="@string/new_item_desc_itemImage"
+                    android:src="@mipmap/addcamera2"
+                    android:scaleType="centerCrop" />
+
+
+                <LinearLayout
+                    android:id="@+id/itemDetailRating"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:layout_below="@id/itemDetailImage"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@color/primary"
+                    android:weightSum="1">
+
+                    <RatingBar
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:numStars="5"
+                        android:stepSize="1.0"
+                        android:id="@+id/ratingBar" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/itemNameLayout"
+                    android:layout_below="@id/itemDetailRating"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+                    <TextView
+                        android:text="@string/new_item_label_name"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp"/>
+                    <EditText
+                        android:id="@+id/itemName"
+                        android:singleLine="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:textSize="18sp"
+                        android:hint="@string/new_item_hint_name" />
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/itemNameDivider"
+                    android:layout_below="@id/itemNameLayout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:background="#c0c0c0"/>
+
+
+
+                <LinearLayout
+                    android:id="@+id/itemDetailAttributes"
+                    android:layout_below="@id/itemNameDivider"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
+                        <TextView
+                            android:id="@+id/attrCategoryName"
+                            android:layout_width="150dp"
+                            android:layout_height="40dp"
+                            android:layout_gravity="center_vertical"
+                            android:gravity="center_vertical"
+                            android:textSize="18sp"/>
+                        <TextView
+                            android:id="@+id/attrCategoryValue"
+                            android:textColor="@android:color/black"
+                            android:background="@color/gray01"
+                            android:textSize="18sp"
+                            android:layout_gravity="center_vertical"
+                            android:gravity="center"
+                            android:layout_width="fill_parent"
+                            android:layout_height="30dp">
+                        </TextView>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
+                        <TextView
+                            android:id="@+id/attrColorName"
+                            android:layout_width="150dp"
+                            android:layout_height="40dp"
+                            android:layout_gravity="center_vertical"
+                            android:gravity="center_vertical"
+                            android:textSize="18sp"/>
+                        <TextView
+                            android:id="@+id/attrColorValue"
+                            android:textColor="@android:color/black"
+                            android:background="@color/gray01"
+                            android:textSize="18sp"
+                            android:layout_gravity="center_vertical"
+                            android:gravity="center"
+                            android:layout_width="fill_parent"
+                            android:layout_height="30dp">
+                        </TextView>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
+                        <TextView
+                            android:id="@+id/attrWishlistName"
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="18sp"/>
+                        <Switch
+                            android:id="@+id/attrWishlistValue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:textOff="@string/switch_false"
+                            android:showText="true"
+                            android:textOn="@string/switch_true"
+                            android:checked="false"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+            </RelativeLayout>
+        </ScrollView>
+
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>

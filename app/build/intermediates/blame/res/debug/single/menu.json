@@ -1,0 +1,38 @@
+[
+    {
+        "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/menu/menu_search_results_activity.xml",
+        "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/src/main/res/menu/menu_search_results_activity.xml"
+    },
+    {
+        "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/menu/menu_new_category.xml",
+        "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/src/main/res/menu/menu_new_category.xml"
+    },
+    {
+        "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/menu/menu_new_item.xml",
+        "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/src/main/res/menu/menu_new_item.xml"
+    },
+    {
+        "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/menu/menu_compare_fragment.xml",
+        "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/src/main/res/menu/menu_compare_fragment.xml"
+    },
+    {
+        "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/menu/menu_saved_compares_detail.xml",
+        "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/src/main/res/menu/menu_saved_compares_detail.xml"
+    },
+    {
+        "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/menu/menu_new_compare.xml",
+        "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/src/main/res/menu/menu_new_compare.xml"
+    },
+    {
+        "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/menu/menu_categories_fragment.xml",
+        "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/src/main/res/menu/menu_categories_fragment.xml"
+    },
+    {
+        "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/menu/menu_wishlist_fragment.xml",
+        "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/src/main/res/menu/menu_wishlist_fragment.xml"
+    },
+    {
+        "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/menu/menu_items_list.xml",
+        "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/src/main/res/menu/menu_items_list.xml"
+    }
+]

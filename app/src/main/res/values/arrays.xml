@@ -1,383 +1,370 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="sizes_text">
-        <item>S</item>
-        <item>M</item>
-        <item>L</item>
-        <item>XL</item>
-        <item>XXL</item>
-        <item>32</item>
-        <item>34</item>
-        <item>36</item>
-        <item>38</item>
-        <item>40</item>
-        <item>42</item>
-        <item>44</item>
-        <item>46</item>
+   <string-array name="sizes_text">
+      <item>S</item>
+      <item>M</item>
+      <item>L</item>
+      <item>XL</item>
+      <item>XXL</item>
+      <item>32</item>
+      <item>34</item>
+      <item>36</item>
+      <item>38</item>
+      <item>40</item>
+      <item>42</item>
+      <item>44</item>
+      <item>46</item>
 
-    </string-array>
+   </string-array>
 
+   <!--All category icons -->
+   <string-array name="category_icons_array">
+      <item>kleiderbuegel</item>
+      <item>accessoires</item>
+      <item>anzug</item>
+      <item>bademode</item>
+      <item>bag</item>
+      <item>belt</item>
+      <item>cardigan</item>
+      <item>hose</item>
+      <item>jacke</item>
+      <item>kleid</item>
+      <item>mantel</item>
+      <item>nail_polish</item>
+      <item>pulli</item>
+      <item>rock</item>
+      <item>schuh</item>
+      <item>shorts</item>
+      <item>sneaker</item>
+      <item>socken</item>
+      <item>stiefel</item>
+      <item>top</item>
+      <item>tshirt</item>
+      <item>unterwaesche</item>
+   </string-array>
+   <string-array name="sizes_shoes_text">
+      <item>33</item>
+      <item>33.5</item>
+      <item>34</item>
+      <item>34.5</item>
+      <item>35</item>
+      <item>35.5</item>
+      <item>36</item>
+      <item>36.5</item>
+      <item>37</item>
+      <item>37.5</item>
+      <item>38</item>
+      <item>38.5</item>
+      <item>39</item>
+      <item>39.5</item>
+      <item>40</item>
+      <item>40.5</item>
+      <item>41</item>
+      <item>41.5</item>
+      <item>42</item>
+      <item>42.5</item>
+      <item>43</item>
+      <item>43.5</item>
+      <item>44</item>
+      <item>44.5</item>
+      <item>45</item>
 
-    <!--All category icons -->
-    <string-array name="category_icons_array">
-        <item>kleiderbuegel</item>
-        <item>accessoires</item>
-        <item>anzug</item>
-        <item>bademode</item>
-        <item>bag</item>
-        <item>belt</item>
-        <item>cardigan</item>
-        <item>hose</item>
-        <item>jacke</item>
-        <item>kleid</item>
-        <item>mantel</item>
-        <item>nail_polish</item>
-        <item>pulli</item>
-        <item>rock</item>
-        <item>schuh</item>
-        <item>shorts</item>
-        <item>sneaker</item>
-        <item>socken</item>
-        <item>stiefel</item>
-        <item>top</item>
-        <item>tshirt</item>
-        <item>unterwaesche</item>
-    </string-array>
-    <string-array name="sizes_shoes_text">
-        <item>33</item>
-        <item>33.5</item>
-        <item>34</item>
-        <item>34.5</item>
-        <item>35</item>
-        <item>35.5</item>
-        <item>36</item>
-        <item>36.5</item>
-        <item>37</item>
-        <item>37.5</item>
-        <item>38</item>
-        <item>38.5</item>
-        <item>39</item>
-        <item>39.5</item>
-        <item>40</item>
-        <item>40.5</item>
-        <item>41</item>
-        <item>41.5</item>
-        <item>42</item>
-        <item>42.5</item>
-        <item>43</item>
-        <item>43.5</item>
-        <item>44</item>
-        <item>44.5</item>
-        <item>45</item>
+   </string-array>
+   <string-array name="language_text">
+      <item>@string/settings_lang_de</item>
+      <item>@string/settings_lang_en</item>
 
-    </string-array>
-    <string-array name="language_text">
-        <item>@string/settings_lang_de</item>
-        <item>@string/settings_lang_en</item>
+   </string-array>
 
-    </string-array>
+   <array name="initial_cats">
+      <item>@array/initial_cat_sweater</item>
+      <item>@array/initial_cat_trousers</item>
+      <item>@array/initial_cat_skirts</item>
+      <item>@array/initial_cat_coats</item>
+      <item>@array/initial_cat_tops</item>
+      <item>@array/initial_cat_socks</item>
+      <item>@array/initial_cat_pants</item>
+      <item>@array/initial_cat_swimwear</item>
+      <item>@array/initial_cat_underwear</item>
+      <item>@array/initial_cat_suits</item>
+      <item>@array/initial_cat_shoes</item>
+      <item>@array/initial_cat_dresses</item>
+      <item>@array/initial_cat_accessoires</item>
+   </array>
+   <!--<name></name>-->
+   <!--<parent_categorie_id></parent_categorie_id>-->
+   <!--<default_attribute_type></default_attribute_type>-->
+   <!--<icon></icon>-->
+   <string-array name="initial_cat_sweater">
+      <item>@string/cat_sweater_en</item>
+      <item>@string/cat_sweater_de</item>
+      <item>-1</item>
+      <item>0</item>
+      <item>pulli</item>
+   </string-array>
+   <string-array name="initial_cat_trousers">
+      <item>@string/cat_trousers_en</item>
+      <item>@string/cat_trousers_de</item>
+      <item>-1</item>
+      <item>1</item>
+      <item>hose</item>
+   </string-array>
+   <string-array name="initial_cat_skirts">
+      <item>@string/cat_skirts_en</item>
+      <item>@string/cat_skirts_de</item>
+      <item>-1</item>
+      <item>1</item>
+      <item>rock</item>
+   </string-array>
+   <string-array name="initial_cat_coats">
+      <item>@string/cat_coats_en</item>
+      <item>@string/cat_coats_de</item>
+      <item>-1</item>
+      <item>0</item>
+      <item>mantel</item>
+   </string-array>
+   <string-array name="initial_cat_tops">
+      <item>@string/cat_tops_en</item>
+      <item>@string/cat_tops_de</item>
+      <item>-1</item>
+      <item>0</item>
+      <item>top</item>
+   </string-array>
+   <string-array name="initial_cat_socks">
+      <item>@string/cat_socks_en</item>
+      <item>@string/cat_socks_de</item>
+      <item>-1</item>
+      <item>2</item>
+      <item>socken</item>
+   </string-array>
+   <string-array name="initial_cat_pants">
+      <item>@string/cat_pants_en</item>
+      <item>@string/cat_pants_de</item>
+      <item>-1</item>
+      <item>1</item>
+      <item>shorts</item>
+   </string-array>
+   <string-array name="initial_cat_swimwear">
+      <item>@string/cat_swimwear_en</item>
+      <item>@string/cat_swimwear_de</item>
+      <item>-1</item>
+      <item>1</item>
+      <item>bademode</item>
+   </string-array>
+   <string-array name="initial_cat_underwear">
+      <item>@string/cat_underwear_en</item>
+      <item>@string/cat_underwear_de</item>
+      <item>-1</item>
+      <item>1</item>
+      <item>unterwaesche</item>
+   </string-array>
+   <string-array name="initial_cat_suits">
+      <item>@string/cat_suits_en</item>
+      <item>@string/cat_suits_de</item>
+      <item>-1</item>
+      <item>1</item>
+      <item>anzug</item>
+   </string-array>
+   <string-array name="initial_cat_shoes">
+      <item>@string/cat_shoes_en</item>
+      <item>@string/cat_shoes_de</item>
+      <item>-1</item>
+      <item>2</item>
+      <item>sneaker</item>
+   </string-array>
+   <string-array name="initial_cat_dresses">
+      <item>@string/cat_dresses_en</item>
+      <item>@string/cat_dresses_de</item>
+      <item>-1</item>
+      <item>0</item>
+      <item>kleid</item>
+   </string-array>
+   <string-array name="initial_cat_accessoires">
+      <item>@string/cat_accessoires_en</item>
+      <item>@string/cat_accessoires_de</item>
+      <item>-1</item>
+      <item>-1</item>
+      <item>accessoires</item>
+   </string-array>
 
-    <string-array name="layout_text">
-        <item>@string/settings_layout_blue</item>
-        <item>@string/settings_layout_red</item>
-        <item>@string/settings_layout_green</item>
+   <array name="initial_colors">
+      <item>@array/initial_color_black</item>
+      <item>@array/initial_color_grey</item>
+      <item>@array/initial_color_white</item>
+      <item>@array/initial_color_beige</item>
+      <item>@array/initial_color_brown</item>
+      <item>@array/initial_color_gold</item>
+      <item>@array/initial_color_silver</item>
+      <item>@array/initial_color_bronze</item>
+      <item>@array/initial_color_blue</item>
+      <item>@array/initial_color_petrol</item>
+      <item>@array/initial_color_turqouise</item>
+      <item>@array/initial_color_green</item>
+      <item>@array/initial_color_olive</item>
+      <item>@array/initial_color_purple</item>
+      <item>@array/initial_color_red</item>
+      <item>@array/initial_color_pink</item>
+      <item>@array/initial_color_orange</item>
+      <item>@array/initial_color_yellow</item>
+   </array>
+   <string-array name="initial_color_black">
+      <item>@string/color_black_en</item>
+      <item>@string/color_black_de</item>
+      <item>#000000</item>
+   </string-array>
+   <string-array name="initial_color_grey">
+      <item>@string/color_grey_en</item>
+      <item>@string/color_grey_de</item>
+      <item>#888888</item>
+   </string-array>
+   <string-array name="initial_color_white">
+      <item>@string/color_white_en</item>
+      <item>@string/color_white_de</item>
+      <item>#FFFFFF</item>
+   </string-array>
+   <string-array name="initial_color_beige">
+      <item>@string/color_beige_en</item>
+      <item>@string/color_beige_de</item>
+      <item>#F5DEB3</item>
+   </string-array>
+   <string-array name="initial_color_brown">
+      <item>@string/color_brown_en</item>
+      <item>@string/color_brown_de</item>
+      <item>#8B4513</item>
+   </string-array>
+   <string-array name="initial_color_gold">
+      <item>@string/color_gold_en</item>
+      <item>@string/color_gold_de</item>
+      <item>#FFD700</item>
+   </string-array>
+   <string-array name="initial_color_silver">
+      <item>@string/color_silver_en</item>
+      <item>@string/color_silver_de</item>
+      <item>#C0C0C0</item>
+   </string-array>
+   <string-array name="initial_color_bronze">
+      <item>@string/color_bronze_en</item>
+      <item>@string/color_bronze_de</item>
+      <item>#904E3B</item>
+   </string-array>
+   <string-array name="initial_color_blue">
+      <item>@string/color_blue_en</item>
+      <item>@string/color_blue_de</item>
+      <item>#0000a9</item>
+   </string-array>
+   <string-array name="initial_color_petrol">
+      <item>@string/color_petrol_en</item>
+      <item>@string/color_petrol_de</item>
+      <item>#5F9EA0</item>
+   </string-array>
+   <string-array name="initial_color_turqouise">
+      <item>@string/color_turquoise_en</item>
+      <item>@string/color_turquoise_de</item>
+      <item>#40E0D0</item>
+   </string-array>
+   <string-array name="initial_color_green">
+      <item>@string/color_green_en</item>
+      <item>@string/color_green_de</item>
+      <item>#00ab00</item>
+   </string-array>
+   <string-array name="initial_color_olive">
+      <item>@string/color_olive_en</item>
+      <item>@string/color_olive_de</item>
+      <item>#556B2F</item>
+   </string-array>
+   <string-array name="initial_color_purple">
+      <item>@string/color_purple_en</item>
+      <item>@string/color_purple_de</item>
+      <item>#800080</item>
+   </string-array>
+   <string-array name="initial_color_red">
+      <item>@string/color_red_en</item>
+      <item>@string/color_red_de</item>
+      <item>#c40000</item>
+   </string-array>
+   <string-array name="initial_color_pink">
+      <item>@string/color_pink_en</item>
+      <item>@string/color_pink_de</item>
+      <item>#FFC0CB</item>
+   </string-array>
+   <string-array name="initial_color_orange">
+      <item>@string/color_orange_en</item>
+      <item>@string/color_orange_de</item>
+      <item>#FFA500</item>
+   </string-array>
+   <string-array name="initial_color_yellow">
+      <item>@string/color_yellow_en</item>
+      <item>@string/color_yellow_de</item>
+      <item>#FFFF00</item>
+   </string-array>
 
-    </string-array>
-
-
-    <array name="initial_cats">
-        <item>@array/initial_cat_sweater</item>
-        <item>@array/initial_cat_trousers</item>
-        <item>@array/initial_cat_skirts</item>
-        <item>@array/initial_cat_coats</item>
-        <item>@array/initial_cat_tops</item>
-        <item>@array/initial_cat_socks</item>
-        <item>@array/initial_cat_pants</item>
-        <item>@array/initial_cat_swimwear</item>
-        <item>@array/initial_cat_underwear</item>
-        <item>@array/initial_cat_suits</item>
-        <item>@array/initial_cat_shoes</item>
-        <item>@array/initial_cat_dresses</item>
-        <item>@array/initial_cat_accessoires</item>
-    </array>
-    <!--<name></name>-->
-    <!--<parent_categorie_id></parent_categorie_id>-->
-    <!--<default_attribute_type></default_attribute_type>-->
-    <!--<icon></icon>-->
-    <string-array name="initial_cat_sweater">
-        <item>@string/cat_sweater_en</item>
-        <item>@string/cat_sweater_de</item>
-        <item>-1</item>
-        <item>0</item>
-        <item>pulli</item>
-    </string-array>
-    <string-array name="initial_cat_trousers">
-        <item>@string/cat_trousers_en</item>
-        <item>@string/cat_trousers_de</item>
-        <item>-1</item>
-        <item>1</item>
-        <item>hose</item>
-    </string-array>
-    <string-array name="initial_cat_skirts">
-        <item>@string/cat_skirts_en</item>
-        <item>@string/cat_skirts_de</item>
-        <item>-1</item>
-        <item>1</item>
-        <item>rock</item>
-    </string-array>
-    <string-array name="initial_cat_coats">
-        <item>@string/cat_coats_en</item>
-        <item>@string/cat_coats_de</item>
-        <item>-1</item>
-        <item>0</item>
-        <item>mantel</item>
-    </string-array>
-    <string-array name="initial_cat_tops">
-        <item>@string/cat_tops_en</item>
-        <item>@string/cat_tops_de</item>
-        <item>-1</item>
-        <item>0</item>
-        <item>top</item>
-    </string-array>
-    <string-array name="initial_cat_socks">
-        <item>@string/cat_socks_en</item>
-        <item>@string/cat_socks_de</item>
-        <item>-1</item>
-        <item>2</item>
-        <item>socken</item>
-    </string-array>
-    <string-array name="initial_cat_pants">
-        <item>@string/cat_pants_en</item>
-        <item>@string/cat_pants_de</item>
-        <item>-1</item>
-        <item>1</item>
-        <item>shorts</item>
-    </string-array>
-    <string-array name="initial_cat_swimwear">
-        <item>@string/cat_swimwear_en</item>
-        <item>@string/cat_swimwear_de</item>
-        <item>-1</item>
-        <item>1</item>
-        <item>bademode</item>
-    </string-array>
-    <string-array name="initial_cat_underwear">
-        <item>@string/cat_underwear_en</item>
-        <item>@string/cat_underwear_de</item>
-        <item>-1</item>
-        <item>1</item>
-        <item>unterwaesche</item>
-    </string-array>
-    <string-array name="initial_cat_suits">
-        <item>@string/cat_suits_en</item>
-        <item>@string/cat_suits_de</item>
-        <item>-1</item>
-        <item>1</item>
-        <item>anzug</item>
-    </string-array>
-    <string-array name="initial_cat_shoes">
-        <item>@string/cat_shoes_en</item>
-        <item>@string/cat_shoes_de</item>
-        <item>-1</item>
-        <item>2</item>
-        <item>sneaker</item>
-    </string-array>
-    <string-array name="initial_cat_dresses">
-        <item>@string/cat_dresses_en</item>
-        <item>@string/cat_dresses_de</item>
-        <item>-1</item>
-        <item>0</item>
-        <item>kleid</item>
-    </string-array>
-    <string-array name="initial_cat_accessoires">
-        <item>@string/cat_accessoires_en</item>
-        <item>@string/cat_accessoires_de</item>
-        <item>-1</item>
-        <item>-1</item>
-        <item>accessoires</item>
-    </string-array>
-
-
-
-    <array name="initial_colors">
-        <item>@array/initial_color_black</item>
-        <item>@array/initial_color_grey</item>
-        <item>@array/initial_color_white</item>
-        <item>@array/initial_color_beige</item>
-        <item>@array/initial_color_brown</item>
-        <item>@array/initial_color_gold</item>
-        <item>@array/initial_color_silver</item>
-        <item>@array/initial_color_bronze</item>
-        <item>@array/initial_color_blue</item>
-        <item>@array/initial_color_petrol</item>
-        <item>@array/initial_color_turqouise</item>
-        <item>@array/initial_color_green</item>
-        <item>@array/initial_color_olive</item>
-        <item>@array/initial_color_purple</item>
-        <item>@array/initial_color_red</item>
-        <item>@array/initial_color_pink</item>
-        <item>@array/initial_color_orange</item>
-        <item>@array/initial_color_yellow</item>
-    </array>
-    <string-array name="initial_color_black">
-        <item>@string/color_black_en</item>
-        <item>@string/color_black_de</item>
-        <item>#000000</item>
-    </string-array>
-    <string-array name="initial_color_grey">
-        <item>@string/color_grey_en</item>
-        <item>@string/color_grey_de</item>
-        <item>#888888</item>
-    </string-array>
-    <string-array name="initial_color_white">
-        <item>@string/color_white_en</item>
-        <item>@string/color_white_de</item>
-        <item>#FFFFFF</item>
-    </string-array>
-    <string-array name="initial_color_beige">
-        <item>@string/color_beige_en</item>
-        <item>@string/color_beige_de</item>
-        <item>#F5DEB3</item>
-    </string-array>
-    <string-array name="initial_color_brown">
-        <item>@string/color_brown_en</item>
-        <item>@string/color_brown_de</item>
-        <item>#8B4513</item>
-    </string-array>
-    <string-array name="initial_color_gold">
-        <item>@string/color_gold_en</item>
-        <item>@string/color_gold_de</item>
-        <item>#FFD700</item>
-    </string-array>
-    <string-array name="initial_color_silver">
-        <item>@string/color_silver_en</item>
-        <item>@string/color_silver_de</item>
-        <item>#C0C0C0</item>
-    </string-array>
-    <string-array name="initial_color_bronze">
-        <item>@string/color_bronze_en</item>
-        <item>@string/color_bronze_de</item>
-        <item>#904E3B</item>
-    </string-array>
-    <string-array name="initial_color_blue">
-        <item>@string/color_blue_en</item>
-        <item>@string/color_blue_de</item>
-        <item>#0000a9</item>
-    </string-array>
-    <string-array name="initial_color_petrol">
-        <item>@string/color_petrol_en</item>
-        <item>@string/color_petrol_de</item>
-        <item>#5F9EA0</item>
-    </string-array>
-    <string-array name="initial_color_turqouise">
-        <item>@string/color_turquoise_en</item>
-        <item>@string/color_turquoise_de</item>
-        <item>#40E0D0</item>
-    </string-array>
-    <string-array name="initial_color_green">
-        <item>@string/color_green_en</item>
-        <item>@string/color_green_de</item>
-        <item>#00ab00</item>
-    </string-array>
-    <string-array name="initial_color_olive">
-        <item>@string/color_olive_en</item>
-        <item>@string/color_olive_de</item>
-        <item>#556B2F</item>
-    </string-array>
-    <string-array name="initial_color_purple">
-        <item>@string/color_purple_en</item>
-        <item>@string/color_purple_de</item>
-        <item>#800080</item>
-    </string-array>
-    <string-array name="initial_color_red">
-        <item>@string/color_red_en</item>
-        <item>@string/color_red_de</item>
-        <item>#c40000</item>
-    </string-array>
-    <string-array name="initial_color_pink">
-        <item>@string/color_pink_en</item>
-        <item>@string/color_pink_de</item>
-        <item>#FFC0CB</item>
-    </string-array>
-    <string-array name="initial_color_orange">
-        <item>@string/color_orange_en</item>
-        <item>@string/color_orange_de</item>
-        <item>#FFA500</item>
-    </string-array>
-    <string-array name="initial_color_yellow">
-        <item>@string/color_yellow_en</item>
-        <item>@string/color_yellow_de</item>
-        <item>#FFFF00</item>
-    </string-array>
-
-
-
-    <array name="initial_attr_types">
-        <item>@array/initial_attr_type_size</item>
-        <item>@array/initial_attr_type_ex_color</item>
-        <item>@array/initial_attr_type_brand</item>
-        <item>@array/initial_attr_type_material</item>
-        <item>@array/initial_attr_type_price</item>
-        <item>@array/initial_attr_type_store</item>
-        <item>@array/initial_attr_type_buy_date</item>
-        <item>@array/initial_attr_type_pattern</item>
-        <item>@array/initial_attr_type_other</item>
-    </array>
-    <!--<name></name>-->
-    <!--<value_type></value_type>-->
-    <!--<is_unique></is_unique>-->
-    <string-array name="initial_attr_type_size">
-        <item>@string/attr_type_size_en</item>
-        <item>@string/attr_type_size_de</item>
-        <item>1</item>
-        <item>1</item>
-    </string-array>
-    <string-array name="initial_attr_type_ex_color">
-        <item>@string/attr_type_ex_color_en</item>
-        <item>@string/attr_type_ex_color_de</item>
-        <item>3</item>
-        <item>1</item>
-    </string-array>
-    <string-array name="initial_attr_type_brand">
-        <item>@string/attr_type_brand_en</item>
-        <item>@string/attr_type_brand_de</item>
-        <item>1</item>
-        <item>1</item>
-    </string-array>
-    <string-array name="initial_attr_type_material">
-        <item>@string/attr_type_material_en</item>
-        <item>@string/attr_type_material_de</item>
-        <item>1</item>
-        <item>1</item>
-    </string-array>
-    <string-array name="initial_attr_type_price">
-        <item>@string/attr_type_price_en</item>
-        <item>@string/attr_type_price_de</item>
-        <item>1</item>
-        <item>1</item>
-    </string-array>
-    <string-array name="initial_attr_type_store">
-        <item>@string/attr_type_store_en</item>
-        <item>@string/attr_type_store_de</item>
-        <item>1</item>
-        <item>1</item>
-    </string-array>
-    <string-array name="initial_attr_type_buy_date">
-        <item>@string/attr_type_buy_date_en</item>
-        <item>@string/attr_type_buy_date_de</item>
-        <item>4</item>
-        <item>1</item>
-    </string-array>
-    <string-array name="initial_attr_type_pattern">
-        <item>@string/attr_type_pattern_en</item>
-        <item>@string/attr_type_pattern_de</item>
-        <item>2</item>
-        <item>1</item>
-    </string-array>
-    <string-array name="initial_attr_type_other">
-        <item>@string/attr_type_other_en</item>
-        <item>@string/attr_type_other_de</item>
-        <item>1</item>
-        <item>1</item>
-    </string-array>
+   <array name="initial_attr_types">
+      <item>@array/initial_attr_type_size</item>
+      <item>@array/initial_attr_type_ex_color</item>
+      <item>@array/initial_attr_type_brand</item>
+      <item>@array/initial_attr_type_material</item>
+      <item>@array/initial_attr_type_price</item>
+      <item>@array/initial_attr_type_store</item>
+      <item>@array/initial_attr_type_buy_date</item>
+      <item>@array/initial_attr_type_pattern</item>
+      <item>@array/initial_attr_type_other</item>
+   </array>
+   <!--<name></name>-->
+   <!--<value_type></value_type>-->
+   <!--<is_unique></is_unique>-->
+   <string-array name="initial_attr_type_size">
+      <item>@string/attr_type_size_en</item>
+      <item>@string/attr_type_size_de</item>
+      <item>1</item>
+      <item>1</item>
+   </string-array>
+   <string-array name="initial_attr_type_ex_color">
+      <item>@string/attr_type_ex_color_en</item>
+      <item>@string/attr_type_ex_color_de</item>
+      <item>3</item>
+      <item>1</item>
+   </string-array>
+   <string-array name="initial_attr_type_brand">
+      <item>@string/attr_type_brand_en</item>
+      <item>@string/attr_type_brand_de</item>
+      <item>1</item>
+      <item>1</item>
+   </string-array>
+   <string-array name="initial_attr_type_material">
+      <item>@string/attr_type_material_en</item>
+      <item>@string/attr_type_material_de</item>
+      <item>1</item>
+      <item>1</item>
+   </string-array>
+   <string-array name="initial_attr_type_price">
+      <item>@string/attr_type_price_en</item>
+      <item>@string/attr_type_price_de</item>
+      <item>1</item>
+      <item>1</item>
+   </string-array>
+   <string-array name="initial_attr_type_store">
+      <item>@string/attr_type_store_en</item>
+      <item>@string/attr_type_store_de</item>
+      <item>1</item>
+      <item>1</item>
+   </string-array>
+   <string-array name="initial_attr_type_buy_date">
+      <item>@string/attr_type_buy_date_en</item>
+      <item>@string/attr_type_buy_date_de</item>
+      <item>4</item>
+      <item>1</item>
+   </string-array>
+   <string-array name="initial_attr_type_pattern">
+      <item>@string/attr_type_pattern_en</item>
+      <item>@string/attr_type_pattern_de</item>
+      <item>2</item>
+      <item>1</item>
+   </string-array>
+   <string-array name="initial_attr_type_other">
+      <item>@string/attr_type_other_en</item>
+      <item>@string/attr_type_other_de</item>
+      <item>1</item>
+      <item>1</item>
+   </string-array>
 
 </resources>

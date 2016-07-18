@@ -126,10 +126,6 @@
     <string name="favColors">Lieblingsfarben:</string>
     <string name="chooseColor">Wähle deine Lieblingsfarben:</string>
     <string name="showWishlistItems">Zeige Wunschlisten Items im Compare</string>
-    <string name="chooseLayout">Wähle deine App Farbe:</string>
-    <string name="settings_layout_blue">Blau</string>
-    <string name="settings_layout_red">Rot</string>
-    <string name="settings_layout_green">Grün</string>
 
 
 </resources>

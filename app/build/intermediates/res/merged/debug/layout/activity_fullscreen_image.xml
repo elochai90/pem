@@ -1,0 +1,13 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:background="#0099cc"
+    tools:context="com.gruppe1.pem.challengeme.views.FullscreenImageActivity">
+
+        <ImageView
+            android:id="@+id/fullscreenImage"
+            android:background="@android:color/black"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/new_item_desc_itemImage" />
+
+</FrameLayout>
