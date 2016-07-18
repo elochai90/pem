@@ -1695,6 +1695,12 @@
         <item name="metaButtonBarStyle">@style/ButtonBar</item>
         <item name="metaButtonBarButtonStyle">@style/ButtonBarButton</item>
     </style>
+    <style name="MenuButtonsStyle">
+        <item name="fab_shadowColor">#444</item>
+        <item name="fab_colorNormal">@color/accent</item>
+        <item name="fab_colorPressed">@color/accent_dark</item>
+        <item name="fab_colorRipple">@color/accent_dark</item>
+    </style>
     <style name="Platform.AppCompat" parent="android:Theme">
         <item name="android:windowNoTitle">true</item>
 

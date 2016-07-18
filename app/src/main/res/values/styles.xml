@@ -49,5 +49,13 @@
     <style name="ButtonBarButton" />
 
 
+    <style name="MenuButtonsStyle">
+        <item name="fab_shadowColor">#444</item>
+        <item name="fab_colorNormal">@color/accent</item>
+        <item name="fab_colorPressed">@color/accent_dark</item>
+        <item name="fab_colorRipple">@color/accent_dark</item>
+    </style>
+
+
 
 </resources>

@@ -1,106 +1,106 @@
+<FrameLayout android:id="@+id/frameLayout"
+   xmlns:android="http://schemas.android.com/apk/res/android"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent">
 
-<FrameLayout
-    android:layout_height="match_parent"
-    android:layout_width="match_parent"
-    android:id="@+id/frameLayout"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+   <android.support.v7.widget.RecyclerView
+      android:id="@+id/listView"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:clickable="true"
+      android:focusable="true"
+      android:scrollbars="vertical"></android.support.v7.widget.RecyclerView>
 
+   <android.support.v7.widget.RecyclerView
+      android:id="@+id/gridView"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:clickable="true"
+      android:focusable="true"
+      android:scrollbars="vertical"></android.support.v7.widget.RecyclerView>
 
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/listView"
-        android:scrollbars="vertical"
-        android:focusable="true"
-        android:clickable="true">
-    </android.support.v7.widget.RecyclerView>
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/gridView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="vertical"
-        android:focusable="true"
-        android:clickable="true">
-    </android.support.v7.widget.RecyclerView>
+   <RelativeLayout
+      android:id="@+id/noItemLayout"
+      android:layout_width="fill_parent"
+      android:layout_height="match_parent"
+      android:padding="30dp"
+      android:visibility="gone">
 
-    <RelativeLayout
-        android:id="@+id/noItemLayout"
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        android:padding="30dp">
-        <TextView
-            android:id="@+id/noItemText"
-            android:textSize="18sp"
-            android:height="80dp"
-            android:gravity="center_horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        <ImageView
-            android:id="@+id/noItemArrow"
-            android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-            android:src="@drawable/arrow_no_items"
-            android:layout_below="@id/noItemText"
-            android:padding="10dp"
-            android:layout_marginEnd="?attr/actionBarSize"
-            android:contentDescription="@string/list_grid_view_desc_arrowImage"/>
-    </RelativeLayout>
+      <TextView
+         android:id="@+id/noItemText"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:height="80dp"
+         android:gravity="center_horizontal"
+         android:textSize="18sp" />
 
-    <com.github.clans.fab.FloatingActionMenu
-        xmlns:fab="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/menu"
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        fab:menu_showShadow="true"
-        android:paddingEnd="10dp"
-        android:paddingStart="10dp"
-        android:paddingBottom="10dp"
-        fab:menu_colorNormal="#DA4336"
-        fab:menu_colorPressed="#E75043"
-        fab:menu_colorRipple="#99FFFFFF"
-        fab:menu_animationDelayPerItem="50"
-        fab:menu_icon="@drawable/fab_add"
-        fab:menu_buttonSpacing="0dp"
-        fab:menu_openDirection="up"
-        fab:menu_backgroundColor="@color/grey_transparent">
+      <ImageView
+         android:id="@+id/noItemArrow"
+         android:layout_width="match_parent"
+         android:layout_height="fill_parent"
+         android:layout_below="@id/noItemText"
+         android:layout_marginEnd="?attr/actionBarSize"
+         android:contentDescription="@string/list_grid_view_desc_arrowImage"
+         android:padding="10dp"
+         android:src="@drawable/arrow_no_items" />
+   </RelativeLayout>
 
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/add_compare"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/fab_add"
-            fab:fab_size="mini"
-            fab:fab_label="@string/title_activity_saved_compares" />
+   <com.github.clans.fab.FloatingActionMenu android:id="@+id/menu"
+      xmlns:fab="http://schemas.android.com/apk/res-auto"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_alignParentBottom="true"
+      android:layout_alignParentEnd="true"
+      android:paddingBottom="10dp"
+      android:paddingEnd="10dp"
+      android:paddingStart="10dp"
+      android:visibility="gone"
+      fab:menu_animationDelayPerItem="50"
+      fab:menu_backgroundColor="@color/grey_transparent"
+      fab:menu_buttonSpacing="0dp"
+      fab:menu_colorNormal="@color/accent"
+      fab:menu_colorPressed="@color/accent_dark"
+      fab:menu_colorRipple="@color/accent_dark"
+      fab:menu_icon="@drawable/fab_add"
+      fab:menu_openDirection="up"
+      fab:menu_showShadow="true">
 
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/add_wishlist_item"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/fab_add"
-            fab:fab_size="mini"
-            fab:fab_label="@string/title_activity_new_Wishlistitem" />
+      <com.github.clans.fab.FloatingActionButton
+         android:id="@+id/add_compare"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:src="@drawable/fab_add"
+         style="@style/MenuButtonsStyle"
+         fab:fab_label="@string/title_activity_saved_compares"
+         fab:fab_size="mini" />
 
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/add_category"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/fab_add"
-            fab:fab_size="mini"
-            fab:fab_label="@string/title_activity_new_category" />
+      <com.github.clans.fab.FloatingActionButton
+         android:id="@+id/add_wishlist_item"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:src="@drawable/fab_add"
+         style="@style/MenuButtonsStyle"
+         fab:fab_label="@string/title_activity_new_Wishlistitem"
+         fab:fab_size="mini" />
 
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/add_item"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/fab_add"
-            fab:fab_size="mini"
-            fab:fab_label="@string/title_activity_new_item" />
+      <com.github.clans.fab.FloatingActionButton
+         android:id="@+id/add_category"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:src="@drawable/fab_add"
+         style="@style/MenuButtonsStyle"
+         fab:fab_label="@string/title_activity_new_category"
+         fab:fab_size="mini" />
 
-    </com.github.clans.fab.FloatingActionMenu>
+      <com.github.clans.fab.FloatingActionButton
+         android:id="@+id/add_item"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:src="@drawable/fab_add"
+         style="@style/MenuButtonsStyle"
+         fab:fab_label="@string/title_activity_new_item"
+         fab:fab_size="mini" />
+
+   </com.github.clans.fab.FloatingActionMenu>
 
 </FrameLayout>
