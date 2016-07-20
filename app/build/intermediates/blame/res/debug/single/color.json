@@ -34,5 +34,9 @@
     {
         "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/color/abc_primary_text_disable_only_material_light.xml",
         "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.1/res/color/abc_primary_text_disable_only_material_light.xml"
+    },
+    {
+        "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/color/color_item_drawer.xml",
+        "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/src/main/res/color/color_item_drawer.xml"
     }
 ]

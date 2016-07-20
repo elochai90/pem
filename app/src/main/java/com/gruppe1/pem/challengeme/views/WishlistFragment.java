@@ -171,14 +171,10 @@ public class WishlistFragment extends Fragment {
                      getResources().getDisplayMetrics());
             }
             //no items in the RecyclerView
-            if (listView.getAdapter()
-                  .getItemCount() == 0) {
-               listView.setNestedScrollingEnabled(false);
-               frameLayout.setPadding(0, 0, 0, actionBarHeight);
-               //if the first and the last item is visible
-            } else if (layoutManager.findFirstCompletelyVisibleItemPosition() == 0 &&
-                  layoutManager.findLastCompletelyVisibleItemPosition() == listView.getAdapter()
-                        .getItemCount() - 1) {
+            if (listView.getAdapter().getItemCount() == 0 ||
+                  (layoutManager.findFirstCompletelyVisibleItemPosition() == 0 &&
+                   layoutManager.findLastCompletelyVisibleItemPosition() ==
+                              listView.getAdapter().getItemCount() - 1)) {
                listView.setNestedScrollingEnabled(false);
                frameLayout.setPadding(0, 0, 0, actionBarHeight);
             } else {

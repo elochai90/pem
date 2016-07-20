@@ -131,7 +131,7 @@ public class ItemsListActivity extends AppCompatActivity {
                 return true;
             }
         });
-        StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+        StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         gridView.setLayoutManager(gridLayoutManager);
         gridView.setHasFixedSize(true);
         gridView.setAdapter(defaultRecyclerGridAdapter);

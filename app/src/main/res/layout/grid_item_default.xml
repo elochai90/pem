@@ -21,30 +21,33 @@
 
       <RelativeLayout
          android:layout_width="match_parent"
-         android:layout_height="40dp"
+         android:layout_height="68dp"
+         android:padding="16dp"
          android:orientation="horizontal"
          android:background="@color/grey_transparent"
          android:layout_below="@id/imageView">
 
-         <TextView
-            android:id="@+id/rightTextView"
+         <ImageView
+            android:id="@+id/ic_more"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
             android:layout_alignParentEnd="true"
-            android:paddingEnd="10dp"
-            android:paddingStart="5dp"
-            android:textColor="@android:color/white"
-            android:textSize="14sp" />
+            android:paddingStart="16dp"
+            android:src="@drawable/ic_more"/>
          <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_toLeftOf="@id/rightTextView"
-            android:gravity="center_vertical"
-            android:paddingStart="10dp"
-            android:textColor="@android:color/white"
-            android:textSize="14sp" />
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/ic_more"
+            android:textColor="@color/primary_text_light"
+            android:textSize="16sp" />
+         <TextView
+            android:id="@+id/rightTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textView"
+            android:textColor="@color/secondary_text_light"
+            android:textSize="12sp" />
 
 
       </RelativeLayout>

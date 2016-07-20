@@ -229,6 +229,7 @@ public class TabsFragmentActivity extends ActionBarActivity {
      * selects the current tab in the navigation drawer
      */
     public void setSelectedNavigationDrawerItem(int tab_index) {
+        mDrawerList.setSelection(tab_index + 1);
         mDrawerList.setItemChecked(tab_index + 1, true);
     }
 
@@ -337,6 +338,7 @@ public class TabsFragmentActivity extends ActionBarActivity {
                 }
                 // Closing the drawer
                 mDrawerLayout.closeDrawer(mDrawerList);
+                mDrawerList.setSelection(position);
             }
         });
 

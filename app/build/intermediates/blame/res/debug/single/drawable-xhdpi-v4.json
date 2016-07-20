@@ -20,12 +20,12 @@
         "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.1/res/drawable-xhdpi/abc_ic_menu_cut_mtrl_alpha.png"
     },
     {
-        "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/drawable-xhdpi-v4/ic_settings.png",
-        "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/src/main/res/drawable-xhdpi/ic_settings.png"
-    },
-    {
         "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/drawable-xhdpi-v4/abc_menu_hardkey_panel_mtrl_mult.9.png",
         "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.1/res/drawable-xhdpi/abc_menu_hardkey_panel_mtrl_mult.9.png"
+    },
+    {
+        "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/drawable-xhdpi-v4/ic_settings.png",
+        "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/src/main/res/drawable-xhdpi/ic_settings.png"
     },
     {
         "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/drawable-xhdpi-v4/abc_textfield_activated_mtrl_alpha.9.png",

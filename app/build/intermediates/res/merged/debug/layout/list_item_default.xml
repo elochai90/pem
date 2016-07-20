@@ -1,14 +1,15 @@
 <RelativeLayout android:id="@+id/listItemView"
    xmlns:android="http://schemas.android.com/apk/res/android"
    android:layout_width="fill_parent"
-   android:layout_height="?android:attr/listPreferredItemHeightLarge"
+   android:layout_height="?android:attr/listPreferredItemHeight"
    android:background="@drawable/selector_list_item"
    android:focusable="true">
 
    <ImageView
       android:id="@+id/imageView"
-      android:layout_width="?android:attr/listPreferredItemHeightLarge"
-      android:layout_height="?android:attr/listPreferredItemHeightLarge"
+      android:layout_marginRight="10dp"
+      android:layout_width="?android:attr/listPreferredItemHeight"
+      android:layout_height="?android:attr/listPreferredItemHeight"
       android:contentDescription="@string/list_grid_item_desc_image" />
 
    <RelativeLayout
@@ -28,8 +29,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:textColor="@android:color/black"
-            android:textSize="18sp" />
+            android:textColor="@color/primary_text"
+            android:textSize="16sp" />
 
          <LinearLayout
             android:layout_width="wrap_content"
@@ -40,10 +41,11 @@
             <TextView
                android:id="@+id/secondLine"
                android:layout_width="match_parent"
-               android:layout_height="26dip"
+               android:layout_height="wrap_content"
                android:ellipsize="marquee"
+               android:textColor="@color/secondary_text"
                android:singleLine="true"
-               android:textSize="12sp" />
+               android:textSize="14sp" />
 
             <RatingBar
                android:id="@+id/listItemRatingBar"
@@ -71,9 +73,9 @@
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
          android:layout_centerVertical="true"
-         android:layout_marginEnd="10dp"
+         android:textColor="@color/secondary_text"
          android:layout_toLeftOf="@+id/ic_more"
-         android:textSize="18sp" />
+         android:textSize="14sp" />
 
       <ImageView
          android:id="@+id/ic_more"
@@ -87,7 +89,7 @@
 
       <View
          android:layout_width="match_parent"
-         android:layout_height="1dp"
+         android:layout_height="0.5dp"
          android:layout_alignParentBottom="true"
          android:layout_marginEnd="15dp"
          android:layout_marginRight="15dp"

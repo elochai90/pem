@@ -16,10 +16,14 @@ import com.gruppe1.pem.challengeme.ListItemIconName;
 import com.gruppe1.pem.challengeme.R;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
+import com.gruppe1.pem.challengeme.helpers.ImageLoader;
 import com.gruppe1.pem.challengeme.helpers.PicassoSingleton;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Array adapter to fill a default list view
@@ -69,9 +73,13 @@ public class CompareRecyclerGridAdapter extends RecyclerView.Adapter<CompareRecy
         ArrayList<Integer> itemIds = item.getItemIds();
         Item item1 = new Item(this.context, itemIds.get(0), this.dbHelper);
         Item item2 = new Item(this.context, itemIds.get(1), this.dbHelper);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy", Locale.ENGLISH);
+        String currentDateandTime = sdf.format(new Date(Long.parseLong(item.getTimestamp())));
 
-        picassoSingleton.setImage(item1.getImageFile(), Constants.LIST_VIEW_IMAGE_WIDTH, Constants.LIST_VIEW_IMAGE_HEIGHT, holder.imageItem1);
-        picassoSingleton.setImage(item2.getImageFile(), Constants.LIST_VIEW_IMAGE_WIDTH, Constants.LIST_VIEW_IMAGE_HEIGHT, holder.imageItem2);
+        holder.rightTextView.setText(currentDateandTime);
+
+        picassoSingleton.setImage(item1.getImageFile(), Constants.LIST_VIEW_IMAGE_WIDTH_BIG, Constants.LIST_VIEW_IMAGE_HEIGHT_BIG, holder.imageItem1);
+        picassoSingleton.setImage(item2.getImageFile(), Constants.LIST_VIEW_IMAGE_WIDTH_BIG, Constants.LIST_VIEW_IMAGE_HEIGHT_BIG, holder.imageItem2);
 
         holder.itemView.setOnClickListener(onItemClickListener);
         holder.itemView.setOnLongClickListener(onItemLongClickListener);
@@ -93,6 +101,7 @@ public class CompareRecyclerGridAdapter extends RecyclerView.Adapter<CompareRecy
         TextView compareName;
         ImageView imageItem1;
         ImageView imageItem2;
+        TextView rightTextView;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -100,6 +109,7 @@ public class CompareRecyclerGridAdapter extends RecyclerView.Adapter<CompareRecy
             compareName = (TextView) itemView.findViewById(R.id.compareName);
             imageItem1 = (ImageView)itemView.findViewById(R.id.imageItem1);
             imageItem2 = (ImageView)itemView.findViewById(R.id.imageItem2);
+            rightTextView = (TextView)itemView.findViewById(R.id.rightTextView);
         }
     }
 

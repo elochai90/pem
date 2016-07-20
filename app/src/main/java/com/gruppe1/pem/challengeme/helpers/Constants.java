@@ -68,6 +68,9 @@ public class Constants {
     public static final int LIST_VIEW_IMAGE_WIDTH = 150;
     public static final int LIST_VIEW_IMAGE_HEIGHT = 150;
 
+    public static final int LIST_VIEW_IMAGE_WIDTH_BIG = 450;
+    public static final int LIST_VIEW_IMAGE_HEIGHT_BIG = 450;
+
 
     public static final int COMPARE_IMAGE_WIDTH = 800;
     public static final int COMPARE_IMAGE_HEIGHT = 800;

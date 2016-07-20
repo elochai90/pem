@@ -4,58 +4,64 @@
     api-level="23"
     density="xxhdpi"
     format="7"
-    timestamp="387073188502963" >
+    timestamp="425704437821115"
+    verifier="METHOD_DELETED" >
 
     <task
         name="javac"
-        duration="0" />
+        duration="277" />
     <task
         name="instant-run-dex"
         duration="0" />
     <task
         name="instant-run-transform"
-        duration="0" />
+        duration="19" />
     <task
         name="verifier"
-        duration="0" />
+        duration="5" />
 
     <artifact
-        location="/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/resources-debug.ap_"
-        type="RESOURCES" />
+        location="/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/transforms/dex/debug/folders/1000/5/slice_1/classes.dex"
+        type="DEX" />
 
-    <build timestamp="386619226856637" >
+    <build timestamp="420573996096175" >
         <artifact
             location="/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/outputs/apk/app-debug.apk"
             type="MAIN" />
     </build>
     <build
-        timestamp="386713091093510"
+        timestamp="422814825485337"
         verifier="R_CLASS_CHANGE" >
         <artifact
-            location="/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/transforms/dex/debug/folders/1000/5/slice_9/classes.dex"
+            location="/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/transforms/dex/debug/folders/1000/5/slice_4/classes.dex"
             type="DEX" />
+        <artifact
+            location="/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/transforms/dex/debug/folders/1000/5/slice_7/classes.dex"
+            type="DEX" />
+    </build>
+    <build timestamp="424583292512231" >
+        <artifact
+            location="/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/resources-debug.ap_"
+            type="RESOURCES" />
+    </build>
+    <build
+        timestamp="424817794533164"
+        verifier="FIELD_REMOVED" >
         <artifact
             location="/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/transforms/dex/debug/folders/1000/5/slice_0/classes.dex"
             type="DEX" />
     </build>
-    <build
-        timestamp="386869445639630"
-        verifier="COMPATIBLE" >
+    <build timestamp="425015380584489" >
         <artifact
-            location="/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/builds/debug/386869445639630/classes.dex"
-            type="RELOAD_DEX" />
+            location="/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/transforms/dex/debug/folders/1000/5/slice_9/classes.dex"
+            type="DEX" />
     </build>
     <build
-        timestamp="386943276994096"
-        verifier="COMPATIBLE" >
+        timestamp="425704437821115"
+        verifier="METHOD_DELETED" >
         <artifact
-            location="/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/builds/debug/386943276994096/classes.dex"
-            type="RELOAD_DEX" />
-    </build>
-    <build timestamp="387073188502963" >
-        <artifact
-            location="/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/resources-debug.ap_"
-            type="RESOURCES" />
+            location="/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/transforms/dex/debug/folders/1000/5/slice_1/classes.dex"
+            type="DEX" />
     </build>
 
 </instant-run>
