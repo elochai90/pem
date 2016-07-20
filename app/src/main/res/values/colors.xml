@@ -30,10 +30,15 @@
 
     <color name="blue01">#7fd3f3ff</color>
 
+    <color name="transparent">#00000000</color>
+
+    <color name="gray00">#ffffff</color>
     <color name="gray01">#e9e9e9</color>
     <color name="gray02">#d4d4d4</color>
     <color name="gray03">#ffaeaeae</color>
     <color name="gray04">#8f8f8f</color>
     <color name="gray05">#5d5d5d</color>
+    <color name="gray06">#313131</color>
+    <color name="gray07">#000000</color>
 
 </resources>

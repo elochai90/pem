@@ -20,34 +20,66 @@
          android:layout_centerHorizontal="true" />
 
       <RelativeLayout
+         android:id="@+id/text_container"
          android:layout_width="match_parent"
          android:layout_height="68dp"
-         android:padding="16dp"
+         android:paddingLeft="@dimen/activity_vertical_margin"
+         android:paddingTop="@dimen/activity_vertical_margin"
+         android:paddingBottom="@dimen/activity_vertical_margin"
          android:orientation="horizontal"
          android:background="@color/grey_transparent"
          android:layout_below="@id/imageView">
 
          <ImageView
             android:id="@+id/ic_more"
-            android:layout_width="wrap_content"
+            android:layout_width="40dp"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
-            android:paddingStart="16dp"
+            android:layout_centerVertical="true"
+            android:scaleType="centerInside"
             android:src="@drawable/ic_more"/>
          <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@id/ic_more"
+            android:ellipsize="marquee"
+            android:singleLine="true"
             android:textColor="@color/primary_text_light"
             android:textSize="16sp" />
-         <TextView
-            android:id="@+id/rightTextView"
+         <!--<TextView-->
+            <!--android:id="@+id/rightTextView"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@id/textView"-->
+            <!--android:textColor="@color/secondary_text_light"-->
+            <!--android:textSize="12sp" />-->
+
+         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/textView"
-            android:textColor="@color/secondary_text_light"
-            android:textSize="12sp" />
+            android:layout_gravity="center_vertical"
+            android:layout_toLeftOf="@id/ic_more"
+            android:orientation="horizontal">
+
+            <RatingBar
+               android:id="@+id/listItemRatingBar"
+               style="?android:attr/ratingBarStyleSmall"
+               android:layout_gravity="center_vertical"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_marginEnd="10dp" />
+
+            <TextView
+               android:id="@+id/rightTextView"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:ellipsize="marquee"
+               android:textColor="@color/secondary_text_light"
+               android:singleLine="true"
+               android:textSize="12sp" />
+         </LinearLayout>
 
 
       </RelativeLayout>

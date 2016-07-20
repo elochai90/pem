@@ -88,11 +88,10 @@ public class CompareFragment extends Fragment {
             compareFragmentOnItemClick(v, listView.getChildPosition(v));
          }
       });
-      compareRecyclerListAdapter.setOnItemLongClickListener(new View.OnLongClickListener() {
+      compareRecyclerListAdapter.setOnIcMoreClickListener(new View.OnClickListener() {
          @Override
-         public boolean onLongClick(View v) {
-            compareFragmentOnItemLongClick(listView, v, listView.getChildPosition(v));
-            return true;
+         public void onClick(View v) {
+            compareFragmentOnIcMoreClick(listView, v, (Integer) v.getTag());
          }
       });
       listView.setAdapter(compareRecyclerListAdapter);
@@ -105,11 +104,10 @@ public class CompareFragment extends Fragment {
             compareFragmentOnItemClick(v, listView.getChildPosition(v));
          }
       });
-      compareRecyclerGridAdapter.setOnItemLongClickListener(new View.OnLongClickListener() {
+      compareRecyclerGridAdapter.setOnIcMoreClickListener(new View.OnClickListener() {
          @Override
-         public boolean onLongClick(View v) {
-            compareFragmentOnItemLongClick(listView, v, listView.getChildPosition(v));
-            return true;
+         public void onClick(View v) {
+            compareFragmentOnIcMoreClick(listView, v, (Integer) v.getTag());
          }
       });
       gridView.setAdapter(compareRecyclerGridAdapter);
@@ -240,24 +238,28 @@ public class CompareFragment extends Fragment {
             System.out.println(mRecyclerView.getLayoutManager().getClass());
             if (mRecyclerView.getAdapter()
                   .getItemCount() == 0) {
-               mRecyclerView.setNestedScrollingEnabled(false);
+               gridView.setNestedScrollingEnabled(false);
+               listView.setNestedScrollingEnabled(false);
                frameLayout.setPadding(0, 0, 0, actionBarHeight);
-            } else if (list && ((LinearLayoutManager)mRecyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition() == 0 &&
-                  ((LinearLayoutManager)mRecyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition() ==
-                           mRecyclerView.getAdapter()
+            } else if (list && ((LinearLayoutManager)listView.getLayoutManager()).findFirstCompletelyVisibleItemPosition() == 0 &&
+                  ((LinearLayoutManager)listView.getLayoutManager()).findLastCompletelyVisibleItemPosition() ==
+                        listView.getAdapter()
                                  .getItemCount() - 1) {
-                  mRecyclerView.setNestedScrollingEnabled(false);
+                  listView.setNestedScrollingEnabled(false);
+                  gridView.setNestedScrollingEnabled(false);
                   frameLayout.setPadding(0, 0, 0, actionBarHeight);
-            } else if (!list && ((StaggeredGridLayoutManager)mRecyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPositions(null).length > 0 &&
-                  ((StaggeredGridLayoutManager)mRecyclerView.getLayoutManager()).findLastCompletelyVisibleItemPositions(null).length > 0 &&
-                  ((StaggeredGridLayoutManager)mRecyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPositions(null)[0] == 0 &&
-                  ((StaggeredGridLayoutManager)mRecyclerView.getLayoutManager()).findLastCompletelyVisibleItemPositions(null)[0] ==
-                           mRecyclerView.getAdapter()
+            } else if (!list && ((StaggeredGridLayoutManager)gridView.getLayoutManager()).findFirstCompletelyVisibleItemPositions(null).length > 0 &&
+                  ((StaggeredGridLayoutManager)gridView.getLayoutManager()).findLastCompletelyVisibleItemPositions(null).length > 0 &&
+                  ((StaggeredGridLayoutManager)gridView.getLayoutManager()).findFirstCompletelyVisibleItemPositions(null)[0] == 0 &&
+                  ((StaggeredGridLayoutManager)gridView.getLayoutManager()).findLastCompletelyVisibleItemPositions(null)[0] ==
+                        gridView.getAdapter()
                                  .getItemCount() - 1) {
-                  mRecyclerView.setNestedScrollingEnabled(false);
+                  gridView.setNestedScrollingEnabled(false);
+                  listView.setNestedScrollingEnabled(false);
                   frameLayout.setPadding(0, 0, 0, actionBarHeight);
             } else {
-               mRecyclerView.setNestedScrollingEnabled(true);
+               gridView.setNestedScrollingEnabled(true);
+               listView.setNestedScrollingEnabled(true);
             }
          }
       }, 5);
@@ -297,7 +299,7 @@ public class CompareFragment extends Fragment {
       }
    }
 
-   private boolean compareFragmentOnItemLongClick(RecyclerView parent, View view, int position) {
+   private boolean compareFragmentOnIcMoreClick(RecyclerView parent, View view, int position) {
       selectedItem = new Object[2];
       selectedItem[0] = position;
       selectedItem[1] = view;

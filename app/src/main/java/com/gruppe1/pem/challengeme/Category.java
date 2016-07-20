@@ -21,6 +21,7 @@ public class Category {
     private String m_name_de;
     private int m_parent_category_id = Constants.DEFAULT_CATEGORY_ID;
     private String m_icon;
+    private String m_color;
     // TODO add default size to sql init
     private int m_defaultSizeType;
     private DataBaseHelper m_dbHelper;
@@ -44,6 +45,7 @@ public class Category {
                 this.m_parent_category_id = categoryData.getInt(3);
                 this.m_defaultSizeType = categoryData.getInt(4);
                 this.m_icon = categoryData.getString(5);
+                this.m_color = categoryData.getString(6);
             }
             categoryData.close();
         }
@@ -90,6 +92,14 @@ public class Category {
 
     public void setParentCategoryId(int m_parent_cat_id) {
         this.m_parent_category_id = m_parent_cat_id;
+    }
+
+    public String getColor() {
+        return m_color;
+    }
+
+    public void setColor(String m_color) {
+        this.m_color = m_color;
     }
 
     public int getDefaultSizeType() {
@@ -140,6 +150,7 @@ public class Category {
             category.setDefaultSizeType(allCategoriesIterator.getInt(4));
 
             category.setIcon(allCategoriesIterator.getString(5));
+            category.setColor(allCategoriesIterator.getString(6));
             allCategories.add(category);
             allCategoriesIterator.moveToNext();
         }
@@ -181,6 +192,7 @@ public class Category {
             category.setDefaultSizeType(allCategoriesIterator.getInt(4));
 
             category.setIcon(allCategoriesIterator.getString(5));
+            category.setColor(allCategoriesIterator.getString(6));
             allCategories.add(category);
             allCategoriesIterator.moveToNext();
         }
@@ -219,6 +231,10 @@ public class Category {
 
                 case "icon":
                     this.setIcon(dbColumnValue);
+                    break;
+
+                case "color":
+                    this.setColor(dbColumnValue);
                     break;
 
                 default:
@@ -340,6 +356,7 @@ public class Category {
         this.m_dbHelper.setIntegerValue("default_attribute_type", this.m_defaultSizeType);
         String iconValue = (this.m_icon != null) ? this.m_icon : Constants.DEFAULT_CAT_ICON;
         this.m_dbHelper.setStringValue("icon", iconValue);
+        this.m_dbHelper.setStringValue("color", this.m_color);
     }
 
     /**

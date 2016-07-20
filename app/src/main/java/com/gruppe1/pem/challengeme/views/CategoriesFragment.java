@@ -93,11 +93,10 @@ public class CategoriesFragment extends Fragment {
                 categoryFragmentOnItemClick(v,listView.getChildPosition(v));
             }
         });
-        defaultRecyclerGridAdapter.setOnItemLongClickListener(new View.OnLongClickListener() {
+        defaultRecyclerGridAdapter.setOnIcMoreClickListener(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View v) {
-                categoryFragmentOnIcMoreClick(listView,v,listView.getChildPosition(v));
-                return true;
+            public void onClick(View v) {
+                categoryFragmentOnIcMoreClick(listView,v,(Integer) v.getTag());
             }
         });
         StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);

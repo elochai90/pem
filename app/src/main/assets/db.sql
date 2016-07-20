@@ -4,7 +4,8 @@ CREATE TABLE `orga_nice_categories` (
     `name_de` VARCHAR(50) NOT NULL DEFAULT "",
     `parent_category_id` INT(5) NOT NULL DEFAULT -1,
     `default_attribute_type` INT (3) NOT NULL DEFAULT -1,
-    `icon` VARCHAR(50) DEFAULT "kleiderbuegel"
+    `icon` VARCHAR(50) DEFAULT "kleiderbuegel",
+    `color` VARCHAR(50) DEFAULT "5d5d5d"
 );
 
 CREATE TABLE `orga_nice_items` (

@@ -39,7 +39,7 @@ public class CompareRecyclerListAdapter extends RecyclerView.Adapter<CompareRecy
     private PicassoSingleton picassoSingleton;
 
     private View.OnClickListener onItemClickListener;
-    private View.OnLongClickListener onItemLongClickListener;
+    private View.OnClickListener onIcMoreClickListener;
 
     /**
      * Constructor of the CompareRecyclerListAdapter
@@ -60,8 +60,8 @@ public class CompareRecyclerListAdapter extends RecyclerView.Adapter<CompareRecy
     public void setOnItemClickListener(View.OnClickListener onClickListener) {
         this.onItemClickListener  = onClickListener;
     }
-    public void setOnItemLongClickListener(View.OnLongClickListener onClickListener) {
-        this.onItemLongClickListener = onClickListener;
+    public void setOnIcMoreClickListener(View.OnClickListener onClickListener) {
+        this.onIcMoreClickListener = onClickListener;
     }
 
     @Override
@@ -93,7 +93,8 @@ public class CompareRecyclerListAdapter extends RecyclerView.Adapter<CompareRecy
         picassoSingleton.setImage(item2.getImageFile(), Constants.LIST_VIEW_IMAGE_WIDTH, Constants.LIST_VIEW_IMAGE_HEIGHT, holder.imageItem2);
 
         holder.itemView.setOnClickListener(onItemClickListener);
-        holder.itemView.setOnLongClickListener(onItemLongClickListener);
+        holder.moreButton.setTag(position);
+        holder.moreButton.setOnClickListener(onIcMoreClickListener);
 
     }
 
@@ -116,6 +117,7 @@ public class CompareRecyclerListAdapter extends RecyclerView.Adapter<CompareRecy
         ImageView imageItem1;
         ImageView imageItem2;
         TextView rightTextView;
+        ImageView moreButton;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -126,6 +128,7 @@ public class CompareRecyclerListAdapter extends RecyclerView.Adapter<CompareRecy
             rightTextView = (TextView)itemView.findViewById(R.id.rightTextView);
             imageItem1 = (ImageView)itemView.findViewById(R.id.imageItem1);
             imageItem2 = (ImageView)itemView.findViewById(R.id.imageItem2);
+            moreButton = (ImageView)itemView.findViewById(R.id.ic_more);
         }
     }
 

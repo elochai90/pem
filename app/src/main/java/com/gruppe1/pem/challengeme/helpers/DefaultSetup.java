@@ -148,6 +148,7 @@ public class DefaultSetup {
                 cat_attributes.put("parent_category_id", initial_cat[2]);
                 cat_attributes.put("default_attribute_type", initial_cat[3]);
                 cat_attributes.put("icon", initial_cat[4]);
+                cat_attributes.put("color", initial_cat[5]);
 
                 Category defaultCategory = new Category(m_context, 0, this.m_dbHelper);
                 defaultCategory.edit(cat_attributes);

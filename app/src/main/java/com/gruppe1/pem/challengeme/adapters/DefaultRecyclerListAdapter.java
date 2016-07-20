@@ -97,7 +97,7 @@ public class DefaultRecyclerListAdapter extends RecyclerView.Adapter<DefaultRecy
             String secondLineText = "";
             int attributesToShowCount = 0;
             if(!attributeColor.getName().equals("")) {
-                secondLineText += "Color: " + attributeColor.getName() + "   ";
+                secondLineText += attributeColor.getName() + "   ";
                 attributesToShowCount++;
             }
             for(int i = 0; i < allAttributes.size(); i++) {
@@ -105,7 +105,7 @@ public class DefaultRecyclerListAdapter extends RecyclerView.Adapter<DefaultRecy
                 if(attributesToShowCount < 3
                         && !allAttributes.get(i).getValue().toString().equals("")
                         && allAttributes.get(i).getAttributeType().getValueType() == 1) {
-                    secondLineText += allAttributes.get(i).getAttributeType().getName() + ": " + allAttributes.get(i).getValue().toString() + "   ";
+                    secondLineText += allAttributes.get(i).getValue().toString() + "   ";
                     attributesToShowCount++;
                 }
             }
