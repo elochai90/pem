@@ -43,6 +43,7 @@ import java.util.Locale;
         setContentView(R.layout.activity_collection_items);
 
         loadLocale();
+        setupToolbar();
 
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -73,6 +74,7 @@ import java.util.Locale;
                 currentItemPosition = position;
                 mItemsCollectionPagerAdapter.getItem(position);
 //                getSupportActionBar().setTitle(mDataset.get(position).getName());
+                getSupportActionBar().setTitle(mDataset.get(position).getName());
             }
 
             @Override
@@ -84,6 +86,14 @@ import java.util.Locale;
 
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+    }
+
+    private void setupToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override

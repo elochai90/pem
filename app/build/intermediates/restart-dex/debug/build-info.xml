@@ -4,7 +4,7 @@
     api-level="23"
     density="xxhdpi"
     format="7"
-    timestamp="464380699200714" >
+    timestamp="466419648446881" >
 
     <task
         name="javac"
@@ -20,13 +20,18 @@
         duration="0" />
 
     <artifact
-        location="/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/outputs/apk/app-debug.apk"
-        type="MAIN" />
+        location="/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/resources-debug.ap_"
+        type="RESOURCES" />
 
-    <build timestamp="464380699200714" >
+    <build timestamp="466280912991098" >
         <artifact
             location="/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/outputs/apk/app-debug.apk"
             type="MAIN" />
+    </build>
+    <build timestamp="466419648446881" >
+        <artifact
+            location="/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/resources-debug.ap_"
+            type="RESOURCES" />
     </build>
 
 </instant-run>

@@ -117,7 +117,7 @@ public class NewItemActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_collection_items);
+        setContentView(R.layout.activity_new_item);
 //        getActionBar().setTitle(R.string.title_activity_new_item);
 
         getWindow().setSoftInputMode(

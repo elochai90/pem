@@ -110,11 +110,6 @@ public class CollectionItemsFragment extends Fragment {
         activity = (CollectionItemsActivity) getActivity();
 
 
-        Toolbar toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
-        activity.setSupportActionBar(toolbar);
-        activity.getSupportActionBar().setDisplayShowHomeEnabled(true);
-        activity.getSupportActionBar().setHomeButtonEnabled(true);
-        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         sharedPreferences = getActivity().getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
 
@@ -195,7 +190,7 @@ public class CollectionItemsFragment extends Fragment {
             editItem = new Item(activity, editItemId, getDb_helper());
             parentCategoryId = editItem.getCategoryId();
             savedColorId = editItem.getPrimaryColorId();
-            activity.getSupportActionBar().setTitle(editItem.getName());
+//            activity.getSupportActionBar().setTitle(editItem.getName());
 
         } else {
             getDb_helper().setTable(Constants.ITEMS_DB_TABLE);
@@ -293,14 +288,6 @@ public class CollectionItemsFragment extends Fragment {
      * creates and shows the overlay to choose a category
      */
     private void setupCategoryOverlay() {
-//        final AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-//        LayoutInflater inflater = getLayoutInflater(null);
-//
-//        final View dialogView = inflater.inflate(R.layout.dialog_grid, null);
-//        TextView headline = (TextView)dialogView.findViewById(R.id.dialog_headline);
-//        headline.setText(getString(R.string.item_select_category_overlay_title));
-//        RecyclerView gridView = (RecyclerView) dialogView.findViewById(R.id.gridView);
-
         alertDialog = createCategoryOverlay(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -311,28 +298,6 @@ public class CollectionItemsFragment extends Fragment {
                 alertDialog.dismiss();
             }
         });
-
-//        gridView.setAdapter(gridCateoriesAdapter);
-//
-//        builder.setView(dialogView);
-//        final AlertDialog alert = builder.create();
-//        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//
-//                getDb_helper().setTable(Constants.CATEGORIES_DB_TABLE);
-//                attrCategorySelected = new Category(activity, gridCateoriesAdapter.getItem(position).getElementId(), getDb_helper());
-//                attrCategoryValue.setText(gridCateoriesAdapter.getItem(position).getName());
-//                ((TextView) attributesView.findViewWithTag("size")).setText(getSizeValueBySizeType(attrCategorySelected.getDefaultSizeType()));
-//                alert.dismiss();
-//            }
-//        });
-//        alert.setButton(DialogInterface.BUTTON_NEGATIVE, getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                alert.dismiss();
-//            }
-//        });
         alertDialog.show();
     }
 
@@ -351,15 +316,6 @@ public class CollectionItemsFragment extends Fragment {
         headline.setText(getString(R.string.item_select_category_overlay_title));
         RecyclerView gridView = (RecyclerView) dialogView.findViewById(R.id.gridView);
 
-//        ArrayList<ListItemIconName> catArray = new ArrayList<>();
-//
-//        for (Category tmpCat : upperCategoriesList) {
-//            int iconId = getResources().getIdentifier(tmpCat.getIcon(), "drawable",
-//                  "com.gruppe1.pem.challengeme");
-//            catArray.add(
-//                  new ListItemIconName("category", tmpCat.getId(), iconId, tmpCat.getName(), null));
-//        }
-
         StaggeredGridLayoutManager
               gridLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
         gridView.setLayoutManager(gridLayoutManager);
@@ -369,11 +325,8 @@ public class CollectionItemsFragment extends Fragment {
               new GridSpacingItemDecoration(3, spacingInPixels, false, 0));
         builder.setView(dialogView);
         final AlertDialog alert = builder.create();
-//        final CategoriesGridOverlayAdapter gridAdapter =
-//              new CategoriesGridOverlayAdapter(this, R.layout.grid_item_overlay_category, catArray);
         gridCateoriesAdapter.setOnItemClickListener(onItemClickListener);
         gridView.setAdapter(gridCateoriesAdapter);
-        //      gridView.setOnItemClickListener(onItemClickListener);
         alert.setButton(DialogInterface.BUTTON_NEGATIVE, getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

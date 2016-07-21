@@ -300,6 +300,10 @@
         "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/24.1.0/res/layout/abc_alert_dialog_button_bar_material.xml"
     },
     {
+        "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/layout/activity_new_item.xml",
+        "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/src/main/res/layout/activity_new_item.xml"
+    },
+    {
         "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/layout/activity_settings.xml",
         "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/src/main/res/layout/activity_settings.xml"
     }

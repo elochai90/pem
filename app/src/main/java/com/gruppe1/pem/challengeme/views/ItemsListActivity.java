@@ -55,6 +55,8 @@ public class ItemsListActivity extends AppCompatActivity {
    private DefaultRecyclerListAdapter defaultRecyclerListAdapter;
    private DefaultRecyclerGridAdapter defaultRecyclerGridAdapter;
 
+   private int categoriesCount = 0;
+
    @Override
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
@@ -325,6 +327,8 @@ public class ItemsListActivity extends AppCompatActivity {
                new ListItemIconName("category", tmpCat.getId(), iconId, tmpCat.getName(), null));
       }
 
+      categoriesCount = mDataset.size();
+
       ArrayList<Item> allCategoryItems = Item.getItemsByCategoryId(this, categoryId, false);
 
       for (Item tmpItem : allCategoryItems) {
@@ -387,7 +391,7 @@ public class ItemsListActivity extends AppCompatActivity {
       } else if (isItem) {
          int itemId = list ? (int) defaultRecyclerListAdapter.getItemId(position) :
                (int) defaultRecyclerGridAdapter.getItemId(position);
-         selectItem(itemId, position);
+         selectItem(itemId, position-categoriesCount);
       }
    }
 
