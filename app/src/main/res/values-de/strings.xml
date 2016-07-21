@@ -74,6 +74,7 @@
     <string name="new_category_label_parent">Oberkategorie:</string>
     <string name="new_category_label_defaultSize">Standardgröße:</string>
     <string name="new_category_label_icon">Icon:</string>
+    <string name="new_category_label_color">Farbe:</string>
     <string name="new_category_desc_icon">Kategorie Icon</string>
     <string name="new_category_overlay_title">Wähle ein Icon</string>
     <string name="default_size_tops">Oberteile</string>

@@ -74,6 +74,7 @@
     <string name="new_category_label_parent">Parent category:</string>
     <string name="new_category_label_defaultSize">Default size:</string>
     <string name="new_category_label_icon">Icon:</string>
+    <string name="new_category_label_color">Color:</string>
     <string name="new_category_desc_icon">category icon</string>
     <string name="new_category_overlay_title">Select an icon</string>
     <string name="default_size_tops">Tops</string>

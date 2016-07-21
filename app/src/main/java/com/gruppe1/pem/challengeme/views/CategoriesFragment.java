@@ -43,6 +43,7 @@ public class CategoriesFragment extends Fragment {
    private RecyclerView gridView;
    private RecyclerView listView;
    private Boolean list;
+   private DataBaseHelper db_helper;
 
    private Object[] selectedItem;
 
@@ -240,8 +241,7 @@ public class CategoriesFragment extends Fragment {
    }
 
    private void categoryFragmentOnItemClick(View view, int position) {
-      selectCategory(mDataset.get(position)
-            .getElementId());
+      selectCategory(mDataset.get(position).getElementId());
    }
 
    @Override
@@ -282,7 +282,16 @@ public class CategoriesFragment extends Fragment {
                         getActivity().getPackageName() + ".views.NewCategoryActivity");
                   int categoryId =
                         (int) defaultRecyclerListAdapter.getItemId((int) selectedItem[0]);
-                  intent.putExtra("category_id", categoryId);
+
+                  DataBaseHelper db_helper =
+                        new DataBaseHelper(getActivity().getApplicationContext());
+                  db_helper.init();
+
+                  Category category =
+                        new Category(getActivity().getApplicationContext(), categoryId, db_helper);
+
+                  db_helper.close();
+                  intent.putExtra(Constants.EXTRA_CATEGORY_ID, category.getId());
 
                   startActivityForResult(intent, REQUEST_CODE);
                }
@@ -325,5 +334,19 @@ public class CategoriesFragment extends Fragment {
             .show();
 
       return true;
+   }
+
+   /**
+    * Get the db_helper instance for this class
+    *
+    * @return DataBaseHelper instance
+    */
+   private DataBaseHelper getDb_helper() {
+      if (!db_helper.isOpen()) {
+         System.out.println("db helper was closed");
+         db_helper = new DataBaseHelper(getContext());
+         db_helper.init();
+      }
+      return db_helper;
    }
 }

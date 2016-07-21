@@ -36,6 +36,10 @@
         "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/src/main/res/drawable/background_item_default.xml"
     },
     {
+        "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/drawable/selector_grid_item_overlay.xml",
+        "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/src/main/res/drawable/selector_grid_item_overlay.xml"
+    },
+    {
         "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/drawable/icon_category_circle_filled.xml",
         "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/src/main/res/drawable/icon_category_circle_filled.xml"
     },
@@ -78,6 +82,10 @@
     {
         "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/drawable/abc_btn_radio_material.xml",
         "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/24.1.0/res/drawable/abc_btn_radio_material.xml"
+    },
+    {
+        "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/drawable/overlay_grid_item.xml",
+        "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/src/main/res/drawable/overlay_grid_item.xml"
     },
     {
         "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/drawable/ic_add.png",

@@ -381,9 +381,15 @@ public class TabsFragmentActivity extends ActionBarActivity {
 
             if (requestCode == 0) {
                 if(resultCode == Activity.RESULT_OK) {
-                    categoriesFragment.onActivityResult(requestCode,resultCode,data);
-                    compareFragment.onActivityResult(requestCode,resultCode,data);
-                    wishlistFragment.onActivityResult(requestCode,resultCode,data);
+                    if(categoriesFragment.getActivity() != null) {
+                        categoriesFragment.onActivityResult(requestCode,resultCode,data);
+                    }
+                    if(compareFragment.getActivity() != null) {
+                        compareFragment.onActivityResult(requestCode,resultCode,data);
+                    }
+                    if(wishlistFragment.getActivity() != null) {
+                        wishlistFragment.onActivityResult(requestCode,resultCode,data);
+                    }
                 }
             }
         } catch (Exception ex) {

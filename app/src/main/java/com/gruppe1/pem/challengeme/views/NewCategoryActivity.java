@@ -23,33 +23,38 @@ import android.widget.TextView;
 
 import com.gruppe1.pem.challengeme.Category;
 import com.gruppe1.pem.challengeme.DefaultSize;
+import com.gruppe1.pem.challengeme.HSVColorPickerDialog;
 import com.gruppe1.pem.challengeme.R;
 import com.gruppe1.pem.challengeme.adapters.DefaultSizesAdapter;
 import com.gruppe1.pem.challengeme.adapters.IconsGridOverlayAdapter;
-import com.gruppe1.pem.challengeme.adapters.ParentCategoryAdapter;
+import com.gruppe1.pem.challengeme.helpers.ClickToSelectEditText;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-
 public class NewCategoryActivity extends AppCompatActivity {
 
     private EditText newCategory_name;
     private Spinner categoryDefaultSize;
-    private Spinner categoryParent;
+    private ClickToSelectEditText categoryParent;
     private ImageView categoryIcon;
+    private View categoryColor;
     private Bundle extras;
 
     private String iconName;
     private SharedPreferences sharedPreferences;
 
-    private  ParentCategoryAdapter parentAdapter;
+//    private  ParentCategoryAdapter parentAdapter;
 
     private int categoryId;
     private int parentCategoryId;
-    private Category parentCategory;
+    private int categoryColorHex ;
+    private Category parentCategory = null;
+
+//    private ColorsGridOverlayAdapter gridColorsAdapter;
+//    private AlertDialog colorsAlertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +72,9 @@ public class NewCategoryActivity extends AppCompatActivity {
 
         newCategory_name = (EditText) findViewById(R.id.categoryName);
         categoryDefaultSize = (Spinner) findViewById(R.id.categoryDefaultSize);
-        categoryParent = (Spinner) findViewById(R.id.categoryParent);
+        categoryParent = (ClickToSelectEditText) findViewById(R.id.categoryParent);
         categoryIcon = (ImageView) findViewById(R.id.categoryIcon);
+        categoryColor = (View) findViewById(R.id.categoryColor);
 
         String defaultSize1Value = sharedPreferences.getString(Constants.KEY_DS_1_NAME, "");
         String defaultSize2Value = sharedPreferences.getString(Constants.KEY_DS_2_NAME, "");
@@ -92,19 +98,18 @@ public class NewCategoryActivity extends AppCompatActivity {
         });
 
         if (extras != null) {
-            if(extras.getInt("parent_category_id") != 0) {
-                parentCategoryId = extras.getInt("parent_category_id");
+            if(extras.getInt(Constants.EXTRA_PARENT_CATEGORY_ID) != 0) {
+                parentCategoryId = extras.getInt(Constants.EXTRA_PARENT_CATEGORY_ID);
                 DataBaseHelper dbHelper = new DataBaseHelper(getApplicationContext());
                 dbHelper.init();
                 parentCategory = new Category(this, parentCategoryId, dbHelper);
+                categoryColorHex = Integer.parseInt(parentCategory.getColor(), 16) + 0xFF000000;
                 dbHelper.close();
 
             }
-            System.out.println("cat id: " + extras.getInt("category_id"));
-            System.out.println("parent cat id: " + extras.getInt("parent_category_id"));
-            if(extras.getInt("category_id") != 0) {
+            if(extras.getInt(Constants.EXTRA_CATEGORY_ID) != 0) {
                 //edit category
-                categoryId = extras.getInt("category_id");
+                categoryId = extras.getInt(Constants.EXTRA_CATEGORY_ID);
                 DataBaseHelper dbHelper = new DataBaseHelper(getApplicationContext());
                 dbHelper.init();
 
@@ -112,6 +117,7 @@ public class NewCategoryActivity extends AppCompatActivity {
 
                 setTitle("Edit " + editCategory.getName());
                 newCategory_name.setText(editCategory.getName());
+                categoryColorHex = Integer.parseInt(editCategory.getColor(), 16) + 0xFF000000;
 
                 iconName = editCategory.getIcon();
                 int iconId = getResources().getIdentifier(editCategory.getIcon(), "drawable", "com.gruppe1.pem.challengeme");
@@ -137,14 +143,48 @@ public class NewCategoryActivity extends AppCompatActivity {
 
                 dbHelper.close();
             }
+        } else {
+            categoryColorHex = getResources().getColor(R.color.gray05);
         }
+        categoryColor.setBackgroundColor(categoryColorHex);
+        categoryColor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                new HSVColorPickerDialog(NewCategoryActivity.this, categoryColorHex,
+                      new HSVColorPickerDialog.OnColorSelectedListener() {
+                          @Override
+                          public void colorSelected(Integer color) {
+                              // Do something with the selected color
+                              categoryColorHex = color;
+                              categoryColor.setBackgroundColor(categoryColorHex);
+                          }
+                      }).show();
+            }
+        });
 
         ArrayList<Category> allCategories = Category.getAllCategories(this);
-        parentAdapter = new ParentCategoryAdapter(this, android.R.layout.simple_spinner_item, allCategories);
-        parentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        categoryParent.setAdapter(parentAdapter);
-        if(parentCategoryId != -1) {
-            categoryParent.setSelection(parentAdapter.getPosition(parentCategory)+1);
+
+//        parentAdapter = new ParentCategoryAdapter(this, android.R.layout.simple_spinner_item, allCategories);
+//        parentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        categoryParent.setItems(allCategories);
+        categoryParent.setOnItemSelectedListener(new ClickToSelectEditText.OnItemSelectedListener<Category>() {
+            @Override
+            public void onItemSelectedListener(Category category, int selectedIndex) {
+                if(category != null && category.getId() > 0) {
+                    parentCategory = category;
+                    parentCategoryId = parentCategory.getId();
+                } else {
+                    parentCategory = null;
+                    parentCategoryId = -1;
+                }
+            }
+        });
+        if(parentCategory != null) {
+            System.out.println("parentCategory.toString()");
+            System.out.println(parentCategory.getName());
+            categoryParent.setSelection(categoryParent.getPosition(parentCategory));
             categoryDefaultSize.setSelection(parentCategory.getDefaultSizeType()+1);
         }
     }
@@ -211,24 +251,24 @@ public class NewCategoryActivity extends AppCompatActivity {
         editCategory.setNameEn(newCategory_name.getText().toString());
         editCategory.setNameDe(newCategory_name.getText().toString());
         editCategory.setDefaultSizeType(categoryDefaultSize.getSelectedItemPosition() - 1);
-        editCategory.setColor("5d5d5d");
-        if(categoryParent.getSelectedItemPosition() == 0) {
+        editCategory.setColor(String.format("%06X", (0xFFFFFF & categoryColorHex)));
+        if(parentCategory == null) {
             editCategory.setParentCategoryId(-1);
         } else {
-            editCategory.setParentCategoryId(parentAdapter.getItem(categoryParent.getSelectedItemPosition()).getId());
+            editCategory.setParentCategoryId(parentCategory.getId());
         }
         editCategory.setIcon(iconName);
         editCategory.save();
 
         db_helper.close();
 
-        // TODO: send parent cat id back
         // sending new Item back to CategoriesFragment for actualizing list view
         Intent i = new Intent();
         i.putExtra("categoryName", editCategory.getName());
         i.putExtra("defaultSize", editCategory.getDefaultSizeType());
         i.putExtra("icon", editCategory.getIcon());
         i.putExtra("categoryId", editCategory.getId());
+        i.putExtra("categoryParentId", editCategory.getParentCategoryId());
         i.putExtra("color", editCategory.getColor());
 
         setResult(Activity.RESULT_OK, i);
@@ -244,4 +284,7 @@ public class NewCategoryActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+
 }

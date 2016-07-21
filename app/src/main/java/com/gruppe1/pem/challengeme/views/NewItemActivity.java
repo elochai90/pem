@@ -114,7 +114,6 @@ public class NewItemActivity extends AppCompatActivity {
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_new_item);
-      //        getActionBar().setTitle(R.string.title_activity_new_item);
 
       getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
@@ -188,13 +187,6 @@ public class NewItemActivity extends AppCompatActivity {
             com.gruppe1.pem.challengeme.Color.getAllColors(this);
       gridColorsAdapter =
             new ColorsGridOverlayAdapter(this, R.layout.grid_item_overlay_color, allColors);
-
-//      attrCategoryValue.setOnClickListener(new View.OnClickListener() {
-//         @Override
-//         public void onClick(View v) {
-//            setupCategoryOverlay();
-//         }
-//      });
 
       attrColorValue.setOnClickListener(new View.OnClickListener() {
          @Override

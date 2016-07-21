@@ -45,6 +45,7 @@
     <string name="nav_drawer_title">Menu</string>
     <string name="new_category_desc_icon">category icon</string>
     <string name="new_category_hint_name">Category Name</string>
+    <string name="new_category_label_color">Color:</string>
     <string name="new_category_label_defaultSize">Default size:</string>
     <string name="new_category_label_icon">Icon:</string>
     <string name="new_category_label_name">Name:</string>

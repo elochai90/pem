@@ -68,12 +68,12 @@
         "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/src/main/res/mipmap-hdpi/weather_fog.png"
     },
     {
-        "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/mipmap-hdpi-v4/weather_clouds.png",
-        "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/src/main/res/mipmap-hdpi/weather_clouds.png"
-    },
-    {
         "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/mipmap-hdpi-v4/weather_snow_old.png",
         "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/src/main/res/mipmap-hdpi/weather_snow_old.png"
+    },
+    {
+        "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/mipmap-hdpi-v4/weather_clouds.png",
+        "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/src/main/res/mipmap-hdpi/weather_clouds.png"
     },
     {
         "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/mipmap-hdpi-v4/weather_heavysunrain.png",

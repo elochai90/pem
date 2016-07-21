@@ -77,7 +77,6 @@ public class WishlistFragment extends Fragment {
       listView.setLayoutManager(linearLayoutManagerList);
       listView.setHasFixedSize(true);
 
-      mDataset = new ArrayList<>();
       initDataset();
 
       defaultRecyclerListAdapter =
@@ -147,6 +146,7 @@ public class WishlistFragment extends Fragment {
     * initializes the dataset
     */
    private void initDataset() {
+      mDataset = new ArrayList<>();
       mDataset.clear();
 
       ArrayList<Item> allWishlistItems =

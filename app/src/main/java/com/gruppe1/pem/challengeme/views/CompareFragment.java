@@ -128,7 +128,6 @@ public class CompareFragment extends Fragment {
             savedInstanceState.getBoolean(Constants.KEY_VIEW_COMPARE_AS_LIST, true);
 
       setHasOptionsMenu(true);
-
       sharedPreferences =
             getActivity().getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
       editor = sharedPreferences.edit();

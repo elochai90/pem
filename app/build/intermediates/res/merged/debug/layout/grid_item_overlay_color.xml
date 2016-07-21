@@ -3,14 +3,13 @@
    xmlns:tools="http://schemas.android.com/tools"
    android:layout_width="match_parent"
    android:layout_height="wrap_content"
-   android:layout_margin="5dp"
    android:minHeight="?android:attr/listPreferredItemHeight"
    tools:layoutgravity="center">
 
    <com.gruppe1.pem.challengeme.SquareImageView
       android:id="@+id/imageView"
-      android:layout_width="fill_parent"
-      android:layout_height="fill_parent"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
       android:layout_alignParentTop="true"
       android:layout_centerHorizontal="true" />
 
@@ -21,9 +20,15 @@
       android:layout_alignBottom="@id/imageView"
       android:background="@color/grey_transparent"
       android:gravity="center_vertical"
-      android:paddingEnd="7dp"
-      android:paddingStart="7dp"
-      android:textColor="@android:color/white"
+      android:paddingEnd="@dimen/margin_small"
+      android:paddingStart="@dimen/margin_small"
+      android:textColor="@color/primary_text_light"
       android:textSize="16sp" />
+
+   <!-- TODO: not working! -->
+   <ImageView
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:src="@drawable/selector_grid_item_overlay" />
 
 </RelativeLayout>

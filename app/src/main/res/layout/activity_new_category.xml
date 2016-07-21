@@ -1,141 +1,197 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:app="http://schemas.android.com/apk/res-auto"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent">
 
+   <android.support.design.widget.AppBarLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+      <android.support.v7.widget.Toolbar
+         android:id="@+id/toolbar"
+         android:layout_width="match_parent"
+         android:layout_height="?attr/actionBarSize"
+         android:background="@color/primary"
+         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+   </android.support.design.widget.AppBarLayout>
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/primary"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
-    </android.support.design.widget.AppBarLayout>
+   <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <LinearLayout
+      <!--<LinearLayout-->
+         <!--android:id="@+id/categoryNameLayout"-->
+         <!--android:layout_width="match_parent"-->
+         <!--android:layout_height="wrap_content"-->
+         <!--android:orientation="horizontal"-->
+         <!--android:paddingLeft="10dp"-->
+         <!--android:paddingRight="10dp">-->
+         <android.support.design.widget.TextInputLayout
             android:id="@+id/categoryNameLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
-            <TextView
-                android:text="@string/new_category_label_name"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"/>
+            android:layout_height="wrap_content">
+
             <EditText
-                android:id="@+id/categoryName"
-                android:singleLine="true"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:textSize="18sp"
-                android:hint="@string/new_category_hint_name" />
-        </LinearLayout>
+               android:id="@+id/categoryName"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:hint="@string/new_category_label_name" />
 
-        <View
-            android:id="@+id/categoryNameDivider"
-            android:layout_below="@id/categoryNameLayout"
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:background="#c0c0c0"/>
+         </android.support.design.widget.TextInputLayout>
+         <!--<TextView-->
+            <!--android:layout_width="150dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/new_category_label_name"-->
+            <!--android:textSize="18sp" />-->
 
-        <LinearLayout
-            android:id="@+id/categoryParentLayout"
-            android:layout_below="@id/categoryNameDivider"
+         <!--<EditText-->
+            <!--android:id="@+id/categoryName"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="60dp"-->
+            <!--android:hint="@string/new_category_hint_name"-->
+            <!--android:singleLine="true"-->
+            <!--android:textSize="18sp" />-->
+      <!--</LinearLayout>-->
+
+      <!--<View-->
+         <!--android:id="@+id/categoryNameDivider"-->
+         <!--android:layout_width="fill_parent"-->
+         <!--android:layout_height="1dp"-->
+         <!--android:layout_below="@id/categoryNameLayout"-->
+         <!--android:background="#c0c0c0" />-->
+      <android.support.design.widget.TextInputLayout
+         android:layout_below="@id/categoryNameLayout"
+         android:id="@+id/categoryParentLayout"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content">
+
+         <com.gruppe1.pem.challengeme.helpers.ClickToSelectEditText
+            android:id="@+id/categoryParent"
+            android:singleLine="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
-            <TextView
-                android:text="@string/new_category_label_parent"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"/>
-            <Spinner
-                android:id="@+id/categoryParent"
-                android:layout_width="fill_parent"
-                android:layout_height="60dp">
-            </Spinner>
-        </LinearLayout>
+            android:hint="@string/new_category_label_parent" />
+      </android.support.design.widget.TextInputLayout>
+      <!--<LinearLayout-->
+         <!--android:id="@+id/categoryParentLayout"-->
+         <!--android:layout_width="match_parent"-->
+         <!--android:layout_height="wrap_content"-->
+         <!--android:layout_below="@id/categoryNameDivider"-->
+         <!--android:orientation="horizontal"-->
+         <!--android:paddingLeft="10dp"-->
+         <!--android:paddingRight="10dp">-->
 
-        <View
-            android:id="@+id/categoryParentDivider"
-            android:layout_below="@id/categoryParentLayout"
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:background="#c0c0c0"/>
+         <!--<TextView-->
+            <!--android:layout_width="150dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/new_category_label_parent"-->
+            <!--android:textSize="18sp" />-->
 
-        <LinearLayout
-            android:id="@+id/categoryDefaultSizeLayout"
-            android:layout_width="match_parent"
+         <!--<Spinner-->
+            <!--android:id="@+id/categoryParent"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="60dp"></Spinner>-->
+      <!--</LinearLayout>-->
+
+      <View
+         android:id="@+id/categoryParentDivider"
+         android:layout_width="fill_parent"
+         android:layout_height="1dp"
+         android:layout_below="@id/categoryParentLayout"
+         android:background="#c0c0c0" />
+
+      <LinearLayout
+         android:id="@+id/categoryDefaultSizeLayout"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_below="@id/categoryParentDivider"
+         android:orientation="horizontal"
+         android:paddingLeft="10dp"
+         android:paddingRight="10dp">
+
+         <TextView
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/categoryParentDivider"
-            android:orientation="horizontal"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
-            <TextView
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:text="@string/new_category_label_defaultSize"
-                android:textSize="18sp"/>
-            <Spinner
-                android:id="@+id/categoryDefaultSize"
-                android:layout_width="fill_parent"
-                android:layout_height="60dp">
-            </Spinner>
-        </LinearLayout>
+            android:text="@string/new_category_label_defaultSize"
+            android:textSize="18sp" />
 
-        <View
-            android:id="@+id/categoryDefaultSizeDivider"
-            android:layout_below="@id/categoryDefaultSizeLayout"
+         <Spinner
+            android:id="@+id/categoryDefaultSize"
             android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:background="#c0c0c0"/>
+            android:layout_height="60dp"></Spinner>
+      </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/categoryIconLayout"
-            android:layout_width="match_parent"
+      <View
+         android:id="@+id/categoryDefaultSizeDivider"
+         android:layout_width="fill_parent"
+         android:layout_height="1dp"
+         android:layout_below="@id/categoryDefaultSizeLayout"
+         android:background="#c0c0c0" />
+
+      <LinearLayout
+         android:id="@+id/categoryIconLayout"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_below="@id/categoryDefaultSizeDivider"
+         android:orientation="horizontal"
+         android:paddingLeft="10dp"
+         android:paddingRight="10dp">
+
+         <TextView
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/categoryDefaultSizeDivider"
-            android:orientation="horizontal"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
-            <TextView
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="@string/new_category_label_icon"
-                android:textSize="18sp"/>
-            <ImageView
-                android:id="@+id/categoryIcon"
-                android:src="@drawable/kleiderbuegel"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:contentDescription="@string/new_category_desc_icon">
-            </ImageView>
-        </LinearLayout>
+            android:layout_gravity="center_vertical"
+            android:text="@string/new_category_label_icon"
+            android:textSize="18sp" />
 
-        <View
-            android:layout_below="@id/categoryIconLayout"
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:background="#c0c0c0"/>
+         <ImageView
+            android:id="@+id/categoryIcon"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:contentDescription="@string/new_category_desc_icon"
+            android:background="@drawable/selector_list_item"
+            android:padding="@dimen/margin_small"
+            android:src="@drawable/kleiderbuegel"/>
+      </LinearLayout>
 
-    </RelativeLayout>
+      <View
+         android:layout_width="fill_parent"
+         android:layout_height="1dp"
+         android:layout_below="@id/categoryIconLayout"
+         android:background="#c0c0c0" />
 
+      <LinearLayout
+         android:id="@+id/categoryColorLayout"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_below="@id/categoryIconLayout"
+         android:orientation="horizontal"
+         android:paddingLeft="10dp"
+         android:paddingRight="10dp">
+
+         <TextView
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/new_category_label_color"
+            android:textSize="18sp" />
+
+         <View
+            android:id="@+id/categoryColor"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="@color/gray00"></View>
+      </LinearLayout>
+
+      <View
+         android:layout_width="fill_parent"
+         android:layout_height="1dp"
+         android:layout_below="@id/categoryColorLayout"
+         android:background="#c0c0c0" />
+
+   </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

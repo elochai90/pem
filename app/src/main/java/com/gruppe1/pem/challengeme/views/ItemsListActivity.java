@@ -181,7 +181,7 @@ public class ItemsListActivity extends AppCompatActivity {
          public void onClick(View v) {
             Intent intent = new Intent();
             intent.setClassName(getPackageName(), getPackageName() + ".views.NewCategoryActivity");
-            intent.putExtra("parent_category_id", categoryId);
+            intent.putExtra(Constants.EXTRA_PARENT_CATEGORY_ID, categoryId);
             startActivityForResult(intent, 1);
             menu.close(false);
          }
@@ -453,8 +453,16 @@ public class ItemsListActivity extends AppCompatActivity {
                            getPackageName() + ".views.NewCategoryActivity");
                      int categoryId =
                            (int) defaultRecyclerListAdapter.getItemId((int) selectedItem[0]);
-                     intent.putExtra("category_id", categoryId);
+                     DataBaseHelper db_helper =
+                           new DataBaseHelper(getApplicationContext());
+                     db_helper.init();
 
+                     Category category =
+                           new Category(getApplicationContext(), categoryId, db_helper);
+
+                     db_helper.close();
+                     intent.putExtra(Constants.EXTRA_CATEGORY_ID, category.getId());
+                     intent.putExtra(Constants.EXTRA_PARENT_CATEGORY_ID, category.getParentCategoryId());
                      startActivityForResult(intent, 1);
                   }
                })
