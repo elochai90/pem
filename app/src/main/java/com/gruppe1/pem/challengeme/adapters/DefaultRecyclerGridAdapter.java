@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,9 +28,10 @@ import java.util.ArrayList;
  * Array adapter to fill a default list view
  */
 public class DefaultRecyclerGridAdapter
-      extends RecyclerView.Adapter<DefaultRecyclerGridAdapter.ViewHolder> {
+      extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
    private Context context;
    private int layoutResourceId;
+   private int layoutResourceCategoryId;
    private ArrayList<ListItemIconName> data = new ArrayList<>();
    private boolean isCategory;
    private PicassoSingleton picassoSingleton;
@@ -38,10 +40,14 @@ public class DefaultRecyclerGridAdapter
    private View.OnClickListener onItemClickListener;
    private View.OnClickListener onIcMoreClickListener;
 
-   public DefaultRecyclerGridAdapter(Context context, int layoutResourceId,
+   private final int TYPE_CATEGORY = 0;
+   private final int TYPE_ITEM = 1;
+
+   public DefaultRecyclerGridAdapter(Context context, int layoutResourceId, int layoutResourceCategoryId,
          ArrayList<ListItemIconName> data, boolean isCategory) {
       super();
       this.layoutResourceId = layoutResourceId;
+      this.layoutResourceCategoryId = layoutResourceCategoryId;
       this.context = context;
       this.data = data;
       this.isCategory = isCategory;
@@ -59,34 +65,55 @@ public class DefaultRecyclerGridAdapter
    }
 
    @Override
-   public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-      View v = LayoutInflater.from(parent.getContext())
-            .inflate(layoutResourceId, parent, false);
-      ViewHolder vh = new ViewHolder(v);
+   public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+      RecyclerView.ViewHolder vh;
+      if(viewType == TYPE_CATEGORY) {
+         View v = LayoutInflater.from(parent.getContext())
+               .inflate(layoutResourceCategoryId, parent, false);
+         vh = new ViewHolderCategory(v);
+      } else {
+         View v = LayoutInflater.from(parent.getContext())
+               .inflate(layoutResourceId, parent, false);
+         vh = new ViewHolder(v);
+      }
       return vh;
    }
 
    @Override
-   public void onBindViewHolder(ViewHolder holder, int position) {
+   public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
       final ListItemIconName item = data.get(position);
+      int viewType = viewHolder.getItemViewType();
 
-      holder.imageTitle.setText(item.getName());
-
-      if (isCategory || item.getItemFile() == null || item.isCategoryElement()) {
+      if(viewType == TYPE_CATEGORY) {
+         ViewHolderCategory holder = (ViewHolderCategory) viewHolder;
+         holder.imageTitle.setText(item.getName());
          Category category = new Category(this.context, item.getElementId(), this.dbHelper);
-         holder.textContainer.setBackgroundColor(
-               Integer.parseInt(category.getColor(), 16) + 0xFF000000);
+         int colorHex = Integer.parseInt(category.getColor(), 16) + 0xFF000000;
+         float[] hsv = new float[3];
+         android.graphics.Color.colorToHSV(colorHex, hsv);
+         if(hsv[2] > 0.75f) {
+            hsv[2] -= 0.25f;
+         }
+         colorHex = android.graphics.Color.HSVToColor(hsv);
+         holder.textContainer.setBackgroundColor(colorHex);
          holder.image.setImageResource(item.getIcon());
-      } else {
-         picassoSingleton.setImage(item.getItemFile(), Constants.LIST_VIEW_IMAGE_WIDTH,
-               Constants.LIST_VIEW_IMAGE_HEIGHT, holder.image);
-      }
-
-      if (isCategory || item.isCategoryElement()) {
          holder.rightTextView.setText(
                Item.getItemsCountByCategoryId(context, item.getElementId(), false) + "");
-         holder.listItemRatingBar.setVisibility(View.GONE);
-      } else {
+         holder.moreButton.setTag(position);
+         holder.itemView.setOnClickListener(onItemClickListener);
+         holder.moreButton.setOnClickListener(onIcMoreClickListener);
+
+      } else if(viewType == TYPE_ITEM) {
+         ViewHolder holder = (ViewHolder) viewHolder;
+         holder.imageTitle.setText(item.getName());
+         if(item.getItemFile() == null) {
+            Category category = new Category(this.context, item.getElementId(), this.dbHelper);
+            int iconId = this.context.getResources().getIdentifier(category.getIcon(), "drawable", "com.gruppe1.pem.challengeme");
+            holder.image.setImageResource(iconId);
+         } else {
+            picassoSingleton.setImage(item.getItemFile(), Constants.LIST_VIEW_IMAGE_WIDTH,
+                  Constants.LIST_VIEW_IMAGE_HEIGHT, holder.image);
+         }
          dbHelper.setTable(Constants.ITEMS_DB_TABLE);
          Item listItem = new Item(context, item.getElementId(), dbHelper);
          dbHelper.setTable(Constants.COLORS_DB_TABLE);
@@ -118,19 +145,38 @@ public class DefaultRecyclerGridAdapter
                colorHex = Integer.parseInt(allAttributes.get(i).getValue().toString());
             }
          }
-         holder.rightTextView.setText(secondLineText);
+         holder.secondLineTextView.setText(secondLineText);
+         holder.rightTextView.setVisibility(View.GONE);
 
-         holder.listItemRatingBar.setRating(listItem.getRating());
+         if(listItem.getRating() > 0.0f) {
+            holder.listItemRatingBar.setRating(listItem.getRating());
+         } else {
+            holder.listItemRatingBar.setVisibility(View.GONE);
+         }
          if(colorHex == -1) {
             Color color = new Color(context, listItem.getPrimaryColorId(), dbHelper);
             colorHex = android.graphics.Color.parseColor(color.getHexColor());
+         } float[] hsv = new float[3];
+         android.graphics.Color.colorToHSV(colorHex, hsv);
+         if(hsv[2] > 0.75f) {
+            hsv[2] -= 0.25f;
          }
+         colorHex = android.graphics.Color.HSVToColor(hsv);
          holder.textContainer.setBackgroundColor(colorHex);
-      }
+         holder.moreButton.setTag(position);
+         holder.itemView.setOnClickListener(onItemClickListener);
+         holder.moreButton.setOnClickListener(onIcMoreClickListener);
 
-      holder.moreButton.setTag(position);
-      holder.itemView.setOnClickListener(onItemClickListener);
-      holder.moreButton.setOnClickListener(onIcMoreClickListener);
+      }
+   }
+
+   @Override
+   public int getItemViewType(int position) {
+      if(data.get(position).isCategoryElement() || isCategory) {
+         return TYPE_CATEGORY;
+      } else {
+         return TYPE_ITEM;
+      }
    }
 
    @Override
@@ -152,6 +198,8 @@ public class DefaultRecyclerGridAdapter
       CardView itemView;
       TextView imageTitle;
       TextView rightTextView;
+      TextView secondLineTextView;
+      LinearLayout secondLine;
       ImageView image;
       ImageView moreButton;
       RatingBar listItemRatingBar;
@@ -162,9 +210,30 @@ public class DefaultRecyclerGridAdapter
          this.itemView = (CardView) itemView;
          imageTitle = (TextView) itemView.findViewById(R.id.textView);
          rightTextView = (TextView) itemView.findViewById(R.id.rightTextView);
+         secondLineTextView = (TextView) itemView.findViewById(R.id.secondLineTextView);
+         secondLine = (LinearLayout) itemView.findViewById(R.id.second_line);
          image = (ImageView) itemView.findViewById(R.id.imageView);
          moreButton = (ImageView) itemView.findViewById(R.id.ic_more);
          listItemRatingBar = (RatingBar) itemView.findViewById(R.id.listItemRatingBar);
+         textContainer = (RelativeLayout) itemView.findViewById(R.id.text_container);
+      }
+   }
+
+   public static class ViewHolderCategory extends RecyclerView.ViewHolder {
+      CardView itemView;
+      TextView imageTitle;
+      TextView rightTextView;
+      ImageView image;
+      ImageView moreButton;
+      RelativeLayout textContainer;
+
+      public ViewHolderCategory(View itemView) {
+         super(itemView);
+         this.itemView = (CardView) itemView;
+         imageTitle = (TextView) itemView.findViewById(R.id.textView);
+         rightTextView = (TextView) itemView.findViewById(R.id.rightTextView);
+         image = (ImageView) itemView.findViewById(R.id.imageView);
+         moreButton = (ImageView) itemView.findViewById(R.id.ic_more);
          textContainer = (RelativeLayout) itemView.findViewById(R.id.text_container);
       }
    }

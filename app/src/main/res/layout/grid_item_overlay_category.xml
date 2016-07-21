@@ -1,0 +1,32 @@
+<RelativeLayout android:id="@+id/gridItemView"
+   xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:tools="http://schemas.android.com/tools"
+   android:layout_width="match_parent"
+   android:layout_height="wrap_content"
+   android:minHeight="?android:attr/listPreferredItemHeight"
+   android:background="@drawable/selector_list_item"
+   tools:layoutgravity="center">
+
+   <com.gruppe1.pem.challengeme.SquareImageView
+      android:id="@+id/imageView"
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+      android:layout_alignParentTop="true"
+      android:layout_centerHorizontal="true"
+      android:layout_margin="@dimen/margin_small" />
+
+   <TextView
+      android:id="@+id/textView"
+      android:layout_width="fill_parent"
+      android:layout_height="30dp"
+      android:background="@drawable/background_grid_item"
+      android:singleLine="true"
+      android:ellipsize="marquee"
+      android:gravity="center_vertical"
+      android:paddingEnd="@dimen/margin_small"
+      android:paddingStart="@dimen/margin_small"
+      android:layout_below="@id/imageView"
+      android:textColor="@color/primary_text_light"
+      android:textSize="16sp" />
+
+</RelativeLayout>

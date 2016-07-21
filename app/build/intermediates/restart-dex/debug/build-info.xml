@@ -4,26 +4,26 @@
     api-level="23"
     density="xxhdpi"
     format="7"
-    timestamp="435430965154481" >
+    timestamp="464380699200714" >
 
     <task
         name="javac"
-        duration="650" />
+        duration="0" />
     <task
         name="instant-run-dex"
         duration="0" />
     <task
         name="instant-run-transform"
-        duration="414" />
+        duration="0" />
     <task
         name="verifier"
-        duration="189" />
+        duration="0" />
 
     <artifact
         location="/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/outputs/apk/app-debug.apk"
         type="MAIN" />
 
-    <build timestamp="435430965154481" >
+    <build timestamp="464380699200714" >
         <artifact
             location="/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/outputs/apk/app-debug.apk"
             type="MAIN" />

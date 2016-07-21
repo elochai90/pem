@@ -100,12 +100,12 @@
         "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/src/main/res/drawable-nodpi/shorts.png"
     },
     {
-        "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/drawable-nodpi-v4/belt_weiss.png",
-        "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/src/main/res/drawable-nodpi/belt_weiss.png"
-    },
-    {
         "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/drawable-nodpi-v4/nail_polish_weiss.png",
         "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/src/main/res/drawable-nodpi/nail_polish_weiss.png"
+    },
+    {
+        "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/drawable-nodpi-v4/belt_weiss.png",
+        "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/src/main/res/drawable-nodpi/belt_weiss.png"
     },
     {
         "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/drawable-nodpi-v4/kleid_weiss.png",
@@ -164,15 +164,15 @@
         "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/src/main/res/drawable-nodpi/top_weiss.png"
     },
     {
+        "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/drawable-nodpi-v4/accessoires.png",
+        "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/src/main/res/drawable-nodpi/accessoires.png"
+    },
+    {
         "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/drawable-nodpi-v4/hose.png",
         "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/src/main/res/drawable-nodpi/hose.png"
     },
     {
         "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/drawable-nodpi-v4/stiefel_weiss.png",
         "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/src/main/res/drawable-nodpi/stiefel_weiss.png"
-    },
-    {
-        "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/drawable-nodpi-v4/accessoires.png",
-        "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/src/main/res/drawable-nodpi/accessoires.png"
     }
 ]

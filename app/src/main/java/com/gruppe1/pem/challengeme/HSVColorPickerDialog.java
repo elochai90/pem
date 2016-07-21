@@ -12,7 +12,6 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
-import android.util.FloatMath;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,419 +20,431 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-
 public class HSVColorPickerDialog extends AlertDialog {
 
-    private static final int PADDING_DP = 15;
+   private static final int PADDING_DP = 15;
 
-    private static final int CONTROL_SPACING_DP = 20;
-    private static final int SELECTED_COLOR_HEIGHT_DP = 40;
-    private static final int BORDER_DP = 1;
-    private static final int BORDER_COLOR = Color.BLACK;
+   private static final int CONTROL_SPACING_DP = 20;
+   private static final int SELECTED_COLOR_HEIGHT_DP = 40;
+   private static final int BORDER_DP = 1;
+   private static final int BORDER_COLOR = Color.BLACK;
 
-    private final OnColorSelectedListener listener;
-    private int selectedColor;
+   private final OnColorSelectedListener listener;
+   private int selectedColor;
 
-    private HSVColorWheel colorWheel;
-    private HSVValueSlider valueSlider;
+   private HSVColorWheel colorWheel;
+   private HSVValueSlider valueSlider;
 
-    private View selectedColorView;
+   private View selectedColorView;
 
-    public interface OnColorSelectedListener {
-        /**
-         * @param color The color code selected, or null if no color.
-         */
-        void colorSelected( Integer color );
-    }
+   public interface OnColorSelectedListener {
+      /**
+       * @param color The color code selected, or null if no color.
+       */
+      void colorSelected(Integer color);
+   }
 
-    public HSVColorPickerDialog(Context context, int initialColor, final OnColorSelectedListener listener) {
-        super(context);
-        this.selectedColor = initialColor;
-        this.listener = listener;
+   public HSVColorPickerDialog(Context context, int initialColor,
+         final OnColorSelectedListener listener) {
+      super(context);
+      this.selectedColor = initialColor;
+      this.listener = listener;
 
+      colorWheel = new HSVColorWheel(context);
+      valueSlider = new HSVValueSlider(context);
+      int padding = (int) (context.getResources()
+            .getDisplayMetrics().density * PADDING_DP);
+      int borderSize = (int) (context.getResources()
+            .getDisplayMetrics().density * BORDER_DP);
+      RelativeLayout layout = new RelativeLayout(context);
 
-        colorWheel = new HSVColorWheel( context );
-        valueSlider = new HSVValueSlider( context );
-        int padding = (int) (context.getResources().getDisplayMetrics().density * PADDING_DP);
-        int borderSize = (int) (context.getResources().getDisplayMetrics().density * BORDER_DP);
-        RelativeLayout layout = new RelativeLayout( context );
+      RelativeLayout.LayoutParams lp_headline =
+            new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+      LayoutInflater li = LayoutInflater.from(context);
+      View headlineView = li.inflate(R.layout.dialog_edit, null);
+      TextView headline = (TextView) headlineView.findViewById(R.id.dialog_headline);
+      headline.setText(context.getString(R.string.item_select_exact_color_overlay_title));
+      headlineView.setId(R.id.overlayHeadlineId);
+      layout.addView(headlineView, lp_headline);
 
+      RelativeLayout.LayoutParams lp =
+            new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+      lp.setMargins(padding, padding, padding, padding);
+      lp.addRule(RelativeLayout.BELOW, R.id.overlayHeadlineId);
+      colorWheel.setListener(new OnColorSelectedListener() {
+         public void colorSelected(Integer color) {
+            valueSlider.setColor(color, true);
+         }
+      });
+      colorWheel.setColor(initialColor);
+      colorWheel.setId(R.id.colorWheel);
+      layout.addView(colorWheel, lp);
 
-        RelativeLayout.LayoutParams lp_headline = new RelativeLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-        LayoutInflater li = LayoutInflater.from(context);
-        View headlineView = li.inflate(R.layout.dialog_edit, null);
-        TextView headline = (TextView) headlineView.findViewById(R.id.dialog_headline);
-        headline.setText(context.getString(R.string.item_select_exact_color_overlay_title));
-        headlineView.setId(R.id.overlayHeadlineId);
-        layout.addView(headlineView, lp_headline);
+      int selectedColorHeight = (int) (context.getResources()
+            .getDisplayMetrics().density * SELECTED_COLOR_HEIGHT_DP);
 
-        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT );
-        lp.setMargins(padding, padding, padding, padding);
-        lp.addRule(RelativeLayout.BELOW, R.id.overlayHeadlineId);
-        colorWheel.setListener( new OnColorSelectedListener() {
-            public void colorSelected(Integer color) {
-                valueSlider.setColor( color, true );
+      FrameLayout valueSliderBorder = new FrameLayout(context);
+      valueSliderBorder.setBackgroundColor(BORDER_COLOR);
+      valueSliderBorder.setPadding(borderSize, borderSize, borderSize, borderSize);
+      valueSliderBorder.setId(R.id.colorSlider);
+      lp = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT,
+            selectedColorHeight + 2 * borderSize);
+      lp.setMargins(padding, 0, padding, padding);
+      lp.addRule(RelativeLayout.BELOW, R.id.colorWheel);
+      layout.addView(valueSliderBorder, lp);
+
+      valueSlider.setColor(initialColor, false);
+      valueSlider.setListener(new OnColorSelectedListener() {
+         @Override
+         public void colorSelected(Integer color) {
+            selectedColor = color;
+            selectedColorView.setBackgroundColor(color);
+         }
+      });
+      valueSliderBorder.addView(valueSlider);
+
+      FrameLayout selectedColorborder = new FrameLayout(context);
+      selectedColorborder.setBackgroundColor(BORDER_COLOR);
+      lp = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT,
+            selectedColorHeight + 2 * borderSize);
+      selectedColorborder.setPadding(borderSize, borderSize, borderSize, borderSize);
+      lp.setMargins(padding, 0, padding, 0);
+      lp.addRule(RelativeLayout.BELOW, R.id.colorSlider);
+      layout.addView(selectedColorborder, lp);
+
+      selectedColorView = new View(context);
+      selectedColorView.setBackgroundColor(selectedColor);
+      selectedColorborder.addView(selectedColorView);
+
+      OnClickListener clickListener = new OnClickListener() {
+         public void onClick(DialogInterface dialog, int which) {
+            switch (which) {
+               case BUTTON_NEGATIVE:
+                  dialog.dismiss();
+                  break;
+               case BUTTON_NEUTRAL:
+                  dialog.dismiss();
+                  listener.colorSelected(-1);
+                  break;
+               case BUTTON_POSITIVE:
+                  listener.colorSelected(selectedColor);
+                  break;
             }
-        } );
-        colorWheel.setColor( initialColor );
-        colorWheel.setId(R.id.colorWheel);
-        layout.addView( colorWheel, lp );
+         }
+      };
+      setButton(BUTTON_NEGATIVE, context.getString(android.R.string.cancel), clickListener);
+      setButton(BUTTON_POSITIVE, context.getString(android.R.string.ok), clickListener);
 
-        int selectedColorHeight = (int) (context.getResources().getDisplayMetrics().density * SELECTED_COLOR_HEIGHT_DP);
+      setView(layout);
+   }
 
-        FrameLayout valueSliderBorder = new FrameLayout( context );
-        valueSliderBorder.setBackgroundColor(BORDER_COLOR);
-        valueSliderBorder.setPadding(borderSize, borderSize, borderSize, borderSize);
-        valueSliderBorder.setId(R.id.colorSlider);
-        lp = new RelativeLayout.LayoutParams( LayoutParams.MATCH_PARENT, selectedColorHeight + 2 * borderSize );
-        lp.setMargins(padding, 0, padding, padding);
-        lp.addRule( RelativeLayout.BELOW, R.id.colorWheel );
-        layout.addView( valueSliderBorder, lp );
+   private static class HSVColorWheel extends View {
 
-        valueSlider.setColor( initialColor, false );
-        valueSlider.setListener( new OnColorSelectedListener() {
-            @Override
-            public void colorSelected(Integer color) {
-                selectedColor = color;
-                selectedColorView.setBackgroundColor( color );
-            }
-        });
-        valueSliderBorder.addView( valueSlider );
+      private static final float SCALE = 2f;
+      private static final float FADE_OUT_FRACTION = 0.03f;
 
-        FrameLayout selectedColorborder = new FrameLayout( context );
-        selectedColorborder.setBackgroundColor( BORDER_COLOR );
-        lp = new RelativeLayout.LayoutParams( LayoutParams.MATCH_PARENT, selectedColorHeight + 2 * borderSize );
-        selectedColorborder.setPadding( borderSize, borderSize, borderSize, borderSize );
-        lp.setMargins(padding, 0, padding, 0);
-        lp.addRule( RelativeLayout.BELOW, R.id.colorSlider );
-        layout.addView( selectedColorborder, lp );
+      private static final int POINTER_LINE_WIDTH_DP = 2;
+      private static final int POINTER_LENGTH_DP = 10;
 
-        selectedColorView = new View( context );
-        selectedColorView.setBackgroundColor( selectedColor );
-        selectedColorborder.addView( selectedColorView );
+      private final Context context;
 
-        OnClickListener clickListener = new OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                    case BUTTON_NEGATIVE:
-                        dialog.dismiss();
-                        break;
-                    case BUTTON_NEUTRAL:
-                        dialog.dismiss();
-                        listener.colorSelected(-1);
-                        break;
-                    case BUTTON_POSITIVE:
-                        listener.colorSelected(selectedColor);
-                        break;
-                }
-            }
-        };
-        setButton( BUTTON_NEGATIVE, context.getString( android.R.string.cancel ), clickListener);
-        setButton( BUTTON_POSITIVE, context.getString( android.R.string.ok ), clickListener);
+      private Rect rect;
+      private Bitmap bitmap;
 
-        setView( layout );
-    }
+      private int[] pixels;
+      private float innerCircleRadius;
+      private float fullCircleRadius;
 
+      private int scaledWidth;
+      private int scaledHeight;
+      private int[] scaledPixels;
 
+      private float scaledInnerCircleRadius;
+      private float scaledFullCircleRadius;
+      private float scaledFadeOutSize;
 
+      private int scale;
+      private int pointerLength;
+      private int innerPadding;
+      private Paint pointerPaint = new Paint();
 
+      private Point selectedPoint = new Point();
+      private OnColorSelectedListener listener;
 
-    private static class HSVColorWheel  extends View {
+      float[] colorHsv = { 0f, 0f, 1f };
 
-        private static final float SCALE = 2f;
-        private static final float FADE_OUT_FRACTION = 0.03f;
+      public HSVColorWheel(Context context, AttributeSet attrs, int defStyle) {
+         super(context, attrs, defStyle);
+         this.context = context;
+         init();
+      }
 
-        private static final int POINTER_LINE_WIDTH_DP = 2;
-        private static final int POINTER_LENGTH_DP = 10;
+      public HSVColorWheel(Context context, AttributeSet attrs) {
+         super(context, attrs);
+         this.context = context;
+         init();
+      }
 
-        private final Context context;
+      public HSVColorWheel(Context context) {
+         super(context);
+         this.context = context;
+         init();
+      }
 
-        private Rect rect;
-        private Bitmap bitmap;
+      private void init() {
+         float density = context.getResources()
+               .getDisplayMetrics().density;
+         scale = (int) (density * SCALE);
+         pointerLength = (int) (density * POINTER_LENGTH_DP);
+         pointerPaint.setStrokeWidth((int) (density * POINTER_LINE_WIDTH_DP));
+         innerPadding = pointerLength / 2;
+      }
 
-        private int[] pixels;
-        private float innerCircleRadius;
-        private float fullCircleRadius;
+      public void setListener(OnColorSelectedListener listener) {
+         this.listener = listener;
+      }
 
-        private int scaledWidth;
-        private int scaledHeight;
-        private int[] scaledPixels;
+      public void setColor(int color) {
+         Color.colorToHSV(color, colorHsv);
+         invalidate();
+      }
 
-        private float scaledInnerCircleRadius;
-        private float scaledFullCircleRadius;
-        private float scaledFadeOutSize;
+      @Override
+      protected void onDraw(Canvas canvas) {
+         if (bitmap != null) {
+            canvas.drawBitmap(bitmap, null, rect, null);
+            float hueInPiInterval = colorHsv[0] / 180f * (float) Math.PI;
 
-        private int scale;
-        private int pointerLength;
-        private int innerPadding;
-        private Paint pointerPaint = new Paint();
+            selectedPoint.x = rect.left +
+                  (int) (-Math.cos(hueInPiInterval) * colorHsv[1] * innerCircleRadius +
+                        fullCircleRadius);
+            selectedPoint.y = rect.top +
+                  (int) (-Math.sin(hueInPiInterval) * colorHsv[1] * innerCircleRadius +
+                        fullCircleRadius);
 
-        private Point selectedPoint = new Point();
-        private OnColorSelectedListener listener;
+            canvas.drawLine(selectedPoint.x - pointerLength, selectedPoint.y,
+                  selectedPoint.x + pointerLength, selectedPoint.y, pointerPaint);
+            canvas.drawLine(selectedPoint.x, selectedPoint.y - pointerLength, selectedPoint.x,
+                  selectedPoint.y + pointerLength, pointerPaint);
+         }
+      }
 
-        float[] colorHsv = { 0f, 0f, 1f };
+      @Override
+      protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+         super.onSizeChanged(w, h, oldw, oldh);
 
-        public HSVColorWheel(Context context, AttributeSet attrs, int defStyle) {
-            super(context, attrs, defStyle);
-            this.context = context;
-            init();
-        }
+         rect = new Rect(innerPadding, innerPadding, w - innerPadding, h - innerPadding);
+         bitmap = Bitmap.createBitmap(w - 2 * innerPadding, h - 2 * innerPadding, Config.ARGB_8888);
 
-        public HSVColorWheel(Context context, AttributeSet attrs) {
-            super(context, attrs);
-            this.context = context;
-            init();
-        }
+         fullCircleRadius = Math.min(rect.width(), rect.height()) / 2;
+         innerCircleRadius = fullCircleRadius * (1 - FADE_OUT_FRACTION);
 
-        public HSVColorWheel(Context context) {
-            super(context);
-            this.context = context;
-            init();
-        }
-        private void init() {
-            float density = context.getResources().getDisplayMetrics().density;
-            scale = (int) (density * SCALE);
-            pointerLength = (int) (density * POINTER_LENGTH_DP );
-            pointerPaint.setStrokeWidth(  (int) (density * POINTER_LINE_WIDTH_DP ) );
-            innerPadding = pointerLength / 2;
-        }
+         scaledWidth = rect.width() / scale;
+         scaledHeight = rect.height() / scale;
+         scaledFullCircleRadius = Math.min(scaledWidth, scaledHeight) / 2;
+         scaledInnerCircleRadius = scaledFullCircleRadius * (1 - FADE_OUT_FRACTION);
+         scaledFadeOutSize = scaledFullCircleRadius - scaledInnerCircleRadius;
+         scaledPixels = new int[scaledWidth * scaledHeight];
+         pixels = new int[rect.width() * rect.height()];
 
-        public void setListener( OnColorSelectedListener listener ) {
-            this.listener = listener;
-        }
+         createBitmap();
+      }
 
-        public void setColor( int color ) {
-            Color.colorToHSV(color, colorHsv);
-            invalidate();
-        }
+      private void createBitmap() {
+         int w = rect.width();
+         int h = rect.height();
 
-        @Override
-        protected void onDraw(Canvas canvas) {
-            if ( bitmap != null ) {
-                canvas.drawBitmap(bitmap, null, rect, null);
-                float hueInPiInterval = colorHsv[0] / 180f * (float)Math.PI;
+         float[] hsv = new float[] { 0f, 0f, 1f };
+         int alpha;
 
-                selectedPoint.x = rect.left + (int) (-FloatMath.cos( hueInPiInterval ) * colorHsv[1] * innerCircleRadius + fullCircleRadius);
-                selectedPoint.y = rect.top + (int) (-FloatMath.sin( hueInPiInterval ) * colorHsv[1] * innerCircleRadius + fullCircleRadius);
-
-                canvas.drawLine( selectedPoint.x - pointerLength, selectedPoint.y, selectedPoint.x + pointerLength, selectedPoint.y, pointerPaint );
-                canvas.drawLine( selectedPoint.x, selectedPoint.y - pointerLength, selectedPoint.x, selectedPoint.y + pointerLength, pointerPaint );
-            }
-        }
-
-        @Override
-        protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-            super.onSizeChanged(w, h, oldw, oldh);
-
-            rect = new Rect( innerPadding, innerPadding, w - innerPadding, h - innerPadding );
-            bitmap = Bitmap.createBitmap( w - 2 * innerPadding, h - 2 * innerPadding, Config.ARGB_8888 );
-
-            fullCircleRadius = Math.min( rect.width(), rect.height() ) / 2;
-            innerCircleRadius = fullCircleRadius * ( 1 - FADE_OUT_FRACTION );
-
-            scaledWidth = rect.width() / scale;
-            scaledHeight = rect.height() / scale;
-            scaledFullCircleRadius = Math.min( scaledWidth, scaledHeight ) / 2;
-            scaledInnerCircleRadius = scaledFullCircleRadius * ( 1 - FADE_OUT_FRACTION );
-            scaledFadeOutSize = scaledFullCircleRadius - scaledInnerCircleRadius;
-            scaledPixels = new int[ scaledWidth * scaledHeight ];
-            pixels = new int[ rect.width() * rect.height() ];
-
-            createBitmap();
-        }
-
-        private void createBitmap() {
-            int w = rect.width();
-            int h = rect.height();
-
-            float[] hsv = new float[] { 0f, 0f, 1f };
-            int alpha;
-
-            int x = (int) -scaledFullCircleRadius, y = (int) -scaledFullCircleRadius;
-            for ( int i = 0; i < scaledPixels.length; i++ ) {
-                if ( i % scaledWidth == 0 ) {
-                    x = (int) -scaledFullCircleRadius;
-                    y++;
-                } else {
-                    x++;
-                }
-
-                double centerDist = Math.sqrt( x*x + y*y );
-                if ( centerDist <= scaledFullCircleRadius ) {
-                    hsv[ 0 ] = (float) (Math.atan2( y, x ) / Math.PI * 180f) + 180;
-                    hsv[ 1 ] = (float) (centerDist / scaledInnerCircleRadius);
-                    if ( centerDist <= scaledInnerCircleRadius ) {
-                        alpha = 255;
-                    } else {
-                        alpha = 255 - (int) ((centerDist - scaledInnerCircleRadius) / scaledFadeOutSize * 255);
-                    }
-                    scaledPixels[ i ] = Color.HSVToColor( alpha, hsv );
-                } else {
-                    scaledPixels[ i ] = 0x00000000;
-                }
+         int x = (int) -scaledFullCircleRadius, y = (int) -scaledFullCircleRadius;
+         for (int i = 0; i < scaledPixels.length; i++) {
+            if (i % scaledWidth == 0) {
+               x = (int) -scaledFullCircleRadius;
+               y++;
+            } else {
+               x++;
             }
 
-            int scaledX, scaledY;
-            for( x = 0; x < w; x++ ) {
-                scaledX = x / scale;
-                if ( scaledX >= scaledWidth ) scaledX = scaledWidth - 1;
-                for ( y = 0; y < h; y++ ) {
-                    scaledY = y / scale;
-                    if ( scaledY >= scaledHeight ) scaledY = scaledHeight - 1;
-                    pixels[ x * h + y ] = scaledPixels[ scaledX * scaledHeight + scaledY ];
-                }
+            double centerDist = Math.sqrt(x * x + y * y);
+            if (centerDist <= scaledFullCircleRadius) {
+               hsv[0] = (float) (Math.atan2(y, x) / Math.PI * 180f) + 180;
+               hsv[1] = (float) (centerDist / scaledInnerCircleRadius);
+               if (centerDist <= scaledInnerCircleRadius) {
+                  alpha = 255;
+               } else {
+                  alpha = 255 -
+                        (int) ((centerDist - scaledInnerCircleRadius) / scaledFadeOutSize * 255);
+               }
+               scaledPixels[i] = Color.HSVToColor(alpha, hsv);
+            } else {
+               scaledPixels[i] = 0x00000000;
             }
+         }
 
-            bitmap.setPixels( pixels, 0, w, 0, 0, w, h );
+         int scaledX, scaledY;
+         for (x = 0; x < w; x++) {
+            scaledX = x / scale;
+            if (scaledX >= scaledWidth) {
+               scaledX = scaledWidth - 1;
+            }
+            for (y = 0; y < h; y++) {
+               scaledY = y / scale;
+               if (scaledY >= scaledHeight) {
+                  scaledY = scaledHeight - 1;
+               }
+               pixels[x * h + y] = scaledPixels[scaledX * scaledHeight + scaledY];
+            }
+         }
 
-            invalidate();
-        }
+         bitmap.setPixels(pixels, 0, w, 0, 0, w, h);
 
-        @Override
-        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            int maxWidth = MeasureSpec.getSize( widthMeasureSpec );
-            int maxHeight = MeasureSpec.getSize( heightMeasureSpec );
+         invalidate();
+      }
 
-            int width, height;
-			/*
+      @Override
+      protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+         int maxWidth = MeasureSpec.getSize(widthMeasureSpec);
+         int maxHeight = MeasureSpec.getSize(heightMeasureSpec);
+
+         int width, height;
+         /*
 			 * Make the view quadratic, with height and width equal and as large as possible
 			 */
-            width = height = Math.min( maxWidth, maxHeight );
+         width = height = Math.min(maxWidth, maxHeight);
 
-            setMeasuredDimension( width, height );
-        }
+         setMeasuredDimension(width, height);
+      }
 
-        public int getColorForPoint( int x, int y, float[] hsv ) {
-            x -= fullCircleRadius;
-            y -= fullCircleRadius;
-            double centerDist = Math.sqrt( x*x + y*y );
-            hsv[ 0 ] = (float) (Math.atan2( y, x ) / Math.PI * 180f) + 180;
-            hsv[ 1 ] = Math.max( 0f, Math.min( 1f, (float) (centerDist / innerCircleRadius) ) );
-            return Color.HSVToColor( hsv );
-        }
+      public int getColorForPoint(int x, int y, float[] hsv) {
+         x -= fullCircleRadius;
+         y -= fullCircleRadius;
+         double centerDist = Math.sqrt(x * x + y * y);
+         hsv[0] = (float) (Math.atan2(y, x) / Math.PI * 180f) + 180;
+         hsv[1] = Math.max(0f, Math.min(1f, (float) (centerDist / innerCircleRadius)));
+         return Color.HSVToColor(hsv);
+      }
 
-        @Override
-        public boolean onTouchEvent(@NonNull MotionEvent event) {
-            int action = event.getActionMasked();
-            switch ( action ) {
-                case MotionEvent.ACTION_DOWN:
-                case MotionEvent.ACTION_MOVE:
-                    if ( listener != null ) {
-                        listener.colorSelected( getColorForPoint( (int)event.getX(), (int)event.getY(), colorHsv ) );
-                    }
-                    invalidate();
-                    return true;
+      @Override
+      public boolean onTouchEvent(@NonNull MotionEvent event) {
+         int action = event.getActionMasked();
+         switch (action) {
+            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_MOVE:
+               if (listener != null) {
+                  listener.colorSelected(
+                        getColorForPoint((int) event.getX(), (int) event.getY(), colorHsv));
+               }
+               invalidate();
+               return true;
+         }
+         return super.onTouchEvent(event);
+      }
+   }
+
+   private static class HSVValueSlider extends View {
+      private OnColorSelectedListener listener;
+      float[] colorHsv = { 0f, 0f, 1f };
+
+      private Rect srcRect;
+      private Rect dstRect;
+      private Bitmap bitmap;
+      private int[] pixels;
+
+      public HSVValueSlider(Context context, AttributeSet attrs, int defStyle) {
+         super(context, attrs, defStyle);
+      }
+
+      public HSVValueSlider(Context context, AttributeSet attrs) {
+         super(context, attrs);
+      }
+
+      public HSVValueSlider(Context context) {
+         super(context);
+      }
+
+      public void setListener(OnColorSelectedListener listener) {
+         this.listener = listener;
+      }
+
+      public void setColor(int color, boolean keepValue) {
+         float oldValue = colorHsv[2];
+         Color.colorToHSV(color, colorHsv);
+         if (keepValue) {
+            colorHsv[2] = oldValue;
+         }
+         if (listener != null) {
+            listener.colorSelected(Color.HSVToColor(colorHsv));
+         }
+         createBitmap();
+      }
+
+      @Override
+      protected void onDraw(Canvas canvas) {
+         if (bitmap != null) {
+            canvas.drawBitmap(bitmap, srcRect, dstRect, null);
+         }
+      }
+
+      @Override
+      protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+         super.onSizeChanged(w, h, oldw, oldh);
+
+         srcRect = new Rect(0, 0, w, 1);
+         dstRect = new Rect(0, 0, w, h);
+         bitmap = Bitmap.createBitmap(w, 1, Config.ARGB_8888);
+         pixels = new int[w];
+         createBitmap();
+      }
+
+      private void createBitmap() {
+         if (bitmap == null) {
+            return;
+         }
+         int w = getWidth();
+
+         float[] hsv = new float[] { colorHsv[0], colorHsv[1], 1f };
+
+         int selectedX = (int) (colorHsv[2] * w);
+
+         float value = 0;
+         float valueStep = 1f / w;
+         for (int x = 0; x < w; x++) {
+            value += valueStep;
+            if (x >= selectedX - 1 && x <= selectedX + 1) {
+               int intVal = 0xFF - (int) (value * 0xFF);
+               int color = intVal * 0x010101 + 0xFF000000;
+               pixels[x] = color;
+            } else {
+               hsv[2] = value;
+               pixels[x] = Color.HSVToColor(hsv);
             }
-            return super.onTouchEvent(event);
-        }
-    }
+         }
 
+         bitmap.setPixels(pixels, 0, w, 0, 0, w, 1);
 
+         invalidate();
+      }
 
-
-    private static class HSVValueSlider extends View {
-        private OnColorSelectedListener listener;
-        float[] colorHsv = { 0f, 0f, 1f };
-
-        private Rect srcRect;
-        private Rect dstRect;
-        private Bitmap bitmap;
-        private int[] pixels;
-
-        public HSVValueSlider(Context context, AttributeSet attrs, int defStyle) {
-            super(context, attrs, defStyle);
-        }
-
-        public HSVValueSlider(Context context, AttributeSet attrs) {
-            super(context, attrs);
-        }
-
-        public HSVValueSlider(Context context) {
-            super(context);
-        }
-
-        public void setListener( OnColorSelectedListener listener ) {
-            this.listener = listener;
-        }
-
-        public void setColor( int color, boolean keepValue ) {
-            float oldValue = colorHsv[2];
-            Color.colorToHSV(color, colorHsv);
-            if ( keepValue ) {
-                colorHsv[2] = oldValue;
-            }
-            if ( listener != null ) {
-                listener.colorSelected( Color.HSVToColor( colorHsv ) );
-            }
-            createBitmap();
-        }
-
-        @Override
-        protected void onDraw(Canvas canvas) {
-            if ( bitmap != null ) {
-                canvas.drawBitmap(bitmap, srcRect, dstRect, null);
-            }
-        }
-
-        @Override
-        protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-            super.onSizeChanged(w, h, oldw, oldh);
-
-            srcRect = new Rect( 0, 0, w, 1 );
-            dstRect = new Rect( 0, 0, w, h );
-            bitmap = Bitmap.createBitmap( w, 1, Config.ARGB_8888 );
-            pixels = new int[ w ];
-            createBitmap();
-        }
-
-        private void createBitmap() {
-            if ( bitmap == null ) {
-                return;
-            }
-            int w = getWidth();
-
-            float[] hsv = new float[] { colorHsv[0], colorHsv[1], 1f };
-
-            int selectedX = (int) (colorHsv[ 2 ] * w);
-
-            float value = 0;
-            float valueStep = 1f / w;
-            for( int x = 0; x < w; x++ ) {
-                value += valueStep;
-                if ( x >= selectedX - 1 && x <= selectedX + 1 ) {
-                    int intVal = 0xFF - (int)( value * 0xFF );
-                    int color = intVal * 0x010101 + 0xFF000000;
-                    pixels[x] = color;
-                } else {
-                    hsv[2] = value;
-                    pixels[x] = Color.HSVToColor( hsv );
-                }
-            }
-
-            bitmap.setPixels( pixels, 0, w, 0, 0, w, 1 );
-
-            invalidate();
-        }
-
-        @Override
-        public boolean onTouchEvent(@NonNull MotionEvent event) {
-            int action = event.getActionMasked();
-            switch ( action ) {
-                case MotionEvent.ACTION_DOWN:
-                case MotionEvent.ACTION_MOVE:
-                    int x = Math.max( 0, Math.min( bitmap.getWidth() - 1, (int)event.getX() ) );
-                    float value = x / (float)bitmap.getWidth();
-                    if ( colorHsv[2] != value ) {
-                        colorHsv[2] = value;
-                        if ( listener != null ) {
-                            listener.colorSelected( Color.HSVToColor( colorHsv ) );
-                        }
-                        createBitmap();
-                        invalidate();
-                    }
-                    return true;
-            }
-            return super.onTouchEvent(event);
-        }
-    }
+      @Override
+      public boolean onTouchEvent(@NonNull MotionEvent event) {
+         int action = event.getActionMasked();
+         switch (action) {
+            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_MOVE:
+               int x = Math.max(0, Math.min(bitmap.getWidth() - 1, (int) event.getX()));
+               float value = x / (float) bitmap.getWidth();
+               if (colorHsv[2] != value) {
+                  colorHsv[2] = value;
+                  if (listener != null) {
+                     listener.colorSelected(Color.HSVToColor(colorHsv));
+                  }
+                  createBitmap();
+                  invalidate();
+               }
+               return true;
+         }
+         return super.onTouchEvent(event);
+      }
+   }
 }

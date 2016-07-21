@@ -9,13 +9,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,6 +29,7 @@ import com.gruppe1.pem.challengeme.adapters.CategoriesGridOverlayAdapter;
 import com.gruppe1.pem.challengeme.adapters.CompareImageAdapter;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
+import com.gruppe1.pem.challengeme.helpers.GridSpacingItemDecoration;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -106,11 +108,11 @@ public class NewCompareActivity extends AppCompatActivity {
             }
          }
       }
-      builder1 = createCategoryOverlay(new AdapterView.OnItemClickListener() {
+      builder1 = createCategoryOverlay(new View.OnClickListener() {
          @Override
-         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+         public void onClick(View view) {
             firstCatItems = Item.getItemsByCategoryId(getApplicationContext(),
-                  upperCategoriesList.get(position)
+                  upperCategoriesList.get((Integer)view.getTag())
                         .getId(),
                   sharedPreferences.getBoolean(Constants.KEY_WISHLIST_IN_COMPARE, false));
 
@@ -135,11 +137,11 @@ public class NewCompareActivity extends AppCompatActivity {
          }
       });
 
-      builder2 = createCategoryOverlay(new AdapterView.OnItemClickListener() {
+      builder2 = createCategoryOverlay(new View.OnClickListener() {
          @Override
-         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+         public void onClick(View view) {
             secontCatItems = Item.getItemsByCategoryId(getApplicationContext(),
-                  upperCategoriesList.get(position)
+                  upperCategoriesList.get((Integer)view.getTag())
                         .getId(),
                   sharedPreferences.getBoolean(Constants.KEY_WISHLIST_IN_COMPARE, false));
 
@@ -227,15 +229,23 @@ public class NewCompareActivity extends AppCompatActivity {
     * @param onItemClickListener the onItemClickListener for the items in the overlay
     * @return the created AlertDialog
     */
-   private AlertDialog createCategoryOverlay(AdapterView.OnItemClickListener onItemClickListener) {
+   private AlertDialog createCategoryOverlay(View.OnClickListener onItemClickListener) {
       final AlertDialog.Builder builder = new AlertDialog.Builder(this);
       LayoutInflater inflater = getLayoutInflater();
 
-      final View dialogView = inflater.inflate(R.layout.dialog_grid, null);
+      final View dialogView = inflater.inflate(R.layout.dialog_recycler_view, null);
       TextView headline = (TextView) dialogView.findViewById(R.id.dialog_headline);
 
       headline.setText(getString(R.string.compare_choose_cat_overlay_title));
-      GridView gridView = (GridView) dialogView.findViewById(R.id.gridView);
+      RecyclerView gridView = (RecyclerView) dialogView.findViewById(R.id.gridView);
+
+      StaggeredGridLayoutManager
+            gridLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+      gridView.setLayoutManager(gridLayoutManager);
+      gridView.setHasFixedSize(false);
+      int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
+      gridView.addItemDecoration(
+            new GridSpacingItemDecoration(3, spacingInPixels, false, 0));
 
       ArrayList<ListItemIconName> catArray = new ArrayList<>();
 
@@ -249,9 +259,10 @@ public class NewCompareActivity extends AppCompatActivity {
       builder.setView(dialogView);
       final AlertDialog alert = builder.create();
       final CategoriesGridOverlayAdapter gridAdapter =
-            new CategoriesGridOverlayAdapter(this, R.layout.grid_item_overlay, catArray);
+            new CategoriesGridOverlayAdapter(this, R.layout.grid_item_overlay_category, catArray);
+      gridAdapter.setOnItemClickListener(onItemClickListener);
       gridView.setAdapter(gridAdapter);
-      gridView.setOnItemClickListener(onItemClickListener);
+//      gridView.setOnItemClickListener(onItemClickListener);
       alert.setButton(DialogInterface.BUTTON_NEGATIVE, getString(android.R.string.cancel),
             new DialogInterface.OnClickListener() {
                @Override

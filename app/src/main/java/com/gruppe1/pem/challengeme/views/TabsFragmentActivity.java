@@ -303,10 +303,10 @@ public class TabsFragmentActivity extends ActionBarActivity {
         mDrawerList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         mDrawerList.setTextFilterEnabled(true);
         ListItemIconName[] navigationDrawerItems = {
-                new ListItemIconName("navdrawer", 0, R.drawable.ic_categories, menuItems[0], null),
-                new ListItemIconName("navdrawer", 0, R.drawable.ic_compare, menuItems[1], null),
-                new ListItemIconName("navdrawer", 0, R.drawable.ic_wishlist, menuItems[2], null),
-                new ListItemIconName("navdrawer", 0, R.drawable.ic_settings, menuItems[3], null)
+                new ListItemIconName("navdrawer", 0, R.drawable.selector_drawer_categories, menuItems[0], null),
+                new ListItemIconName("navdrawer", 0, R.drawable.selector_drawer_compares, menuItems[1], null),
+                new ListItemIconName("navdrawer", 0, R.drawable.selector_drawer_wishlist, menuItems[2], null),
+                new ListItemIconName("navdrawer", 0, R.drawable.selector_drawer_settings, menuItems[3], null)
         };
         mDrawerList.setAdapter(new NavigationDrawerAdapter(this, R.layout.list_item_navigation_drawer, navigationDrawerItems));
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {

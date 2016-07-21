@@ -30,6 +30,7 @@ import com.gruppe1.pem.challengeme.adapters.CompareRecyclerGridAdapter;
 import com.gruppe1.pem.challengeme.adapters.CompareRecyclerListAdapter;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
+import com.gruppe1.pem.challengeme.helpers.GridSpacingItemDecoration;
 
 import java.util.ArrayList;
 
@@ -73,9 +74,12 @@ public class CompareFragment extends Fragment {
       listView.setLayoutManager(linearLayoutManagerList);
       listView.setHasFixedSize(true);
       StaggeredGridLayoutManager gridLayoutManager =
-            new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+            new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
       gridView.setLayoutManager(gridLayoutManager);
-      gridView.setHasFixedSize(true);
+//      gridView.setHasFixedSize(true);
+      int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
+      gridView.addItemDecoration(
+            new GridSpacingItemDecoration(3, spacingInPixels, false, 0));
 
       mDataset = new ArrayList<>();
       initDataset();

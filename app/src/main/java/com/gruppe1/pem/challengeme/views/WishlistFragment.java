@@ -28,6 +28,7 @@ import com.gruppe1.pem.challengeme.R;
 import com.gruppe1.pem.challengeme.adapters.DefaultRecyclerListAdapter;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
+import com.gruppe1.pem.challengeme.helpers.GridSpacingItemDecoration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,10 +63,13 @@ public class WishlistFragment extends Fragment {
       TextView noWishlistItemText = (TextView) rootView.findViewById(R.id.noItemText);
       noWishlistItemText.setText(R.string.no_wishlist_items);
 
-      StaggeredGridLayoutManager gridLayoutManager =
-            new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-      gridView.setLayoutManager(gridLayoutManager);
-      gridView.setHasFixedSize(true);
+//      StaggeredGridLayoutManager gridLayoutManager =
+//            new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+//      gridView.setLayoutManager(gridLayoutManager);
+//      gridView.setHasFixedSize(true);
+//      int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
+//      gridView.addItemDecoration(
+//            new GridSpacingItemDecoration(2, spacingInPixels, false, 0));
       gridView.setVisibility(View.INVISIBLE);
 
       LinearLayoutManager linearLayoutManagerList =
@@ -77,7 +81,7 @@ public class WishlistFragment extends Fragment {
       initDataset();
 
       defaultRecyclerListAdapter =
-            new DefaultRecyclerListAdapter(getActivity(), R.layout.list_item_default, mDataset,
+            new DefaultRecyclerListAdapter(getActivity(), R.layout.list_item_default, R.layout.list_item_category, mDataset,
                   false, true);
       defaultRecyclerListAdapter.setOnItemClickListener(new View.OnClickListener() {
          @Override

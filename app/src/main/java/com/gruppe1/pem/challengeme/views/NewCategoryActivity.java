@@ -19,7 +19,6 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.gruppe1.pem.challengeme.Category;
@@ -166,7 +165,7 @@ public class NewCategoryActivity extends AppCompatActivity {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
 
-        View dialogView = inflater.inflate(R.layout.dialog_grid, null);
+        View dialogView = inflater.inflate(R.layout.dialog_grid_view, null);
         TextView headline = (TextView)dialogView.findViewById(R.id.dialog_headline);
         headline.setText(R.string.new_category_overlay_title);
         GridView gridView = (GridView) dialogView.findViewById(R.id.gridView);
@@ -174,7 +173,7 @@ public class NewCategoryActivity extends AppCompatActivity {
         ArrayList<String> iconsArray = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.category_icons_array)));
         builder.setView(dialogView);
         final AlertDialog alert = builder.create();
-        final IconsGridOverlayAdapter gridAdapter = new IconsGridOverlayAdapter(this, R.layout.grid_item_overlay, iconsArray);
+        final IconsGridOverlayAdapter gridAdapter = new IconsGridOverlayAdapter(this, R.layout.grid_item_overlay_category, iconsArray);
         gridView.setAdapter(gridAdapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -212,6 +211,7 @@ public class NewCategoryActivity extends AppCompatActivity {
         editCategory.setNameEn(newCategory_name.getText().toString());
         editCategory.setNameDe(newCategory_name.getText().toString());
         editCategory.setDefaultSizeType(categoryDefaultSize.getSelectedItemPosition() - 1);
+        editCategory.setColor("5d5d5d");
         if(categoryParent.getSelectedItemPosition() == 0) {
             editCategory.setParentCategoryId(-1);
         } else {
@@ -229,6 +229,7 @@ public class NewCategoryActivity extends AppCompatActivity {
         i.putExtra("defaultSize", editCategory.getDefaultSizeType());
         i.putExtra("icon", editCategory.getIcon());
         i.putExtra("categoryId", editCategory.getId());
+        i.putExtra("color", editCategory.getColor());
 
         setResult(Activity.RESULT_OK, i);
         this.finish();

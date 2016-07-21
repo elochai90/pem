@@ -21,7 +21,7 @@ public class Category {
     private String m_name_de;
     private int m_parent_category_id = Constants.DEFAULT_CATEGORY_ID;
     private String m_icon;
-    private String m_color;
+    private String m_color = "5d5d5d";
     // TODO add default size to sql init
     private int m_defaultSizeType;
     private DataBaseHelper m_dbHelper;

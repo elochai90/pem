@@ -16,8 +16,9 @@ import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -48,6 +49,7 @@ import com.gruppe1.pem.challengeme.adapters.CategoriesGridOverlayAdapter;
 import com.gruppe1.pem.challengeme.adapters.ColorsGridOverlayAdapter;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
+import com.gruppe1.pem.challengeme.helpers.GridSpacingItemDecoration;
 import com.gruppe1.pem.challengeme.helpers.ImageDominantColorExtractor;
 import com.gruppe1.pem.challengeme.helpers.ImageLoader;
 
@@ -95,6 +97,8 @@ public class NewItemActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
 
     private static final int DATE_DIALOG_ID = 999;
+
+    private AlertDialog categoriesAlertDialog;
 
 
     private DatePickerDialog.OnDateSetListener datePickerListener
@@ -160,7 +164,7 @@ public class NewItemActivity extends AppCompatActivity {
             int iconId = getResources().getIdentifier(tmpCat.getIcon(), "drawable", "com.gruppe1.pem.challengeme");
             catArray.add(new ListItemIconName("category", tmpCat.getId(), iconId, tmpCat.getName(), null));
         }
-        gridCateoriesAdapter = new CategoriesGridOverlayAdapter(this, R.layout.grid_item_overlay, catArray);
+        gridCateoriesAdapter = new CategoriesGridOverlayAdapter(this, R.layout.grid_item_overlay_category, catArray);
         attrCategoryValue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -170,7 +174,7 @@ public class NewItemActivity extends AppCompatActivity {
 
         // Setup Colors Adapter
         ArrayList<com.gruppe1.pem.challengeme.Color> allColors = com.gruppe1.pem.challengeme.Color.getAllColors(this);
-        gridColorsAdapter = new ColorsGridOverlayAdapter(this, R.layout.grid_item_overlay, allColors);
+        gridColorsAdapter = new ColorsGridOverlayAdapter(this, R.layout.grid_item_overlay_color, allColors);
 
 
 
@@ -710,37 +714,86 @@ public class NewItemActivity extends AppCompatActivity {
      * creates and shows the overlay to choose a category
      */
     private void setupCategoryOverlay() {
+//        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        LayoutInflater inflater = getLayoutInflater();
+
+//        final View dialogView = inflater.inflate(R.layout.dialog_grid, null);
+//        TextView headline = (TextView)dialogView.findViewById(R.id.dialog_headline);
+//        headline.setText(getString(R.string.item_select_category_overlay_title));
+//        RecyclerView gridView = (RecyclerView) dialogView.findViewById(R.id.gridView);
+
+        categoriesAlertDialog = createCategoryOverlay(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getDb_helper().setTable(Constants.CATEGORIES_DB_TABLE);
+                attrCategorySelected = new Category(getBaseContext(), gridCateoriesAdapter.getItem((Integer)view.getTag()).getElementId(), getDb_helper());
+                attrCategoryValue.setText(gridCateoriesAdapter.getItem((Integer)view.getTag()).getName());
+                ((TextView)attributesView.findViewWithTag("size")).setText(getSizeValueBySizeType(attrCategorySelected.getDefaultSizeType()));
+                categoriesAlertDialog.dismiss();
+            }
+        });
+
+//        gridView.setAdapter(gridCateoriesAdapter);
+
+//        builder.setView(dialogView);
+//        final AlertDialog alert = builder.create();
+//        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//
+//                getDb_helper().setTable(Constants.CATEGORIES_DB_TABLE);
+//                attrCategorySelected = new Category(getBaseContext(), gridCateoriesAdapter.getItem(position).getElementId(), getDb_helper());
+//                attrCategoryValue.setText(gridCateoriesAdapter.getItem(position).getName());
+//                ((TextView)attributesView.findViewWithTag("size")).setText(getSizeValueBySizeType(attrCategorySelected.getDefaultSizeType()));
+//                alert.dismiss();
+//            }
+//        });
+//        alert.setButton(DialogInterface.BUTTON_NEGATIVE, getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                alert.dismiss();
+//            }
+//        });
+        categoriesAlertDialog.show();
+    }
+
+    /**
+     * creates a overlay with categories as grid view
+     *
+     * @param onItemClickListener the onItemClickListener for the items in the overlay
+     * @return the created AlertDialog
+     */
+    private AlertDialog createCategoryOverlay(View.OnClickListener onItemClickListener) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
 
-        final View dialogView = inflater.inflate(R.layout.dialog_grid, null);
-        TextView headline = (TextView)dialogView.findViewById(R.id.dialog_headline);
+        final View dialogView = inflater.inflate(R.layout.dialog_recycler_view, null);
+        TextView headline = (TextView) dialogView.findViewById(R.id.dialog_headline);
         headline.setText(getString(R.string.item_select_category_overlay_title));
-        GridView gridView = (GridView) dialogView.findViewById(R.id.gridView);
+        RecyclerView gridView = (RecyclerView) dialogView.findViewById(R.id.gridView);
 
-        gridView.setAdapter(gridCateoriesAdapter);
+        StaggeredGridLayoutManager
+              gridLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+        gridView.setLayoutManager(gridLayoutManager);
+        gridView.setHasFixedSize(true);
+        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
+        gridView.addItemDecoration(
+              new GridSpacingItemDecoration(3, spacingInPixels, false, 0));
 
         builder.setView(dialogView);
         final AlertDialog alert = builder.create();
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                getDb_helper().setTable(Constants.CATEGORIES_DB_TABLE);
-                attrCategorySelected = new Category(getBaseContext(), gridCateoriesAdapter.getItem(position).getElementId(), getDb_helper());
-                attrCategoryValue.setText(gridCateoriesAdapter.getItem(position).getName());
-                ((TextView)attributesView.findViewWithTag("size")).setText(getSizeValueBySizeType(attrCategorySelected.getDefaultSizeType()));
-                alert.dismiss();
-            }
-        });
+        gridCateoriesAdapter.setOnItemClickListener(onItemClickListener);
+        gridView.setAdapter(gridCateoriesAdapter);
         alert.setButton(DialogInterface.BUTTON_NEGATIVE, getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 alert.dismiss();
             }
         });
-        alert.show();
+        return alert;
     }
+
+
 
 
     /**
@@ -750,7 +803,7 @@ public class NewItemActivity extends AppCompatActivity {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
 
-        final View dialogView = inflater.inflate(R.layout.dialog_grid, null);
+        final View dialogView = inflater.inflate(R.layout.dialog_grid_view, null);
         TextView headline = (TextView)dialogView.findViewById(R.id.dialog_headline);
         headline.setText(getString(R.string.item_select_color_overlay_title));
         GridView gridView = (GridView) dialogView.findViewById(R.id.gridView);

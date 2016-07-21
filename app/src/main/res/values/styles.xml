@@ -56,6 +56,10 @@
         <item name="fab_colorRipple">@color/accent_dark</item>
     </style>
 
+    <style name="WhiteRatingBar" parent="@android:style/Widget.Material.RatingBar.Small">
+        <item name="android:progressTint">@color/white_transparent</item>
+        <item name="android:secondaryProgressTint">@color/transparent</item>
+    </style>
 
 
 </resources>

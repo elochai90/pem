@@ -46,7 +46,7 @@ public class IconsGridOverlayAdapter extends ArrayAdapter<String> {
             row = inflater.inflate(layoutResourceId, parent, false);
             holder = new ViewHolder();
             holder.textView = (TextView) row.findViewById(R.id.textView);
-            holder.textView.setVisibility(View.INVISIBLE);
+            holder.textView.setVisibility(View.GONE);
             holder.imageView = (ImageView) row.findViewById(R.id.imageView);
             row.setTag(holder);
         } else {

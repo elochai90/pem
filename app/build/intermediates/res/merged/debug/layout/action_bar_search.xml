@@ -33,6 +33,6 @@
         android:layout_weight="0.5"
         android:layout_gravity="center"
         android:id="@+id/drawer_imageview_done"
-        android:src="@drawable/abc_btn_rating_star_off_mtrl_alpha"/>
+        android:src="@drawable/accessoires"/><!--abc_btn_rating_star_off_mtrl_alpha-->
 
 </RelativeLayout>

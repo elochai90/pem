@@ -64,7 +64,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:scaleType="centerInside"
-            android:src="@drawable/ic_more"/>
+            android:src="@drawable/ic_more_white"/>
          <TextView
             android:id="@+id/compareName"
             android:layout_width="match_parent"
