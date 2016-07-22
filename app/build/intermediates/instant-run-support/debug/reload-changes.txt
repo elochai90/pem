@@ -1,2 +1,0 @@
-CHANGED,/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/transforms/instantRun/debug/folders/4000/5/enhanced/com/android/tools/fd/runtime/AppPatchesLoaderImpl.class
-CHANGED,/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/transforms/instantRun/debug/folders/4000/5/enhanced/com/gruppe1/pem/challengeme/views/NewCategoryActivity$override.class
