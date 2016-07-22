@@ -22,79 +22,32 @@
       android:layout_height="match_parent"
       app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-      <!--<LinearLayout-->
-         <!--android:id="@+id/categoryNameLayout"-->
-         <!--android:layout_width="match_parent"-->
-         <!--android:layout_height="wrap_content"-->
-         <!--android:orientation="horizontal"-->
-         <!--android:paddingLeft="10dp"-->
-         <!--android:paddingRight="10dp">-->
-         <android.support.design.widget.TextInputLayout
-            android:id="@+id/categoryNameLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-               android:id="@+id/categoryName"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:hint="@string/new_category_label_name" />
-
-         </android.support.design.widget.TextInputLayout>
-         <!--<TextView-->
-            <!--android:layout_width="150dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="@string/new_category_label_name"-->
-            <!--android:textSize="18sp" />-->
-
-         <!--<EditText-->
-            <!--android:id="@+id/categoryName"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="60dp"-->
-            <!--android:hint="@string/new_category_hint_name"-->
-            <!--android:singleLine="true"-->
-            <!--android:textSize="18sp" />-->
-      <!--</LinearLayout>-->
-
-      <!--<View-->
-         <!--android:id="@+id/categoryNameDivider"-->
-         <!--android:layout_width="fill_parent"-->
-         <!--android:layout_height="1dp"-->
-         <!--android:layout_below="@id/categoryNameLayout"-->
-         <!--android:background="#c0c0c0" />-->
       <android.support.design.widget.TextInputLayout
-         android:layout_below="@id/categoryNameLayout"
-         android:id="@+id/categoryParentLayout"
+         android:id="@+id/categoryNameLayout"
          android:layout_width="match_parent"
          android:layout_height="wrap_content">
 
-         <com.gruppe1.pem.challengeme.helpers.ClickToSelectEditText
-            android:id="@+id/categoryParent"
-            android:singleLine="true"
+         <EditText
+            android:id="@+id/categoryName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/new_category_label_parent" />
+            android:hint="@string/new_category_label_name" />
+
       </android.support.design.widget.TextInputLayout>
-      <!--<LinearLayout-->
-         <!--android:id="@+id/categoryParentLayout"-->
-         <!--android:layout_width="match_parent"-->
-         <!--android:layout_height="wrap_content"-->
-         <!--android:layout_below="@id/categoryNameDivider"-->
-         <!--android:orientation="horizontal"-->
-         <!--android:paddingLeft="10dp"-->
-         <!--android:paddingRight="10dp">-->
 
-         <!--<TextView-->
-            <!--android:layout_width="150dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="@string/new_category_label_parent"-->
-            <!--android:textSize="18sp" />-->
+      <android.support.design.widget.TextInputLayout
+         android:id="@+id/categoryParentLayout"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_below="@id/categoryNameLayout">
 
-         <!--<Spinner-->
-            <!--android:id="@+id/categoryParent"-->
-            <!--android:layout_width="fill_parent"-->
-            <!--android:layout_height="60dp"></Spinner>-->
-      <!--</LinearLayout>-->
+         <com.gruppe1.pem.challengeme.helpers.ClickToSelectEditText
+            android:id="@+id/categoryParent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/new_category_label_parent"
+            android:singleLine="true" />
+      </android.support.design.widget.TextInputLayout>
 
       <View
          android:id="@+id/categoryParentDivider"
@@ -151,10 +104,10 @@
             android:id="@+id/categoryIcon"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:contentDescription="@string/new_category_desc_icon"
             android:background="@drawable/selector_list_item"
+            android:contentDescription="@string/new_category_desc_icon"
             android:padding="@dimen/margin_small"
-            android:src="@drawable/kleiderbuegel"/>
+            android:src="@drawable/kleiderbuegel" />
       </LinearLayout>
 
       <View

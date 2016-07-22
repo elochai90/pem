@@ -15,6 +15,7 @@ import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
@@ -471,18 +472,15 @@ public class CollectionItemsFragment extends Fragment {
     */
    private void setAttributeLayout(AttributeType attributeType, Object attributeValue) {
 
-      int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 150,
-            getResources().getDisplayMetrics());
       int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40,
             getResources().getDisplayMetrics());
       int with_background_height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30,
             getResources().getDisplayMetrics());
 
-      LinearLayout attributeLayout = new LinearLayout(activity);
-      attributeLayout.setOrientation(LinearLayout.HORIZONTAL);
-      int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10,
-            getResources().getDisplayMetrics());
-      attributeLayout.setPadding(padding, 0, padding, 0);
+      TextInputLayout attributeLayout = new TextInputLayout(activity);
+//      int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10,
+//            getResources().getDisplayMetrics());
+//      attributeLayout.setPadding(padding, 0, padding, 0);
       LinearLayout.LayoutParams attributeLayoutParams =
             new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                   ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -490,12 +488,6 @@ public class CollectionItemsFragment extends Fragment {
       // Set the attributeTypeId for saving
       attributeLayout.setTag(attributeType.getId());
 
-      TextView attributeName = new TextView(activity);
-      attributeName.setTextSize(18);
-      ViewGroup.LayoutParams attibuteNameLayoutParams = new ViewGroup.LayoutParams(width, height);
-      attributeName.setLayoutParams(attibuteNameLayoutParams);
-      attributeName.setGravity(Gravity.CENTER_VERTICAL);
-      attributeName.setText(attributeType.getName() + ":");
 
       View attributeValueView;
       // attribute is boolean
@@ -588,9 +580,9 @@ public class CollectionItemsFragment extends Fragment {
       } else {
          EditText textAttributeValue = new EditText(activity);
          textAttributeValue.setSingleLine(true);
-         textAttributeValue.setTextSize(18);
          ViewGroup.LayoutParams attibuteValueLayoutParams =
-               new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
+               new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                     ViewGroup.LayoutParams.WRAP_CONTENT);
          textAttributeValue.setLayoutParams(attibuteValueLayoutParams);
          textAttributeValue.setId(R.id.stringAttrField);
 
@@ -599,8 +591,8 @@ public class CollectionItemsFragment extends Fragment {
                attributeType.getName()
                      .equals(getResources().getString(R.string.attr_type_size_de))) {
             textAttributeValue.setTag("size");
-            System.out.println("Tag size set");
          }
+         textAttributeValue.setHint(attributeType.getName());
          if (attributeValue != null) {
             textAttributeValue.setText(attributeValue.toString());
          } else if (attributeType.getName()
@@ -612,7 +604,6 @@ public class CollectionItemsFragment extends Fragment {
 
          attributeValueView = textAttributeValue;
       }
-      attributeLayout.addView(attributeName);
       attributeLayout.addView(attributeValueView);
 
       attributesView.addView(attributeLayout, attributesView.getChildCount());
