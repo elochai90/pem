@@ -488,18 +488,20 @@ public class WeatherRequest {
                      }
                   }
 
-                  weather_1_day = days.get(0);
-                  weather_1_temp = temps.get(0);
-                  weather_1_image = getImage(codes.get(0));
-                  weather_2_day = days.get(1);
-                  weather_2_temp = temps.get(1);
-                  weather_2_image = getImage(codes.get(1));
-                  weather_3_day = days.get(2);
-                  weather_3_temp = temps.get(2);
-                  weather_3_image = getImage(codes.get(2));
-                  Date date_to_save = new Date();
-                  DateFormat sdf_to_save = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH);
-                  weather_date = sdf_to_save.format(date_to_save);
+                  if(days.size() > 0) {
+                     weather_1_day = days.get(0);
+                     weather_1_temp = temps.get(0);
+                     weather_1_image = getImage(codes.get(0));
+                     weather_2_day = days.get(1);
+                     weather_2_temp = temps.get(1);
+                     weather_2_image = getImage(codes.get(1));
+                     weather_3_day = days.get(2);
+                     weather_3_temp = temps.get(2);
+                     weather_3_image = getImage(codes.get(2));
+                     Date date_to_save = new Date();
+                     DateFormat sdf_to_save = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH);
+                     weather_date = sdf_to_save.format(date_to_save);
+                  }
                }
             }
          } catch (JSONException e) {

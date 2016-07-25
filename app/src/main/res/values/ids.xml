@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <item name="dateDialogField" type="id"/>
     <item name="boolAttrField" type="id"/>
     <item name="stringAttrField" type="id"/>
     <item name="colorWheel" type="id"/>

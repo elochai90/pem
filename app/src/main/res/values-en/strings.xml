@@ -56,7 +56,7 @@
     <!--For new/edit item activity-->
     <string name="no_buy_date_selected">Select a date</string>
     <string name="no_exact_color_selected">Select a color</string>
-    <string name="new_item_label_name">Name:</string>
+    <string name="new_item_label_name">Name</string>
     <string name="new_item_hint_name">Add Item Name</string>
     <string name="item_show_image_fullscreen">Show Fullscreen</string>
     <string name="item_take_photo">Take Photo</string>
@@ -64,17 +64,17 @@
     <string name="item_select_color_overlay_title">Select a color</string>
     <string name="item_select_exact_color_overlay_title">Pick the exact color</string>
     <string name="item_select_category_overlay_title">Select a category</string>
-    <string name="item_cateory_label">Category:</string>
-    <string name="item_color_label">Color:</string>
-    <string name="item_wishlist_label">In Wishlist:</string>
+    <string name="item_cateory_label">Category</string>
+    <string name="item_color_label">Color category</string>
+    <string name="item_wishlist_label">Show item in wishlist</string>
 
     <!--For new category activity-->
-    <string name="new_category_label_name">Name:</string>
+    <string name="new_category_label_name">Name</string>
     <string name="new_category_hint_name">Category Name</string>
-    <string name="new_category_label_parent">Parent category:</string>
-    <string name="new_category_label_defaultSize">Default size:</string>
-    <string name="new_category_label_icon">Icon:</string>
-    <string name="new_category_label_color">Color:</string>
+    <string name="new_category_label_parent">Parent category</string>
+    <string name="new_category_label_defaultSize">Default size</string>
+    <string name="new_category_label_icon">Icon</string>
+    <string name="new_category_label_color">Color</string>
     <string name="new_category_desc_icon">category icon</string>
     <string name="new_category_overlay_title">Select an icon</string>
     <string name="default_size_tops">Tops</string>

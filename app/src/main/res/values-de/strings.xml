@@ -56,25 +56,26 @@
     <!--For new/edit item activity-->
     <string name="no_buy_date_selected">Wähle ein Datum</string>
     <string name="no_exact_color_selected">Wähle eine Farbe</string>
-    <string name="new_item_label_name">Name:</string>
-    <string name="new_item_hint_name">Item Name hinzufügen</string>
+    <string name="new_item_label_name">Name</string>
+    <!--<string name="new_item_hint_name">Item Name hinzufügen</string>-->
     <string name="item_show_image_fullscreen">Zeige Vollbild</string>
     <string name="item_take_photo">Neues Foto aufnehmen</string>
     <string name="item_choose_gellery">Bild aus der Galerie auswählen</string>
     <string name="item_select_color_overlay_title">Farbe auswählen</string>
     <string name="item_select_exact_color_overlay_title">Genaue Farbe auswählen</string>
     <string name="item_select_category_overlay_title">Kategorie auswählen</string>
-    <string name="item_cateory_label">Kategorie:</string>
-    <string name="item_color_label">Farbe:</string>
-    <string name="item_wishlist_label">In Wunschliste:</string>
+    <string name="item_cateory_label">Kategorie</string>
+    <string name="item_color_label">Farbkategorie</string>
+    <string name="item_exact_color_label">Exakter Farbwert</string>
+    <string name="item_wishlist_label">Item in Wunschliste anzeigen</string>
 
     <!--For new category activity-->
-    <string name="new_category_label_name">Name:</string>
+    <string name="new_category_label_name">Name</string>
     <string name="new_category_hint_name">Kategorie Name</string>
-    <string name="new_category_label_parent">Oberkategorie:</string>
-    <string name="new_category_label_defaultSize">Standardgröße:</string>
-    <string name="new_category_label_icon">Icon:</string>
-    <string name="new_category_label_color">Farbe:</string>
+    <string name="new_category_label_parent">Oberkategorie</string>
+    <string name="new_category_label_defaultSize">Standardgröße</string>
+    <string name="new_category_label_icon">Icon</string>
+    <string name="new_category_label_color">Farbe</string>
     <string name="new_category_desc_icon">Kategorie Icon</string>
     <string name="new_category_overlay_title">Wähle ein Icon</string>
     <string name="default_size_tops">Oberteile</string>

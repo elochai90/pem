@@ -3,7 +3,6 @@ package com.gruppe1.pem.challengeme.views;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,11 +17,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,22 +35,20 @@ import android.widget.TextView;
 import com.gruppe1.pem.challengeme.Attribute;
 import com.gruppe1.pem.challengeme.AttributeType;
 import com.gruppe1.pem.challengeme.Category;
-import com.gruppe1.pem.challengeme.HSVColorPickerDialog;
 import com.gruppe1.pem.challengeme.Item;
-import com.gruppe1.pem.challengeme.ListItemIconName;
 import com.gruppe1.pem.challengeme.R;
-import com.gruppe1.pem.challengeme.adapters.CategoriesGridOverlayAdapter;
-import com.gruppe1.pem.challengeme.adapters.ColorsGridOverlayAdapter;
+import com.gruppe1.pem.challengeme.helpers.CategoryEditText;
+import com.gruppe1.pem.challengeme.helpers.ColorEditText;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
-import com.gruppe1.pem.challengeme.helpers.GridSpacingItemDecoration;
+import com.gruppe1.pem.challengeme.helpers.DateEditText;
+import com.gruppe1.pem.challengeme.helpers.ExactColorEditText;
 import com.gruppe1.pem.challengeme.helpers.ImageDominantColorExtractor;
 import com.gruppe1.pem.challengeme.helpers.ImageLoader;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 
 public class NewItemActivity extends AppCompatActivity {
@@ -66,50 +59,26 @@ public class NewItemActivity extends AppCompatActivity {
    private RatingBar ratingBar;
    private EditText itemNameExitText;
    private LinearLayout attributesView;
+   private View attrColorIndicator;
 
-   private TextView attrCategoryName;
-   private TextView attrCategoryValue;
+   private CategoryEditText attrCategoryValue;
    private Category attrCategorySelected;
-   private TextView attrColorName;
-   private TextView attrColorValue;
+   private ColorEditText attrColorValue;
    private com.gruppe1.pem.challengeme.Color attrColorSelected;
-   private TextView attrWishlistName;
    private Switch attrWishlistValue;
    private String item_imageFile;
 
-   private int editItemId;
+   //   private int editItemId;
    private Item editItem;
-   private int parentCategoryId;
-   private int savedColorId;
 
-   // Color Picker
-   private int exactColorId;
-   private TextView attrValueColorPicker;
-   private String buyDate;
-   private TextView attrValueDatePicker;
+   private ExactColorEditText attrValueColorPicker;
+   private DateEditText attrValueDatePicker;
 
    private ArrayList<AttributeType> attributeTypesList;
-   private CategoriesGridOverlayAdapter gridCateoriesAdapter;
-   private ColorsGridOverlayAdapter gridColorsAdapter;
 
    private SharedPreferences sharedPreferences;
 
-   private static final int DATE_DIALOG_ID = 999;
-
-   private AlertDialog categoriesAlertDialog;
-   private AlertDialog colorsAlertDialog;
-
-   private DatePickerDialog.OnDateSetListener datePickerListener =
-         new DatePickerDialog.OnDateSetListener() {
-
-            // when dialog box is closed, below method will be called.
-            public void onDateSet(DatePicker view, int selectedYear, int selectedMonth,
-                  int selectedDay) {
-               buyDate = selectedDay + "." + (selectedMonth + 1) + "." + selectedYear;
-               attrValueDatePicker.setText(buyDate);
-               attrValueDatePicker.setTextColor(getResources().getColor(android.R.color.black));
-            }
-         };
+   private ArrayList<com.gruppe1.pem.challengeme.Color> allColors;
 
    @Override
    protected void onCreate(Bundle savedInstanceState) {
@@ -140,154 +109,87 @@ public class NewItemActivity extends AppCompatActivity {
       attributeTypesList = new ArrayList<>();
       itemNameExitText = (EditText) findViewById(R.id.itemName);
       attributesView = (LinearLayout) findViewById(R.id.itemDetailAttributes);
-      attrCategoryName = (TextView) findViewById(R.id.attrCategoryName);
-      attrCategoryValue = (TextView) findViewById(R.id.attrCategoryValue);
-      attrColorName = (TextView) findViewById(R.id.attrColorName);
-      attrColorValue = (TextView) findViewById(R.id.attrColorValue);
-      attrWishlistName = (TextView) findViewById(R.id.attrWishlistName);
+      attrCategoryValue = (CategoryEditText) findViewById(R.id.attrCategoryValue);
+      attrColorValue = (ColorEditText) findViewById(R.id.attrColorValue);
+      attrColorIndicator = (View) findViewById(R.id.attrColorIndicator);
       attrWishlistValue = (Switch) findViewById(R.id.attrWishlistValue);
 
-      attrCategoryName.setText(getString(R.string.item_cateory_label));
-      attrColorName.setText(getString(R.string.item_color_label));
-      attrWishlistName.setText(getString(R.string.item_wishlist_label));
+      setupAttributeViews();
 
-      // Setup Categories Adapter
       ArrayList<Category> allCategories = Category.getAllCategories(this);
-      ArrayList<ListItemIconName> catArray = new ArrayList<>();
-      for (Category tmpCat : allCategories) {
-         int iconId = getResources().getIdentifier(tmpCat.getIcon(), "drawable",
-               "com.gruppe1.pem.challengeme");
-         catArray.add(
-               new ListItemIconName("category", tmpCat.getId(), iconId, tmpCat.getName(), null));
-      }
-      gridCateoriesAdapter =
-            new CategoriesGridOverlayAdapter(this, R.layout.grid_item_overlay_category, catArray);
-      attrCategoryValue.setOnClickListener(new View.OnClickListener() {
+      attrCategoryValue.setItems(this, getDb_helper(), allCategories);
+      attrCategoryValue.setOnItemSelectedListener(new CategoryEditText.OnItemSelectedListener() {
          @Override
-         public void onClick(View v) {
-            categoriesAlertDialog = setupCategoryOverlay(new View.OnClickListener() {
-               @Override
-               public void onClick(View view) {
-                  getDb_helper().setTable(Constants.CATEGORIES_DB_TABLE);
-                  attrCategorySelected = new Category(getBaseContext(),
-                        gridCateoriesAdapter.getItem((Integer) view.getTag())
-                              .getElementId(), getDb_helper());
-                  attrCategoryValue.setText(gridCateoriesAdapter.getItem((Integer) view.getTag())
-                        .getName());
-                  ((TextView) attributesView.findViewWithTag("size")).setText(
-                        getSizeValueBySizeType(attrCategorySelected.getDefaultSizeType()));
-                  categoriesAlertDialog.dismiss();
-               }
-            });
-            categoriesAlertDialog.show();
+         public void onItemSelectedListener(Category item, int selectedIndex) {
+            ((TextView) attributesView.findViewWithTag("size")).setText(
+                  getSizeValueBySizeType(item.getDefaultSizeType()));
          }
       });
 
-      // Setup Colors Adapter
-      ArrayList<com.gruppe1.pem.challengeme.Color> allColors =
-            com.gruppe1.pem.challengeme.Color.getAllColors(this);
-      gridColorsAdapter =
-            new ColorsGridOverlayAdapter(this, R.layout.grid_item_overlay_color, allColors);
-
-      attrColorValue.setOnClickListener(new View.OnClickListener() {
+      allColors = com.gruppe1.pem.challengeme.Color.getAllColors(this);
+      attrColorValue.setItems(this, getDb_helper(), allColors);
+      attrColorValue.setOnItemSelectedListener(new ColorEditText.OnItemSelectedListener() {
          @Override
-         public void onClick(View v) {
-            colorsAlertDialog = setupColorsOverlay(new View.OnClickListener() {
-               @Override
-               public void onClick(View view) {
-                  getDb_helper().setTable(Constants.CATEGORIES_DB_TABLE);
-                  attrColorSelected = new com.gruppe1.pem.challengeme.Color(getBaseContext(),
-                        gridColorsAdapter.getItem((Integer) view.getTag())
-                              .getId(), getDb_helper());
-                  attrColorValue.setText(attrColorSelected.getName());
-                  attrColorValue.setBackgroundColor(
-                        Color.parseColor(attrColorSelected.getHexColor()));
-                  if (!gridColorsAdapter.isColorLight(
-                        Color.parseColor(attrColorSelected.getHexColor()))) {
-                     attrColorValue.setTextColor(getResources().getColor(android.R.color.white));
-                  }
-                  colorsAlertDialog.dismiss();
-               }
-            });
-            colorsAlertDialog.show();
+         public void onItemSelectedListener(com.gruppe1.pem.challengeme.Color item,
+               int selectedIndex) {
+            attrColorIndicator.setBackgroundColor(Color.parseColor(item.getHexColor()));
          }
       });
 
-      if (savedInstanceState == null) {
-         Bundle extras = getIntent().getExtras();
-         if (extras == null) {
-            editItemId = -1;
-         } else {
-            editItemId = extras.getInt(Constants.EXTRA_ITEM_ID);
-         }
-      } else {
-         editItemId = -1;
-      }
+      //      editItemId = -1;
+      //      if (savedInstanceState == null) {
+      //         Bundle extras = getIntent().getExtras();
+      //         if (extras != null) {
+      //            editItemId = extras.getInt(Constants.EXTRA_ITEM_ID);
+      //         }
+      //      }
 
       Bundle extras1 = getIntent().getExtras();
       if (extras1 != null && extras1.getBoolean("is_wishlist")) {
          attrWishlistValue.setChecked(true);
       }
       // Not a new item, but editing an existing item
-      if (editItemId > 0) {
-         if (getActionBar() != null) {
-            getActionBar().setTitle(R.string.title_activity_edit_item);
-         }
-         getDb_helper().setTable(Constants.ITEMS_DB_TABLE);
-         editItem = new Item(this, editItemId, getDb_helper());
-         parentCategoryId = editItem.getCategoryId();
-         savedColorId = editItem.getPrimaryColorId();
-      } else {
-         if (getActionBar() != null) {
-            getActionBar().setTitle(R.string.title_activity_new_item);
-         }
-         getDb_helper().setTable(Constants.ITEMS_DB_TABLE);
-         editItem = new Item(this, 0, getDb_helper());
+      //      int parentCategoryId = -1;
+      //      int savedColorId = -1;
+      //      if (editItemId > 0) {
+      //         if (getActionBar() != null) {
+      //            getActionBar().setTitle(R.string.title_activity_edit_item);
+      //         }
+      //         getDb_helper().setTable(Constants.ITEMS_DB_TABLE);
+      //         editItem = new Item(this, editItemId, getDb_helper());
+      //         parentCategoryId = editItem.getCategoryId();
+      //         savedColorId = editItem.getPrimaryColorId();
+      //      } else {
+      //         if (getActionBar() != null) {
+      //            getActionBar().setTitle(R.string.title_activity_new_item);
+      //         }
+      //         getDb_helper().setTable(Constants.ITEMS_DB_TABLE);
+      //         editItem = new Item(this, 0, getDb_helper());
+      //         if (extras1 != null && extras1.getInt("category_id") != 0) {
+      //            parentCategoryId = extras1.getInt("category_id");
+      //         }
+      //      }
 
-         savedColorId = -1;
+      //      if (parentCategoryId != -1) {
+      //         attrCategorySelected =
+      //               new Category(getApplicationContext(), parentCategoryId, getDb_helper());
+      //         attrCategoryValue.setSelection(allCategories.indexOf(attrCategorySelected));
+      //      } else {
+      //         attrCategorySelected = null;
+      //      }
+      //
+      //      if (savedColorId != -1) {
+      //         attrColorSelected =
+      //               new com.gruppe1.pem.challengeme.Color(getApplicationContext(), savedColorId,
+      //                     getDb_helper());
+      //         attrColorValue.setSelection(allColors.indexOf(attrColorSelected));
+      //      } else {
+      //         attrColorSelected = null;
+      //      }
 
-         if (extras1 != null && extras1.getInt("category_id") != 0) {
-            parentCategoryId = extras1.getInt("category_id");
-         } else {
-            parentCategoryId = -1;
-         }
-      }
-
-      if (parentCategoryId != -1) {
-         attrCategorySelected =
-               new Category(getApplicationContext(), parentCategoryId, getDb_helper());
-         attrCategoryValue.setText(attrCategorySelected.getName());
-      } else {
-         attrCategorySelected = new Category(getApplicationContext(),
-               gridCateoriesAdapter.getItem(0)
-                     .getElementId(), getDb_helper());
-         attrCategoryValue.setText(attrCategorySelected.getName());
-      }
-
-      if (savedColorId != -1) {
-         attrColorSelected =
-               new com.gruppe1.pem.challengeme.Color(getApplicationContext(), savedColorId,
-                     getDb_helper());
-         attrColorValue.setText(attrColorSelected.getName());
-         attrColorValue.setBackgroundColor(Color.parseColor(attrColorSelected.getHexColor()));
-         if (!gridColorsAdapter.isColorLight(Color.parseColor(attrColorSelected.getHexColor()))) {
-            attrColorValue.setTextColor(getResources().getColor(android.R.color.white));
-         }
-      } else {
-         attrColorSelected = new com.gruppe1.pem.challengeme.Color(getApplicationContext(),
-               gridColorsAdapter.getItem(0)
-                     .getId(), getDb_helper());
-         attrColorValue.setText(attrColorSelected.getName());
-         attrColorValue.setBackgroundColor(Color.parseColor(attrColorSelected.getHexColor()));
-         if (!gridColorsAdapter.isColorLight(Color.parseColor(attrColorSelected.getHexColor()))) {
-            attrColorValue.setTextColor(getResources().getColor(android.R.color.white));
-         }
-      }
-
-      if (editItemId > 0) {
-         setItemData();
-      }
-      setupAttributeViews();
+      //      if (editItemId > 0) {
+      //         setItemData();
+      //      }
 
       Intent intentImage = getIntent();
       Bundle extrasImage = intentImage.getExtras();
@@ -301,9 +203,9 @@ public class NewItemActivity extends AppCompatActivity {
                editItem.setImageFile(item_imageFile);
                Bitmap tmpBitmap = ImageLoader.getPicFromFile(editItem.getImageFile(), 500, 500);
                ImgPhoto.setImageBitmap(tmpBitmap);
-               exactColorId = ImageDominantColorExtractor.getInstance()
+               int exactColorId = ImageDominantColorExtractor.getInstance()
                      .getDominantColor(tmpBitmap);
-               attrValueColorPicker.setBackgroundColor(exactColorId);
+               attrValueColorPicker.setExactColorId(exactColorId);
             }
          }
       }
@@ -317,42 +219,43 @@ public class NewItemActivity extends AppCompatActivity {
       getSupportActionBar().setDisplayHomeAsUpEnabled(true);
    }
 
-   /**
-    * sets the data of the editing item into the formular
-    */
-   private void setItemData() {
-      itemNameExitText.setText(editItem.getName());
-      ratingBar.setRating(editItem.getRating());
-
-      attrCategorySelected =
-            new Category(getApplicationContext(), editItem.getCategoryId(), getDb_helper());
-      attrCategoryValue.setText(attrCategorySelected.getName());
-      attrColorSelected = new com.gruppe1.pem.challengeme.Color(getApplicationContext(),
-            editItem.getPrimaryColorId(), getDb_helper());
-      attrColorValue.setBackgroundColor(Color.parseColor(attrColorSelected.getHexColor()));
-
-      try {
-         String imgPath = editItem.getImageFile();
-         File imgFile = new File(imgPath);
-         if (imgFile.exists()) {
-            Bitmap tmpBitmap = ImageLoader.getPicFromFile(editItem.getImageFile(), 500, 500);
-            ImgPhoto.setImageBitmap(tmpBitmap);
-         }
-      } catch (Exception e) {
-         e.printStackTrace();
-      }
-      if (editItem.getIsWish() == 0) {
-         attrWishlistValue.setChecked(false);
-      } else {
-         attrWishlistValue.setChecked(true);
-      }
-
-      ArrayList<Attribute> itemAttributes = Attribute.getAttributesByItemId(this, editItem.getId());
-      for (Attribute tmpItemAttr : itemAttributes) {
-         attributeTypesList.add(tmpItemAttr.getAttributeType());
-         setAttributeLayout(tmpItemAttr.getAttributeType(), tmpItemAttr.getValue());
-      }
-   }
+   //   /**
+   //    * sets the data of the editing item into the formular
+   //    */
+   //   private void setItemData() {
+   //      itemNameExitText.setText(editItem.getName());
+   //      ratingBar.setRating(editItem.getRating());
+   //
+   //      attrCategorySelected =
+   //            new Category(getApplicationContext(), editItem.getCategoryId(), getDb_helper());
+   //      attrCategoryValue.setText(attrCategorySelected.getName());
+   //      attrColorSelected = new com.gruppe1.pem.challengeme.Color(getApplicationContext(),
+   //            editItem.getPrimaryColorId(), getDb_helper());
+   //      attrColorValue.setSelection(allColors.indexOf(attrColorSelected));
+   //
+   //      try {
+   //         String imgPath = editItem.getImageFile();
+   //         File imgFile = new File(imgPath);
+   //         if (imgFile.exists()) {
+   //            Bitmap tmpBitmap = ImageLoader.getPicFromFile(editItem.getImageFile(), 500, 500);
+   //            ImgPhoto.setImageBitmap(tmpBitmap);
+   //         }
+   //      } catch (Exception e) {
+   //         e.printStackTrace();
+   //      }
+   //      if (editItem.getIsWish() == 0) {
+   //         attrWishlistValue.setChecked(false);
+   //      } else {
+   //         attrWishlistValue.setChecked(true);
+   //      }
+   //
+   //      ArrayList<Attribute> itemAttributes = Attribute.getAttributesByItemId(this, editItem
+   // .getId());
+   //      for (Attribute tmpItemAttr : itemAttributes) {
+   //         attributeTypesList.add(tmpItemAttr.getAttributeType());
+   //         setAttributeLayout(tmpItemAttr.getAttributeType(), tmpItemAttr.getValue());
+   //      }
+   //   }
 
    /**
     * creates/updates the item
@@ -360,11 +263,10 @@ public class NewItemActivity extends AppCompatActivity {
    private void saveItem() {
       String item_name = itemNameExitText.getText()
             .toString();
-      //        Category newParentCatId = (attrCategorySelected != null) ? attrCategorySelected :
-       // new Category(getApplicationContext(), (int) gridCateoriesAdapter.getItem(0).elementId,
-       // getDb_helper());
-      String item_categoryId = "" + attrCategorySelected.getId();
-      String item_primaryColor = "" + attrColorSelected.getId();
+      String item_categoryId = "" + attrCategoryValue.getSelectedItem()
+            .getId();
+      String item_primaryColor = "" + attrColorValue.getSelectedItem()
+            .getId();
       String item_rating = Float.toString(ratingBar.getRating());
       String item_isWish = attrWishlistValue.isChecked() ? "1" : "0";
 
@@ -387,15 +289,15 @@ public class NewItemActivity extends AppCompatActivity {
          // boolean
          if (tmpItemAttrType.getValueType() == 2) {
             attributeSaveValue =
-                  ((Switch) attributeView.findViewById(R.id.boolAttrField)).isChecked() ? "1" : "0";
+                  ((Switch) attributeView.findViewById(R.id.switchValue)).isChecked() ? "1" : "0";
          }
          // Color Picker
          else if (tmpItemAttrType.getValueType() == 3) {
-            attributeSaveValue = exactColorId + "";
+            attributeSaveValue = attrValueColorPicker.getExactColor() + "";
          }
          // Date Picker
          else if (tmpItemAttrType.getValueType() == 4) {
-            attributeSaveValue = buyDate;
+            attributeSaveValue = attrValueDatePicker.getDate();
          } else {
             attributeSaveValue =
                   ((EditText) attributeView.findViewById(R.id.stringAttrField)).getText()
@@ -424,107 +326,82 @@ public class NewItemActivity extends AppCompatActivity {
     */
    private void setAttributeLayout(AttributeType attributeType, Object attributeValue) {
 
-      int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40,
-            getResources().getDisplayMetrics());
-      int with_background_height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30,
-            getResources().getDisplayMetrics());
-
       TextInputLayout attributeLayout = new TextInputLayout(this);
-//      int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10,
-//            getResources().getDisplayMetrics());
-//      attributeLayout.setPadding(padding, 0, padding, 0);
       LinearLayout.LayoutParams attributeLayoutParams =
             new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                   ViewGroup.LayoutParams.WRAP_CONTENT);
+      attributeLayoutParams.bottomMargin = getResources().getDimensionPixelSize(R.dimen.margin_small);
       attributeLayout.setLayoutParams(attributeLayoutParams);
       // Set the attributeTypeId for saving
       attributeLayout.setTag(attributeType.getId());
 
-
       View attributeValueView;
       // attribute is boolean
       if (attributeType.getValueType() == 2) {
-         Switch attrValueSwitch = new Switch(this);
-         ViewGroup.LayoutParams attibuteValueLayoutParams =
-               new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, height);
-         attrValueSwitch.setLayoutParams(attibuteValueLayoutParams);
-         attrValueSwitch.setShowText(true);
-         attrValueSwitch.setTextOn(getResources().getString(R.string.switch_true));
-         attrValueSwitch.setTextOff(getResources().getString(R.string.switch_false));
-         attrValueSwitch.setId(R.id.boolAttrField);
+         LayoutInflater inflater = getLayoutInflater();
+
+         View switchLayout = inflater.inflate(R.layout.formular_layout_switch, null);
+         Switch switchValue = (Switch) switchLayout.findViewById(R.id.switchValue);
+         final TextView switchLabel = (TextView) switchLayout.findViewById(R.id.switchLabel);
+
+         switchLabel.setText(attributeType.getName());
 
          if (attributeValue != null) {
             boolean bool = (attributeValue.toString()
                   .equals("1"));
-            attrValueSwitch.setChecked(bool);
+            switchValue.setChecked(bool);
          }
 
-         attributeValueView = attrValueSwitch;
+         attributeValueView = switchLayout;
       }
       // attribute is ColorPicker
       else if (attributeType.getValueType() == 3) {
-         attrValueColorPicker = new TextView(this);
-         ViewGroup.LayoutParams attibuteValueLayoutParams =
-               new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                     with_background_height);
-         attrValueColorPicker.setLayoutParams(attibuteValueLayoutParams);
-         attrValueColorPicker.setTextColor(getResources().getColor(android.R.color.white));
-         attrValueColorPicker.setTextSize(18);
-         attrValueColorPicker.setGravity(Gravity.CENTER);
+         LayoutInflater inflater = getLayoutInflater();
 
+         View exactColorLayout = inflater.inflate(R.layout.formular_layout_color, null);
+         attrValueColorPicker =
+               (ExactColorEditText) exactColorLayout.findViewById(R.id.attrExactColorValue);
+         final View attrExactColorIndicator =
+               exactColorLayout.findViewById(R.id.attrExactColorIndicator);
+
+         int exactColorId = -1;
          if (attributeValue != null) {
             exactColorId = Integer.parseInt(attributeValue.toString());
-         } else {
-            attrValueColorPicker.setText(R.string.no_exact_color_selected);
-            exactColorId = getResources().getColor(R.color.gray01);
          }
-         attrValueColorPicker.setBackgroundColor(exactColorId);
-         // 0xFF4488CC
-         attrValueColorPicker.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               new HSVColorPickerDialog(NewItemActivity.this, exactColorId,
-                     new HSVColorPickerDialog.OnColorSelectedListener() {
-                        @Override
-                        public void colorSelected(Integer color) {
-                           // Do something with the selected color
-                           exactColorId = color;
-                           attrValueColorPicker.setBackgroundColor(exactColorId);
-                           attrValueColorPicker.setText("");
-                        }
-                     }).show();
-            }
-         });
-         attributeValueView = attrValueColorPicker;
+         attrValueColorPicker.setOnColorSelectedListener(
+               new ExactColorEditText.OnColorSelectedListener() {
+                  @Override
+                  public void onColorSelectedListener(int color) {
+                     if (color != -1) {
+                        attrExactColorIndicator.setBackgroundColor(color);
+                     }
+                  }
+               });
+         attrValueColorPicker.initialize(this, exactColorId);
+         attributeValueView = exactColorLayout;
       }
       // attribute is DatePicker
       else if (attributeType.getValueType() == 4) {
-         attrValueDatePicker = new TextView(this);
+         attrValueDatePicker = new DateEditText(this);
          ViewGroup.LayoutParams attibuteValueLayoutParams =
                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                     with_background_height);
+                     ViewGroup.LayoutParams.WRAP_CONTENT);
          attrValueDatePicker.setLayoutParams(attibuteValueLayoutParams);
-         attrValueDatePicker.setTextSize(18);
-         attrValueDatePicker.setGravity(Gravity.CENTER);
+         attrValueDatePicker.setHint(attributeType.getName());
 
+         String buyDate = "";
          if (attributeValue != null) {
-            attrValueDatePicker.setTextColor(getResources().getColor(android.R.color.black));
             buyDate = attributeValue.toString();
-            attrValueDatePicker.setText(buyDate);
-         } else {
-            attrValueDatePicker.setTextColor(getResources().getColor(android.R.color.white));
-            attrValueDatePicker.setText(R.string.no_buy_date_selected);
-            buyDate = "";
          }
-
-         attrValueDatePicker.setBackgroundColor(getResources().getColor(R.color.gray01));
-         attrValueDatePicker.setText(buyDate);
-         attrValueDatePicker.setOnClickListener(new View.OnClickListener() {
+         attrValueDatePicker.setOnDateSelectedListener(new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onClick(View v) {
-               showDialog(DATE_DIALOG_ID);
+            public void onDateSet(DatePicker view, int selectedYear, int selectedMonth,
+                  int selectedDay) {
+               String buyDate = selectedDay + "." + (selectedMonth + 1) + "." + selectedYear;
+               attrValueDatePicker.setDate(buyDate);
             }
          });
+         attrValueDatePicker.initialize(this, buyDate);
          attributeValueView = attrValueDatePicker;
       } else {
          EditText textAttributeValue = new EditText(this);
@@ -547,8 +424,10 @@ public class NewItemActivity extends AppCompatActivity {
          } else if (attributeType.getName()
                .equals(getString(R.string.attr_type_size_en)) || attributeType.getName()
                .equals(getResources().getString(R.string.attr_type_size_de))) {
-            textAttributeValue.setText(
-                  getSizeValueBySizeType(attrCategorySelected.getDefaultSizeType()));
+            if (attrCategorySelected != null) {
+               textAttributeValue.setText(
+                     getSizeValueBySizeType(attrCategorySelected.getDefaultSizeType()));
+            }
          }
 
          attributeValueView = textAttributeValue;
@@ -556,28 +435,6 @@ public class NewItemActivity extends AppCompatActivity {
       attributeLayout.addView(attributeValueView);
 
       attributesView.addView(attributeLayout, attributesView.getChildCount());
-   }
-
-   @Override
-   protected Dialog onCreateDialog(int id) {
-      switch (id) {
-         case DATE_DIALOG_ID:
-            // set date picker as current date
-            int year = Calendar.getInstance()
-                  .get(Calendar.YEAR);
-            int month = Calendar.getInstance()
-                  .get(Calendar.MONTH);
-            int day = Calendar.getInstance()
-                  .get(Calendar.DAY_OF_MONTH);
-            if (buyDate.length() > 0) {
-               String[] parts = buyDate.split("\\.");
-               day = Integer.parseInt(parts[0]);
-               month = Integer.parseInt(parts[1]) - 1;
-               year = Integer.parseInt(parts[2]);
-            }
-            return new DatePickerDialog(this, datePickerListener, year, month, day);
-      }
-      return null;
    }
 
    /**
@@ -668,9 +525,9 @@ public class NewItemActivity extends AppCompatActivity {
                Bitmap photo = (Bitmap) data.getExtras()
                      .get("data");
                ImgPhoto.setImageBitmap(photo);
-               exactColorId = ImageDominantColorExtractor.getInstance()
+               int exactColorId = ImageDominantColorExtractor.getInstance()
                      .getDominantColor(photo);
-               attrValueColorPicker.setBackgroundColor(exactColorId);
+               attrValueColorPicker.setExactColorId(exactColorId);
 
                // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
                Uri tempUri = getImageUri(getApplicationContext(), photo);
@@ -697,9 +554,9 @@ public class NewItemActivity extends AppCompatActivity {
 
             Bitmap tmpBitmap = ImageLoader.getPicFromFile(editItem.getImageFile(), 500, 500);
             ImgPhoto.setImageBitmap(tmpBitmap);
-            exactColorId = ImageDominantColorExtractor.getInstance()
+            int exactColorId = ImageDominantColorExtractor.getInstance()
                   .getDominantColor(tmpBitmap);
-            attrValueColorPicker.setBackgroundColor(exactColorId);
+            attrValueColorPicker.setExactColorId(exactColorId);
          }
       }
    }
@@ -761,75 +618,6 @@ public class NewItemActivity extends AppCompatActivity {
             this.finish();
       }
       return super.onOptionsItemSelected(item);
-   }
-
-   /**
-    * creates a overlay with categories as grid view
-    *
-    * @param onItemClickListener the onItemClickListener for the items in the overlay
-    * @return the created AlertDialog
-    */
-   private AlertDialog setupCategoryOverlay(View.OnClickListener onItemClickListener) {
-      final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-      LayoutInflater inflater = getLayoutInflater();
-
-      final View dialogView = inflater.inflate(R.layout.dialog_recycler_view, null);
-      TextView headline = (TextView) dialogView.findViewById(R.id.dialog_headline);
-      headline.setText(getString(R.string.item_select_category_overlay_title));
-      RecyclerView gridView = (RecyclerView) dialogView.findViewById(R.id.gridView);
-
-      StaggeredGridLayoutManager gridLayoutManager =
-            new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
-      gridView.setLayoutManager(gridLayoutManager);
-      gridView.setHasFixedSize(true);
-      int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
-      gridView.addItemDecoration(new GridSpacingItemDecoration(3, spacingInPixels, false, 0));
-
-      builder.setView(dialogView);
-      final AlertDialog alert = builder.create();
-      gridCateoriesAdapter.setOnItemClickListener(onItemClickListener);
-      gridView.setAdapter(gridCateoriesAdapter);
-      alert.setButton(DialogInterface.BUTTON_NEGATIVE, getString(android.R.string.cancel),
-            new DialogInterface.OnClickListener() {
-               @Override
-               public void onClick(DialogInterface dialog, int which) {
-                  alert.dismiss();
-               }
-            });
-      return alert;
-   }
-
-   /**
-    * creates and shows the overlay to choose a color
-    */
-   private AlertDialog setupColorsOverlay(View.OnClickListener onItemClickListener) {
-      final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-      LayoutInflater inflater = getLayoutInflater();
-
-      final View dialogView = inflater.inflate(R.layout.dialog_recycler_view, null);
-      TextView headline = (TextView) dialogView.findViewById(R.id.dialog_headline);
-      headline.setText(getString(R.string.item_select_color_overlay_title));
-      RecyclerView gridView = (RecyclerView) dialogView.findViewById(R.id.gridView);
-
-      StaggeredGridLayoutManager gridLayoutManager =
-            new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
-      gridView.setLayoutManager(gridLayoutManager);
-      gridView.setHasFixedSize(true);
-      int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
-      gridView.addItemDecoration(new GridSpacingItemDecoration(3, spacingInPixels, false, 0));
-
-      builder.setView(dialogView);
-      final AlertDialog alert = builder.create();
-      gridColorsAdapter.setOnItemClickListener(onItemClickListener);
-      gridView.setAdapter(gridColorsAdapter);
-      alert.setButton(DialogInterface.BUTTON_NEGATIVE, getString(android.R.string.cancel),
-            new DialogInterface.OnClickListener() {
-               @Override
-               public void onClick(DialogInterface dialog, int which) {
-                  alert.dismiss();
-               }
-            });
-      return alert;
    }
 
    /**

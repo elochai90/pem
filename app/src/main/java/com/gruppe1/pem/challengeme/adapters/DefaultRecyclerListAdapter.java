@@ -100,6 +100,8 @@ public class DefaultRecyclerListAdapter extends RecyclerView.Adapter<RecyclerVie
          ViewHolder viewHolder = (ViewHolder) holder;
          if (item.getItemFile() == null) {
             viewHolder.image.setImageResource(item.getIcon());
+            int padding = context.getResources().getDimensionPixelSize(R.dimen.margin_small);
+            viewHolder.image.setPadding(padding,padding,padding,padding);
          } else {
             picassoSingleton.setImage(item.getItemFile(), Constants.LIST_VIEW_IMAGE_WIDTH,
                   Constants.LIST_VIEW_IMAGE_HEIGHT, viewHolder.image);

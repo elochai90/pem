@@ -107,9 +107,9 @@ public class DefaultRecyclerGridAdapter
          ViewHolder holder = (ViewHolder) viewHolder;
          holder.imageTitle.setText(item.getName());
          if(item.getItemFile() == null) {
-            Category category = new Category(this.context, item.getElementId(), this.dbHelper);
-            int iconId = this.context.getResources().getIdentifier(category.getIcon(), "drawable", "com.gruppe1.pem.challengeme");
-            holder.image.setImageResource(iconId);
+            holder.image.setImageResource(item.getIcon());
+            int padding = context.getResources().getDimensionPixelSize(R.dimen.activity_horizontal_margin);
+            holder.image.setPadding(padding,padding,padding,padding);
          } else {
             picassoSingleton.setImage(item.getItemFile(), Constants.LIST_VIEW_IMAGE_WIDTH,
                   Constants.LIST_VIEW_IMAGE_HEIGHT, holder.image);
