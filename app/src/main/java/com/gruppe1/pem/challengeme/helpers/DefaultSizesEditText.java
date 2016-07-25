@@ -11,40 +11,42 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.gruppe1.pem.challengeme.Category;
+import com.gruppe1.pem.challengeme.DefaultSize;
 import com.gruppe1.pem.challengeme.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-public class ClickToSelectEditText extends EditText {
+public class DefaultSizesEditText extends EditText {
 
-   List<Category> mItems;
+   ArrayList<DefaultSize> mItems;
    String[] mListableItems;
    CharSequence mHint;
    int selectedItemPosition = 0;
 
-   OnItemSelectedListener<Category> onItemSelectedListener;
+   OnItemSelectedListener onItemSelectedListener;
 
-   public ClickToSelectEditText(Context context) {
+   public DefaultSizesEditText(Context context) {
       super(context);
 
       mHint = getHint();
    }
 
-   public ClickToSelectEditText(Context context, AttributeSet attrs) {
+   public DefaultSizesEditText(Context context, AttributeSet attrs) {
       super(context, attrs);
 
       mHint = getHint();
    }
 
-   public ClickToSelectEditText(Context context, AttributeSet attrs, int defStyleAttr) {
+   public DefaultSizesEditText(Context context, AttributeSet attrs, int defStyleAttr) {
       super(context, attrs, defStyleAttr);
 
       mHint = getHint();
    }
 
    @TargetApi (Build.VERSION_CODES.LOLLIPOP)
-   public ClickToSelectEditText(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+   public DefaultSizesEditText(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
       super(context, attrs, defStyleAttr, defStyleRes);
 
       mHint = getHint();
@@ -57,17 +59,20 @@ public class ClickToSelectEditText extends EditText {
       setClickable(true);
    }
 
-   public void setItems(ArrayList<Category> items) {
+   public void setItems(ArrayList<DefaultSize> items) {
       this.mItems = items;
 
-      this.mListableItems = new String[items.size()+1];
+      this.mListableItems = new String[items.size()];
 
-      this.mListableItems[0] = getResources().getString(R.string.new_category_parent_none);
-      int i = 1;
+      int i = 0;
 
 
-      for (Category item : mItems) {
-         mListableItems[i++] = item.getName();
+      for (DefaultSize item : mItems) {
+         if(i == 0) {
+            mListableItems[i++] = item.getDefaultSizeName();
+         } else {
+            mListableItems[i++] = item.getDefaultSizeName() + ": " + item.getDefaultSizeValue();
+         }
       }
 
       configureOnClickListener();
@@ -86,11 +91,7 @@ public class ClickToSelectEditText extends EditText {
                   setText(mListableItems[selectedIndex]);
 
                   if (onItemSelectedListener != null) {
-                     if (selectedIndex <= 0) {
-                        onItemSelectedListener.onItemSelectedListener(null, selectedIndex);
-                     } else {
-                        onItemSelectedListener.onItemSelectedListener(mItems.get(selectedIndex-1), selectedIndex);
-                     }
+                        onItemSelectedListener.onItemSelectedListener(mItems.get(selectedIndex), selectedIndex);
                   }
                }
             });
@@ -104,28 +105,29 @@ public class ClickToSelectEditText extends EditText {
       return selectedItemPosition;
    }
 
-   public int getPosition(Category category) {
+   public int getPosition(DefaultSize size) {
       for(int i = 0; i < mListableItems.length; i++) {
-         if(category.getId() == (mItems.get(i).getId())) {
-            return i+1;
+         if(Objects.equals(size.getDefaultSizeName(), mItems.get(i)
+               .getDefaultSizeName())) {
+            return i;
          }
       }
       return 0;
    }
 
-   public Category getSelectedItem() {
+   public DefaultSize getSelectedItem() {
       if(selectedItemPosition < 0) {
          return null;
       }
       return mItems.get(selectedItemPosition);
    }
 
-   public void setOnItemSelectedListener(OnItemSelectedListener<Category> onItemSelectedListener) {
+   public void setOnItemSelectedListener(OnItemSelectedListener onItemSelectedListener) {
       this.onItemSelectedListener = onItemSelectedListener;
    }
 
-   public interface OnItemSelectedListener<Category> {
-      void onItemSelectedListener(com.gruppe1.pem.challengeme.Category item, int selectedIndex);
+   public interface OnItemSelectedListener {
+      void onItemSelectedListener(DefaultSize item, int selectedIndex);
    }
 
    @Override
