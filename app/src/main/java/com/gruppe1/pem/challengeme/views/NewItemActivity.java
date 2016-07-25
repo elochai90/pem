@@ -136,6 +136,14 @@ public class NewItemActivity extends AppCompatActivity {
          }
       });
 
+      attrColorIndicator.setOnClickListener(new View.OnClickListener() {
+         @Override
+         public void onClick(View view) {
+            attrColorValue.callOnClick();
+         }
+      });
+
+
       //      editItemId = -1;
       //      if (savedInstanceState == null) {
       //         Bundle extras = getIntent().getExtras();
@@ -147,6 +155,21 @@ public class NewItemActivity extends AppCompatActivity {
       Bundle extras1 = getIntent().getExtras();
       if (extras1 != null && extras1.getBoolean("is_wishlist")) {
          attrWishlistValue.setChecked(true);
+      }
+      getSupportActionBar().setTitle(R.string.title_activity_edit_item);
+
+      int parentCategoryId = -1;
+      getDb_helper().setTable(Constants.ITEMS_DB_TABLE);
+      editItem = new Item(this, 0, getDb_helper());
+      if (extras1 != null && extras1.getInt("category_id") != 0) {
+         parentCategoryId = extras1.getInt("category_id");
+      }
+      if (parentCategoryId != -1) {
+         attrCategorySelected =
+               new Category(getApplicationContext(), parentCategoryId, getDb_helper());
+         attrCategoryValue.setSelection(allCategories.indexOf(attrCategorySelected));
+      } else {
+         attrCategorySelected = null;
       }
       // Not a new item, but editing an existing item
       //      int parentCategoryId = -1;
@@ -378,6 +401,13 @@ public class NewItemActivity extends AppCompatActivity {
                   }
                });
          attrValueColorPicker.initialize(this, exactColorId);
+         attrExactColorIndicator.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               attrValueColorPicker.callOnClick();
+            }
+         });
+
          attributeValueView = exactColorLayout;
       }
       // attribute is DatePicker

@@ -1,290 +1,271 @@
 package com.gruppe1.pem.challengeme.views;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.gruppe1.pem.challengeme.Category;
 import com.gruppe1.pem.challengeme.DefaultSize;
-import com.gruppe1.pem.challengeme.HSVColorPickerDialog;
 import com.gruppe1.pem.challengeme.R;
-import com.gruppe1.pem.challengeme.adapters.DefaultSizesAdapter;
-import com.gruppe1.pem.challengeme.adapters.IconsGridOverlayAdapter;
-import com.gruppe1.pem.challengeme.helpers.ClickToSelectEditText;
+import com.gruppe1.pem.challengeme.helpers.CategoryEditText;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
+import com.gruppe1.pem.challengeme.helpers.DefaultSizesEditText;
+import com.gruppe1.pem.challengeme.helpers.ExactColorEditText;
+import com.gruppe1.pem.challengeme.helpers.IconEditText;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class NewCategoryActivity extends AppCompatActivity {
 
-    private EditText newCategory_name;
-    private Spinner categoryDefaultSize;
-    private ClickToSelectEditText categoryParent;
-    private ImageView categoryIcon;
-    private View categoryColor;
-    private Bundle extras;
+   private EditText newCategory_name;
+   private DefaultSizesEditText categoryDefaultSize;
+   private CategoryEditText categoryParent;
+   private ImageView categoryIconIndicator;
+   private IconEditText categoryIcon;
+   private View categoryColorIndicator;
+   private ExactColorEditText categoryColor;
+   private Bundle extras;
 
-    private String iconName;
-    private SharedPreferences sharedPreferences;
+   //   private String iconName;
+   private SharedPreferences sharedPreferences;
 
-//    private  ParentCategoryAdapter parentAdapter;
+   private int categoryId;
+   private int parentCategoryId;
+   private int categoryColorHex;
+   private Category parentCategory = null;
 
-    private int categoryId;
-    private int parentCategoryId;
-    private int categoryColorHex ;
-    private Category parentCategory = null;
+   @Override
+   protected void onCreate(Bundle savedInstanceState) {
+      super.onCreate(savedInstanceState);
+      setContentView(R.layout.activity_new_category);
+      setupToolbar();
+      getSupportActionBar().setTitle(R.string.title_activity_new_category);
+      extras = getIntent().getExtras();
 
-//    private ColorsGridOverlayAdapter gridColorsAdapter;
-//    private AlertDialog colorsAlertDialog;
+      sharedPreferences = getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_category);
-        setupToolbar();
-        getSupportActionBar().setTitle(R.string.title_activity_new_category);
-        extras = getIntent().getExtras();
+      categoryId = -1;
+      parentCategoryId = -1;
+      categoryColorHex = -1;
 
-        sharedPreferences = getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
+      newCategory_name = (EditText) findViewById(R.id.categoryName);
+      categoryDefaultSize = (DefaultSizesEditText) findViewById(R.id.categoryDefaultSize);
+      categoryParent = (CategoryEditText) findViewById(R.id.categoryParent);
+      categoryIconIndicator = (ImageView) findViewById(R.id.categoryIconIndicator);
+      categoryIcon = (IconEditText) findViewById(R.id.categoryIcon);
+      categoryColor = (ExactColorEditText) findViewById(R.id.attrExactColorValue);
+      categoryColorIndicator = (View) findViewById(R.id.attrExactColorIndicator);
 
-        categoryId = 0;
-        parentCategoryId = -1;
-        iconName = "kleiderbuegel";
+      String defaultSize1Value = sharedPreferences.getString(Constants.KEY_DS_1_NAME, "");
+      String defaultSize2Value = sharedPreferences.getString(Constants.KEY_DS_2_NAME, "");
+      String defaultSize3Value = sharedPreferences.getString(Constants.KEY_DS_3_NAME, "");
 
-        newCategory_name = (EditText) findViewById(R.id.categoryName);
-        categoryDefaultSize = (Spinner) findViewById(R.id.categoryDefaultSize);
-        categoryParent = (ClickToSelectEditText) findViewById(R.id.categoryParent);
-        categoryIcon = (ImageView) findViewById(R.id.categoryIcon);
-        categoryColor = (View) findViewById(R.id.categoryColor);
+      ArrayList<DefaultSize> defaultSizes = new ArrayList<>();
+      defaultSizes.add(new DefaultSize(getString(R.string.default_size_none), ""));
+      defaultSizes.add(new DefaultSize(getString(R.string.default_size_tops), defaultSize1Value));
+      defaultSizes.add(
+            new DefaultSize(getString(R.string.default_size_bottoms), defaultSize2Value));
+      defaultSizes.add(new DefaultSize(getString(R.string.default_size_shoes), defaultSize3Value));
 
-        String defaultSize1Value = sharedPreferences.getString(Constants.KEY_DS_1_NAME, "");
-        String defaultSize2Value = sharedPreferences.getString(Constants.KEY_DS_2_NAME, "");
-        String defaultSize3Value = sharedPreferences.getString(Constants.KEY_DS_3_NAME, "");
+      categoryDefaultSize.setItems(this, defaultSizes);
 
-        ArrayList<DefaultSize> defaultSizes = new ArrayList<>();
-        defaultSizes.add(new DefaultSize(getString(R.string.default_size_none), ""));
-        defaultSizes.add(new DefaultSize(getString(R.string.default_size_tops), defaultSize1Value));
-        defaultSizes.add(new DefaultSize(getString(R.string.default_size_bottoms), defaultSize2Value));
-        defaultSizes.add(new DefaultSize(getString(R.string.default_size_shoes), defaultSize3Value));
+      ArrayList<String> iconsArray = new ArrayList<>(
+            Arrays.asList(getResources().getStringArray(R.array.category_icons_array)));
 
-        ArrayAdapter<DefaultSize> adapter = new DefaultSizesAdapter(getBaseContext(), android.R.layout.simple_spinner_item,defaultSizes);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        categoryDefaultSize.setAdapter(adapter);
+      categoryIcon.setItems(this, iconsArray);
+      categoryIcon.setOnItemSelectedListener(new IconEditText.OnItemSelectedListener() {
+         @Override
+         public void onItemSelectedListener(String item, int selectedIndex) {
+            int iconId =
+                  getResources().getIdentifier(item, "drawable", "com.gruppe1.pem.challengeme");
+            categoryIconIndicator.setImageResource(iconId);
+            System.out.println("set Selection: " + item + " - " + selectedIndex);
+         }
+      });
+      categoryIconIndicator.setOnClickListener(new View.OnClickListener() {
+         @Override
+         public void onClick(View view) {
+            categoryIcon.callOnClick();
+         }
+      });
 
-        categoryIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createIconOverlay();
+      if (extras != null) {
+         if (extras.getInt(Constants.EXTRA_PARENT_CATEGORY_ID) != 0) {
+            parentCategoryId = extras.getInt(Constants.EXTRA_PARENT_CATEGORY_ID);
+            DataBaseHelper dbHelper = new DataBaseHelper(getApplicationContext());
+            dbHelper.init();
+            parentCategory = new Category(this, parentCategoryId, dbHelper);
+            categoryColorHex = Integer.parseInt(parentCategory.getColor(), 16) + 0xFF000000;
+            dbHelper.close();
+         }
+         if (extras.getInt(Constants.EXTRA_CATEGORY_ID) != 0) {
+            //edit category
+            categoryId = extras.getInt(Constants.EXTRA_CATEGORY_ID);
+            DataBaseHelper dbHelper = new DataBaseHelper(getApplicationContext());
+            dbHelper.init();
+
+            Category editCategory = new Category(getApplicationContext(), categoryId, dbHelper);
+
+            getSupportActionBar().setTitle(
+                  getString(R.string.title_edit_category_activity) + " " + editCategory.getName());
+            newCategory_name.setText(editCategory.getName());
+            categoryColorHex = Integer.parseInt(editCategory.getColor(), 16) + 0xFF000000;
+            categoryIcon.setSelection(iconsArray.indexOf(editCategory.getIcon()));
+
+            String defaultSizeTypeString =
+                  getDefaultSizeTypeString(editCategory.getDefaultSizeType());
+            int indexOfDefaultSize = defaultSizes.indexOf(new DefaultSize(defaultSizeTypeString,
+                  sharedPreferences.getString(defaultSizeTypeString, "")));
+            categoryDefaultSize.setSelection(indexOfDefaultSize);
+
+            dbHelper.close();
+         }
+      }
+
+      categoryColor.setOnColorSelectedListener(new ExactColorEditText.OnColorSelectedListener() {
+         @Override
+         public void onColorSelectedListener(int color) {
+            if (color != -1) {
+               categoryColorHex = color;
+               categoryColorIndicator.setBackgroundColor(color);
             }
-        });
+         }
+      });
+      ((TextInputLayout) findViewById(R.id.textInputLayout)).setHint(
+            getString(R.string.new_category_label_color));
+      categoryColor.initialize(this, categoryColorHex);
+      categoryColorIndicator.setOnClickListener(new View.OnClickListener() {
+         @Override
+         public void onClick(View view) {
+            categoryColor.callOnClick();
+         }
+      });
 
-        if (extras != null) {
-            if(extras.getInt(Constants.EXTRA_PARENT_CATEGORY_ID) != 0) {
-                parentCategoryId = extras.getInt(Constants.EXTRA_PARENT_CATEGORY_ID);
-                DataBaseHelper dbHelper = new DataBaseHelper(getApplicationContext());
-                dbHelper.init();
-                parentCategory = new Category(this, parentCategoryId, dbHelper);
-                categoryColorHex = Integer.parseInt(parentCategory.getColor(), 16) + 0xFF000000;
-                dbHelper.close();
-
+      ArrayList<Category> allCategories = Category.getAllCategories(this);
+      DataBaseHelper dbHelper = new DataBaseHelper(getApplicationContext());
+      dbHelper.init();
+      categoryParent.setItems(this, dbHelper, allCategories);
+      dbHelper.close();
+      categoryParent.setOnItemSelectedListener(new CategoryEditText.OnItemSelectedListener() {
+         @Override
+         public void onItemSelectedListener(Category item, int selectedIndex) {
+            if (item != null && item.getId() > 0) {
+               parentCategory = item;
+               parentCategoryId = parentCategory.getId();
+               categoryDefaultSize.setSelection(item.getDefaultSizeType() + 1);
+               categoryColorHex = Integer.parseInt(item.getColor(), 16) + 0xFF000000;
+               categoryColor.setExactColorId(categoryColorHex);
+            } else {
+               parentCategory = null;
+               parentCategoryId = -1;
             }
-            if(extras.getInt(Constants.EXTRA_CATEGORY_ID) != 0) {
-                //edit category
-                categoryId = extras.getInt(Constants.EXTRA_CATEGORY_ID);
-                DataBaseHelper dbHelper = new DataBaseHelper(getApplicationContext());
-                dbHelper.init();
+         }
+      });
 
-                Category editCategory = new Category(getApplicationContext(), categoryId, dbHelper);
+      if (parentCategory != null) {
+         categoryParent.setSelection(allCategories.indexOf(parentCategory));
+         String defaultSizeTypeString =
+               getDefaultSizeTypeString(parentCategory.getDefaultSizeType());
+         int indexOfDefaultSize = defaultSizes.indexOf(new DefaultSize(defaultSizeTypeString,
+               sharedPreferences.getString(defaultSizeTypeString, "")));
+         categoryDefaultSize.setSelection(indexOfDefaultSize);
+         categoryIcon.setSelection(iconsArray.indexOf(parentCategory.getIcon()));
+      }
+      if (parentCategory == null && categoryId < 0) {
+         categoryIcon.setSelection(iconsArray.indexOf("kleiderbuegel"));
+      }
+   }
 
-                setTitle("Edit " + editCategory.getName());
-                newCategory_name.setText(editCategory.getName());
-                categoryColorHex = Integer.parseInt(editCategory.getColor(), 16) + 0xFF000000;
+   private String getDefaultSizeTypeString(int defaultSizeType) {
+      String defaultSizeTypeString;
+      switch (defaultSizeType) {
+         case 0:
+            defaultSizeTypeString = getString(R.string.default_size_tops);
+            break;
+         case 1:
+            defaultSizeTypeString = getString(R.string.default_size_bottoms);
+            break;
+         case 2:
+            defaultSizeTypeString = getString(R.string.default_size_shoes);
+            break;
+         default:
+            defaultSizeTypeString = getString(R.string.default_size_none);
+            break;
+      }
+      return defaultSizeTypeString;
+   }
 
-                iconName = editCategory.getIcon();
-                int iconId = getResources().getIdentifier(editCategory.getIcon(), "drawable", "com.gruppe1.pem.challengeme");
-                categoryIcon.setImageResource(iconId);
+   private void setupToolbar() {
+      Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+      setSupportActionBar(toolbar);
+      getSupportActionBar().setDisplayShowHomeEnabled(true);
+      getSupportActionBar().setHomeButtonEnabled(true);
+      getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+   }
 
-                String defaultSizeTypeString;
-                switch(editCategory.getDefaultSizeType()) {
-                    case 0:
-                        defaultSizeTypeString = getString(R.string.default_size_tops);
-                        break;
-                    case 1:
-                        defaultSizeTypeString = getString(R.string.default_size_bottoms);
-                        break;
-                    case 2:
-                        defaultSizeTypeString = getString(R.string.default_size_shoes);
-                        break;
-                    default:
-                        defaultSizeTypeString = getString(R.string.default_size_none);
-                        break;
-                }
-                int indexOfDefaultSize = defaultSizes.indexOf(new DefaultSize(defaultSizeTypeString, sharedPreferences.getString(defaultSizeTypeString, "")));
-                categoryDefaultSize.setSelection(indexOfDefaultSize);
+   @Override
+   public boolean onCreateOptionsMenu(Menu menu) {
+      // Inflate the menu; this adds items to the action bar if it is present.
+      getMenuInflater().inflate(R.menu.menu_new_category, menu);
+      return true;
+   }
 
-                dbHelper.close();
-            }
-        } else {
-            categoryColorHex = getResources().getColor(R.color.gray05);
-        }
-        categoryColor.setBackgroundColor(categoryColorHex);
-        categoryColor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+   /**
+    * creates and saves the new category
+    */
+   private void saveNewCategory() {
+      DataBaseHelper db_helper = new DataBaseHelper(getApplicationContext());
+      db_helper.init();
 
-                new HSVColorPickerDialog(NewCategoryActivity.this, categoryColorHex,
-                      new HSVColorPickerDialog.OnColorSelectedListener() {
-                          @Override
-                          public void colorSelected(Integer color) {
-                              // Do something with the selected color
-                              categoryColorHex = color;
-                              categoryColor.setBackgroundColor(categoryColorHex);
-                          }
-                      }).show();
-            }
-        });
+      Category editCategory = new Category(getApplicationContext(), categoryId, db_helper);
+      editCategory.setNameEn(newCategory_name.getText()
+            .toString());
+      editCategory.setNameDe(newCategory_name.getText()
+            .toString());
+      editCategory.setDefaultSizeType(categoryDefaultSize.getSelectedItemPosition() - 1);
+      editCategory.setColor(String.format("%06X", (0xFFFFFF & categoryColor.getExactColor())));
+      if (parentCategory == null) {
+         editCategory.setParentCategoryId(-1);
+      } else {
+         editCategory.setParentCategoryId(parentCategory.getId());
+      }
+      editCategory.setIcon(categoryIcon.getSelectedItem());
+      editCategory.save();
 
-        ArrayList<Category> allCategories = Category.getAllCategories(this);
+      db_helper.close();
 
-//        parentAdapter = new ParentCategoryAdapter(this, android.R.layout.simple_spinner_item, allCategories);
-//        parentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+      // sending new Item back to CategoriesFragment for actualizing list view
+      Intent i = new Intent();
+      i.putExtra("categoryName", editCategory.getName());
+      i.putExtra("defaultSize", editCategory.getDefaultSizeType());
+      i.putExtra("icon", editCategory.getIcon());
+      i.putExtra("categoryId", editCategory.getId());
+      i.putExtra("categoryParentId", editCategory.getParentCategoryId());
+      i.putExtra("color", editCategory.getColor());
 
-        categoryParent.setItems(allCategories);
-        categoryParent.setOnItemSelectedListener(new ClickToSelectEditText.OnItemSelectedListener<Category>() {
-            @Override
-            public void onItemSelectedListener(Category category, int selectedIndex) {
-                if(category != null && category.getId() > 0) {
-                    parentCategory = category;
-                    parentCategoryId = parentCategory.getId();
-                } else {
-                    parentCategory = null;
-                    parentCategoryId = -1;
-                }
-            }
-        });
-        if(parentCategory != null) {
-            System.out.println("parentCategory.toString()");
-            System.out.println(parentCategory.getName());
-            categoryParent.setSelection(categoryParent.getPosition(parentCategory));
-            categoryDefaultSize.setSelection(parentCategory.getDefaultSizeType()+1);
-        }
-    }
+      setResult(Activity.RESULT_OK, i);
+      this.finish();
+   }
 
-    private void setupToolbar(){
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
-    /**
-     * creates the overlay to choose an Icon for the new category
-     */
-    private void createIconOverlay() {
-
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = getLayoutInflater();
-
-        View dialogView = inflater.inflate(R.layout.dialog_grid_view, null);
-        TextView headline = (TextView)dialogView.findViewById(R.id.dialog_headline);
-        headline.setText(R.string.new_category_overlay_title);
-        GridView gridView = (GridView) dialogView.findViewById(R.id.gridView);
-
-        ArrayList<String> iconsArray = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.category_icons_array)));
-        builder.setView(dialogView);
-        final AlertDialog alert = builder.create();
-        final IconsGridOverlayAdapter gridAdapter = new IconsGridOverlayAdapter(this, R.layout.grid_item_overlay_category, iconsArray);
-        gridView.setAdapter(gridAdapter);
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                int iconId = getResources().getIdentifier(gridAdapter.getItem(position), "drawable", "com.gruppe1.pem.challengeme");
-                categoryIcon.setImageResource(iconId);
-                iconName = gridAdapter.getItem(position);
-                alert.dismiss();
-            }
-        });
-        alert.setButton(DialogInterface.BUTTON_NEGATIVE, getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                alert.dismiss();
-            }
-        });
-        alert.show();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_new_category, menu);
-        return true;
-    }
-
-    /**
-     * creates and saves the new category
-     */
-    private void saveNewCategory() {
-        DataBaseHelper db_helper = new DataBaseHelper(getApplicationContext());
-        db_helper.init();
-
-        Category editCategory = new Category(getApplicationContext(), categoryId, db_helper);
-        editCategory.setNameEn(newCategory_name.getText().toString());
-        editCategory.setNameDe(newCategory_name.getText().toString());
-        editCategory.setDefaultSizeType(categoryDefaultSize.getSelectedItemPosition() - 1);
-        editCategory.setColor(String.format("%06X", (0xFFFFFF & categoryColorHex)));
-        if(parentCategory == null) {
-            editCategory.setParentCategoryId(-1);
-        } else {
-            editCategory.setParentCategoryId(parentCategory.getId());
-        }
-        editCategory.setIcon(iconName);
-        editCategory.save();
-
-        db_helper.close();
-
-        // sending new Item back to CategoriesFragment for actualizing list view
-        Intent i = new Intent();
-        i.putExtra("categoryName", editCategory.getName());
-        i.putExtra("defaultSize", editCategory.getDefaultSizeType());
-        i.putExtra("icon", editCategory.getIcon());
-        i.putExtra("categoryId", editCategory.getId());
-        i.putExtra("categoryParentId", editCategory.getParentCategoryId());
-        i.putExtra("color", editCategory.getColor());
-
-        setResult(Activity.RESULT_OK, i);
-        this.finish();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.save:
-                saveNewCategory();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-
-
+   @Override
+   public boolean onOptionsItemSelected(MenuItem item) {
+      switch (item.getItemId()) {
+         case R.id.save:
+            saveNewCategory();
+            return true;
+      }
+      return super.onOptionsItemSelected(item);
+   }
 }

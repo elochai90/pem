@@ -6,10 +6,11 @@
    android:weightSum="15">
 
    <android.support.design.widget.TextInputLayout
+      android:id="@+id/textInputLayout"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:orientation="horizontal"
-      android:layout_weight="14">
+      android:layout_weight="13">
 
 
       <com.gruppe1.pem.challengeme.helpers.ExactColorEditText
@@ -20,13 +21,14 @@
    </android.support.design.widget.TextInputLayout>
    <LinearLayout
       android:layout_gravity="center"
+      android:gravity="center"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:layout_weight="1" >
+      android:layout_weight="2" >
 
       <View
          android:id="@+id/attrExactColorIndicator"
-         android:layout_width="20dp"
-         android:layout_height="20dp"/>
+         android:layout_width="30dp"
+         android:layout_height="30dp"/>
    </LinearLayout>
 </LinearLayout>

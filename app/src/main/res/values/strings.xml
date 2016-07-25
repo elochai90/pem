@@ -1,19 +1,28 @@
 <resources>
 
     <!--Categories German-->
-    <string name="cat_sweater_de">Pullover</string>
-    <string name="cat_trousers_de">Hosen</string>
-    <string name="cat_skirts_de">Röcke</string>
-    <string name="cat_coats_de">Mäntel</string>
-    <string name="cat_tops_de">Tops</string>
-    <string name="cat_socks_de">Socken</string>
-    <string name="cat_pants_de">Kurze Hosen</string>
-    <string name="cat_swimwear_de">Bademode</string>
-    <string name="cat_underwear_de">Unterwäsche</string>
-    <string name="cat_suits_de">Anzüge</string>
-    <string name="cat_shoes_de">Schuhe</string>
-    <string name="cat_dresses_de">Kleider</string>
+    <string name="cat_kleiderbuegel_de">Keine</string>
     <string name="cat_accessoires_de">Accessoires</string>
+    <string name="cat_suits_de">Anzüge</string>
+    <string name="cat_swimwear_de">Bademode</string>
+    <string name="cat_bags_de">Taschen</string>
+    <string name="cat_belts_de">Gürtel</string>
+    <string name="cat_cardigans_de">Cardigan</string>
+    <string name="cat_trousers_de">Hosen</string>
+    <string name="cat_jackets_de">Jacken</string>
+    <string name="cat_dresses_de">Kleider</string>
+    <string name="cat_coats_de">Mäntel</string>
+    <string name="cat_nail_polishes_de">Nagellacke</string>
+    <string name="cat_sweater_de">Pullover</string>
+    <string name="cat_skirts_de">Röcke</string>
+    <string name="cat_shoes_de">Schuhe</string>
+    <string name="cat_pants_de">Kurze Hosen</string>
+    <string name="cat_sneaker_de">Sneaker</string>
+    <string name="cat_socks_de">Socken</string>
+    <string name="cat_boots_de">Stiefel</string>
+    <string name="cat_tops_de">Tops</string>
+    <string name="cat_shirts_de">T-Shirts</string>
+    <string name="cat_underwear_de">Unterwäsche</string>
 
     <!--Colors German-->
     <string name="color_black_de">Schwarz</string>
@@ -38,19 +47,28 @@
 
 
     <!--Categories English-->
-    <string name="cat_sweater_en">Sweater</string>
-    <string name="cat_trousers_en">Trousers</string>
-    <string name="cat_skirts_en">Skirts</string>
-    <string name="cat_coats_en">Coats</string>
-    <string name="cat_tops_en">Tops</string>
-    <string name="cat_socks_en">Socks</string>
-    <string name="cat_pants_en">Pants</string>
-    <string name="cat_swimwear_en">Swimwear</string>
-    <string name="cat_underwear_en">Underwear</string>
+    <string name="cat_kleiderbuegel_en">None</string>
+    <string name="cat_accessoires_en">Accessories</string>
     <string name="cat_suits_en">Suits</string>
-    <string name="cat_shoes_en">Shoes</string>
+    <string name="cat_swimwear_en">Swimwear</string>
+    <string name="cat_bags_en">Bags</string>
+    <string name="cat_belts_en">Belts</string>
+    <string name="cat_cardigans_en">Cardigans</string>
+    <string name="cat_trousers_en">Trousers</string>
+    <string name="cat_jackets_en">Jackets</string>
     <string name="cat_dresses_en">Dresses</string>
-    <string name="cat_accessoires_en">Accessoires</string>
+    <string name="cat_coats_en">Coats</string>
+    <string name="cat_nail_polishes_en">Nail polishes</string>
+    <string name="cat_sweater_en">Sweater</string>
+    <string name="cat_skirts_en">Skirts</string>
+    <string name="cat_shoes_en">Shoes</string>
+    <string name="cat_pants_en">Pants</string>
+    <string name="cat_sneaker_en">Sneaker</string>
+    <string name="cat_socks_en">Socks</string>
+    <string name="cat_boots_en">Boots</string>
+    <string name="cat_tops_en">Tops</string>
+    <string name="cat_shirts_en">T-Shirts</string>
+    <string name="cat_underwear_en">Underwear</string>
 
     <!--Colors English-->
     <string name="color_black_en">Black</string>

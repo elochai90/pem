@@ -129,5 +129,6 @@
     <string name="chooseColor">Wähle deine Lieblingsfarben:</string>
     <string name="showWishlistItems">Zeige Wunschlisten Items im Compare</string>
 
+    <string name="title_edit_category_activity">Bearbeite</string>
 
 </resources>

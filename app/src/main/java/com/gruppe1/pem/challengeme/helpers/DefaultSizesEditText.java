@@ -1,28 +1,30 @@
 package com.gruppe1.pem.challengeme.helpers;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
-import com.gruppe1.pem.challengeme.Category;
 import com.gruppe1.pem.challengeme.DefaultSize;
 import com.gruppe1.pem.challengeme.R;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class DefaultSizesEditText extends EditText {
 
-   ArrayList<DefaultSize> mItems;
-   String[] mListableItems;
-   CharSequence mHint;
+   private Activity activity;
+   private ArrayList<DefaultSize> mItems;
+   private String[] mListableItems;
+   private CharSequence mHint;
    int selectedItemPosition = 0;
 
    OnItemSelectedListener onItemSelectedListener;
@@ -46,7 +48,8 @@ public class DefaultSizesEditText extends EditText {
    }
 
    @TargetApi (Build.VERSION_CODES.LOLLIPOP)
-   public DefaultSizesEditText(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+   public DefaultSizesEditText(Context context, AttributeSet attrs, int defStyleAttr,
+         int defStyleRes) {
       super(context, attrs, defStyleAttr, defStyleRes);
 
       mHint = getHint();
@@ -59,16 +62,16 @@ public class DefaultSizesEditText extends EditText {
       setClickable(true);
    }
 
-   public void setItems(ArrayList<DefaultSize> items) {
+   public void setItems(Activity activity, ArrayList<DefaultSize> items) {
+      this.activity = activity;
       this.mItems = items;
 
       this.mListableItems = new String[items.size()];
 
       int i = 0;
 
-
       for (DefaultSize item : mItems) {
-         if(i == 0) {
+         if (i == 0) {
             mListableItems[i++] = item.getDefaultSizeName();
          } else {
             mListableItems[i++] = item.getDefaultSizeName() + ": " + item.getDefaultSizeValue();
@@ -82,21 +85,8 @@ public class DefaultSizesEditText extends EditText {
       setOnClickListener(new OnClickListener() {
          @Override
          public void onClick(View view) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-            builder.setTitle(mHint);
-            builder.setItems(mListableItems, new DialogInterface.OnClickListener() {
-               @Override
-               public void onClick(DialogInterface dialogInterface, int selectedIndex) {
-                  selectedItemPosition = selectedIndex;
-                  setText(mListableItems[selectedIndex]);
-
-                  if (onItemSelectedListener != null) {
-                        onItemSelectedListener.onItemSelectedListener(mItems.get(selectedIndex), selectedIndex);
-                  }
-               }
-            });
-//            builder.setPositiveButton(R.string.save, null);
-            builder.create().show();
+            AlertDialog alertDialog = setupDefaultSizesOverlay();
+            alertDialog.show();
          }
       });
    }
@@ -106,8 +96,8 @@ public class DefaultSizesEditText extends EditText {
    }
 
    public int getPosition(DefaultSize size) {
-      for(int i = 0; i < mListableItems.length; i++) {
-         if(Objects.equals(size.getDefaultSizeName(), mItems.get(i)
+      for (int i = 0; i < mListableItems.length; i++) {
+         if (Objects.equals(size.getDefaultSizeName(), mItems.get(i)
                .getDefaultSizeName())) {
             return i;
          }
@@ -116,7 +106,7 @@ public class DefaultSizesEditText extends EditText {
    }
 
    public DefaultSize getSelectedItem() {
-      if(selectedItemPosition < 0) {
+      if (selectedItemPosition < 0) {
          return null;
       }
       return mItems.get(selectedItemPosition);
@@ -138,5 +128,36 @@ public class DefaultSizesEditText extends EditText {
       if (onItemSelectedListener != null) {
          onItemSelectedListener.onItemSelectedListener(mItems.get(index), index);
       }
+   }
+
+   private AlertDialog setupDefaultSizesOverlay() {
+      final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+      LayoutInflater inflater = activity.getLayoutInflater();
+
+      TextView headline = (TextView) inflater.inflate(R.layout.dialog_headline, null);
+      headline.setText(getResources().getString(R.string.new_category_label_defaultSize));
+      builder.setCustomTitle(headline);
+      builder.setItems(mListableItems, new DialogInterface.OnClickListener() {
+         @Override
+         public void onClick(DialogInterface dialogInterface, int selectedIndex) {
+            selectedItemPosition = selectedIndex;
+            setText(mListableItems[selectedIndex]);
+
+            if (onItemSelectedListener != null) {
+               onItemSelectedListener.onItemSelectedListener(mItems.get(selectedIndex),
+                     selectedIndex);
+            }
+         }
+      });
+      final AlertDialog alert = builder.create();
+      alert.setButton(DialogInterface.BUTTON_NEGATIVE,
+            getResources().getString(android.R.string.cancel),
+            new DialogInterface.OnClickListener() {
+               @Override
+               public void onClick(DialogInterface dialog, int which) {
+                  alert.dismiss();
+               }
+            });
+      return alert;
    }
 }

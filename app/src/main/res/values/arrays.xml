@@ -21,26 +21,26 @@
    <string-array name="category_icons_array">
       <item>kleiderbuegel</item>
       <item>accessoires</item>
-      <item>anzug</item>
-      <item>bademode</item>
-      <item>bag</item>
-      <item>belt</item>
-      <item>cardigan</item>
-      <item>hose</item>
-      <item>jacke</item>
-      <item>kleid</item>
-      <item>mantel</item>
-      <item>nail_polish</item>
-      <item>pulli</item>
-      <item>rock</item>
-      <item>schuh</item>
-      <item>shorts</item>
+      <item>suits</item>
+      <item>swimwear</item>
+      <item>bags</item>
+      <item>belts</item>
+      <item>cardigans</item>
+      <item>trousers</item>
+      <item>jackets</item>
+      <item>dresses</item>
+      <item>coats</item>
+      <item>nail_polishes</item>
+      <item>sweater</item>
+      <item>skirts</item>
+      <item>shoes</item>
+      <item>pants</item>
       <item>sneaker</item>
-      <item>socken</item>
-      <item>stiefel</item>
-      <item>top</item>
-      <item>tshirt</item>
-      <item>unterwaesche</item>
+      <item>socks</item>
+      <item>boots</item>
+      <item>tops</item>
+      <item>shirts</item>
+      <item>underwear</item>
    </string-array>
    <string-array name="sizes_shoes_text">
       <item>33</item>
@@ -100,7 +100,7 @@
       <item>@string/cat_sweater_de</item>
       <item>-1</item>
       <item>0</item>
-      <item>pulli</item>
+      <item>sweater</item>
       <item>8f8f8f</item>
    </string-array>
    <string-array name="initial_cat_trousers">
@@ -108,7 +108,7 @@
       <item>@string/cat_trousers_de</item>
       <item>-1</item>
       <item>1</item>
-      <item>hose</item>
+      <item>trousers</item>
       <item>225491</item>
    </string-array>
    <string-array name="initial_cat_skirts">
@@ -116,7 +116,7 @@
       <item>@string/cat_skirts_de</item>
       <item>-1</item>
       <item>1</item>
-      <item>rock</item>
+      <item>skirts</item>
       <item>55276b</item>
    </string-array>
    <string-array name="initial_cat_coats">
@@ -124,7 +124,7 @@
       <item>@string/cat_coats_de</item>
       <item>-1</item>
       <item>0</item>
-      <item>mantel</item>
+      <item>coats</item>
       <item>663509</item>
    </string-array>
    <string-array name="initial_cat_tops">
@@ -132,7 +132,7 @@
       <item>@string/cat_tops_de</item>
       <item>-1</item>
       <item>0</item>
-      <item>top</item>
+      <item>tops</item>
       <item>054304</item>
    </string-array>
    <string-array name="initial_cat_socks">
@@ -140,7 +140,7 @@
       <item>@string/cat_socks_de</item>
       <item>-1</item>
       <item>2</item>
-      <item>socken</item>
+      <item>socks</item>
       <item>aeaeae</item>
    </string-array>
    <string-array name="initial_cat_pants">
@@ -148,7 +148,7 @@
       <item>@string/cat_pants_de</item>
       <item>-1</item>
       <item>1</item>
-      <item>shorts</item>
+      <item>pants</item>
       <item>1c1c63</item>
    </string-array>
    <string-array name="initial_cat_swimwear">
@@ -156,7 +156,7 @@
       <item>@string/cat_swimwear_de</item>
       <item>-1</item>
       <item>1</item>
-      <item>bademode</item>
+      <item>swimwear</item>
       <item>e5a53e</item>
    </string-array>
    <string-array name="initial_cat_underwear">
@@ -164,7 +164,7 @@
       <item>@string/cat_underwear_de</item>
       <item>-1</item>
       <item>1</item>
-      <item>unterwaesche</item>
+      <item>underwear</item>
       <item>fc81c2</item>
    </string-array>
    <string-array name="initial_cat_suits">
@@ -172,7 +172,7 @@
       <item>@string/cat_suits_de</item>
       <item>-1</item>
       <item>1</item>
-      <item>anzug</item>
+      <item>suits</item>
       <item>000000</item>
    </string-array>
    <string-array name="initial_cat_shoes">
@@ -188,7 +188,7 @@
       <item>@string/cat_dresses_de</item>
       <item>-1</item>
       <item>0</item>
-      <item>kleid</item>
+      <item>dresses</item>
       <item>77062f</item>
    </string-array>
    <string-array name="initial_cat_accessoires">

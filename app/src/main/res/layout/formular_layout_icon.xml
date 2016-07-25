@@ -9,24 +9,25 @@
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:orientation="horizontal"
-      android:layout_weight="14">
+      android:layout_weight="13">
 
 
-      <com.gruppe1.pem.challengeme.helpers.ExactColorEditText
-         android:id="@+id/attrExactColorValue"
+      <com.gruppe1.pem.challengeme.helpers.IconEditText
+         android:id="@+id/categoryIcon"
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
-         android:hint="@string/item_exact_color_label" />
+         android:hint="@string/new_category_label_icon" />
    </android.support.design.widget.TextInputLayout>
    <LinearLayout
       android:layout_gravity="center"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:layout_weight="1" >
+      android:layout_weight="2" >
 
-      <View
-         android:id="@+id/attrExactColorIndicator"
-         android:layout_width="20dp"
-         android:layout_height="20dp"/>
+      <ImageView
+         android:id="@+id/categoryIconIndicator"
+         android:contentDescription="@string/new_category_desc_icon"
+         android:layout_width="40dp"
+         android:layout_height="40dp"/>
    </LinearLayout>
 </LinearLayout>

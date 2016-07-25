@@ -167,6 +167,14 @@ public class CollectionItemsFragment extends Fragment {
          }
       });
 
+      attrColorIndicator.setOnClickListener(new View.OnClickListener() {
+         @Override
+         public void onClick(View view) {
+            attrColorValue.callOnClick();
+         }
+      });
+
+
       setupAttributeViews();
 
 
@@ -409,6 +417,12 @@ public class CollectionItemsFragment extends Fragment {
                   }
                });
          attrValueColorPicker.initialize(activity, exactColorId);
+         attrExactColorIndicator.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               attrValueColorPicker.callOnClick();
+            }
+         });
          attributeValueView = exactColorLayout;
       }
       // attribute is DatePicker

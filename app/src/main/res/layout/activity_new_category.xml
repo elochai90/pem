@@ -20,9 +20,11 @@
    <RelativeLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent"
+      android:layout_margin="@dimen/activity_horizontal_margin"
       app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
       <android.support.design.widget.TextInputLayout
+         style="@style/AppTheme.TextField"
          android:id="@+id/categoryNameLayout"
          android:layout_width="match_parent"
          android:layout_height="wrap_content">
@@ -31,119 +33,55 @@
             android:id="@+id/categoryName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/new_category_label_name" />
+            android:hint="@string/new_category_label_name"
+            android:singleLine="true"/>
 
       </android.support.design.widget.TextInputLayout>
 
       <android.support.design.widget.TextInputLayout
          android:id="@+id/categoryParentLayout"
+         style="@style/AppTheme.TextField"
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
          android:layout_below="@id/categoryNameLayout">
 
-         <com.gruppe1.pem.challengeme.helpers.ClickToSelectEditText
+         <com.gruppe1.pem.challengeme.helpers.CategoryEditText
             android:id="@+id/categoryParent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/new_category_label_parent"
-            android:singleLine="true" />
+            android:singleLine="true"  />
+
       </android.support.design.widget.TextInputLayout>
 
-      <View
-         android:id="@+id/categoryParentDivider"
-         android:layout_width="fill_parent"
-         android:layout_height="1dp"
-         android:layout_below="@id/categoryParentLayout"
-         android:background="#c0c0c0" />
-
-      <LinearLayout
+      <android.support.design.widget.TextInputLayout
          android:id="@+id/categoryDefaultSizeLayout"
+         android:layout_below="@id/categoryParentLayout"
+         style="@style/AppTheme.TextField"
          android:layout_width="match_parent"
-         android:layout_height="wrap_content"
-         android:layout_below="@id/categoryParentDivider"
-         android:orientation="horizontal"
-         android:paddingLeft="10dp"
-         android:paddingRight="10dp">
+         android:layout_height="wrap_content">
 
-         <TextView
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:text="@string/new_category_label_defaultSize"
-            android:textSize="18sp" />
-
-         <Spinner
+         <com.gruppe1.pem.challengeme.helpers.DefaultSizesEditText
             android:id="@+id/categoryDefaultSize"
-            android:layout_width="fill_parent"
-            android:layout_height="60dp"></Spinner>
-      </LinearLayout>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/new_category_label_defaultSize"
+            android:singleLine="true"  />
 
-      <View
-         android:id="@+id/categoryDefaultSizeDivider"
-         android:layout_width="fill_parent"
-         android:layout_height="1dp"
-         android:layout_below="@id/categoryDefaultSizeLayout"
-         android:background="#c0c0c0" />
+      </android.support.design.widget.TextInputLayout>
 
-      <LinearLayout
+      <include
+         layout="@layout/formular_layout_icon"
          android:id="@+id/categoryIconLayout"
-         android:layout_width="match_parent"
+         android:layout_below="@id/categoryDefaultSizeLayout"
          android:layout_height="wrap_content"
-         android:layout_below="@id/categoryDefaultSizeDivider"
-         android:orientation="horizontal"
-         android:paddingLeft="10dp"
-         android:paddingRight="10dp">
-
-         <TextView
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:text="@string/new_category_label_icon"
-            android:textSize="18sp" />
-
-         <ImageView
-            android:id="@+id/categoryIcon"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:background="@drawable/selector_list_item"
-            android:contentDescription="@string/new_category_desc_icon"
-            android:padding="@dimen/margin_small"
-            android:src="@drawable/kleiderbuegel" />
-      </LinearLayout>
-
-      <View
-         android:layout_width="fill_parent"
-         android:layout_height="1dp"
-         android:layout_below="@id/categoryIconLayout"
-         android:background="#c0c0c0" />
-
-      <LinearLayout
+         android:layout_width="match_parent"/>
+      <include
+         layout="@layout/formular_layout_color"
          android:id="@+id/categoryColorLayout"
-         android:layout_width="match_parent"
-         android:layout_height="wrap_content"
          android:layout_below="@id/categoryIconLayout"
-         android:orientation="horizontal"
-         android:paddingLeft="10dp"
-         android:paddingRight="10dp">
-
-         <TextView
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:text="@string/new_category_label_color"
-            android:textSize="18sp" />
-
-         <View
-            android:id="@+id/categoryColor"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:background="@color/gray00"></View>
-      </LinearLayout>
-
-      <View
-         android:layout_width="fill_parent"
-         android:layout_height="1dp"
-         android:layout_below="@id/categoryColorLayout"
-         android:background="#c0c0c0" />
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"/>
 
    </RelativeLayout>
 
