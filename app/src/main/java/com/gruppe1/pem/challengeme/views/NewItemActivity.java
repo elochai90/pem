@@ -1,5 +1,7 @@
 package com.gruppe1.pem.challengeme.views;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -7,17 +9,23 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -48,6 +56,7 @@ import com.gruppe1.pem.challengeme.helpers.ImageLoader;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -156,7 +165,7 @@ public class NewItemActivity extends AppCompatActivity {
       if (extras1 != null && extras1.getBoolean("is_wishlist")) {
          attrWishlistValue.setChecked(true);
       }
-      getSupportActionBar().setTitle(R.string.title_activity_edit_item);
+      getSupportActionBar().setTitle(R.string.title_activity_new_item);
 
       int parentCategoryId = -1;
       getDb_helper().setTable(Constants.ITEMS_DB_TABLE);
@@ -530,9 +539,33 @@ public class NewItemActivity extends AppCompatActivity {
                Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                startActivityForResult(intent, 1);
             } else if (options[item].equals(getString(R.string.item_choose_gellery))) {
-               Intent intent = new Intent(Intent.ACTION_PICK,
-                     android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-               startActivityForResult(intent, 2);
+
+               if (ContextCompat.checkSelfPermission(NewItemActivity.this,
+                     Manifest.permission.READ_EXTERNAL_STORAGE)
+                     != PackageManager.PERMISSION_GRANTED) {
+                  if (ActivityCompat.shouldShowRequestPermissionRationale(NewItemActivity.this,
+                        Manifest.permission.READ_EXTERNAL_STORAGE)) {
+
+                  } else {
+                     ActivityCompat.requestPermissions(NewItemActivity.this,
+                           new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                           Constants.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+                  }
+               } else {
+
+                  if (Build.VERSION.SDK_INT <19){
+                     Intent intent = new Intent();
+                     intent.setType("image/jpeg");
+                     intent.setAction(Intent.ACTION_GET_CONTENT);
+                     startActivityForResult(Intent.createChooser(intent, getResources().getString(R.string.item_select_picture)),2);
+                  } else {
+                     Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                     intent.addCategory(Intent.CATEGORY_OPENABLE);
+                     intent.setType("image/jpeg");
+                     startActivityForResult(intent, 3);
+                  }
+
+               }
             } else if (options[item].equals(getString(R.string.cancel))) {
                dialog.dismiss();
             } else if (options[item].equals(getString(R.string.item_show_image_fullscreen))) {
@@ -546,10 +579,39 @@ public class NewItemActivity extends AppCompatActivity {
    }
 
    @Override
+   public void onRequestPermissionsResult(int requestCode,
+         String permissions[], int[] grantResults) {
+      switch (requestCode) {
+         case Constants.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE: {
+            // If request is cancelled, the result arrays are empty.
+            if (grantResults.length > 0
+                  && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+               if (Build.VERSION.SDK_INT <19){
+                  Intent intent = new Intent();
+                  intent.setType("image/jpeg");
+                  intent.setAction(Intent.ACTION_GET_CONTENT);
+                  startActivityForResult(Intent.createChooser(intent, getResources().getString(R.string.item_select_picture)),2);
+               } else {
+                  Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                  intent.addCategory(Intent.CATEGORY_OPENABLE);
+                  intent.setType("image/jpeg");
+                  startActivityForResult(intent, 3);
+               }
+            } else {
+               // permission denied, boo! Disable the
+               // functionality that depends on this permission.
+            }
+            return;
+         }
+      }
+   }
+
+   @Override
    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
       super.onActivityResult(requestCode, resultCode, data);
 
-      if (resultCode == RESULT_OK) {
+      if (resultCode != Activity.RESULT_OK) return;
+      if (data == null) return;
          if (requestCode == 1) {
             try {
                Bitmap photo = (Bitmap) data.getExtras()
@@ -570,16 +632,48 @@ public class NewItemActivity extends AppCompatActivity {
                e.printStackTrace();
             }
          } else if (requestCode == 2) {
-            Uri selectedImage = data.getData();
-            String[] filePath = { MediaStore.Images.Media.DATA };
+            System.out.println(data.getData());
+            Uri uri = data.getData();
+            String path = ImageLoader.getPath(this, uri);
 
-            Cursor c = getContentResolver().query(selectedImage, filePath, null, null, null);
-            c.moveToFirst();
-            int columnIndex = c.getColumnIndex(filePath[0]);
-            String picturePath = c.getString(columnIndex);
-            c.close();
+            System.out.println(path);
+            item_imageFile = path;
+            editItem.setImageFile(item_imageFile);
 
-            item_imageFile = picturePath;
+            Bitmap tmpBitmap = ImageLoader.getPicFromFile(editItem.getImageFile(), 500, 500);
+            ImgPhoto.setImageBitmap(tmpBitmap);
+            int exactColorId = ImageDominantColorExtractor.getInstance()
+                  .getDominantColor(tmpBitmap);
+            attrValueColorPicker.setExactColorId(exactColorId);
+
+         } else if (requestCode == 3) {
+            System.out.println(data.getData());
+            Uri originalUri = data.getData();
+
+            final int takeFlags = data.getFlags()
+                  & (Intent.FLAG_GRANT_READ_URI_PERMISSION
+                  | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            // Check for the freshest data.
+            getContentResolver().takePersistableUriPermission(originalUri, takeFlags);
+
+            String id = originalUri.getLastPathSegment().split(":")[1];
+            final String[] imageColumns = {MediaStore.Images.Media.DATA };
+            final String imageOrderBy = null;
+
+            Uri uri = getUri();
+            String selectedImagePath = "path";
+
+            Cursor imageCursor = managedQuery(uri, imageColumns,
+                  MediaStore.Images.Media._ID + "="+id, null, imageOrderBy);
+
+            if (imageCursor.moveToFirst()) {
+               selectedImagePath = imageCursor.getString(imageCursor.getColumnIndex(MediaStore.Images.Media.DATA));
+            }
+            Log.e("path",selectedImagePath );
+
+
+            System.out.println(selectedImagePath);
+            item_imageFile = selectedImagePath;
             editItem.setImageFile(item_imageFile);
 
             Bitmap tmpBitmap = ImageLoader.getPicFromFile(editItem.getImageFile(), 500, 500);
@@ -588,7 +682,7 @@ public class NewItemActivity extends AppCompatActivity {
                   .getDominantColor(tmpBitmap);
             attrValueColorPicker.setExactColorId(exactColorId);
          }
-      }
+
    }
 
    /**
@@ -605,6 +699,14 @@ public class NewItemActivity extends AppCompatActivity {
             MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title",
                   null);
       return Uri.parse(path);
+   }
+
+   private Uri getUri() {
+      String state = Environment.getExternalStorageState();
+      if(!state.equalsIgnoreCase(Environment.MEDIA_MOUNTED))
+         return MediaStore.Images.Media.INTERNAL_CONTENT_URI;
+
+      return MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
    }
 
    /**

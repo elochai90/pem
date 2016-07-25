@@ -75,4 +75,7 @@ public class Constants {
 
     public static final int COMPARE_IMAGE_WIDTH = 800;
     public static final int COMPARE_IMAGE_HEIGHT = 800;
+
+
+    public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 5;
 }

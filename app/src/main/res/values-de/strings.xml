@@ -2,9 +2,6 @@
     <string name="app_name">OrgaNice</string>
 
 
-    <string name="drawer_open">Öffnen</string>
-    <string name="drawer_close">Schließen</string>
-
     <!--titles-->
     <string name="title_activity_categories">Kategorien</string>
     <string name="title_activity_compare">Vergleich</string>
@@ -68,6 +65,7 @@
     <string name="item_color_label">Farbkategorie</string>
     <string name="item_exact_color_label">Exakter Farbwert</string>
     <string name="item_wishlist_label">Item in Wunschliste anzeigen</string>
+    <string name="item_select_picture">Bild auswählen</string>
 
     <!--For new category activity-->
     <string name="new_category_label_name">Name</string>
@@ -97,17 +95,6 @@
     <!--List/Grid view-->
     <string name="list_grid_view_desc_arrowImage">arrow_no_items</string>
     <string name="list_grid_item_desc_image">Bild</string>
-
-    <!--navigation drawer-->
-    <string name="nav_drawer_item_desc_icon">Icon</string>
-    <string name="nav_drawer_desc_weatherImage">Wetter Bild</string>
-    <string name="nav_drawer_title">Menü</string>
-    <string name="noWeatherAvailableText">Wenn Sie Internet und GPS aktivieren, können Sie hier das Wetter der nächsten 3 Tage sehen.</string>
-    <string name="weatherold">Diese Wetterdaten sind</string>
-    <string name="weatherold2"> Tag</string>
-    <string name="weatherold22"> e</string>
-    <string name="weatherold3"> alt</string>
-
 
     <string name="abort">Abbrechen</string>
     <string name="save">Speichern</string>

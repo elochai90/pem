@@ -199,6 +199,12 @@ public class CategoriesFragment extends Fragment {
                   getActivity().getPackageName() + ".views.SearchResultsActivity");
             startActivity(intent);
             return true;
+         case R.id.settings:
+            Intent intentSettings = new Intent();
+            intentSettings.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".views.SettingsActivity");
+            startActivityForResult(intentSettings, 0);
+            return true;
+
       }
 
       return super.onOptionsItemSelected(item);
@@ -248,7 +254,7 @@ public class CategoriesFragment extends Fragment {
    public void onActivityResult(int p_requestCode, int p_resultCode, Intent p_data) {
       super.onActivityResult(p_requestCode, p_resultCode, p_data);
 
-      if (p_requestCode == 1 && p_resultCode == Activity.RESULT_OK) {
+      if ((p_requestCode == 1 || p_requestCode == 0) && p_resultCode == Activity.RESULT_OK) {
          // item was updated
          initDataset();
          defaultRecyclerListAdapter.notifyDataSetChanged();

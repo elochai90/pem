@@ -138,6 +138,11 @@ public class WishlistFragment extends Fragment {
                   getActivity().getPackageName() + ".views.SearchResultsActivity");
             startActivity(intent);
             return true;
+         case R.id.settings:
+            Intent intentSettings = new Intent();
+            intentSettings.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".views.SettingsActivity");
+            startActivityForResult(intentSettings, 0);
+            return true;
       }
       return super.onOptionsItemSelected(item);
    }
@@ -215,7 +220,7 @@ public class WishlistFragment extends Fragment {
       try {
          super.onActivityResult(requestCode, resultCode, data);
 
-         if (requestCode == 0) {
+         if (requestCode == 1 || requestCode == 0)  {
             if (resultCode == Activity.RESULT_OK) {
                initDataset();
                defaultRecyclerListAdapter.notifyDataSetChanged();
