@@ -4,7 +4,7 @@
    android:layout_width="match_parent"
    android:layout_height="wrap_content"
    android:minHeight="?android:attr/listPreferredItemHeight"
-   android:background="@drawable/selector_list_item"
+   android:background="@drawable/selector_grid_item"
    tools:layoutgravity="center">
 
    <com.gruppe1.pem.challengeme.SquareImageView
@@ -19,7 +19,7 @@
       android:id="@+id/textView"
       android:layout_width="fill_parent"
       android:layout_height="30dp"
-      android:background="@drawable/background_grid_item"
+      android:background="@drawable/background_grid_item_compare"
       android:singleLine="true"
       android:ellipsize="marquee"
       android:gravity="center_vertical"

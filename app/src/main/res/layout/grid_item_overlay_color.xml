@@ -18,7 +18,7 @@
       android:layout_width="fill_parent"
       android:layout_height="30dp"
       android:layout_alignBottom="@id/imageView"
-      android:background="@color/grey_transparent"
+      android:background="@color/gray07_transparent"
       android:gravity="center_vertical"
       android:paddingEnd="@dimen/margin_small"
       android:paddingStart="@dimen/margin_small"

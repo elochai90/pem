@@ -16,11 +16,15 @@
     <!--<color name="primary_dark">#ff12283e</color>-->
     <!--<color name="accent">#ff33b4f8</color>-->
     <!--<color name="accent_old">#ff3e88d4</color>-->
-    <color name="background">#fff4f4f4</color>
+    <color name="background">@color/gray00</color>
     <color name="listItems">#ffffffff</color>
 
     <!-- for the grid cards -->
-    <color name="grey_transparent">#5e000000</color>
+    <color name="gray00_transparent">#b1ffffff</color>
+    <color name="gray00_transparent_light">#b5ffffff</color>
+    <color name="gray01_transparent">#a7e9e9e9</color>
+    <color name="gray07_transparent_light">#20000000</color>
+    <color name="gray07_transparent">#5e000000</color>
 
     <!-- for the floating action button -->
     <color name="fab_color_1">@color/accent</color>
@@ -32,7 +36,6 @@
 
     <color name="transparent">#00000000</color>
 
-    <color name="white_transparent">#9dffffff</color>
     <color name="gray00">#ffffff</color>
     <color name="gray01">#e9e9e9</color>
     <color name="gray02">#d4d4d4</color>

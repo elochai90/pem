@@ -47,6 +47,7 @@ import com.gruppe1.pem.challengeme.Item;
 import com.gruppe1.pem.challengeme.R;
 import com.gruppe1.pem.challengeme.helpers.CategoryEditText;
 import com.gruppe1.pem.challengeme.helpers.ColorEditText;
+import com.gruppe1.pem.challengeme.helpers.ColorHelper;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 import com.gruppe1.pem.challengeme.helpers.DateEditText;
@@ -111,9 +112,12 @@ public class NewItemActivity extends AppCompatActivity {
       });
 
       ratingBar = (RatingBar) findViewById(R.id.ratingBar);
-      LayerDrawable stars = (LayerDrawable) ratingBar.getProgressDrawable();
-      stars.getDrawable(0)
-            .setColorFilter(getResources().getColor(R.color.gray02), PorterDuff.Mode.SRC_ATOP);
+//      LayerDrawable stars = (LayerDrawable) ratingBar.getProgressDrawable();
+////      stars.getDrawable(0)
+////            .setColorFilter(getResources().getColor(R.color.gray02), PorterDuff.Mode.SRC_ATOP);
+//      stars.getDrawable(2).setColorFilter(getResources().getColor(R.color.accent), PorterDuff.Mode.SRC_ATOP);
+//      stars.getDrawable(0).setColorFilter(getResources().getColor(R.color.transparent), PorterDuff.Mode.SRC_ATOP);
+//      stars.getDrawable(1).setColorFilter(getResources().getColor(R.color.accent_dark), PorterDuff.Mode.SRC_ATOP);
 
       attributeTypesList = new ArrayList<>();
       itemNameExitText = (EditText) findViewById(R.id.itemName);
@@ -406,6 +410,8 @@ public class NewItemActivity extends AppCompatActivity {
                   public void onColorSelectedListener(int color) {
                      if (color != -1) {
                         attrExactColorIndicator.setBackgroundColor(color);
+                        com.gruppe1.pem.challengeme.Color closestColor = ColorHelper.getClosestColor(color, allColors);
+                        attrColorValue.setSelection(allColors.indexOf(closestColor));
                      }
                   }
                });

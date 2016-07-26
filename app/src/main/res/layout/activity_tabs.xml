@@ -28,8 +28,6 @@
          android:background="@color/primary"
          app:tabIndicatorColor="@color/accent"
          app:tabIndicatorHeight="2dp" />
-      <!--app:layout_scrollFlags="scroll|enterAlways"-->
-      <!--app:layout_scrollFlags="scroll|enterAlways"-->
 
    </android.support.design.widget.AppBarLayout>
 
@@ -49,7 +47,7 @@
       android:paddingEnd="10dp"
       android:paddingStart="10dp"
       fab:menu_animationDelayPerItem="50"
-      fab:menu_backgroundColor="@color/grey_transparent"
+      fab:menu_backgroundColor="@color/gray07_transparent"
       fab:menu_buttonSpacing="0dp"
       fab:menu_colorNormal="@color/accent"
       fab:menu_colorPressed="@color/accent_dark"

@@ -81,7 +81,7 @@ public class NewCategoryActivity extends AppCompatActivity {
 
       categoryDefaultSize.setItems(this, defaultSizes);
 
-      ArrayList<String> iconsArray = new ArrayList<>(
+      final ArrayList<String> iconsArray = new ArrayList<>(
             Arrays.asList(getResources().getStringArray(R.array.category_icons_array)));
 
       categoryIcon.setItems(this, iconsArray);
@@ -167,6 +167,7 @@ public class NewCategoryActivity extends AppCompatActivity {
                categoryDefaultSize.setSelection(item.getDefaultSizeType() + 1);
                categoryColorHex = Integer.parseInt(item.getColor(), 16) + 0xFF000000;
                categoryColor.setExactColorId(categoryColorHex);
+               categoryIcon.setSelection(iconsArray.indexOf(parentCategory.getIcon()));
             } else {
                parentCategory = null;
                parentCategoryId = -1;

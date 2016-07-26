@@ -65,7 +65,7 @@
                 <TextView
                     android:id="@+id/nameItem1"
                     android:layout_alignBottom="@id/detail1oben"
-                    android:background="@color/grey_transparent"
+                    android:background="@color/gray07_transparent"
                     android:textColor="@android:color/white"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -100,7 +100,7 @@
                 <TextView
                     android:id="@+id/nameItem2"
                     android:layout_alignBottom="@id/detail2unten"
-                    android:background="@color/grey_transparent"
+                    android:background="@color/gray07_transparent"
                     android:textColor="@android:color/white"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"

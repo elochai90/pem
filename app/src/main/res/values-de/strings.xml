@@ -26,8 +26,8 @@
     <string name="no_search_results">Die Suche hat leider keine Ergebnisse zur Anfrage \'%1$s\' geliefert.</string>
 
     <!--Switch text-->
-    <string name="switch_true">&#10003;</string>
-    <string name="switch_false">&#10007;</string>
+    <string name="switch_true"></string>
+    <string name="switch_false"></string>
 
     <!--empty list text-->
     <string name="no_items">Du hast noch keine Items in dieser Kategorie. Du kannst eines mit dem Button erstellen.</string>

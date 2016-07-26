@@ -25,29 +25,30 @@
             android:scaleType="centerCrop"
             android:src="@mipmap/addcamera2" />
 
-         <LinearLayout
-            android:id="@+id/itemDetailRating"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/itemDetailImage"
-            android:layout_gravity="center_horizontal"
-            android:background="@color/primary"
-            android:gravity="center_horizontal"
-            android:weightSum="1">
+         <!--<LinearLayout-->
+            <!--android:id="@+id/itemDetailRating"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@id/itemDetailImage"-->
+            <!--android:layout_gravity="center_horizontal"-->
+            <!--android:background="@color/primary"-->
+            <!--android:gravity="center_horizontal"-->
+            <!--android:weightSum="1">-->
 
-            <RatingBar
-               android:id="@+id/ratingBar"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:numStars="5"
-               android:stepSize="1.0" />
+            <!--<RatingBar-->
+               <!--style="@style/RatingBar"-->
+               <!--android:id="@+id/ratingBar"-->
+               <!--android:layout_width="wrap_content"-->
+               <!--android:layout_height="wrap_content"-->
+               <!--android:numStars="5"-->
+               <!--android:stepSize="1.0" />-->
 
-         </LinearLayout>
+         <!--</LinearLayout>-->
          <LinearLayout
             android:id="@+id/itemDetailAttributes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/itemDetailRating"
+            android:layout_below="@id/itemDetailImage"
             android:layout_margin="@dimen/activity_horizontal_margin"
             android:orientation="vertical">
 
@@ -63,6 +64,19 @@
                   android:hint="@string/new_item_label_name" />
 
             </android.support.design.widget.TextInputLayout>
+            <LinearLayout
+               android:id="@+id/itemDetailRating"
+               android:layout_width="wrap_content"
+               android:layout_height="42dp"
+               android:layout_marginBottom="@dimen/margin_small">
+               <RatingBar
+                  style="@style/RatingBar"
+                  android:id="@+id/ratingBar"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:numStars="5"
+                  android:stepSize="1.0" />
+               </LinearLayout>
 
             <android.support.design.widget.TextInputLayout
                style="@style/AppTheme.TextField"

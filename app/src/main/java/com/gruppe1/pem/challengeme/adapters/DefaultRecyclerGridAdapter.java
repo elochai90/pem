@@ -1,6 +1,8 @@
 package com.gruppe1.pem.challengeme.adapters;
 
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.StateListDrawable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -96,13 +98,13 @@ public class DefaultRecyclerGridAdapter
          }
          colorHex = android.graphics.Color.HSVToColor(hsv);
          holder.textContainer.setBackgroundColor(colorHex);
+         holder.itemView.setBackgroundColor(colorHex);
          holder.image.setImageResource(item.getIcon());
          holder.rightTextView.setText(
                Item.getItemsCountByCategoryId(context, item.getElementId(), false) + "");
          holder.moreButton.setTag(position);
          holder.itemView.setOnClickListener(onItemClickListener);
          holder.moreButton.setOnClickListener(onIcMoreClickListener);
-
       } else if(viewType == TYPE_ITEM) {
          ViewHolder holder = (ViewHolder) viewHolder;
          holder.imageTitle.setText(item.getName());
