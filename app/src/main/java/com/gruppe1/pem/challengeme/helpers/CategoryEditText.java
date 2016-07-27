@@ -27,7 +27,7 @@ public class CategoryEditText extends EditText {
 
    List<Category> categories;
    CharSequence mHint;
-   int selectedItemPosition = 0;
+   int selectedItemPosition = -1;
    private Activity activity;
    private CategoriesGridOverlayAdapter gridCateoriesAdapter;
    private DataBaseHelper dbHelper;
@@ -81,7 +81,7 @@ public class CategoryEditText extends EditText {
          int iconId = getResources().getIdentifier(tmpCat.getIcon(), "drawable",
                "com.gruppe1.pem.challengeme");
          catArray.add(
-               new ListItemIconName("category", tmpCat.getId(), iconId, tmpCat.getName(), null));
+               new ListItemIconName(activity, "category", tmpCat.getId(), iconId, tmpCat.getName(), null));
       }
       gridCateoriesAdapter =
             new CategoriesGridOverlayAdapter(activity, R.layout.grid_item_overlay_category,
@@ -121,12 +121,14 @@ public class CategoryEditText extends EditText {
 
    @Override
    public void setSelection(int index) {
-      selectedItemPosition = index;
-      setText(categories.get(index)
-            .getName());
+      if(index >= 0) {
+         selectedItemPosition = index;
+         setText(categories.get(index)
+               .getName());
 
-      if (onItemSelectedListener != null) {
-         onItemSelectedListener.onItemSelectedListener(categories.get(index), index);
+         if (onItemSelectedListener != null) {
+            onItemSelectedListener.onItemSelectedListener(categories.get(index), index);
+         }
       }
    }
 

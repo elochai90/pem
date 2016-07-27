@@ -99,7 +99,7 @@
     <string name="attr_type_material_de">Material</string>
     <string name="attr_type_price_de">Preis</string>
     <string name="attr_type_store_de">Geschäft</string>
-    <string name="attr_type_buy_date_de">Kaufsdatum</string>
+    <string name="attr_type_buy_date_de">Kaufdatum</string>
     <string name="attr_type_pattern_de">Hat Muster</string>
     <string name="attr_type_other_de">Sonstiges</string>
 

@@ -7,8 +7,6 @@
 
    <ImageView
       android:id="@+id/imageView"
-      android:padding="@dimen/margin_small"
-      android:layout_marginRight="10dp"
       android:layout_width="?android:attr/listPreferredItemHeight"
       android:layout_height="?android:attr/listPreferredItemHeight"
       android:contentDescription="@string/list_grid_item_desc_image" />
@@ -32,7 +30,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:ellipsize="marquee"
-            android:singleLine="true"
+            android:maxLines="1"
             android:textColor="@color/primary_text"
             android:textSize="16sp" />
       </LinearLayout>

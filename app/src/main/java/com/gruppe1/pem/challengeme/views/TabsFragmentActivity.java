@@ -239,8 +239,9 @@ public class TabsFragmentActivity extends ActionBarActivity {
          @Override
          public void onClick(View v) {
             Intent intent = new Intent();
-            intent.setClassName(getPackageName(), getPackageName() + ".views.NewItemActivity");
-            intent.putExtra("is_wishlist", true);
+            intent.setClassName(getPackageName(),
+                  getPackageName() + ".views.CollectionItemsActivity");
+            intent.putExtra(Constants.EXTRA_ITEM_IS_WISHLIST, true);
             startActivityForResult(intent, 0);
             menu.close(false);
          }
@@ -259,7 +260,8 @@ public class TabsFragmentActivity extends ActionBarActivity {
          @Override
          public void onClick(View v) {
             Intent intent = new Intent();
-            intent.setClassName(getPackageName(), getPackageName() + ".views.NewItemActivity");
+            intent.setClassName(getPackageName(),
+                  getPackageName() + ".views.CollectionItemsActivity");
             startActivityForResult(intent, 0);
             menu.close(false);
          }
@@ -285,24 +287,15 @@ public class TabsFragmentActivity extends ActionBarActivity {
    // for actualizing the categories list on coming back from new category
    @Override
    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-      try {
-         super.onActivityResult(requestCode, resultCode, data);
-
-         if (requestCode == 0) {
-            if (resultCode == Activity.RESULT_OK) {
-               if (categoriesFragment.getActivity() != null) {
-                  categoriesFragment.onActivityResult(requestCode, resultCode, data);
-               }
-               if (compareFragment.getActivity() != null) {
-                  compareFragment.onActivityResult(requestCode, resultCode, data);
-               }
-               if (wishlistFragment.getActivity() != null) {
-                  wishlistFragment.onActivityResult(requestCode, resultCode, data);
-               }
-            }
-         }
-      } catch (Exception ex) {
-         ex.printStackTrace();
+      super.onActivityResult(requestCode, resultCode, data);
+      if (categoriesFragment.getActivity() != null) {
+         categoriesFragment.onActivityResult(requestCode, resultCode, data);
+      }
+      if (compareFragment.getActivity() != null) {
+         compareFragment.onActivityResult(requestCode, resultCode, data);
+      }
+      if (wishlistFragment.getActivity() != null) {
+         wishlistFragment.onActivityResult(requestCode, resultCode, data);
       }
    }
 }

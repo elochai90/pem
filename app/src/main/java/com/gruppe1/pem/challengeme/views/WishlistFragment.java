@@ -2,6 +2,7 @@ package com.gruppe1.pem.challengeme.views;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -63,14 +64,7 @@ public class WishlistFragment extends Fragment {
       TextView noWishlistItemText = (TextView) rootView.findViewById(R.id.noItemText);
       noWishlistItemText.setText(R.string.no_wishlist_items);
 
-//      StaggeredGridLayoutManager gridLayoutManager =
-//            new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-//      gridView.setLayoutManager(gridLayoutManager);
-//      gridView.setHasFixedSize(true);
-//      int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
-//      gridView.addItemDecoration(
-//            new GridSpacingItemDecoration(2, spacingInPixels, false, 0));
-      gridView.setVisibility(View.INVISIBLE);
+      gridView.setVisibility(View.GONE);
 
       LinearLayoutManager linearLayoutManagerList =
             new LinearLayoutManager(getActivity().getBaseContext());
@@ -160,7 +154,7 @@ public class WishlistFragment extends Fragment {
       for (Item tmpItem : allWishlistItems) {
          int iconId = getResources().getIdentifier("kleiderbuegel", "drawable",
                "com.gruppe1.pem.challengeme");
-         mDataset.add(new ListItemIconName("wishlist", tmpItem.getId(), iconId, tmpItem.getName(),
+         mDataset.add(new ListItemIconName(getActivity(), "wishlist", tmpItem.getId(), iconId, tmpItem.getName(),
                tmpItem.getImageFile()));
       }
       if (mDataset.size() > 0) {
@@ -194,41 +188,46 @@ public class WishlistFragment extends Fragment {
    }
 
    /**
-    * Starts the NewItemActivity to show detail information of an item
+    * Starts the CollectionItemsActivity to show detail information of an item
     *
     * @param itemid the id of the selected item
     */
-   private void selectItem(int itemid) {
+   private void selectItem(int itemid, int position) {
       Intent intent = new Intent();
-      intent.setClassName(getActivity().getPackageName(),
-            getActivity().getPackageName() + ".views.NewItemActivity");
+      intent.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".views.CollectionItemsActivity");
+      ArrayList<Item> allWishlistItems =
+            Item.getAllItems(getActivity().getApplicationContext(), true);
+      intent.putExtra(Constants.EXTRA_CLICKED_ITEM_POSITION, position);
       Bundle b = new Bundle();
       b.putInt(Constants.EXTRA_ITEM_ID, itemid);
+      b.putParcelableArrayList(Constants.EXTRA_ITEM_COLLECTION, allWishlistItems);
       intent.putExtras(b);
       startActivityForResult(intent, 1);
+
    }
 
    private void wishlistFragmentOnItemClick(View view, int position) {
       int itemid = (int) defaultRecyclerListAdapter.getItemId(position);
       //        getItem(position).getElementId();
-      selectItem(itemid);
+      selectItem(itemid, position);
    }
 
    // for actualizing the categories list on coming back from new category
    @Override
    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-      try {
-         super.onActivityResult(requestCode, resultCode, data);
+      System.out.println("onActivityResult: " + requestCode + " - " + (resultCode == Activity.RESULT_OK) + " - " + data);
+      super.onActivityResult(requestCode, resultCode, data);
 
-         if (requestCode == 1 || requestCode == 0)  {
-            if (resultCode == Activity.RESULT_OK) {
-               initDataset();
-               defaultRecyclerListAdapter.notifyDataSetChanged();
-            }
-         }
-      } catch (Exception e) {
-         e.printStackTrace();
+      if ((requestCode == 1 || requestCode == 0) && resultCode == Activity.RESULT_OK )  {
+         System.out.println("onActivityResult");
+         initDataset();
+         defaultRecyclerListAdapter.notifyDataSetChanged();
       }
+   }
+
+   @Override
+   public void onAttach(Context context) {
+      super.onAttach(context);
    }
 
    private void wishlistFragmentOnItemActionButtonClick(View view, int position) {
@@ -261,7 +260,7 @@ public class WishlistFragment extends Fragment {
       wishlistItem.save();
    }
 
-   private boolean wishlistFragmentOnIcMoreClick(RecyclerView parent, View view, int position) {
+   private boolean wishlistFragmentOnIcMoreClick(RecyclerView parent, View view, final int position) {
       selectedItem = new Object[2];
       selectedItem[0] = position;
       selectedItem[1] = view;
@@ -294,8 +293,8 @@ public class WishlistFragment extends Fragment {
                   deleteWishlistItem.delete();
                   db_helper.close();
 
-                  initDataset();
-                  defaultRecyclerListAdapter.notifyDataSetChanged();
+                  mDataset.remove(position);
+                  defaultRecyclerListAdapter.notifyItemRemoved(position);
                }
             })
             .setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {

@@ -9,7 +9,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.gruppe1.pem.challengeme.Color;
 import com.gruppe1.pem.challengeme.R;
+import com.gruppe1.pem.challengeme.helpers.ColorHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,8 +54,8 @@ public class IconsGridOverlayAdapter extends ArrayAdapter<String> {
         } else {
             holder = (ViewHolder) row.getTag();
         }
-        int iconId = context.getResources().getIdentifier(iconName, "drawable", "com.gruppe1.pem.challengeme");
-        holder.imageView.setImageResource(iconId);
+        int colorHex = context.getResources().getColor(R.color.primary_dark);
+        holder.imageView.setImageDrawable(ColorHelper.filterIconColor(context, iconName, colorHex));
         return row;
     }
     static class ViewHolder {

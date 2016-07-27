@@ -1,5 +1,7 @@
 package com.gruppe1.pem.challengeme;
 
+import android.content.Context;
+
 import java.util.Date;
 
 /**
@@ -7,16 +9,18 @@ import java.util.Date;
  */
 public class ListItemIconName {
 
+   private Context context;
    private int elementId;
    private int icon;
    private String name;
    private Date date;
    private String itemFile;
-   // category, item, wishlist, navdrawer
+   // category, item, wishlist
    private String elementType;
 
-   public ListItemIconName(String elementType, int elementId, int icon, String name,
-         String itemBitmap) {
+   public ListItemIconName(Context context, String elementType, int elementId, int icon,
+         String name, String itemBitmap) {
+      this.context = context;
       this.elementType = elementType;
       this.elementId = elementId;
       this.icon = icon;
@@ -24,8 +28,9 @@ public class ListItemIconName {
       this.itemFile = itemBitmap;
    }
 
-   public ListItemIconName(String elementType, int elementId, int icon, String name,
-         String itemFile, Date date) {
+   public ListItemIconName(Context context, String elementType, int elementId, int icon,
+         String name, String itemFile, Date date) {
+      this.context = context;
       this.elementType = elementType;
       this.elementId = elementId;
       this.icon = icon;
@@ -64,9 +69,5 @@ public class ListItemIconName {
 
    public boolean isWishlistElement() {
       return (elementType.equals("wishlist"));
-   }
-
-   public boolean isNavigationDrawerElement() {
-      return (elementType.equals("navdrawer"));
    }
 }

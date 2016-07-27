@@ -5,24 +5,25 @@
    android:background="@drawable/selector_list_item">
 
    <LinearLayout
+      android:padding="@dimen/margin_small"
       android:id="@+id/image_container"
       android:layout_width="wrap_content"
-      android:layout_height="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_centerVertical="true"
       android:orientation="vertical"
-      android:layout_marginEnd="10dp"
       android:weightSum="2">
 
-      <ImageView
+      <com.gruppe1.pem.challengeme.SquareImageView
          android:id="@+id/imageItem1"
          android:layout_weight="1"
-         android:layout_width="wrap_content"
+         android:layout_width="30dp"
          android:layout_height="0dp"
          android:contentDescription="@string/compare_desc_image1" />
 
-      <ImageView
+      <com.gruppe1.pem.challengeme.SquareImageView
          android:id="@+id/imageItem2"
          android:layout_weight="1"
-         android:layout_width="wrap_content"
+         android:layout_width="30dp"
          android:layout_height="0dp"
          android:contentDescription="@string/compare_desc_image2" />
    </LinearLayout>
@@ -44,7 +45,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:singleLine="true"
+            android:maxLines="1"
             android:ellipsize="marquee"
             android:textColor="@color/primary_text"
             android:textSize="16sp" />
@@ -55,7 +56,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="marquee"
             android:textColor="@color/secondary_text"
-            android:singleLine="true"
+            android:maxLines="1"
             android:textSize="14sp" />
 
          <TextView
@@ -64,7 +65,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="marquee"
             android:textColor="@color/secondary_text"
-            android:singleLine="true"
+            android:maxLines="1"
             android:textSize="14sp" />
       </LinearLayout>
 

@@ -170,9 +170,10 @@ public class ItemsListActivity extends AppCompatActivity {
          @Override
          public void onClick(View v) {
             Intent intent = new Intent();
-            intent.setClassName(getPackageName(), getPackageName() + ".views.NewItemActivity");
-            intent.putExtra("is_wishlist", true);
-            startActivity(intent);
+            intent.setClassName(getPackageName(),
+                  getPackageName() + ".views.CollectionItemsActivity");
+            intent.putExtra(Constants.EXTRA_ITEM_IS_WISHLIST, true);
+            startActivityForResult(intent, 1);
             menu.close(false);
          }
       });
@@ -191,8 +192,9 @@ public class ItemsListActivity extends AppCompatActivity {
          @Override
          public void onClick(View v) {
             Intent intent = new Intent();
-            intent.setClassName(getPackageName(), getPackageName() + ".views.NewItemActivity");
-            intent.putExtra("category_id", categoryId);
+            intent.setClassName(getPackageName(),
+                  getPackageName() + ".views.CollectionItemsActivity");
+            intent.putExtra(Constants.EXTRA_CATEGORY_ID, categoryId);
             startActivityForResult(intent, 1);
             menu.close(false);
          }
@@ -233,6 +235,7 @@ public class ItemsListActivity extends AppCompatActivity {
 
       if (p_requestCode == 1) {
          // item was updated
+         // TODO: get position from data; notifyitemsetchanged
          initDataset();
          defaultRecyclerListAdapter.notifyDataSetChanged();
          defaultRecyclerGridAdapter.notifyDataSetChanged();
@@ -324,7 +327,7 @@ public class ItemsListActivity extends AppCompatActivity {
          int iconId = getResources().getIdentifier(tmpCat.getIcon(), "drawable",
                "com.gruppe1.pem.challengeme");
          mDataset.add(
-               new ListItemIconName("category", tmpCat.getId(), iconId, tmpCat.getName(), null));
+               new ListItemIconName(this, "category", tmpCat.getId(), iconId, tmpCat.getName(), null));
       }
 
       categoriesCount = mDataset.size();
@@ -334,7 +337,7 @@ public class ItemsListActivity extends AppCompatActivity {
       for (Item tmpItem : allCategoryItems) {
          int iconId = getResources().getIdentifier("kleiderbuegel", "drawable",
                "com.gruppe1.pem.challengeme");
-         mDataset.add(new ListItemIconName("item", tmpItem.getId(), iconId, tmpItem.getName(),
+         mDataset.add(new ListItemIconName(this, "item", tmpItem.getId(), iconId, tmpItem.getName(),
                tmpItem.getImageFile()));
       }
       if (mDataset.size() > 0) {
@@ -346,7 +349,7 @@ public class ItemsListActivity extends AppCompatActivity {
    }
 
    /**
-    * Starts the NewItemActivity to show detail informations of an item
+    * Starts the CollectionItemsActivity to show detail informations of an item
     *
     * @param itemid the id of the selected item
     */
@@ -428,9 +431,9 @@ public class ItemsListActivity extends AppCompatActivity {
                      deleteItem.delete();
                      db_helper.close();
 
-                     initDataset();
-                     defaultRecyclerListAdapter.notifyDataSetChanged();
-                     defaultRecyclerGridAdapter.notifyDataSetChanged();
+                     mDataset.remove(position);
+                     defaultRecyclerListAdapter.notifyItemRemoved(position);
+                     defaultRecyclerGridAdapter.notifyItemRemoved(position);
                   }
                })
                .setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -486,9 +489,9 @@ public class ItemsListActivity extends AppCompatActivity {
 
                      db_helper.close();
 
-                     initDataset();
-                     defaultRecyclerListAdapter.notifyDataSetChanged();
-                     defaultRecyclerGridAdapter.notifyDataSetChanged();
+                     mDataset.remove(position);
+                     defaultRecyclerListAdapter.notifyItemRemoved(position);
+                     defaultRecyclerGridAdapter.notifyItemRemoved(position);
                   }
                })
                .setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {

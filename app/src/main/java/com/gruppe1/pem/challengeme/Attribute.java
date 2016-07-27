@@ -138,6 +138,26 @@ public class Attribute {
         return attributeList;
     }
 
+    public static Attribute getAttributeExactColorByItemId(Context p_context, int p_itemId) {
+        AttributeType attributeType = AttributeType.getAttributeTypeByName(p_context, p_context.getString(R.string.attr_type_ex_color_en));
+        DataBaseHelper dbHelper = new DataBaseHelper(p_context);
+        dbHelper.init();
+        dbHelper.setTable(Constants.ITEM_ATTR_DB_TABLE);
+        dbHelper.setColumns(new String[]{"*"});
+        dbHelper.setWhere("", new String[]{"item_id='" + p_itemId + "' AND attribute_type_id='" + attributeType.getId() + "'"});
+        Cursor cursor = dbHelper.select();
+        cursor.moveToFirst();
+        Attribute exactColorAttribute;
+        if(cursor.getCount() == 0) {
+            exactColorAttribute =  new Attribute(p_context, 0, dbHelper);
+        } else {
+            exactColorAttribute = new Attribute(p_context, cursor.getInt(0), dbHelper);
+        }
+        cursor.close();
+        dbHelper.close();
+        return exactColorAttribute;
+    }
+
     /**
      * get all attributes from database
      * @return ArrayList<Attribute> all attributes

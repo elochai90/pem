@@ -10,13 +10,13 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.WindowManager;
 
 import com.gruppe1.pem.challengeme.Item;
 import com.gruppe1.pem.challengeme.ListItemIconName;
 import com.gruppe1.pem.challengeme.R;
 import com.gruppe1.pem.challengeme.adapters.ItemsCollectionPagerAdapter;
 import com.gruppe1.pem.challengeme.helpers.Constants;
+import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -30,6 +30,7 @@ public class CollectionItemsActivity extends ActionBarActivity {
    ViewPager mViewPager;
 
    private Locale myLocale;
+   private DataBaseHelper db_helper;
 
    private int currentItemPosition;
    private ArrayList<ListItemIconName> mDataset = new ArrayList<>();
@@ -39,19 +40,50 @@ public class CollectionItemsActivity extends ActionBarActivity {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_collection_items);
 
+      db_helper = new DataBaseHelper(this);
+      db_helper.init();
+
       loadLocale();
       setupToolbar();
 
-      getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
       Bundle extras = getIntent().getExtras();
-      if (extras != null) {
+      // new item
+      if (extras == null) {
+         currentItemPosition = 0;
+         itemCollection = new ArrayList<>();
+         itemCollection.add(new Item(this, 0, getDb_helper()));
+         if(getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(getString(R.string.title_activity_new_item));
+         }
+      }
+      // new wishlist item
+      else if(extras.getBoolean(Constants.EXTRA_ITEM_IS_WISHLIST)) {
+         currentItemPosition = 0;
+         itemCollection = new ArrayList<>();
+         Item wishlistItem = new Item(this, 0, getDb_helper());
+         wishlistItem.setIsWish(1);
+         itemCollection.add(wishlistItem);
+         if(getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(getString(R.string.title_activity_new_item));
+         }
+      }
+      // new item with parent category
+      else if(extras.getInt(Constants.EXTRA_CATEGORY_ID, -1) != -1) {
+         currentItemPosition = 0;
+         itemCollection = new ArrayList<>();
+         Item itemWithParent = new Item(this, 0, getDb_helper());
+         itemWithParent.setCategoryId(extras.getInt(Constants.EXTRA_CATEGORY_ID));
+         itemCollection.add(itemWithParent);
+         if(getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(getString(R.string.title_activity_new_item));
+         }
+      }
+      // edit item
+      else {
          currentItemPosition = extras.getInt(Constants.EXTRA_CLICKED_ITEM_POSITION);
          itemCollection = extras.getParcelableArrayList(Constants.EXTRA_ITEM_COLLECTION);
       }
-
       initDataset();
-
       // ViewPager and its adapters use support library
       // fragments, so use getSupportFragmentManager.
       mItemsCollectionPagerAdapter =
@@ -68,9 +100,10 @@ public class CollectionItemsActivity extends ActionBarActivity {
          public void onPageSelected(int position) {
             currentItemPosition = position;
             mItemsCollectionPagerAdapter.getItem(position);
-            //                getSupportActionBar().setTitle(mDataset.get(position).getName());
-            getSupportActionBar().setTitle(mDataset.get(position)
-                  .getName());
+            if(getSupportActionBar() != null) {
+               getSupportActionBar().setTitle(mDataset.get(position)
+                     .getName());
+            }
          }
 
          @Override
@@ -79,8 +112,6 @@ public class CollectionItemsActivity extends ActionBarActivity {
          }
       });
       mViewPager.setCurrentItem(currentItemPosition);
-
-      getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
    }
 
    private void setupToolbar() {
@@ -106,10 +137,8 @@ public class CollectionItemsActivity extends ActionBarActivity {
             return true;
 
          case R.id.action_item_save:
-            saveItem((CollectionItemsFragment) mItemsCollectionPagerAdapter.getItem(
-                  currentItemPosition));
-            setResult(RESULT_OK);
-            this.finish();
+            ((CollectionItemsFragment) mItemsCollectionPagerAdapter.getItem(
+                  currentItemPosition)).saveItem();
       }
       return super.onOptionsItemSelected(item);
    }
@@ -123,30 +152,8 @@ public class CollectionItemsActivity extends ActionBarActivity {
       for (Item tmpItem : itemCollection) {
          int iconId = getResources().getIdentifier("kleiderbuegel", "drawable",
                "com.gruppe1.pem.challengeme");
-         mDataset.add(new ListItemIconName("item", tmpItem.getId(), iconId, tmpItem.getName(),
+         mDataset.add(new ListItemIconName(this, "item", tmpItem.getId(), iconId, tmpItem.getName(),
                tmpItem.getImageFile()));
-      }
-   }
-
-   private void saveItem(CollectionItemsFragment fragment) {
-      fragment.saveItem();
-   }
-
-   @Override
-   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-      super.onActivityResult(requestCode, resultCode, data);
-
-      if (resultCode == RESULT_OK) {
-         if (requestCode == 1) {
-            try {
-               Bitmap photo = (Bitmap) data.getExtras()
-                     .get("data");
-               ((CollectionItemsFragment) mItemsCollectionPagerAdapter.getItem(
-                     currentItemPosition)).setBitmap(photo);
-            } catch (Exception e) {
-               e.printStackTrace();
-            }
-         }
       }
    }
 
@@ -182,6 +189,20 @@ public class CollectionItemsActivity extends ActionBarActivity {
                .updateConfiguration(newConfig, getBaseContext().getResources()
                      .getDisplayMetrics());
       }
+   }
+
+   /**
+    * Get the db_helper instance for this class
+    *
+    * @return DataBaseHelper instance
+    */
+   private DataBaseHelper getDb_helper() {
+      if (!db_helper.isOpen()) {
+         System.out.println("db helper was closed");
+         db_helper = new DataBaseHelper(this);
+         db_helper.init();
+      }
+      return db_helper;
    }
 }
 

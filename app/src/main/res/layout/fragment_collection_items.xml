@@ -20,30 +20,11 @@
             android:id="@+id/itemDetailImage"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:background="@android:color/darker_gray"
+            android:background="@color/gray00"
             android:contentDescription="@string/new_item_desc_itemImage"
             android:scaleType="centerCrop"
             android:src="@mipmap/addcamera2" />
 
-         <!--<LinearLayout-->
-            <!--android:id="@+id/itemDetailRating"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_below="@id/itemDetailImage"-->
-            <!--android:layout_gravity="center_horizontal"-->
-            <!--android:background="@color/primary"-->
-            <!--android:gravity="center_horizontal"-->
-            <!--android:weightSum="1">-->
-
-            <!--<RatingBar-->
-               <!--style="@style/RatingBar"-->
-               <!--android:id="@+id/ratingBar"-->
-               <!--android:layout_width="wrap_content"-->
-               <!--android:layout_height="wrap_content"-->
-               <!--android:numStars="5"-->
-               <!--android:stepSize="1.0" />-->
-
-         <!--</LinearLayout>-->
          <LinearLayout
             android:id="@+id/itemDetailAttributes"
             android:layout_width="match_parent"
@@ -59,6 +40,8 @@
 
                <EditText
                   android:id="@+id/itemName"
+                  android:maxLines="2"
+                  android:inputType="textAutoCorrect"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:hint="@string/new_item_label_name" />
@@ -85,6 +68,8 @@
 
                <com.gruppe1.pem.challengeme.helpers.CategoryEditText
                   android:id="@+id/attrCategoryValue"
+                  android:maxLines="2"
+                  android:inputType="text"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:hint="@string/item_cateory_label" />
@@ -107,6 +92,8 @@
 
                   <com.gruppe1.pem.challengeme.helpers.ColorEditText
                      android:id="@+id/attrColorValue"
+                     android:maxLines="1"
+                     android:inputType="text"
                      android:layout_width="match_parent"
                      android:layout_height="wrap_content"
                      android:hint="@string/item_color_label" />

@@ -253,7 +253,7 @@ public class NewCompareActivity extends AppCompatActivity {
          int iconId = getResources().getIdentifier(tmpCat.getIcon(), "drawable",
                "com.gruppe1.pem.challengeme");
          catArray.add(
-               new ListItemIconName("category", tmpCat.getId(), iconId, tmpCat.getName(), null));
+               new ListItemIconName(this, "category", tmpCat.getId(), iconId, tmpCat.getName(), null));
       }
 
       builder.setView(dialogView);

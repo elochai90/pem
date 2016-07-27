@@ -53,11 +53,22 @@ public class ItemsCollectionPagerAdapter extends FragmentStatePagerAdapter {
         return "OBJECT " + (position + 1);
     }
 
+    private int getCategoryId(int elementId) {
+        DataBaseHelper dbHelper = new DataBaseHelper(context);
+        dbHelper.init();
+        Item item = new Item(context, elementId, dbHelper);
+        dbHelper.close();
+        return item.getCategoryId();
+    }
+
     private void initFragments() {
         for(int i = 0; i < mDataset.size(); i++) {
+
             CollectionItemsFragment fragment = new CollectionItemsFragment();
             Bundle args = new Bundle();
             args.putInt(Constants.EXTRA_ITEM_ID, mDataset.get(i).getElementId());
+            args.putBoolean(Constants.EXTRA_ITEM_IS_WISHLIST, mDataset.get(i).isWishlistElement());
+            args.putInt(Constants.EXTRA_CATEGORY_ID, itemCollection.get(i).getCategoryId());
             fragment.setArguments(args);
             mFragments.add(fragment);
         }
@@ -71,7 +82,12 @@ public class ItemsCollectionPagerAdapter extends FragmentStatePagerAdapter {
 
         for (Item tmpItem : itemCollection) {
             int iconId = context.getResources().getIdentifier("kleiderbuegel", "drawable", "com.gruppe1.pem.challengeme");
-            mDataset.add(new ListItemIconName("item", tmpItem.getId(), iconId, tmpItem.getName(), tmpItem.getImageFile()));
+            if(tmpItem.getIsWish() == 1) {
+                mDataset.add(new ListItemIconName(context, "wishlist", tmpItem.getId(), iconId, tmpItem.getName(), tmpItem.getImageFile()));
+            } else {
+                mDataset.add(new ListItemIconName(context, "item", tmpItem.getId(), iconId, tmpItem.getName(),
+                      tmpItem.getImageFile()));
+            }
         }
     }
 }

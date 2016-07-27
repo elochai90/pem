@@ -74,12 +74,12 @@ public class CompareFragment extends Fragment {
       listView.setLayoutManager(linearLayoutManagerList);
       listView.setHasFixedSize(true);
       StaggeredGridLayoutManager gridLayoutManager =
-            new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+            new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
       gridView.setLayoutManager(gridLayoutManager);
 //      gridView.setHasFixedSize(true);
       int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
       gridView.addItemDecoration(
-            new GridSpacingItemDecoration(3, spacingInPixels, false, 0));
+            new GridSpacingItemDecoration(2, spacingInPixels, false, 0));
 
       mDataset = new ArrayList<>();
       initDataset();
@@ -307,7 +307,12 @@ public class CompareFragment extends Fragment {
       }
    }
 
-   private boolean compareFragmentOnIcMoreClick(RecyclerView parent, View view, int position) {
+   @Override
+   public void onAttach(Context context) {
+      super.onAttach(context);
+   }
+
+   private boolean compareFragmentOnIcMoreClick(RecyclerView parent, View view, final int position) {
       selectedItem = new Object[2];
       selectedItem[0] = position;
       selectedItem[1] = view;
@@ -339,9 +344,9 @@ public class CompareFragment extends Fragment {
                   deleteCompare.delete();
                   db_helper.close();
 
-                  initDataset();
-                  compareRecyclerListAdapter.notifyDataSetChanged();
-                  compareRecyclerGridAdapter.notifyDataSetChanged();
+                  mDataset.remove(position);
+                  compareRecyclerListAdapter.notifyItemRemoved(position);
+                  compareRecyclerGridAdapter.notifyItemRemoved(position);
                }
             })
             .setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {

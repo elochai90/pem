@@ -25,7 +25,7 @@ public class ColorEditText extends EditText {
 
    ArrayList<Color> colors;
    CharSequence mHint;
-   int selectedItemPosition = 0;
+   int selectedItemPosition = -1;
    private Activity activity;
    private ColorsGridOverlayAdapter gridColorsAdapter;
    private DataBaseHelper dbHelper;
@@ -119,6 +119,7 @@ public class ColorEditText extends EditText {
          onItemSelectedListener.onItemSelectedListener(colors.get(index), index);
       }
    }
+
 
    private AlertDialog setupCategoryOverlay(OnClickListener onItemClickListener) {
       final AlertDialog.Builder builder = new AlertDialog.Builder(activity);

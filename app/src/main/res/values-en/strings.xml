@@ -62,6 +62,7 @@
     <string name="item_select_category_overlay_title">Select a category</string>
     <string name="item_cateory_label">Category</string>
     <string name="item_color_label">Color category</string>
+    <string name="item_exact_color_label">Exact color value</string>
     <string name="item_wishlist_label">Show item in wishlist</string>
     <string name="item_select_picture">Slelect a picture</string>
 

@@ -1,8 +1,7 @@
 package com.gruppe1.pem.challengeme.adapters;
 
 import android.content.Context;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.StateListDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,9 +19,11 @@ import com.gruppe1.pem.challengeme.Color;
 import com.gruppe1.pem.challengeme.Item;
 import com.gruppe1.pem.challengeme.ListItemIconName;
 import com.gruppe1.pem.challengeme.R;
+import com.gruppe1.pem.challengeme.helpers.ColorHelper;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 import com.gruppe1.pem.challengeme.helpers.PicassoSingleton;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -90,38 +91,34 @@ public class DefaultRecyclerGridAdapter
          ViewHolderCategory holder = (ViewHolderCategory) viewHolder;
          holder.imageTitle.setText(item.getName());
          Category category = new Category(this.context, item.getElementId(), this.dbHelper);
-         int colorHex = Integer.parseInt(category.getColor(), 16) + 0xFF000000;
-         float[] hsv = new float[3];
-         android.graphics.Color.colorToHSV(colorHex, hsv);
-         if(hsv[2] > 0.75f) {
-            hsv[2] -= 0.25f;
-         }
-         colorHex = android.graphics.Color.HSVToColor(hsv);
+
+         int colorHex = ColorHelper.calculateMinDarkColor(category.getColor());
+         holder.image.setImageDrawable(ColorHelper.filterIconColor(context, category.getIcon(), colorHex));
          holder.textContainer.setBackgroundColor(colorHex);
          holder.itemView.setBackgroundColor(colorHex);
-         holder.image.setImageResource(item.getIcon());
          holder.rightTextView.setText(
-               Item.getItemsCountByCategoryId(context, item.getElementId(), false) + "");
+               String.valueOf(Item.getItemsCountByCategoryId(context, item.getElementId(), false)));
          holder.moreButton.setTag(position);
          holder.itemView.setOnClickListener(onItemClickListener);
          holder.moreButton.setOnClickListener(onIcMoreClickListener);
       } else if(viewType == TYPE_ITEM) {
          ViewHolder holder = (ViewHolder) viewHolder;
          holder.imageTitle.setText(item.getName());
-         if(item.getItemFile() == null) {
-            holder.image.setImageResource(item.getIcon());
-            int padding = context.getResources().getDimensionPixelSize(R.dimen.activity_horizontal_margin);
-            holder.image.setPadding(padding,padding,padding,padding);
-         } else {
-            picassoSingleton.setImage(item.getItemFile(), Constants.LIST_VIEW_IMAGE_WIDTH,
-                  Constants.LIST_VIEW_IMAGE_HEIGHT, holder.image);
-         }
          dbHelper.setTable(Constants.ITEMS_DB_TABLE);
          Item listItem = new Item(context, item.getElementId(), dbHelper);
          dbHelper.setTable(Constants.COLORS_DB_TABLE);
          Color attributeColor = new Color(context, listItem.getPrimaryColorId(), dbHelper);
+         Category parentCategory = new Category(context, listItem.getCategoryId(), dbHelper);
          ArrayList<Attribute> allAttributes =
                Attribute.getAttributesByItemId(context, item.getElementId());
+         if(item.getItemFile() == null) {
+            int colorHex = ColorHelper.calculateMinDarkColor(parentCategory.getColor());
+            holder.image.setImageDrawable(ColorHelper.filterIconColor(context, parentCategory.getIcon(), colorHex));
+         } else {
+            int colorHex = ColorHelper.calculateMinDarkColor(parentCategory.getColor());
+            Drawable icon = ColorHelper.filterIconColor(context, parentCategory.getIcon(), colorHex);
+            picassoSingleton.setImageFit(item.getItemFile(), holder.image, icon, icon);
+         }
          String secondLineText = "";
          int attributesToShowCount = 0;
          int colorHex = -1;
@@ -158,12 +155,8 @@ public class DefaultRecyclerGridAdapter
          if(colorHex == -1) {
             Color color = new Color(context, listItem.getPrimaryColorId(), dbHelper);
             colorHex = android.graphics.Color.parseColor(color.getHexColor());
-         } float[] hsv = new float[3];
-         android.graphics.Color.colorToHSV(colorHex, hsv);
-         if(hsv[2] > 0.75f) {
-            hsv[2] -= 0.25f;
          }
-         colorHex = android.graphics.Color.HSVToColor(hsv);
+         colorHex = ColorHelper.calculateMinDarkColor(colorHex);
          holder.textContainer.setBackgroundColor(colorHex);
          holder.moreButton.setTag(position);
          holder.itemView.setOnClickListener(onItemClickListener);

@@ -1,6 +1,7 @@
 package com.gruppe1.pem.challengeme.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import com.gruppe1.pem.challengeme.Category;
 import com.gruppe1.pem.challengeme.ListItemIconName;
 import com.gruppe1.pem.challengeme.R;
+import com.gruppe1.pem.challengeme.helpers.ColorHelper;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 
 import java.util.ArrayList;
@@ -59,21 +61,19 @@ public class CategoriesGridOverlayAdapter
    public void onBindViewHolder(ViewHolder holder, int position) {
       Category category = new Category(this.context, data.get(position)
             .getElementId(), this.dbHelper);
-      int icon = this.context.getResources()
-            .getIdentifier(category.getIcon(), "drawable", "com.gruppe1.pem.challengeme");
+//      int icon = this.context.getResources()
+//            .getIdentifier(category.getIcon(), "drawable", "com.gruppe1.pem.challengeme");
 
-      String categoryName = data.get(position)
+//      int colorHex = ColorHelper.calculateMinDarkColor(category.getColor());
+//      holder.image.setImageDrawable(ColorHelper.filterIconColor(context, category.getIcon(), colorHex));
+      String categoryName = category
             .getName();
       holder.textView.setText(categoryName);
-      int colorHex = Integer.parseInt(category.getColor(), 16) + 0xFF000000;
-      float[] hsv = new float[3];
-      android.graphics.Color.colorToHSV(colorHex, hsv);
-      if (hsv[2] > 0.75f) {
-         hsv[2] -= 0.25f;
-      }
-      colorHex = android.graphics.Color.HSVToColor(hsv);
+      int colorHex = ColorHelper.calculateMinDarkColor(category.getColor());
+      System.out.println("BIND:  " + categoryName + " - " + colorHex);
       holder.textView.setBackgroundColor(colorHex);
-      holder.imageView.setImageResource(icon);
+      holder.itemView.setBackgroundColor(colorHex);
+      holder.imageView.setImageDrawable(ColorHelper.filterIconColor(context, category.getIcon(), colorHex));
       holder.itemView.setTag(position);
       holder.itemView.setOnClickListener(onClickListener);
    }

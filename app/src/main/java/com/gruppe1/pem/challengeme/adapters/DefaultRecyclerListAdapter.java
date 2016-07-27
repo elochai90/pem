@@ -1,6 +1,7 @@
 package com.gruppe1.pem.challengeme.adapters;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,10 +13,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.gruppe1.pem.challengeme.Attribute;
+import com.gruppe1.pem.challengeme.Category;
 import com.gruppe1.pem.challengeme.Color;
 import com.gruppe1.pem.challengeme.Item;
 import com.gruppe1.pem.challengeme.ListItemIconName;
 import com.gruppe1.pem.challengeme.R;
+import com.gruppe1.pem.challengeme.helpers.ColorHelper;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 import com.gruppe1.pem.challengeme.helpers.PicassoSingleton;
@@ -88,8 +91,11 @@ public class DefaultRecyclerListAdapter extends RecyclerView.Adapter<RecyclerVie
       int viewType = holder.getItemViewType();
       final ListItemIconName item = data.get(position);
       if (viewType == TYPE_CATEGORY) {
+         Category category = new Category(this.context, item.getElementId(), getDb_helper());
          ViewHolderCategory viewHolder = (ViewHolderCategory) holder;
-         viewHolder.image.setImageResource(item.getIcon());
+         int colorHex = ColorHelper.calculateMinDarkColor(category.getColor());
+         ((ViewHolderCategory) holder).image.setImageDrawable(
+               ColorHelper.filterIconColor(context, category.getIcon(), colorHex));
          viewHolder.firstLine.setText(item.getName());
          viewHolder.rightTextView.setText(
                Item.getItemsCountByCategoryId(context, item.getElementId(), false) + "");
@@ -98,21 +104,24 @@ public class DefaultRecyclerListAdapter extends RecyclerView.Adapter<RecyclerVie
          viewHolder.moreButton.setOnClickListener(onIcMoreClickListener);
       } else if(viewType == TYPE_ITEM || viewType == TYPE_WISHLIST){
          ViewHolder viewHolder = (ViewHolder) holder;
-         if (item.getItemFile() == null) {
-            viewHolder.image.setImageResource(item.getIcon());
-            int padding = context.getResources().getDimensionPixelSize(R.dimen.margin_small);
-            viewHolder.image.setPadding(padding,padding,padding,padding);
-         } else {
-            picassoSingleton.setImage(item.getItemFile(), Constants.LIST_VIEW_IMAGE_WIDTH,
-                  Constants.LIST_VIEW_IMAGE_HEIGHT, viewHolder.image);
-         }
-         viewHolder.firstLine.setText(item.getName());
          getDb_helper().setTable(Constants.ITEMS_DB_TABLE);
          Item listItem = new Item(context, item.getElementId(), getDb_helper());
          getDb_helper().setTable(Constants.COLORS_DB_TABLE);
          Color attributeColor = new Color(context, listItem.getPrimaryColorId(), getDb_helper());
+         Category parentCategory = new Category(context, listItem.getCategoryId(), getDb_helper());
          ArrayList<Attribute> allAttributes =
                Attribute.getAttributesByItemId(context, item.getElementId());
+         if (item.getItemFile() == null) {
+            System.out.println("parent cat: " + parentCategory.getName() + " - " + parentCategory.getColor());
+            viewHolder.image.setImageResource(item.getIcon());
+            int colorHex = ColorHelper.calculateMinDarkColor(parentCategory.getColor());
+            viewHolder.image.setImageDrawable(ColorHelper.filterIconColor(context, parentCategory.getIcon(), colorHex));
+         } else {
+            int colorHex = ColorHelper.calculateMinDarkColor(parentCategory.getColor());
+            Drawable icon = ColorHelper.filterIconColor(context, parentCategory.getIcon(), colorHex);
+            picassoSingleton.setImageFit(item.getItemFile(), viewHolder.image, icon, icon);
+         }
+         viewHolder.firstLine.setText(item.getName());
          String secondLineText = "";
          int attributesToShowCount = 0;
          if (!attributeColor.getName()

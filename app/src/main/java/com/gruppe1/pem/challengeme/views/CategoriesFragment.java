@@ -6,6 +6,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,6 +29,7 @@ import com.gruppe1.pem.challengeme.ListItemIconName;
 import com.gruppe1.pem.challengeme.R;
 import com.gruppe1.pem.challengeme.adapters.DefaultRecyclerGridAdapter;
 import com.gruppe1.pem.challengeme.adapters.DefaultRecyclerListAdapter;
+import com.gruppe1.pem.challengeme.helpers.ColorHelper;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 import com.gruppe1.pem.challengeme.helpers.DefaultSetup;
@@ -241,7 +246,7 @@ public class CategoriesFragment extends Fragment {
          int iconId = getResources().getIdentifier(tmpCat.getIcon(), "drawable",
                "com.gruppe1.pem.challengeme");
          mDataset.add(
-               new ListItemIconName("category", tmpCat.getId(), iconId, tmpCat.getName(), null));
+               new ListItemIconName(getActivity(), "category", tmpCat.getId(), iconId, tmpCat.getName(), null));
       }
       db_helper.close();
    }
@@ -262,7 +267,7 @@ public class CategoriesFragment extends Fragment {
       }
    }
 
-   private boolean categoryFragmentOnIcMoreClick(RecyclerView parent, View view, int position) {
+   private boolean categoryFragmentOnIcMoreClick(RecyclerView parent, View view, final int position) {
       selectedItem = new Object[2];
       selectedItem[0] = position;
       selectedItem[1] = view;
@@ -324,9 +329,9 @@ public class CategoriesFragment extends Fragment {
 
                   db_helper.close();
 
-                  initDataset();
-                  defaultRecyclerListAdapter.notifyDataSetChanged();
-                  defaultRecyclerGridAdapter.notifyDataSetChanged();
+                  mDataset.remove(position);
+                  defaultRecyclerListAdapter.notifyItemRemoved(position);
+                  defaultRecyclerGridAdapter.notifyItemRemoved(position);
                }
             })
             .setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -340,6 +345,12 @@ public class CategoriesFragment extends Fragment {
             .show();
 
       return true;
+   }
+
+
+   @Override
+   public void onAttach(Context context) {
+      super.onAttach(context);
    }
 
    /**

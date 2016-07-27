@@ -187,7 +187,7 @@ public class SearchResultsActivity extends AppCompatActivity {
       for (int i = 0; i < filterCategoryLayoutFirstLine.getChildCount(); i++) {
          ImageButton tmpCategoryButton = (ImageButton) filterCategoryLayoutFirstLine.getChildAt(i);
          String tmpIcon = (String) tmpCategoryButton.getTag();
-         int iconId = getResources().getIdentifier(tmpIcon + "_weiss", "drawable",
+         int iconId = getResources().getIdentifier(tmpIcon, "drawable",
                "com.gruppe1.pem.challengeme");
          LayerDrawable newDrawableIcon =
                (LayerDrawable) getDrawable(R.drawable.icon_category_circle);
@@ -197,7 +197,7 @@ public class SearchResultsActivity extends AppCompatActivity {
       for (int i = 0; i < filterCategoryLayoutSecondLine.getChildCount(); i++) {
          ImageButton tmpCategoryButton = (ImageButton) filterCategoryLayoutSecondLine.getChildAt(i);
          String tmpIcon = (String) tmpCategoryButton.getTag();
-         int iconId = getResources().getIdentifier(tmpIcon + "_weiss", "drawable",
+         int iconId = getResources().getIdentifier(tmpIcon, "drawable",
                "com.gruppe1.pem.challengeme");
          LayerDrawable newDrawableIcon =
                (LayerDrawable) getDrawable(R.drawable.icon_category_circle);
@@ -220,7 +220,7 @@ public class SearchResultsActivity extends AppCompatActivity {
          attibuteNameLayoutParams.setMargins(0, 0, colorIconMargin, 0);
          tmpCategoryButton.setLayoutParams(attibuteNameLayoutParams);
 
-         int iconId = getResources().getIdentifier(tmpCat.getIcon() + "_weiss", "drawable",
+         int iconId = getResources().getIdentifier(tmpCat.getIcon(), "drawable",
                "com.gruppe1.pem.challengeme");
          LayerDrawable newDrawableIcon =
                (LayerDrawable) getDrawable(R.drawable.icon_category_circle);
@@ -233,7 +233,7 @@ public class SearchResultsActivity extends AppCompatActivity {
             public void onClick(View v) {
                if (filterCategoryIds.contains(tmpCat.getId())) {
                   filterCategoryIds.remove(filterCategoryIds.indexOf(tmpCat.getId()));
-                  int iconId = getResources().getIdentifier(tmpCat.getIcon() + "_weiss", "drawable",
+                  int iconId = getResources().getIdentifier(tmpCat.getIcon(), "drawable",
                         "com.gruppe1.pem.challengeme");
                   LayerDrawable newDrawableIcon =
                         (LayerDrawable) getDrawable(R.drawable.icon_category_circle);
@@ -241,7 +241,7 @@ public class SearchResultsActivity extends AppCompatActivity {
                   v.setBackground(newDrawableIcon);
                } else {
                   filterCategoryIds.add(tmpCat.getId());
-                  int iconId = getResources().getIdentifier(tmpCat.getIcon() + "_weiss", "drawable",
+                  int iconId = getResources().getIdentifier(tmpCat.getIcon(), "drawable",
                         "com.gruppe1.pem.challengeme");
                   LayerDrawable newDrawableIcon =
                         (LayerDrawable) getDrawable(R.drawable.icon_category_circle_filled);
@@ -558,7 +558,7 @@ public class SearchResultsActivity extends AppCompatActivity {
       for (Item tmpItem : searchResultItems) {
          int iconId = getResources().getIdentifier("kleiderbuegel", "drawable",
                "com.gruppe1.pem.challengeme");
-         mDataset.add(new ListItemIconName("item", tmpItem.getId(), iconId, tmpItem.getName(),
+         mDataset.add(new ListItemIconName(this, "item", tmpItem.getId(), iconId, tmpItem.getName(),
                tmpItem.getImageFile()));
       }
       if (mDataset.size() > 0) {
@@ -571,7 +571,7 @@ public class SearchResultsActivity extends AppCompatActivity {
    }
 
    /**
-    * Starts the NewItemActivity to show detail informations of an item
+    * Starts the CollectionItemsActivity to show detail informations of an item
     *
     * @param itemid the id of the selected item
     */

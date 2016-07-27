@@ -24,6 +24,7 @@ public class Constants {
     public static String EXTRA_CATEGORY_ID = "extra_category_id";
     public static String EXTRA_PARENT_CATEGORY_ID = "extra_parent_category_id";
     public static String EXTRA_ITEM_ID = "extra_item_id";
+    public static String EXTRA_ITEM_IS_WISHLIST = "extra_is_wishlist";
     public static String EXTRA_ITEM_COLLECTION = "extra_item_collection";
     public static String EXTRA_CLICKED_ITEM_POSITION = "extra_clicked_item_position";
     public static String EXTRA_COMPARE_ID = "extra_compare_id";

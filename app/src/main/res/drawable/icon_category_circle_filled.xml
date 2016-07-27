@@ -2,6 +2,6 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item android:id="@+id/circle_filled" android:drawable="@drawable/circle_filled"/>
-    <item android:id="@+id/circle_icon" android:drawable="@drawable/kleiderbuegel_weiss"/>
+    <item android:id="@+id/circle_icon" android:drawable="@drawable/kleiderbuegel"/>
 
 </layer-list>
