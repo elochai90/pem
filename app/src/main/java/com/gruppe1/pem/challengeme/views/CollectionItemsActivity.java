@@ -1,9 +1,7 @@
 package com.gruppe1.pem.challengeme.views;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
@@ -21,13 +19,20 @@ import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * Created by bianka on 20.08.2015.
  */
 public class CollectionItemsActivity extends ActionBarActivity {
 
    ItemsCollectionPagerAdapter mItemsCollectionPagerAdapter;
+
+   @Bind (R.id.pager)
    ViewPager mViewPager;
+   @Bind (R.id.toolbar)
+   Toolbar toolbar;
 
    private Locale myLocale;
    private DataBaseHelper db_helper;
@@ -39,6 +44,7 @@ public class CollectionItemsActivity extends ActionBarActivity {
    public void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_collection_items);
+      ButterKnife.bind(this);
 
       db_helper = new DataBaseHelper(this);
       db_helper.init();
@@ -52,29 +58,32 @@ public class CollectionItemsActivity extends ActionBarActivity {
          currentItemPosition = 0;
          itemCollection = new ArrayList<>();
          itemCollection.add(new Item(this, 0, getDb_helper()));
-         if(getSupportActionBar() != null) {
+         if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(getString(R.string.title_activity_new_item));
+         }
+      }
+      // new item with parent category
+      else if (extras.getInt(Constants.EXTRA_CATEGORY_ID, -1) != -1) {
+         currentItemPosition = 0;
+         itemCollection = new ArrayList<>();
+         Item itemWithParent = new Item(this, 0, getDb_helper());
+         itemWithParent.setCategoryId(extras.getInt(Constants.EXTRA_CATEGORY_ID));
+         if (extras.getBoolean(Constants.EXTRA_ITEM_IS_WISHLIST)) {
+            itemWithParent.setIsWish(1);
+         }
+         itemCollection.add(itemWithParent);
+         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(getString(R.string.title_activity_new_item));
          }
       }
       // new wishlist item
-      else if(extras.getBoolean(Constants.EXTRA_ITEM_IS_WISHLIST)) {
+      else if (extras.getBoolean(Constants.EXTRA_ITEM_IS_WISHLIST)) {
          currentItemPosition = 0;
          itemCollection = new ArrayList<>();
          Item wishlistItem = new Item(this, 0, getDb_helper());
          wishlistItem.setIsWish(1);
          itemCollection.add(wishlistItem);
-         if(getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(getString(R.string.title_activity_new_item));
-         }
-      }
-      // new item with parent category
-      else if(extras.getInt(Constants.EXTRA_CATEGORY_ID, -1) != -1) {
-         currentItemPosition = 0;
-         itemCollection = new ArrayList<>();
-         Item itemWithParent = new Item(this, 0, getDb_helper());
-         itemWithParent.setCategoryId(extras.getInt(Constants.EXTRA_CATEGORY_ID));
-         itemCollection.add(itemWithParent);
-         if(getSupportActionBar() != null) {
+         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(getString(R.string.title_activity_new_item));
          }
       }
@@ -88,7 +97,6 @@ public class CollectionItemsActivity extends ActionBarActivity {
       // fragments, so use getSupportFragmentManager.
       mItemsCollectionPagerAdapter =
             new ItemsCollectionPagerAdapter(getSupportFragmentManager(), this, itemCollection);
-      mViewPager = (ViewPager) findViewById(R.id.pager);
       mViewPager.setAdapter(mItemsCollectionPagerAdapter);
       mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
          @Override
@@ -100,7 +108,7 @@ public class CollectionItemsActivity extends ActionBarActivity {
          public void onPageSelected(int position) {
             currentItemPosition = position;
             mItemsCollectionPagerAdapter.getItem(position);
-            if(getSupportActionBar() != null) {
+            if (getSupportActionBar() != null) {
                getSupportActionBar().setTitle(mDataset.get(position)
                      .getName());
             }
@@ -115,7 +123,6 @@ public class CollectionItemsActivity extends ActionBarActivity {
    }
 
    private void setupToolbar() {
-      Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
       setSupportActionBar(toolbar);
       getSupportActionBar().setDisplayShowHomeEnabled(true);
       getSupportActionBar().setHomeButtonEnabled(true);

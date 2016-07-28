@@ -6,10 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,13 +25,14 @@ import com.gruppe1.pem.challengeme.ListItemIconName;
 import com.gruppe1.pem.challengeme.R;
 import com.gruppe1.pem.challengeme.adapters.DefaultRecyclerGridAdapter;
 import com.gruppe1.pem.challengeme.adapters.DefaultRecyclerListAdapter;
-import com.gruppe1.pem.challengeme.helpers.ColorHelper;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
-import com.gruppe1.pem.challengeme.helpers.DefaultSetup;
 import com.gruppe1.pem.challengeme.helpers.GridSpacingItemDecoration;
 
 import java.util.ArrayList;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class CategoriesFragment extends Fragment {
    private static final int REQUEST_CODE = 1;
@@ -44,9 +41,12 @@ public class CategoriesFragment extends Fragment {
    private SharedPreferences sharedPreferences;
 
    private ArrayList<ListItemIconName> mDataset;
-   private View rootView;
-   private RecyclerView gridView;
-   private RecyclerView listView;
+
+   @Bind (R.id.listView)
+   RecyclerView listView;
+   @Bind (R.id.gridView)
+   RecyclerView gridView;
+
    private Boolean list;
    private DataBaseHelper db_helper;
 
@@ -55,11 +55,19 @@ public class CategoriesFragment extends Fragment {
    private DefaultRecyclerListAdapter defaultRecyclerListAdapter;
    private DefaultRecyclerGridAdapter defaultRecyclerGridAdapter;
 
+   public static CategoriesFragment newInstance(int page, String title) {
+      CategoriesFragment categoriesFragment = new CategoriesFragment();
+      return categoriesFragment;
+   }
+
    @Override
    public View onCreateView(LayoutInflater inflater, ViewGroup container,
          Bundle savedInstanceState) {
-
       super.onCreateView(inflater, container, savedInstanceState);
+      View rootView = getActivity().getLayoutInflater()
+            .inflate(R.layout.default_recycler_view, container, false);
+      ButterKnife.bind(this, rootView);
+
       mDataset = new ArrayList<>();
       sharedPreferences =
             getActivity().getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
@@ -69,10 +77,7 @@ public class CategoriesFragment extends Fragment {
 
       list = savedInstanceState == null ||
             savedInstanceState.getBoolean(Constants.KEY_VIEW_CATEGORIES_AS_LIST, true);
-      rootView = getActivity().getLayoutInflater()
-            .inflate(R.layout.default_recycler_view, container, false);
 
-      listView = (RecyclerView) rootView.findViewById(R.id.listView);
       defaultRecyclerListAdapter =
             new DefaultRecyclerListAdapter(getActivity(), R.layout.list_item_default,
                   R.layout.list_item_category, mDataset, true, false);
@@ -82,12 +87,14 @@ public class CategoriesFragment extends Fragment {
             categoryFragmentOnItemClick(v, listView.getChildPosition(v));
          }
       });
-      defaultRecyclerListAdapter.setOnIcMoreClickListener(new View.OnClickListener() {
-         @Override
-         public void onClick(View v) {
-            categoryFragmentOnIcMoreClick(listView, v, (Integer) v.getTag());
-         }
-      });
+      defaultRecyclerListAdapter.setOnIcMoreClickListener(
+            new DefaultRecyclerListAdapter.OnIcMoreClickListener() {
+
+               @Override
+               public void onClick(View view, ListItemIconName item) {
+                  categoryFragmentOnIcMoreClick(listView, view, mDataset.indexOf(item));
+               }
+            });
 
       LinearLayoutManager linearLayoutManagerList =
             new LinearLayoutManager(getActivity().getBaseContext());
@@ -95,7 +102,6 @@ public class CategoriesFragment extends Fragment {
       listView.setHasFixedSize(true);
       listView.setAdapter(defaultRecyclerListAdapter);
 
-      gridView = (RecyclerView) rootView.findViewById(R.id.gridView);
       defaultRecyclerGridAdapter =
             new DefaultRecyclerGridAdapter(getActivity(), R.layout.grid_item_default,
                   R.layout.grid_item_category, mDataset, true);
@@ -206,10 +212,10 @@ public class CategoriesFragment extends Fragment {
             return true;
          case R.id.settings:
             Intent intentSettings = new Intent();
-            intentSettings.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".views.SettingsActivity");
+            intentSettings.setClassName(getActivity().getPackageName(),
+                  getActivity().getPackageName() + ".views.SettingsActivity");
             startActivityForResult(intentSettings, 0);
             return true;
-
       }
 
       return super.onOptionsItemSelected(item);
@@ -226,18 +232,7 @@ public class CategoriesFragment extends Fragment {
     * initializes the dataset of compares
     */
    private void initDataset() {
-      DataBaseHelper db_helper = new DataBaseHelper(getActivity().getApplicationContext());
-      db_helper.init();
-
       mDataset.clear();
-
-      boolean firstDbInit = sharedPreferences.getBoolean(Constants.KEY_FIRST_DB_INIT, true);
-
-      if (firstDbInit) {
-         new DefaultSetup(getActivity().getApplicationContext());
-         editor.putBoolean(Constants.KEY_FIRST_DB_INIT, false);
-         editor.commit();
-      }
 
       ArrayList<Category> allBaseCategories =
             Category.getCategoriesWithParentCategory(getActivity().getApplicationContext(), -1);
@@ -245,14 +240,14 @@ public class CategoriesFragment extends Fragment {
       for (Category tmpCat : allBaseCategories) {
          int iconId = getResources().getIdentifier(tmpCat.getIcon(), "drawable",
                "com.gruppe1.pem.challengeme");
-         mDataset.add(
-               new ListItemIconName(getActivity(), "category", tmpCat.getId(), iconId, tmpCat.getName(), null));
+         mDataset.add(new ListItemIconName(getActivity(), "category", tmpCat.getId(), iconId,
+               tmpCat.getName(), null));
       }
-      db_helper.close();
    }
 
    private void categoryFragmentOnItemClick(View view, int position) {
-      selectCategory(mDataset.get(position).getElementId());
+      selectCategory(mDataset.get(position)
+            .getElementId());
    }
 
    @Override
@@ -267,7 +262,8 @@ public class CategoriesFragment extends Fragment {
       }
    }
 
-   private boolean categoryFragmentOnIcMoreClick(RecyclerView parent, View view, final int position) {
+   private boolean categoryFragmentOnIcMoreClick(RecyclerView parent, View view,
+         final int position) {
       selectedItem = new Object[2];
       selectedItem[0] = position;
       selectedItem[1] = view;
@@ -346,7 +342,6 @@ public class CategoriesFragment extends Fragment {
 
       return true;
    }
-
 
    @Override
    public void onAttach(Context context) {

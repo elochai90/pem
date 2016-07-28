@@ -17,6 +17,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -58,6 +59,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * Created by bianka on 20.08.2015.
  */
@@ -69,18 +73,29 @@ public class CollectionItemsFragment extends Fragment {
 
    private CollectionItemsActivity activity;
 
-   private ImageView ImgPhoto;
-   private RatingBar ratingBar;
-   private EditText itemNameExitText;
-   private LinearLayout attributesView;
-   private View attrColorIndicator;
 
-   private CategoryEditText attrCategoryValue;
+   @Bind(R.id.itemDetailImage)
+   ImageView imgPhoto;
+   @Bind(R.id.ratingBar)
+   RatingBar ratingBar;
+   @Bind(R.id.itemName)
+   TextInputEditText itemNameExitText;
+   @Bind(R.id.itemDetailAttributes)
+   LinearLayout attributesView;
+   @Bind(R.id.attrCategoryValue)
+   CategoryEditText attrCategoryValue;
+   @Bind(R.id.attrColorValue)
+   ColorEditText attrColorValue;
+   @Bind(R.id.attrWishlistValue)
+   Switch attrWishlistValue;
+   @Bind(R.id.attrWishlistName)
+   TextView attrWishlistName;
+   @Bind(R.id.attrColorIndicator)
+   View attrColorIndicator;
+
+
    private Category attrCategorySelected;
-   private ColorEditText attrColorValue;
    private com.gruppe1.pem.challengeme.Color attrColorSelected;
-   private Switch attrWishlistValue;
-   private TextView attrWishlistName;
    private String item_imageFile;
 
    private int editItemId = -1;
@@ -105,6 +120,7 @@ public class CollectionItemsFragment extends Fragment {
          Bundle savedInstanceState) {
 
       View rootView = inflater.inflate(R.layout.fragment_collection_items, container, false);
+      ButterKnife.bind(this, rootView);
       activity = (CollectionItemsActivity) getActivity();
 
       sharedPreferences =
@@ -112,27 +128,19 @@ public class CollectionItemsFragment extends Fragment {
 
       picassoSingleton = PicassoSingleton.getInstance(activity);
 
+      attributeTypesList = new ArrayList<>();
+
+
       db_helper = new DataBaseHelper(activity);
       db_helper.init();
 
-      ImgPhoto = (ImageView) rootView.findViewById(R.id.itemDetailImage);
-      ImgPhoto.setOnClickListener(new View.OnClickListener() {
+      imgPhoto.setOnClickListener(new View.OnClickListener() {
          @Override
          public void onClick(View view) {
             selectImage();
          }
       });
 
-      ratingBar = (RatingBar) rootView.findViewById(R.id.ratingBar);
-
-      attributeTypesList = new ArrayList<>();
-      itemNameExitText = (EditText) rootView.findViewById(R.id.itemName);
-      attributesView = (LinearLayout) rootView.findViewById(R.id.itemDetailAttributes);
-      attrCategoryValue = (CategoryEditText) rootView.findViewById(R.id.attrCategoryValue);
-      attrColorValue = (ColorEditText) rootView.findViewById(R.id.attrColorValue);
-      attrColorIndicator = (View) rootView.findViewById(R.id.attrColorIndicator);
-      attrWishlistValue = (Switch) rootView.findViewById(R.id.attrWishlistValue);
-      attrWishlistName = (TextView) rootView.findViewById(R.id.attrWishlistName);
 
       attrWishlistName.setOnClickListener(new View.OnClickListener() {
          @Override
@@ -145,7 +153,6 @@ public class CollectionItemsFragment extends Fragment {
 
       allColors = com.gruppe1.pem.challengeme.Color.getAllColors(activity);
       int parentCategoryId = -1;
-      int savedColorId = -1;
 
       Bundle extras = getArguments();
       if(extras != null) {
@@ -164,7 +171,6 @@ public class CollectionItemsFragment extends Fragment {
          getDb_helper().setTable(Constants.ITEMS_DB_TABLE);
          editItem = new Item(activity, editItemId, getDb_helper());
          parentCategoryId = editItem.getCategoryId();
-         savedColorId = editItem.getPrimaryColorId();
       } else {
          getDb_helper().setTable(Constants.ITEMS_DB_TABLE);
          editItem = new Item(activity, 0, getDb_helper());
@@ -211,9 +217,9 @@ public class CollectionItemsFragment extends Fragment {
          attrCategorySelected = null;
       }
 
-      if (savedColorId != -1) {
+      if (editItem.getPrimaryColorId() > 0) {
          attrColorSelected =
-               new com.gruppe1.pem.challengeme.Color(activity, savedColorId, getDb_helper());
+               new com.gruppe1.pem.challengeme.Color(activity, editItem.getPrimaryColorId(), getDb_helper());
          attrColorValue.setSelection(allColors.indexOf(attrColorSelected));
       } else {
          attrColorSelected = null;
@@ -339,9 +345,7 @@ public class CollectionItemsFragment extends Fragment {
 
                File imagesFolder = new File(Environment.getExternalStorageDirectory().getPath(),
                      getString(R.string.app_name));
-               if(!imagesFolder.mkdirs()) {
-                  System.out.println("Error with creating file");
-               }
+               imagesFolder.mkdirs();
 
                File image = new File(imagesFolder, "QR_image_" + timeStamp + ".jpg");
                Uri uriSavedImage = Uri.fromFile(image);
@@ -485,11 +489,10 @@ public class CollectionItemsFragment extends Fragment {
             attrValueColorPicker.setExactColorId(exactColorId);
             // attribute is DatePicker
          } else if (attributeType.getValueType() == 4) {
-            // TODO: change; setTag auf richtige Views; alle Types
             String buyDate = attributeValue.toString();
             attrValueDatePicker.setDate(buyDate);
          } else {
-            EditText textView = (EditText) layout.findViewById(R.id.stringAttrField);
+            TextInputEditText textView = (TextInputEditText) layout.findViewById(R.id.stringAttrField);
             textView.setText(attributeValue.toString());
             if (attributeType.getName()
                   .equals(getString(R.string.attr_type_size_en)) || attributeType.getName()
@@ -607,7 +610,7 @@ public class CollectionItemsFragment extends Fragment {
          attrValueDatePicker.initialize(activity, buyDate);
          attributeValueView = attrValueDatePicker;
       } else {
-         EditText textAttributeValue = new EditText(activity);
+         TextInputEditText textAttributeValue = new TextInputEditText(activity);
          textAttributeValue.setMaxLines(1);
          textAttributeValue.setInputType(InputType.TYPE_TEXT_FLAG_AUTO_CORRECT);
          ViewGroup.LayoutParams attibuteValueLayoutParams =
@@ -659,7 +662,7 @@ public class CollectionItemsFragment extends Fragment {
          String imgPath = editItem.getImageFile();
          item_imageFile = imgPath;
 
-         picassoSingleton.setImageFit(imgPath, ImgPhoto,
+         picassoSingleton.setImageFit(imgPath, imgPhoto,
                activity.getDrawable(R.drawable.kleiderbuegel),
                activity.getDrawable(R.mipmap.addcamera2));
       }
@@ -722,7 +725,7 @@ public class CollectionItemsFragment extends Fragment {
             attributeSaveValue = attrValueDatePicker.getDate();
          } else {
             attributeSaveValue =
-                  ((EditText) attributeView.findViewById(R.id.stringAttrField)).getText()
+                  ((TextInputEditText) attributeView.findViewById(R.id.stringAttrField)).getText()
                         .toString();
          }
          HashMap<String, String> itemAttributeValue = new HashMap<>();
@@ -738,13 +741,13 @@ public class CollectionItemsFragment extends Fragment {
       }
       this.db_helper.close();
       Intent i = new Intent();
-      i.putExtra("name", item_name);
-      i.putExtra("item_id", editItem.getId());
-      i.putExtra("image_file", editItem.getImageFile());
-      i.putExtra("category_id", item_categoryId);
-      i.putExtra("primary_color", item_primaryColor);
-      i.putExtra("rating", item_rating);
-      i.putExtra("is_wish", item_isWish);
+      i.putExtra(Constants.EXTRA_ITEM_NAME, item_name);
+      i.putExtra(Constants.EXTRA_ITEM_ID, editItem.getId());
+      i.putExtra(Constants.EXTRA_ITEM_FILE, editItem.getImageFile());
+      i.putExtra(Constants.EXTRA_CATEGORY_ID, item_categoryId);
+      i.putExtra(Constants.EXTRA_ITEM_PRIMARY_COLOR_ID, item_primaryColor);
+      i.putExtra(Constants.EXTRA_ITEM_RATING, item_rating);
+      i.putExtra(Constants.EXTRA_ITEM_IS_WISHLIST, item_isWish);
       activity.setResult(Activity.RESULT_OK, i);
       activity.finish();
    }
@@ -760,7 +763,7 @@ public class CollectionItemsFragment extends Fragment {
       item_imageFile = path;
       editItem.setImageFile(item_imageFile);
 
-      picassoSingleton.setImageFit(path, ImgPhoto, activity.getDrawable(R.drawable.kleiderbuegel),
+      picassoSingleton.setImageFit(path, imgPhoto, activity.getDrawable(R.drawable.kleiderbuegel),
             activity.getDrawable(R.mipmap.addcamera2));
       setExactColor(ImageLoader.getPicFromFile(path, 500, 500));
    }

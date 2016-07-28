@@ -2,13 +2,26 @@ package com.gruppe1.pem.challengeme.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
+import com.gruppe1.pem.challengeme.Category;
 import com.gruppe1.pem.challengeme.Item;
-import com.gruppe1.pem.challengeme.helpers.Constants;
+import com.gruppe1.pem.challengeme.R;
+import com.gruppe1.pem.challengeme.SquareImageView;
+import com.gruppe1.pem.challengeme.SquareImageViewWidth;
+import com.gruppe1.pem.challengeme.helpers.ColorHelper;
+import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
+import com.gruppe1.pem.challengeme.helpers.ExactColorEditText;
 import com.gruppe1.pem.challengeme.helpers.PicassoSingleton;
 import com.gruppe1.pem.challengeme.views.NewCompareActivity;
 
@@ -18,75 +31,82 @@ import java.util.ArrayList;
  * PagerAdapter to fill the compare views
  */
 public class CompareImageAdapter extends PagerAdapter {
-    private Context context;
-    private ArrayList<Item> categoryItems;
-    private PicassoSingleton picassoSingleton;
-    private NewCompareActivity activity;
-    private int builder;
+   private Context context;
+   private ArrayList<Item> categoryItems;
+   private PicassoSingleton picassoSingleton;
+   private NewCompareActivity activity;
+   private int builder;
 
-    /**
-     * Constructor of the CompareImageAdapter
-     * @param activity the activity of the context
-     * @param items list of the items to fill the pager with
-     * @param p_builder the parent builder
-     */
-    public CompareImageAdapter(Activity activity, ArrayList<Item> items, int p_builder) {
-        this.activity = (NewCompareActivity) activity;
-        this.context = activity.getApplicationContext();
-        this.builder = p_builder;
+   /**
+    * Constructor of the CompareImageAdapter
+    *
+    * @param activity  the activity of the context
+    * @param items     list of the items to fill the pager with
+    * @param p_builder the parent builder
+    */
+   public CompareImageAdapter(Activity activity, ArrayList<Item> items, int p_builder) {
+      this.activity = (NewCompareActivity) activity;
+      this.context = activity.getApplicationContext();
+      this.builder = p_builder;
 
-        categoryItems = items;
+      categoryItems = items;
 
-        for(int i = 0; i < categoryItems.size(); i++){
-            String imageFile = categoryItems.get(i).getImageFile();
-            if(imageFile == null){
-                categoryItems.remove(i);
-            }
-        }
+      for (int i = 0; i < categoryItems.size(); i++) {
+         String imageFile = categoryItems.get(i)
+               .getImageFile();
+         if (imageFile == null) {
+            categoryItems.remove(i);
+         }
+      }
 
-        this.picassoSingleton = PicassoSingleton.getInstance(activity);
-    }
+      this.picassoSingleton = PicassoSingleton.getInstance(activity);
+   }
 
-    @Override
-    public int getCount() {
-        return categoryItems.size();
-    }
+   @Override
+   public int getCount() {
+      return categoryItems.size();
+   }
 
-    @Override
-    public boolean isViewFromObject(View view, Object object) {
-        return view == object;
-    }
+   @Override
+   public boolean isViewFromObject(View view, Object object) {
+      return view == object;
+   }
 
-    @Override
-    public Object instantiateItem(ViewGroup container, int position) {
-        ImageView imageView = new ImageView(context);
-        imageView.setPadding(0, 0, 0, 0);
-        //imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+   @Override
+   public Object instantiateItem(ViewGroup container, int position) {
 
-        String imageFile = categoryItems.get(position).getImageFile();
+      LayoutInflater inflater = LayoutInflater.from(context);
+      ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.item_view_pager, container, false);
+      SquareImageViewWidth imageView = (SquareImageViewWidth) layout.findViewById(R.id.imageView);
 
-        this.picassoSingleton.setImage(imageFile, Constants.COMPARE_IMAGE_WIDTH,Constants.COMPARE_IMAGE_HEIGHT, imageView);
-        container.addView(imageView, 0);
+      Item item = categoryItems.get(position);
+      DataBaseHelper dbHelper = new DataBaseHelper(context);
+      dbHelper.init();
+      Category category = new Category(this.context, item.getCategoryId(), dbHelper);
+      dbHelper.close();
 
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                activity.showCategoryChooser(builder);
-            }
-        });
+      int colorHex = ColorHelper.calculateMinDarkColor(category.getColor());
+      Drawable icon = ColorHelper.filterIconColor(context, category.getIcon(), colorHex);
+      picassoSingleton.setImageFit(item.getImageFile(), imageView, icon, icon);
 
-        return imageView;
-    }
+      imageView.setOnClickListener(new View.OnClickListener() {
+         @Override
+         public void onClick(View v) {
+            activity.showCategoryChooser(builder);
+         }
+      });
 
-    @Override
-    public int getItemPosition(Object object) {
-        return categoryItems.indexOf(object);
-    }
+      container.addView(layout);
+      return layout;
+   }
 
-    @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
-        container.removeView((ImageView) object);
-    }
+   @Override
+   public int getItemPosition(Object object) {
+      return categoryItems.indexOf(object);
+   }
 
-
+   @Override
+   public void destroyItem(ViewGroup container, int position, Object object) {
+      container.removeView((View) object);
+   }
 }

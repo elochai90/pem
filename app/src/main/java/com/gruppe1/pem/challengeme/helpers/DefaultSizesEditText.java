@@ -1,16 +1,14 @@
 package com.gruppe1.pem.challengeme.helpers;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Canvas;
-import android.os.Build;
+import android.support.design.widget.TextInputEditText;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.gruppe1.pem.challengeme.DefaultSize;
@@ -19,7 +17,7 @@ import com.gruppe1.pem.challengeme.R;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class DefaultSizesEditText extends EditText {
+public class DefaultSizesEditText extends TextInputEditText {
 
    private Activity activity;
    private ArrayList<DefaultSize> mItems;
@@ -43,14 +41,6 @@ public class DefaultSizesEditText extends EditText {
 
    public DefaultSizesEditText(Context context, AttributeSet attrs, int defStyleAttr) {
       super(context, attrs, defStyleAttr);
-
-      mHint = getHint();
-   }
-
-   @TargetApi (Build.VERSION_CODES.LOLLIPOP)
-   public DefaultSizesEditText(Context context, AttributeSet attrs, int defStyleAttr,
-         int defStyleRes) {
-      super(context, attrs, defStyleAttr, defStyleRes);
 
       mHint = getHint();
    }

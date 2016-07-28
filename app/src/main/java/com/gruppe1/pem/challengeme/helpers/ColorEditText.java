@@ -1,18 +1,16 @@
 package com.gruppe1.pem.challengeme.helpers;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Canvas;
-import android.os.Build;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.gruppe1.pem.challengeme.Color;
@@ -21,7 +19,7 @@ import com.gruppe1.pem.challengeme.adapters.ColorsGridOverlayAdapter;
 
 import java.util.ArrayList;
 
-public class ColorEditText extends EditText {
+public class ColorEditText extends TextInputEditText {
 
    ArrayList<Color> colors;
    CharSequence mHint;
@@ -47,13 +45,6 @@ public class ColorEditText extends EditText {
 
    public ColorEditText(Context context, AttributeSet attrs, int defStyleAttr) {
       super(context, attrs, defStyleAttr);
-
-      mHint = getHint();
-   }
-
-   @TargetApi (Build.VERSION_CODES.LOLLIPOP)
-   public ColorEditText(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-      super(context, attrs, defStyleAttr, defStyleRes);
 
       mHint = getHint();
    }
@@ -94,6 +85,7 @@ public class ColorEditText extends EditText {
          }
       });
    }
+
    public void setOnItemSelectedListener(OnItemSelectedListener onItemSelectedListener) {
       this.onItemSelectedListener = onItemSelectedListener;
    }
@@ -119,7 +111,6 @@ public class ColorEditText extends EditText {
          onItemSelectedListener.onItemSelectedListener(colors.get(index), index);
       }
    }
-
 
    private AlertDialog setupCategoryOverlay(OnClickListener onItemClickListener) {
       final AlertDialog.Builder builder = new AlertDialog.Builder(activity);

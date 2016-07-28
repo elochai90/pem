@@ -32,11 +32,15 @@ import com.gruppe1.pem.challengeme.Item;
 import com.gruppe1.pem.challengeme.ListItemIconName;
 import com.gruppe1.pem.challengeme.R;
 import com.gruppe1.pem.challengeme.adapters.DefaultRecyclerListAdapter;
+import com.gruppe1.pem.challengeme.helpers.ColorHelper;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 import com.gruppe1.pem.challengeme.helpers.GridSpacingItemDecoration;
 
 import java.util.ArrayList;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by bianka on 13.10.2015.
@@ -45,27 +49,44 @@ public class SearchResultsActivity extends AppCompatActivity {
 
    private ArrayList<ListItemIconName> mDataset;
 
-   private RecyclerView gridView;
-   private RecyclerView listView;
+   @Bind(R.id.noItemLayout)
+   RelativeLayout noItemLayout;
+   @Bind(R.id.noItemText)
+   TextView noItemText;
+   @Bind(R.id.noItemArrow)
+   ImageView noItemArrow;
+   @Bind(R.id.listView)
+   RecyclerView listView;
+   @Bind(R.id.gridView)
+   RecyclerView gridView;
+   @Bind(R.id.filterColorLayout)
+   LinearLayout filterColorLayout;
+   @Bind(R.id.filterColorLayoutFirstLine)
+   LinearLayout filterColorLayoutFirstLine;
+   @Bind(R.id.filterColorLayoutSecondLine)
+   LinearLayout filterColorLayoutSecondLine;
+   @Bind(R.id.filterCategoryLayout)
+   LinearLayout filterCategoryLayout;
+   @Bind(R.id.filterCategoryLayoutFirstLine)
+   LinearLayout filterCategoryLayoutFirstLine;
+   @Bind(R.id.filterCategoryLayoutSecondLine)
+   LinearLayout filterCategoryLayoutSecondLine;
+   @Bind(R.id.filterRatingLayout)
+   LinearLayout filterRatingLayout;
+   @Bind(R.id.filterWishlist)
+   ImageButton filterWishlist;
+   @Bind(R.id.filterRating)
+   ImageButton filterRating;
+   @Bind(R.id.filterColor)
+   ImageButton filterColor;
+   @Bind(R.id.filterCategory)
+   ImageButton filterCategory;
+   @Bind(R.id.toolbar)
+   Toolbar toolbar;
+
    private DefaultRecyclerListAdapter defaultRecyclerListAdapter;
-   private ArrayList<Item> searchResultItems = new ArrayList<>();
    private String query;
 
-   private RelativeLayout noItemLayout;
-   private TextView noItemText;
-   private ImageView noItemArrow;
-
-   private LinearLayout filterColorLayout;
-   private LinearLayout filterColorLayoutFirstLine;
-   private LinearLayout filterColorLayoutSecondLine;
-   private LinearLayout filterRatingLayout;
-   private LinearLayout filterCategoryLayout;
-   private LinearLayout filterCategoryLayoutFirstLine;
-   private LinearLayout filterCategoryLayoutSecondLine;
-   private ImageButton filterWishlist;
-   private ImageButton filterRating;
-   private ImageButton filterColor;
-   private ImageButton filterCategory;
    private boolean filterWishlistActivated;
    private boolean filterRatingActivated;
    private boolean filterColorActivated;
@@ -78,31 +99,12 @@ public class SearchResultsActivity extends AppCompatActivity {
    private SharedPreferences.Editor editor;
    private SharedPreferences sharedPreferences;
 
-   private Toolbar toolbar;
 
    @Override
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_search_results);
-
-      noItemLayout = (RelativeLayout) findViewById(R.id.noItemLayout);
-      noItemText = (TextView) findViewById(R.id.noItemText);
-      noItemArrow = (ImageView) findViewById(R.id.noItemArrow);
-      listView = (RecyclerView) findViewById(R.id.listView);
-      gridView = (RecyclerView) findViewById(R.id.gridView);
-      filterColorLayout = (LinearLayout) findViewById(R.id.filterColorLayout);
-      filterColorLayoutFirstLine = (LinearLayout) findViewById(R.id.filterColorLayoutFirstLine);
-      filterColorLayoutSecondLine = (LinearLayout) findViewById(R.id.filterColorLayoutSecondLine);
-      filterCategoryLayout = (LinearLayout) findViewById(R.id.filterCategoryLayout);
-      filterCategoryLayoutFirstLine =
-            (LinearLayout) findViewById(R.id.filterCategoryLayoutFirstLine);
-      filterCategoryLayoutSecondLine =
-            (LinearLayout) findViewById(R.id.filterCategoryLayoutSecondLine);
-      filterRatingLayout = (LinearLayout) findViewById(R.id.filterRatingLayout);
-      filterWishlist = (ImageButton) findViewById(R.id.filterWishlist);
-      filterRating = (ImageButton) findViewById(R.id.filterRating);
-      filterColor = (ImageButton) findViewById(R.id.filterColor);
-      filterCategory = (ImageButton) findViewById(R.id.filterCategory);
+      ButterKnife.bind(this);
 
       sharedPreferences = getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
       editor = sharedPreferences.edit();
@@ -127,10 +129,12 @@ public class SearchResultsActivity extends AppCompatActivity {
             searchResultsActivityOnItemClick(v, listView.getChildPosition(v));
          }
       });
-      defaultRecyclerListAdapter.setOnIcMoreClickListener(new View.OnClickListener() {
+      defaultRecyclerListAdapter.setOnIcMoreClickListener(new DefaultRecyclerListAdapter.OnIcMoreClickListener() {
+
          @Override
-         public void onClick(View v) {
-            searchResultsActivityOnIcMoreClick(listView, v, (Integer) v.getTag());
+         public void onClick(View view, ListItemIconName item) {
+            searchResultsActivityOnIcMoreClick(listView, view, mDataset.indexOf(item));
+
          }
       });
 
@@ -138,14 +142,7 @@ public class SearchResultsActivity extends AppCompatActivity {
       listView.setLayoutManager(linearLayoutManagerList);
       listView.setHasFixedSize(true);
       listView.setAdapter(defaultRecyclerListAdapter);
-
-//      StaggeredGridLayoutManager gridLayoutManager =
-//            new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-//      gridView.setLayoutManager(gridLayoutManager);
-//      gridView.setHasFixedSize(true);
-//      int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
-//      gridView.addItemDecoration(new GridSpacingItemDecoration(2, spacingInPixels, false, 0));
-      gridView.setVisibility(View.INVISIBLE);
+      gridView.setVisibility(View.GONE);
 
       initDataset();
       setupFilterViews();
@@ -241,11 +238,11 @@ public class SearchResultsActivity extends AppCompatActivity {
                   v.setBackground(newDrawableIcon);
                } else {
                   filterCategoryIds.add(tmpCat.getId());
-                  int iconId = getResources().getIdentifier(tmpCat.getIcon(), "drawable",
-                        "com.gruppe1.pem.challengeme");
                   LayerDrawable newDrawableIcon =
                         (LayerDrawable) getDrawable(R.drawable.icon_category_circle_filled);
-                  newDrawableIcon.setDrawableByLayerId(R.id.circle_icon, getDrawable(iconId));
+                  int colorHex = getResources().getColor(R.color.primary);
+                  newDrawableIcon.setDrawableByLayerId(R.id.circle_icon,
+                        ColorHelper.filterIconColor(SearchResultsActivity.this, tmpCat.getIcon(), colorHex));
                   v.setBackground(newDrawableIcon);
                }
                initDataset();
@@ -289,7 +286,12 @@ public class SearchResultsActivity extends AppCompatActivity {
                filterCategoryActivated = false;
                initDataset();
             } else {
-               filterCategory.setBackground(getDrawable(R.drawable.icon_category_circle_filled));
+               LayerDrawable newDrawableIcon =
+                     (LayerDrawable) getDrawable(R.drawable.icon_category_circle_filled);
+               int colorHex = getResources().getColor(R.color.primary);
+               newDrawableIcon.setDrawableByLayerId(R.id.circle_icon,
+                     ColorHelper.filterIconColor(SearchResultsActivity.this, "kleiderbuegel", colorHex));
+               filterCategory.setBackground(newDrawableIcon);
                filterCategoryLayout.setVisibility(View.VISIBLE);
                filterCategoryActivated = true;
             }
@@ -371,7 +373,12 @@ public class SearchResultsActivity extends AppCompatActivity {
                filterColorActivated = false;
                initDataset();
             } else {
-               filterColor.setBackground(getDrawable(R.drawable.icon_color_circle_filled));
+               LayerDrawable newDrawableIcon =
+                     (LayerDrawable) getDrawable(R.drawable.icon_category_circle_filled);
+               int colorHex = getResources().getColor(R.color.primary);
+               newDrawableIcon.setDrawableByLayerId(R.id.circle_icon,
+                     ColorHelper.filterIconColor(SearchResultsActivity.this, "ic_color_lens_white", colorHex));
+               filterColor.setBackground(newDrawableIcon);
                filterColorLayout.setVisibility(View.VISIBLE);
                filterColorActivated = true;
             }
@@ -386,7 +393,12 @@ public class SearchResultsActivity extends AppCompatActivity {
             if (filterWishlistActivated) {
                filterWishlist.setBackground(getDrawable(R.drawable.icon_wishlist_circle));
             } else {
-               filterWishlist.setBackground(getDrawable(R.drawable.icon_wishlist_circle_filled));
+               LayerDrawable newDrawableIcon =
+                     (LayerDrawable) getDrawable(R.drawable.icon_wishlist_circle_filled);
+               int colorHex = getResources().getColor(R.color.primary);
+               newDrawableIcon.setDrawableByLayerId(R.id.circle_icon,
+                     ColorHelper.filterIconColor(SearchResultsActivity.this, "ic_wishlist_white", colorHex));
+               filterWishlist.setBackground(newDrawableIcon);
             }
             filterWishlistActivated = !filterWishlistActivated;
             initDataset();
@@ -445,7 +457,12 @@ public class SearchResultsActivity extends AppCompatActivity {
                filterRatingActivated = false;
                initDataset();
             } else {
-               filterRating.setBackground(getDrawable(R.drawable.icon_rating_circle_filled));
+               LayerDrawable newDrawableIcon =
+                     (LayerDrawable) getDrawable(R.drawable.icon_category_circle_filled);
+               int colorHex = getResources().getColor(R.color.primary);
+               newDrawableIcon.setDrawableByLayerId(R.id.circle_icon,
+                     ColorHelper.filterIconColor(SearchResultsActivity.this, "ic_star_border_white", colorHex));
+               filterRating.setBackground(newDrawableIcon);
                filterRatingLayout.setVisibility(View.VISIBLE);
                filterRatingActivated = true;
             }
@@ -461,7 +478,6 @@ public class SearchResultsActivity extends AppCompatActivity {
    }
 
    private void setupToolbar() {
-      toolbar = (Toolbar) findViewById(R.id.toolbar);
       setSupportActionBar(toolbar);
       getSupportActionBar().setDisplayShowHomeEnabled(true);
       getSupportActionBar().setHomeButtonEnabled(true);
@@ -551,7 +567,7 @@ public class SearchResultsActivity extends AppCompatActivity {
       DataBaseHelper db_helper = new DataBaseHelper(this);
       db_helper.init();
 
-      searchResultItems =
+      ArrayList<Item> searchResultItems =
             Item.getSearchResults(this, query, filterCategoryIds, filterWishlistActivated,
                   filterRatingCount, filterColorIds);
 
@@ -576,6 +592,10 @@ public class SearchResultsActivity extends AppCompatActivity {
     * @param itemid the id of the selected item
     */
    private void selectItem(int itemid, int position) {
+      ArrayList<Item> searchResultItems =
+            Item.getSearchResults(this, query, filterCategoryIds, filterWishlistActivated,
+                  filterRatingCount, filterColorIds);
+
       Intent intent = new Intent();
       intent.setClassName(getPackageName(), getPackageName() + ".views.CollectionItemsActivity");
 
@@ -620,8 +640,8 @@ public class SearchResultsActivity extends AppCompatActivity {
                   deleteItem.delete();
                   db_helper.close();
 
-                  initDataset();
-                  defaultRecyclerListAdapter.notifyDataSetChanged();
+                  mDataset.remove(position);
+                  defaultRecyclerListAdapter.notifyItemRemoved(position);
                }
             })
             .setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {

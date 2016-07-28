@@ -37,24 +37,6 @@ public class PicassoSingleton {
     * Sets an image to a ImageView
     *
     * @param p_file       filename
-    * @param p_width      desired width
-    * @param p_height     desired height
-    * @param p_targetView target ImageView
-    */
-   public void setImage(String p_file, int p_width, int p_height, ImageView p_targetView) {
-      if (!p_file.equals("")) {
-         Picasso.with(context)
-               .load(new File(p_file))
-               .resize(p_width, p_height)
-               .centerCrop()
-               .into(p_targetView);
-      }
-   }
-
-   /**
-    * Sets an image to a ImageView
-    *
-    * @param p_file       filename
     * @param p_targetView target ImageView
     */
    public void setImageFit(String p_file, ImageView p_targetView, Drawable placeHolder,

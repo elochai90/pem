@@ -8,15 +8,22 @@ import android.view.MenuItem;
 
 import com.gruppe1.pem.challengeme.R;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by bianka on 08.11.2015.
  */
 public class SettingsActivity extends AppCompatActivity {
+
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        ButterKnife.bind(this);
 
         setupToolbar();
 
@@ -24,7 +31,6 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void setupToolbar(){
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if(toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayShowHomeEnabled(true);

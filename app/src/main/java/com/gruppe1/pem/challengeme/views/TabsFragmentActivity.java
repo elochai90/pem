@@ -21,27 +21,41 @@ import com.github.clans.fab.FloatingActionMenu;
 import com.gruppe1.pem.challengeme.R;
 import com.gruppe1.pem.challengeme.adapters.ViewPagerAdapter;
 import com.gruppe1.pem.challengeme.helpers.Constants;
+import com.gruppe1.pem.challengeme.helpers.DefaultSetup;
 
 import java.util.Locale;
 
-public class TabsFragmentActivity extends ActionBarActivity {
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
-   private FloatingActionMenu menu;
+public class TabsFragmentActivity extends ActionBarActivity {
 
    private String mTitle;
    private Locale myLocale;
 
-   private ViewPager mainViewsPager;
-   private TabLayout tabLayout;
+   @Bind(R.id.appBar)
+   AppBarLayout appBarLayout;
+   @Bind(R.id.pagerMainViews)
+   ViewPager mainViewsPager;
+   @Bind(R.id.tabLayout)
+   TabLayout tabLayout;
+   @Bind(R.id.toolbar)
+   Toolbar toolbar;
+   @Bind(R.id.menu)
+   FloatingActionMenu menu;
+   @Bind(R.id.add_item)
+   FloatingActionButton fab_add_item;
+   @Bind(R.id.add_category)
+   FloatingActionButton fab_add_category;
+   @Bind(R.id.add_wishlist_item)
+   FloatingActionButton fab_add_wishlist_item;
+   @Bind(R.id.add_compare)
+   FloatingActionButton fab_add_compare;
 
-   private CategoriesFragment categoriesFragment;
-   private CompareFragment compareFragment;
-   private WishlistFragment wishlistFragment;
-   private AppBarLayout appBarLayout;
-   private Toolbar toolbar;
+   private ViewPagerAdapter viewPagerAdapter;
+
 
    private void setupToolbar() {
-      toolbar = (Toolbar) findViewById(R.id.toolbar);
       setSupportActionBar(toolbar);
       getSupportActionBar().setDisplayShowHomeEnabled(false);
       getSupportActionBar().setHomeButtonEnabled(false);
@@ -53,9 +67,9 @@ public class TabsFragmentActivity extends ActionBarActivity {
       super.onCreate(savedInstanceState);
 
       setContentView(R.layout.activity_tabs);
+      ButterKnife.bind(this);
       loadLocale();
-
-      appBarLayout = (AppBarLayout) findViewById(R.id.appBar);
+      checkFirstDBInit();
 
       setupToolbar();
 
@@ -63,13 +77,7 @@ public class TabsFragmentActivity extends ActionBarActivity {
 
       mTitle = getString(R.string.app_name);
 
-      categoriesFragment = new CategoriesFragment();
-      compareFragment = new CompareFragment();
-      wishlistFragment = new WishlistFragment();
-
-      mainViewsPager = (ViewPager) findViewById(R.id.pagerMainViews);
       setupViewPager(mainViewsPager);
-      tabLayout = (TabLayout) findViewById(R.id.tabLayout);
       tabLayout.setupWithViewPager(mainViewsPager);
 
       if (getSupportActionBar() != null) {
@@ -111,6 +119,19 @@ public class TabsFragmentActivity extends ActionBarActivity {
       });
    }
 
+   private void checkFirstDBInit() {
+      SharedPreferences sharedPreferences =
+            getSharedPreferences(Constants.MY_PREFERENCES, Activity.MODE_PRIVATE);
+      SharedPreferences.Editor editor = sharedPreferences.edit();
+      boolean firstDbInit = sharedPreferences.getBoolean(Constants.KEY_FIRST_DB_INIT, true);
+
+      if (firstDbInit) {
+         new DefaultSetup(getApplicationContext());
+         editor.putBoolean(Constants.KEY_FIRST_DB_INIT, false);
+         editor.commit();
+      }
+   }
+
    private void onTabClickedSwitched(TabLayout.Tab tab) {
 
       mainViewsPager.setCurrentItem(tab.getPosition());
@@ -129,11 +150,10 @@ public class TabsFragmentActivity extends ActionBarActivity {
    }
 
    private void setupViewPager(ViewPager viewPager) {
-      ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-      adapter.addFrag(categoriesFragment, getString(R.string.title_activity_categories));
-      adapter.addFrag(compareFragment, getString(R.string.title_activity_compare));
-      adapter.addFrag(wishlistFragment, getString(R.string.title_activity_wishlist));
-      viewPager.setAdapter(adapter);
+      viewPagerAdapter = new ViewPagerAdapter(this, getSupportFragmentManager());
+      viewPager.setAdapter(viewPagerAdapter);
+      viewPagerAdapter.notifyDataSetChanged();
+
    }
 
    public void loadLocale() {
@@ -210,20 +230,10 @@ public class TabsFragmentActivity extends ActionBarActivity {
    }
 
    private void setupFloatingActionMenu() {
-
-      menu = (FloatingActionMenu) findViewById(R.id.menu);
       menu.setClosedOnTouchOutside(true);
-      com.github.clans.fab.FloatingActionButton fab_add_compare =
-            (FloatingActionButton) findViewById(R.id.add_compare);
       fab_add_compare.setLabelText(getString(R.string.title_activity_saved_compares));
-      com.github.clans.fab.FloatingActionButton fab_add_wishlist_item =
-            (FloatingActionButton) findViewById(R.id.add_wishlist_item);
       fab_add_wishlist_item.setLabelText(getString(R.string.title_activity_new_Wishlistitem));
-      com.github.clans.fab.FloatingActionButton fab_add_category =
-            (FloatingActionButton) findViewById(R.id.add_category);
       fab_add_category.setLabelText(getString(R.string.title_activity_new_category));
-      com.github.clans.fab.FloatingActionButton fab_add_item =
-            (FloatingActionButton) findViewById(R.id.add_item);
       fab_add_item.setLabelText(getString(R.string.title_activity_new_item));
       fab_add_compare.setOnClickListener(new View.OnClickListener() {
          @Override
@@ -288,15 +298,15 @@ public class TabsFragmentActivity extends ActionBarActivity {
    @Override
    public void onActivityResult(int requestCode, int resultCode, Intent data) {
       super.onActivityResult(requestCode, resultCode, data);
-      if (categoriesFragment.getActivity() != null) {
-         categoriesFragment.onActivityResult(requestCode, resultCode, data);
+      if (viewPagerAdapter.getItem(0).getActivity() != null) {
+         viewPagerAdapter.getItem(0).onActivityResult(requestCode, resultCode, data);
       }
-      if (compareFragment.getActivity() != null) {
-         compareFragment.onActivityResult(requestCode, resultCode, data);
+      if (viewPagerAdapter.getItem(1).getActivity() != null) {
+         viewPagerAdapter.getItem(1).onActivityResult(requestCode, resultCode, data);
       }
-      if (wishlistFragment.getActivity() != null) {
-         wishlistFragment.onActivityResult(requestCode, resultCode, data);
-      }
+//      if (wishlistFragment.getActivity() != null) {
+         viewPagerAdapter.getItem(2).onActivityResult(requestCode, resultCode, data);
+//      }
    }
 }
 

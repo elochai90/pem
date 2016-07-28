@@ -34,16 +34,13 @@ import com.gruppe1.pem.challengeme.helpers.GridSpacingItemDecoration;
 
 import java.util.ArrayList;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 public class ItemsListActivity extends AppCompatActivity {
    private ArrayList<ListItemIconName> mDataset;
 
-   private RecyclerView gridView;
-   private RecyclerView listView;
    private Boolean list;
-
-   private FloatingActionMenu menu;
-
-   private RelativeLayout noItemLayout;
 
    private int categoryId;
 
@@ -56,16 +53,35 @@ public class ItemsListActivity extends AppCompatActivity {
    private DefaultRecyclerGridAdapter defaultRecyclerGridAdapter;
 
    private int categoriesCount = 0;
+   @Bind (R.id.menu)
+   FloatingActionMenu menu;
+   @Bind (R.id.add_item)
+   FloatingActionButton fab_add_item;
+   @Bind (R.id.add_category)
+   FloatingActionButton fab_add_category;
+   @Bind (R.id.add_wishlist_item)
+   FloatingActionButton fab_add_wishlist_item;
+   @Bind (R.id.add_compare)
+   FloatingActionButton fab_add_compare;
+   @Bind (R.id.noItemLayout)
+   RelativeLayout noItemLayout;
+   @Bind (R.id.noItemText)
+   TextView noItemText;
+   @Bind (R.id.listView)
+   RecyclerView listView;
+   @Bind (R.id.gridView)
+   RecyclerView gridView;
+   @Bind (R.id.toolbar)
+   Toolbar toolbar;
 
    @Override
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
 
       setContentView(R.layout.activity_items_list);
+      ButterKnife.bind(this);
 
       setupToolbar();
-      noItemLayout = (RelativeLayout) findViewById(R.id.noItemLayout);
-      TextView noItemText = (TextView) findViewById(R.id.noItemText);
       noItemText.setText(R.string.no_items);
 
       sharedPreferences = getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
@@ -95,7 +111,6 @@ public class ItemsListActivity extends AppCompatActivity {
 
       initDataset();
 
-      listView = (RecyclerView) findViewById(R.id.listView);
       defaultRecyclerListAdapter = new DefaultRecyclerListAdapter(this, R.layout.list_item_default,
             R.layout.list_item_category, mDataset, false, false);
       defaultRecyclerListAdapter.setOnItemClickListener(new View.OnClickListener() {
@@ -104,19 +119,20 @@ public class ItemsListActivity extends AppCompatActivity {
             itemListActivityOnItemClick(v, listView.getChildPosition(v));
          }
       });
-      defaultRecyclerListAdapter.setOnIcMoreClickListener(new View.OnClickListener() {
-         @Override
-         public void onClick(View v) {
-            itemListActivityOnIcMoreClick(listView, v, (Integer) v.getTag());
-         }
-      });
+      defaultRecyclerListAdapter.setOnIcMoreClickListener(
+            new DefaultRecyclerListAdapter.OnIcMoreClickListener() {
+
+               @Override
+               public void onClick(View view, ListItemIconName item) {
+                  itemListActivityOnIcMoreClick(listView, view, mDataset.indexOf(item));
+               }
+            });
 
       LinearLayoutManager linearLayoutManagerList = new LinearLayoutManager(this.getBaseContext());
       listView.setLayoutManager(linearLayoutManagerList);
       listView.setHasFixedSize(true);
       listView.setAdapter(defaultRecyclerListAdapter);
 
-      gridView = (RecyclerView) findViewById(R.id.gridView);
       defaultRecyclerGridAdapter = new DefaultRecyclerGridAdapter(this, R.layout.grid_item_default,
             R.layout.grid_item_category, mDataset, false);
 
@@ -141,20 +157,11 @@ public class ItemsListActivity extends AppCompatActivity {
       gridView.setAdapter(defaultRecyclerGridAdapter);
       gridView.setVisibility(View.INVISIBLE);
 
-      menu = (FloatingActionMenu) findViewById(R.id.menu);
       menu.setVisibility(View.VISIBLE);
       menu.setClosedOnTouchOutside(true);
-      com.github.clans.fab.FloatingActionButton fab_add_compare =
-            (FloatingActionButton) findViewById(R.id.add_compare);
       fab_add_compare.setLabelText(getString(R.string.title_activity_saved_compares));
-      com.github.clans.fab.FloatingActionButton fab_add_wishlist_item =
-            (FloatingActionButton) findViewById(R.id.add_wishlist_item);
       fab_add_wishlist_item.setLabelText(getString(R.string.title_activity_new_Wishlistitem));
-      com.github.clans.fab.FloatingActionButton fab_add_category =
-            (FloatingActionButton) findViewById(R.id.add_category);
       fab_add_category.setLabelText(getString(R.string.title_activity_new_category));
-      com.github.clans.fab.FloatingActionButton fab_add_item =
-            (FloatingActionButton) findViewById(R.id.add_item);
       fab_add_item.setLabelText(getString(R.string.title_activity_new_item));
       fab_add_compare.setOnClickListener(new View.OnClickListener() {
          @Override
@@ -173,6 +180,7 @@ public class ItemsListActivity extends AppCompatActivity {
             intent.setClassName(getPackageName(),
                   getPackageName() + ".views.CollectionItemsActivity");
             intent.putExtra(Constants.EXTRA_ITEM_IS_WISHLIST, true);
+            intent.putExtra(Constants.EXTRA_CATEGORY_ID, categoryId);
             startActivityForResult(intent, 1);
             menu.close(false);
          }
@@ -202,7 +210,6 @@ public class ItemsListActivity extends AppCompatActivity {
    }
 
    private void setupToolbar() {
-      Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
       setSupportActionBar(toolbar);
       getSupportActionBar().setDisplayShowHomeEnabled(true);
       getSupportActionBar().setHomeButtonEnabled(true);
@@ -327,7 +334,8 @@ public class ItemsListActivity extends AppCompatActivity {
          int iconId = getResources().getIdentifier(tmpCat.getIcon(), "drawable",
                "com.gruppe1.pem.challengeme");
          mDataset.add(
-               new ListItemIconName(this, "category", tmpCat.getId(), iconId, tmpCat.getName(), null));
+               new ListItemIconName(this, "category", tmpCat.getId(), iconId, tmpCat.getName(),
+                     null));
       }
 
       categoriesCount = mDataset.size();
@@ -394,7 +402,7 @@ public class ItemsListActivity extends AppCompatActivity {
       } else if (isItem) {
          int itemId = list ? (int) defaultRecyclerListAdapter.getItemId(position) :
                (int) defaultRecyclerGridAdapter.getItemId(position);
-         selectItem(itemId, position-categoriesCount);
+         selectItem(itemId, position - categoriesCount);
       }
    }
 
@@ -456,8 +464,7 @@ public class ItemsListActivity extends AppCompatActivity {
                            getPackageName() + ".views.NewCategoryActivity");
                      int categoryId =
                            (int) defaultRecyclerListAdapter.getItemId((int) selectedItem[0]);
-                     DataBaseHelper db_helper =
-                           new DataBaseHelper(getApplicationContext());
+                     DataBaseHelper db_helper = new DataBaseHelper(getApplicationContext());
                      db_helper.init();
 
                      Category category =
@@ -465,7 +472,8 @@ public class ItemsListActivity extends AppCompatActivity {
 
                      db_helper.close();
                      intent.putExtra(Constants.EXTRA_CATEGORY_ID, category.getId());
-                     intent.putExtra(Constants.EXTRA_PARENT_CATEGORY_ID, category.getParentCategoryId());
+                     intent.putExtra(Constants.EXTRA_PARENT_CATEGORY_ID,
+                           category.getParentCategoryId());
                      startActivityForResult(intent, 1);
                   }
                })

@@ -1,7 +1,6 @@
 package com.gruppe1.pem.challengeme.adapters;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +15,9 @@ import com.gruppe1.pem.challengeme.helpers.ColorHelper;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 
 import java.util.ArrayList;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * the Category Adapter for a Category Select Overlay
@@ -61,19 +63,19 @@ public class CategoriesGridOverlayAdapter
    public void onBindViewHolder(ViewHolder holder, int position) {
       Category category = new Category(this.context, data.get(position)
             .getElementId(), this.dbHelper);
-//      int icon = this.context.getResources()
-//            .getIdentifier(category.getIcon(), "drawable", "com.gruppe1.pem.challengeme");
+      //      int icon = this.context.getResources()
+      //            .getIdentifier(category.getIcon(), "drawable", "com.gruppe1.pem.challengeme");
 
-//      int colorHex = ColorHelper.calculateMinDarkColor(category.getColor());
-//      holder.image.setImageDrawable(ColorHelper.filterIconColor(context, category.getIcon(), colorHex));
-      String categoryName = category
-            .getName();
+      //      int colorHex = ColorHelper.calculateMinDarkColor(category.getColor());
+      //      holder.image.setImageDrawable(ColorHelper.filterIconColor(context, category.getIcon
+      // (), colorHex));
+      String categoryName = category.getName();
       holder.textView.setText(categoryName);
       int colorHex = ColorHelper.calculateMinDarkColor(category.getColor());
-      System.out.println("BIND:  " + categoryName + " - " + colorHex);
       holder.textView.setBackgroundColor(colorHex);
       holder.itemView.setBackgroundColor(colorHex);
-      holder.imageView.setImageDrawable(ColorHelper.filterIconColor(context, category.getIcon(), colorHex));
+      holder.imageView.setImageDrawable(
+            ColorHelper.filterIconColor(context, category.getIcon(), colorHex));
       holder.itemView.setTag(position);
       holder.itemView.setOnClickListener(onClickListener);
    }
@@ -94,13 +96,14 @@ public class CategoriesGridOverlayAdapter
    }
 
    public static class ViewHolder extends RecyclerView.ViewHolder {
+      @Bind (R.id.textView)
       TextView textView;
+      @Bind (R.id.imageView)
       ImageView imageView;
 
       public ViewHolder(View itemView) {
          super(itemView);
-         textView = (TextView) itemView.findViewById(R.id.textView);
-         imageView = (ImageView) itemView.findViewById(R.id.imageView);
+         ButterKnife.bind(this, itemView);
       }
    }
 }

@@ -1,9 +1,9 @@
 package com.gruppe1.pem.challengeme.views;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -14,29 +14,41 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.gruppe1.pem.challengeme.Category;
 import com.gruppe1.pem.challengeme.Compare;
 import com.gruppe1.pem.challengeme.Item;
 import com.gruppe1.pem.challengeme.R;
+import com.gruppe1.pem.challengeme.helpers.ColorHelper;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
-import com.gruppe1.pem.challengeme.helpers.ImageLoader;
+import com.gruppe1.pem.challengeme.helpers.PicassoSingleton;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 public class SavedComparesDetailActivity extends AppCompatActivity {
 
    private Compare compareItem;
 
-   private ImageView detail1;
-   private ImageView detail2;
-   private TextView nameitem1;
-   private TextView nameitem2;
-   private CardView card_view_item1;
-   private CardView card_view_item2;
-   private TextView timeStampSavedCompare;
+   @Bind (R.id.detail1oben)
+   ImageView detail1;
+   @Bind (R.id.detail2unten)
+   ImageView detail2;
+   @Bind (R.id.card_view_item1)
+   CardView card_view_item1;
+   @Bind (R.id.card_view_item2)
+   CardView card_view_item2;
+   @Bind (R.id.timeStampSavedCompare)
+   TextView timeStampSavedCompare;
+   @Bind (R.id.toolbar)
+   Toolbar toolbar;
+
+   PicassoSingleton picassoSingleton;
 
    private ArrayList<Item> compareItems = new ArrayList<>();
 
@@ -44,16 +56,11 @@ public class SavedComparesDetailActivity extends AppCompatActivity {
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_saved_compares_detail);
+      ButterKnife.bind(this);
+
+      picassoSingleton = PicassoSingleton.getInstance(this);
 
       setupToolbar();
-
-      detail1 = (ImageView) findViewById(R.id.detail1oben);
-      detail2 = (ImageView) findViewById(R.id.detail2unten);
-      nameitem1 = (TextView) findViewById(R.id.nameItem1);
-      nameitem2 = (TextView) findViewById(R.id.nameItem2);
-      card_view_item1 = (CardView) findViewById(R.id.card_view_item1);
-      card_view_item2 = (CardView) findViewById(R.id.card_view_item2);
-      timeStampSavedCompare = (TextView) findViewById(R.id.timeStampSavedCompare);
 
       DataBaseHelper dbHelper = new DataBaseHelper(this);
       dbHelper.init();
@@ -67,14 +74,19 @@ public class SavedComparesDetailActivity extends AppCompatActivity {
          getSupportActionBar().setTitle(compareItem.getName());
       }
 
-      detail1.setImageBitmap(ImageLoader.getPicFromFile(compareItems.get(0)
-            .getImageFile(), 500, 500));
-      detail2.setImageBitmap(ImageLoader.getPicFromFile(compareItems.get(1)
-            .getImageFile(), 500, 500));
-      nameitem1.setText(compareItems.get(0)
-            .getName());
-      nameitem2.setText(compareItems.get(1)
-            .getName());
+      Category category1 = new Category(this, compareItems.get(0)
+            .getCategoryId(), dbHelper);
+      Category category2 = new Category(this, compareItems.get(1)
+            .getCategoryId(), dbHelper);
+
+      int colorHex1 = ColorHelper.calculateMinDarkColor(category1.getColor());
+      int colorHex2 = ColorHelper.calculateMinDarkColor(category2.getColor());
+      Drawable icon1 = ColorHelper.filterIconColor(this, category1.getIcon(), colorHex1);
+      Drawable icon2 = ColorHelper.filterIconColor(this, category2.getIcon(), colorHex2);
+      picassoSingleton.setImageFit(compareItems.get(0)
+            .getImageFile(), detail1, icon1, icon1);
+      picassoSingleton.setImageFit(compareItems.get(1)
+            .getImageFile(), detail2, icon2, icon2);
 
       card_view_item1.setOnClickListener(new View.OnClickListener() {
          @Override
@@ -98,7 +110,6 @@ public class SavedComparesDetailActivity extends AppCompatActivity {
    }
 
    private void setupToolbar() {
-      Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
       setSupportActionBar(toolbar);
       getSupportActionBar().setDisplayShowHomeEnabled(true);
       getSupportActionBar().setHomeButtonEnabled(true);
@@ -179,55 +190,70 @@ public class SavedComparesDetailActivity extends AppCompatActivity {
 
    @Override
    public void onActivityResult(int p_requestCode, int p_resultCode, Intent p_data) {
-      try {
-         super.onActivityResult(p_requestCode, p_resultCode, p_data);
+      super.onActivityResult(p_requestCode, p_resultCode, p_data);
+      if (p_resultCode != RESULT_OK) {
+         return;
+      }
+      if (p_requestCode == 0) {
+         int itemId = p_data.getIntExtra(Constants.EXTRA_ITEM_ID, -1);
+         DataBaseHelper dbHelper = new DataBaseHelper(this);
+         dbHelper.init();
+         compareItems.remove(0);
+         compareItems.add(0, new Item(this, itemId, dbHelper));
+         Category category1 = new Category(this, compareItems.get(0)
+               .getCategoryId(), dbHelper);
+         dbHelper.close();
+         int colorHex1 = ColorHelper.calculateMinDarkColor(category1.getColor());
+         Drawable icon1 = ColorHelper.filterIconColor(this, category1.getIcon(), colorHex1);
+         picassoSingleton.setImageFit(compareItems.get(0)
+               .getImageFile(), detail1, icon1, icon1);
+      } else if (p_requestCode == 1) {
+         int itemId = p_data.getIntExtra(Constants.EXTRA_ITEM_ID, -1);
+         DataBaseHelper dbHelper = new DataBaseHelper(this);
+         dbHelper.init();
+         compareItems.remove(1);
+         compareItems.add(1, new Item(this, itemId, dbHelper));
+         Category category2 = new Category(this, compareItems.get(1)
+               .getCategoryId(), dbHelper);
+         dbHelper.close();
+         int colorHex2 = ColorHelper.calculateMinDarkColor(category2.getColor());
+         Drawable icon2 = ColorHelper.filterIconColor(this, category2.getIcon(), colorHex2);
+         picassoSingleton.setImageFit(compareItems.get(1)
+               .getImageFile(), detail2, icon2, icon2);
+      } else if (p_requestCode == 2) {
+         int compareId = p_data.getIntExtra("compareId", -1);
+         int compareItemId1 = p_data.getIntExtra("compareItemId1", -1);
+         int compareItemId2 = p_data.getIntExtra("compareItemId2", -1);
+         String compareTimestamp = p_data.getStringExtra("compareTimestamp");
+         String compareName = p_data.getStringExtra("compareName");
 
-         if (p_resultCode == Activity.RESULT_OK) {
-            if (p_requestCode == 0) {
-               int itemId = p_data.getIntExtra("itemId", -1);
-               String itemImageFile = p_data.getStringExtra("itemImage");
-               String itemName = p_data.getStringExtra("itemName");
-               detail1.setImageBitmap(ImageLoader.getPicFromFile(itemImageFile, 500, 500));
-               nameitem1.setText(itemName);
-            } else if (p_requestCode == 1) {
-               int itemId = p_data.getIntExtra("itemId", -1);
-               String itemImageFile = p_data.getStringExtra("itemImage");
-               String itemName = p_data.getStringExtra("itemName");
-               detail2.setImageBitmap(ImageLoader.getPicFromFile(itemImageFile, 500, 500));
-               nameitem2.setText(itemName);
-            } else if (p_requestCode == 2) {
-               int compareId = p_data.getIntExtra("compareId", -1);
-               int compareItemId1 = p_data.getIntExtra("compareItemId1", -1);
-               int compareItemId2 = p_data.getIntExtra("compareItemId2", -1);
-               String compareTimestamp = p_data.getStringExtra("compareTimestamp");
-               String compareName = p_data.getStringExtra("compareName");
+         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy", Locale.ENGLISH);
+         String compareCreatedTimestamp = sdf.format(new Date(Long.parseLong(compareTimestamp)));
+         timeStampSavedCompare.setText(getResources().getString(R.string.compare_saved) + ":  " +
+               compareCreatedTimestamp);
+         getSupportActionBar().setTitle(compareName);
 
-               SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy", Locale.ENGLISH);
-               String compareCreatedTimestamp =
-                     sdf.format(new Date(Long.parseLong(compareTimestamp)));
-               timeStampSavedCompare.setText(
-                     getResources().getString(R.string.compare_saved) + ":  " +
-                           compareCreatedTimestamp);
-               getSupportActionBar().setTitle(compareName);
+         DataBaseHelper dbHelper = new DataBaseHelper(this);
+         dbHelper.init();
+         compareItems.clear();
+         compareItems.add(new Item(this, compareItemId1, dbHelper));
+         compareItems.add(new Item(this, compareItemId2, dbHelper));
+         compareItem = new Compare(this, compareId, dbHelper);
 
-               DataBaseHelper dbHelper = new DataBaseHelper(this);
-               dbHelper.init();
-               compareItems.clear();
-               compareItems.add(new Item(this, compareItemId1, dbHelper));
-               compareItems.add(new Item(this, compareItemId2, dbHelper));
-               compareItem = new Compare(this, compareId, dbHelper);
-               dbHelper.close();
-               detail1.setImageBitmap(ImageLoader.getPicFromFile(compareItems.get(0)
-                     .getImageFile(), 500, 500));
-               nameitem1.setText(compareItems.get(0)
-                     .getName());
-               detail2.setImageBitmap(ImageLoader.getPicFromFile(compareItems.get(1)
-                     .getImageFile(), 500, 500));
-               nameitem2.setText(compareItems.get(1)
-                     .getName());
-            }
-         }
-      } catch (Exception ex) {
+         Category category1 = new Category(this, compareItems.get(0)
+               .getCategoryId(), dbHelper);
+         Category category2 = new Category(this, compareItems.get(1)
+               .getCategoryId(), dbHelper);
+
+         int colorHex1 = ColorHelper.calculateMinDarkColor(category1.getColor());
+         int colorHex2 = ColorHelper.calculateMinDarkColor(category2.getColor());
+         Drawable icon1 = ColorHelper.filterIconColor(this, category1.getIcon(), colorHex1);
+         Drawable icon2 = ColorHelper.filterIconColor(this, category2.getIcon(), colorHex2);
+         picassoSingleton.setImageFit(compareItems.get(0)
+               .getImageFile(), detail1, icon1, icon1);
+         picassoSingleton.setImageFit(compareItems.get(1)
+               .getImageFile(), detail2, icon2, icon2);
+         dbHelper.close();
       }
    }
 }

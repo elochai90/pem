@@ -1,18 +1,16 @@
 package com.gruppe1.pem.challengeme.helpers;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
-import android.os.Build;
+import android.support.design.widget.TextInputEditText;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.TextView;
 
@@ -21,7 +19,7 @@ import com.gruppe1.pem.challengeme.adapters.IconsGridOverlayAdapter;
 
 import java.util.ArrayList;
 
-public class IconEditText extends EditText {
+public class IconEditText extends TextInputEditText {
 
    ArrayList<String> icons;
    CharSequence mHint;
@@ -46,13 +44,6 @@ public class IconEditText extends EditText {
 
    public IconEditText(Context context, AttributeSet attrs, int defStyleAttr) {
       super(context, attrs, defStyleAttr);
-
-      mHint = getHint();
-   }
-
-   @TargetApi (Build.VERSION_CODES.LOLLIPOP)
-   public IconEditText(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-      super(context, attrs, defStyleAttr, defStyleRes);
 
       mHint = getHint();
    }
@@ -128,15 +119,15 @@ public class IconEditText extends EditText {
    @Override
    public void setSelection(int index) {
       selectedItemPosition = index;
-      SharedPreferences prefs = activity.getSharedPreferences(Constants.MY_PREFERENCES, Activity.MODE_PRIVATE);
+      SharedPreferences prefs =
+            activity.getSharedPreferences(Constants.MY_PREFERENCES, Activity.MODE_PRIVATE);
       String language = prefs.getString(Constants.KEY_LANGUAGE, "en");
       String icon_title = "cat_" + icons.get(index) + "_" + language;
-      System.out.println("set Selection: " + index + " - " + icon_title);
-      int icon_title_id = getResources().getIdentifier(icon_title, "string", "com.gruppe1.pem.challengeme");
+      int icon_title_id =
+            getResources().getIdentifier(icon_title, "string", "com.gruppe1.pem.challengeme");
       setText(getResources().getString(icon_title_id));
 
       if (onItemSelectedListener != null) {
-         System.out.println("set Selection onselectedListener: " + index + " - " + icon_title);
          onItemSelectedListener.onItemSelectedListener(icons.get(index), index);
       }
    }

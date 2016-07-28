@@ -1,17 +1,15 @@
 package com.gruppe1.pem.challengeme.helpers;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.os.Build;
+import android.support.design.widget.TextInputEditText;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.EditText;
 
 import com.gruppe1.pem.challengeme.HSVColorPickerDialog;
 
-public class ExactColorEditText extends EditText {
+public class ExactColorEditText extends TextInputEditText {
 
    CharSequence mHint;
    int exactColorId = -1;
@@ -34,14 +32,6 @@ public class ExactColorEditText extends EditText {
 
    public ExactColorEditText(Context context, AttributeSet attrs, int defStyleAttr) {
       super(context, attrs, defStyleAttr);
-
-      mHint = getHint();
-   }
-
-   @TargetApi (Build.VERSION_CODES.LOLLIPOP)
-   public ExactColorEditText(Context context, AttributeSet attrs, int defStyleAttr,
-         int defStyleRes) {
-      super(context, attrs, defStyleAttr, defStyleRes);
 
       mHint = getHint();
    }
@@ -86,7 +76,7 @@ public class ExactColorEditText extends EditText {
 
    public void setExactColorId(int exactColorId) {
       this.exactColorId = exactColorId;
-      if(exactColorId != -1) {
+      if (exactColorId != -1) {
          String hexColor = String.format("#%06X", (0xFFFFFF & exactColorId));
          setText(hexColor);
       }

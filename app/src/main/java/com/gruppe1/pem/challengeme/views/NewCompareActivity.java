@@ -37,14 +37,23 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 public class NewCompareActivity extends AppCompatActivity {
 
-   private ViewPager viewPager1;
-   private ViewPager viewPager2;
-   private ImageView img1;
-   private ImageView img2;
-   private ArrayList<Item> firstCatItems;
-   private ArrayList<Item> secontCatItems;
+   @Bind (R.id.view_pager1)
+   ViewPager viewPager1;
+   @Bind (R.id.view_pager2)
+   ViewPager viewPager2;
+   @Bind (R.id.img1)
+   ImageView img1;
+   @Bind (R.id.img2)
+   ImageView img2;
+   @Bind (R.id.toolbar)
+   Toolbar toolbar;
+   ArrayList<Item> firstCatItems;
+   ArrayList<Item> secontCatItems;
 
    private Activity thisActivity;
    private ArrayList<Category> upperCategoriesList;
@@ -60,6 +69,7 @@ public class NewCompareActivity extends AppCompatActivity {
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_new_compare);
+      ButterKnife.bind(this);
 
       setupToolbar();
       getSupportActionBar().setTitle(R.string.title_activity_compare);
@@ -80,14 +90,10 @@ public class NewCompareActivity extends AppCompatActivity {
          editCompareId = -1;
       }
 
-      viewPager1 = (ViewPager) findViewById(R.id.view_pager1);
-      viewPager2 = (ViewPager) findViewById(R.id.view_pager2);
       viewPager1.setVisibility(View.INVISIBLE);
       viewPager2.setVisibility(View.INVISIBLE);
 
       ArrayList<Category> allCategories = Category.getAllCategories(getApplicationContext());
-      img1 = (ImageView) findViewById(R.id.img1);
-      img2 = (ImageView) findViewById(R.id.img2);
 
       thisActivity = this;
 
@@ -112,7 +118,7 @@ public class NewCompareActivity extends AppCompatActivity {
          @Override
          public void onClick(View view) {
             firstCatItems = Item.getItemsByCategoryId(getApplicationContext(),
-                  upperCategoriesList.get((Integer)view.getTag())
+                  upperCategoriesList.get((Integer) view.getTag())
                         .getId(),
                   sharedPreferences.getBoolean(Constants.KEY_WISHLIST_IN_COMPARE, false));
 
@@ -141,7 +147,7 @@ public class NewCompareActivity extends AppCompatActivity {
          @Override
          public void onClick(View view) {
             secontCatItems = Item.getItemsByCategoryId(getApplicationContext(),
-                  upperCategoriesList.get((Integer)view.getTag())
+                  upperCategoriesList.get((Integer) view.getTag())
                         .getId(),
                   sharedPreferences.getBoolean(Constants.KEY_WISHLIST_IN_COMPARE, false));
 
@@ -171,7 +177,6 @@ public class NewCompareActivity extends AppCompatActivity {
    }
 
    private void setupToolbar() {
-      Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
       setSupportActionBar(toolbar);
       getSupportActionBar().setDisplayShowHomeEnabled(true);
       getSupportActionBar().setHomeButtonEnabled(true);
@@ -239,13 +244,12 @@ public class NewCompareActivity extends AppCompatActivity {
       headline.setText(getString(R.string.compare_choose_cat_overlay_title));
       RecyclerView gridView = (RecyclerView) dialogView.findViewById(R.id.gridView);
 
-      StaggeredGridLayoutManager
-            gridLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+      StaggeredGridLayoutManager gridLayoutManager =
+            new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
       gridView.setLayoutManager(gridLayoutManager);
       gridView.setHasFixedSize(false);
       int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
-      gridView.addItemDecoration(
-            new GridSpacingItemDecoration(3, spacingInPixels, false, 0));
+      gridView.addItemDecoration(new GridSpacingItemDecoration(3, spacingInPixels, false, 0));
 
       ArrayList<ListItemIconName> catArray = new ArrayList<>();
 
@@ -253,7 +257,8 @@ public class NewCompareActivity extends AppCompatActivity {
          int iconId = getResources().getIdentifier(tmpCat.getIcon(), "drawable",
                "com.gruppe1.pem.challengeme");
          catArray.add(
-               new ListItemIconName(this, "category", tmpCat.getId(), iconId, tmpCat.getName(), null));
+               new ListItemIconName(this, "category", tmpCat.getId(), iconId, tmpCat.getName(),
+                     null));
       }
 
       builder.setView(dialogView);
@@ -262,7 +267,6 @@ public class NewCompareActivity extends AppCompatActivity {
             new CategoriesGridOverlayAdapter(this, R.layout.grid_item_overlay_category, catArray);
       gridAdapter.setOnItemClickListener(onItemClickListener);
       gridView.setAdapter(gridAdapter);
-//      gridView.setOnItemClickListener(onItemClickListener);
       alert.setButton(DialogInterface.BUTTON_NEGATIVE, getString(android.R.string.cancel),
             new DialogInterface.OnClickListener() {
                @Override

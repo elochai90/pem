@@ -29,13 +29,20 @@
         <!--<item name="theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>-->
     </style>
 
-    <style name="FullscreenTheme" parent="android:Theme.NoTitleBar">
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowBackground">@null</item>
-        <item name="metaButtonBarStyle">@style/ButtonBar</item>
-        <item name="metaButtonBarButtonStyle">@style/ButtonBarButton</item>
-    </style>
+    <!--<style name="FullscreenTheme" parent="android:Theme.NoTitleBar">-->
+        <!--<item name="android:windowContentOverlay">@null</item>-->
+        <!--<item name="android:windowBackground">@null</item>-->
+        <!--<item name="metaButtonBarStyle">@style/ButtonBar</item>-->
+        <!--<item name="metaButtonBarButtonStyle">@style/ButtonBarButton</item>-->
+    <!--</style>-->
 
+    <style name="TransparentStatusBar" parent="@style/AppTheme">
+        <item name="android:statusBarColor">@color/transparent</item>
+    </style>
+    <style name="FullscreenTheme" parent="@style/TransparentStatusBar">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
     <!-- Backward-compatible version of ?android:attr/buttonBarStyle -->
     <style name="ButtonBar">
         <item name="android:paddingLeft">2dp</item>

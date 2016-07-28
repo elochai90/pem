@@ -13,6 +13,9 @@ import com.gruppe1.pem.challengeme.R;
 
 import java.util.ArrayList;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * the Color Adapter for a Color Overlay
  */
@@ -73,13 +76,14 @@ public class ColorsGridOverlayAdapter
    }
 
    public static class ViewHolder extends RecyclerView.ViewHolder {
+      @Bind (R.id.textView)
       TextView textView;
+      @Bind (R.id.imageView)
       ImageView imageView;
 
       public ViewHolder(View itemView) {
          super(itemView);
-         textView = (TextView) itemView.findViewById(R.id.textView);
-         imageView = (ImageView) itemView.findViewById(R.id.imageView);
+         ButterKnife.bind(this, itemView);
       }
    }
 

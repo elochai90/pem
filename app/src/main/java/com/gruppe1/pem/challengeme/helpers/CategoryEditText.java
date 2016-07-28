@@ -1,18 +1,16 @@
 package com.gruppe1.pem.challengeme.helpers;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Canvas;
-import android.os.Build;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.gruppe1.pem.challengeme.Category;
@@ -23,7 +21,7 @@ import com.gruppe1.pem.challengeme.adapters.CategoriesGridOverlayAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CategoryEditText extends EditText {
+public class CategoryEditText extends TextInputEditText {
 
    List<Category> categories;
    CharSequence mHint;
@@ -53,13 +51,6 @@ public class CategoryEditText extends EditText {
       mHint = getHint();
    }
 
-   @TargetApi (Build.VERSION_CODES.LOLLIPOP)
-   public CategoryEditText(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-      super(context, attrs, defStyleAttr, defStyleRes);
-
-      mHint = getHint();
-   }
-
    @Override
    protected void onDraw(Canvas canvas) {
       super.onDraw(canvas);
@@ -81,7 +72,8 @@ public class CategoryEditText extends EditText {
          int iconId = getResources().getIdentifier(tmpCat.getIcon(), "drawable",
                "com.gruppe1.pem.challengeme");
          catArray.add(
-               new ListItemIconName(activity, "category", tmpCat.getId(), iconId, tmpCat.getName(), null));
+               new ListItemIconName(activity, "category", tmpCat.getId(), iconId, tmpCat.getName(),
+                     null));
       }
       gridCateoriesAdapter =
             new CategoriesGridOverlayAdapter(activity, R.layout.grid_item_overlay_category,
@@ -121,7 +113,7 @@ public class CategoryEditText extends EditText {
 
    @Override
    public void setSelection(int index) {
-      if(index >= 0) {
+      if (index >= 0) {
          selectedItemPosition = index;
          setText(categories.get(index)
                .getName());

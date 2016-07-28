@@ -26,6 +26,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * Array adapter to fill a default list view
  */
@@ -126,20 +129,21 @@ public class CompareRecyclerGridAdapter
 
    public static class ViewHolder extends RecyclerView.ViewHolder {
       CardView itemView;
+      @Bind(R.id.compareName)
       TextView compareName;
+      @Bind(R.id.imageItem1)
       ImageView imageItem1;
+      @Bind(R.id.imageItem2)
       ImageView imageItem2;
+      @Bind(R.id.rightTextView)
       TextView rightTextView;
+      @Bind(R.id.ic_more)
       ImageView moreButton;
 
       public ViewHolder(View itemView) {
          super(itemView);
+         ButterKnife.bind(this, itemView);
          this.itemView = (CardView) itemView;
-         compareName = (TextView) itemView.findViewById(R.id.compareName);
-         imageItem1 = (ImageView) itemView.findViewById(R.id.imageItem1);
-         imageItem2 = (ImageView) itemView.findViewById(R.id.imageItem2);
-         rightTextView = (TextView) itemView.findViewById(R.id.rightTextView);
-         moreButton = (ImageView) itemView.findViewById(R.id.ic_more);
       }
    }
 }

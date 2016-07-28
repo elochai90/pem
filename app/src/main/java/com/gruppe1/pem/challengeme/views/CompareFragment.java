@@ -34,18 +34,25 @@ import com.gruppe1.pem.challengeme.helpers.GridSpacingItemDecoration;
 
 import java.util.ArrayList;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 public class CompareFragment extends Fragment {
 
    private ArrayList<Compare> mDataset;
 
-   private View rootView;
+   @Bind (R.id.noItemLayout)
+   RelativeLayout noComparesLayout;
+   @Bind (R.id.listView)
+   RecyclerView listView;
+   @Bind (R.id.gridView)
+   RecyclerView gridView;
+   @Bind (R.id.frameLayout)
+   FrameLayout frameLayout;
+   @Bind (R.id.noItemText)
+   TextView noComparesText;
 
-   private RecyclerView gridView;
-   private RecyclerView listView;
    private Boolean list;
-   private FrameLayout frameLayout;
-
-   private RelativeLayout noComparesLayout;
 
    private SharedPreferences.Editor editor;
    private SharedPreferences sharedPreferences;
@@ -54,19 +61,20 @@ public class CompareFragment extends Fragment {
    private CompareRecyclerListAdapter compareRecyclerListAdapter;
    private CompareRecyclerGridAdapter compareRecyclerGridAdapter;
 
+   public static CompareFragment newInstance(int page, String title) {
+      CompareFragment compareFragment = new CompareFragment();
+      return compareFragment;
+   }
+
    @Override
    public View onCreateView(LayoutInflater inflater, ViewGroup container,
          Bundle savedInstanceState) {
       super.onCreateView(inflater, container, savedInstanceState);
 
-      rootView = inflater.inflate(R.layout.default_recycler_view, container, false);
+      View rootView = inflater.inflate(R.layout.default_recycler_view, container, false);
 
-      noComparesLayout = (RelativeLayout) rootView.findViewById(R.id.noItemLayout);
-      listView = (RecyclerView) rootView.findViewById(R.id.listView);
-      gridView = (RecyclerView) rootView.findViewById(R.id.gridView);
-      frameLayout = (FrameLayout) rootView.findViewById(R.id.frameLayout);
+      ButterKnife.bind(this, rootView);
 
-      TextView noComparesText = (TextView) rootView.findViewById(R.id.noItemText);
       noComparesText.setText(R.string.no_compares);
 
       LinearLayoutManager linearLayoutManagerList =
@@ -76,10 +84,9 @@ public class CompareFragment extends Fragment {
       StaggeredGridLayoutManager gridLayoutManager =
             new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
       gridView.setLayoutManager(gridLayoutManager);
-//      gridView.setHasFixedSize(true);
+      //      gridView.setHasFixedSize(true);
       int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
-      gridView.addItemDecoration(
-            new GridSpacingItemDecoration(2, spacingInPixels, false, 0));
+      gridView.addItemDecoration(new GridSpacingItemDecoration(2, spacingInPixels, false, 0));
 
       mDataset = new ArrayList<>();
       initDataset();
@@ -213,7 +220,8 @@ public class CompareFragment extends Fragment {
             return true;
          case R.id.settings:
             Intent intentSettings = new Intent();
-            intentSettings.setClassName(getActivity().getPackageName(), getActivity().getPackageName() + ".views.SettingsActivity");
+            intentSettings.setClassName(getActivity().getPackageName(),
+                  getActivity().getPackageName() + ".views.SettingsActivity");
             startActivityForResult(intentSettings, 0);
             return true;
       }
@@ -243,28 +251,39 @@ public class CompareFragment extends Fragment {
                actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data,
                      getResources().getDisplayMetrics());
             }
-            System.out.println(mRecyclerView.getLayoutManager().getClass());
             if (mRecyclerView.getAdapter()
                   .getItemCount() == 0) {
                gridView.setNestedScrollingEnabled(false);
                listView.setNestedScrollingEnabled(false);
                frameLayout.setPadding(0, 0, 0, actionBarHeight);
-            } else if (list && ((LinearLayoutManager)listView.getLayoutManager()).findFirstCompletelyVisibleItemPosition() == 0 &&
-                  ((LinearLayoutManager)listView.getLayoutManager()).findLastCompletelyVisibleItemPosition() ==
+            } else if (list &&
+                  ((LinearLayoutManager) listView.getLayoutManager())
+                        .findFirstCompletelyVisibleItemPosition() ==
+                        0 &&
+                  ((LinearLayoutManager) listView.getLayoutManager())
+                        .findLastCompletelyVisibleItemPosition() ==
                         listView.getAdapter()
-                                 .getItemCount() - 1) {
-                  listView.setNestedScrollingEnabled(false);
-                  gridView.setNestedScrollingEnabled(false);
-                  frameLayout.setPadding(0, 0, 0, actionBarHeight);
-            } else if (!list && ((StaggeredGridLayoutManager)gridView.getLayoutManager()).findFirstCompletelyVisibleItemPositions(null).length > 0 &&
-                  ((StaggeredGridLayoutManager)gridView.getLayoutManager()).findLastCompletelyVisibleItemPositions(null).length > 0 &&
-                  ((StaggeredGridLayoutManager)gridView.getLayoutManager()).findFirstCompletelyVisibleItemPositions(null)[0] == 0 &&
-                  ((StaggeredGridLayoutManager)gridView.getLayoutManager()).findLastCompletelyVisibleItemPositions(null)[0] ==
-                        gridView.getAdapter()
-                                 .getItemCount() - 1) {
-                  gridView.setNestedScrollingEnabled(false);
-                  listView.setNestedScrollingEnabled(false);
-                  frameLayout.setPadding(0, 0, 0, actionBarHeight);
+                              .getItemCount() - 1) {
+               listView.setNestedScrollingEnabled(false);
+               gridView.setNestedScrollingEnabled(false);
+               frameLayout.setPadding(0, 0, 0, actionBarHeight);
+            } else if (!list &&
+                  ((StaggeredGridLayoutManager) gridView.getLayoutManager())
+                        .findFirstCompletelyVisibleItemPositions(
+                        null).length > 0 &&
+                  ((StaggeredGridLayoutManager) gridView.getLayoutManager())
+                        .findLastCompletelyVisibleItemPositions(
+                        null).length > 0 &&
+                  ((StaggeredGridLayoutManager) gridView.getLayoutManager())
+                        .findFirstCompletelyVisibleItemPositions(
+                        null)[0] == 0 &&
+                  ((StaggeredGridLayoutManager) gridView.getLayoutManager())
+                        .findLastCompletelyVisibleItemPositions(
+                        null)[0] == gridView.getAdapter()
+                        .getItemCount() - 1) {
+               gridView.setNestedScrollingEnabled(false);
+               listView.setNestedScrollingEnabled(false);
+               frameLayout.setPadding(0, 0, 0, actionBarHeight);
             } else {
                gridView.setNestedScrollingEnabled(true);
                listView.setNestedScrollingEnabled(true);
@@ -312,7 +331,8 @@ public class CompareFragment extends Fragment {
       super.onAttach(context);
    }
 
-   private boolean compareFragmentOnIcMoreClick(RecyclerView parent, View view, final int position) {
+   private boolean compareFragmentOnIcMoreClick(RecyclerView parent, View view,
+         final int position) {
       selectedItem = new Object[2];
       selectedItem[0] = position;
       selectedItem[1] = view;

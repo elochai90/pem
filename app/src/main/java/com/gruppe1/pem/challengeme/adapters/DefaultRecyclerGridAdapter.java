@@ -27,6 +27,9 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * Array adapter to fill a default list view
  */
@@ -191,45 +194,47 @@ public class DefaultRecyclerGridAdapter
 
    public static class ViewHolder extends RecyclerView.ViewHolder {
       CardView itemView;
+      @Bind(R.id.textView)
       TextView imageTitle;
+      @Bind(R.id.rightTextView)
       TextView rightTextView;
+      @Bind(R.id.secondLineTextView)
       TextView secondLineTextView;
+      @Bind(R.id.second_line)
       LinearLayout secondLine;
+      @Bind(R.id.imageView)
       ImageView image;
+      @Bind(R.id.ic_more)
       ImageView moreButton;
+      @Bind(R.id.listItemRatingBar)
       RatingBar listItemRatingBar;
+      @Bind(R.id.text_container)
       RelativeLayout textContainer;
 
       public ViewHolder(View itemView) {
          super(itemView);
+         ButterKnife.bind(this, itemView);
          this.itemView = (CardView) itemView;
-         imageTitle = (TextView) itemView.findViewById(R.id.textView);
-         rightTextView = (TextView) itemView.findViewById(R.id.rightTextView);
-         secondLineTextView = (TextView) itemView.findViewById(R.id.secondLineTextView);
-         secondLine = (LinearLayout) itemView.findViewById(R.id.second_line);
-         image = (ImageView) itemView.findViewById(R.id.imageView);
-         moreButton = (ImageView) itemView.findViewById(R.id.ic_more);
-         listItemRatingBar = (RatingBar) itemView.findViewById(R.id.listItemRatingBar);
-         textContainer = (RelativeLayout) itemView.findViewById(R.id.text_container);
       }
    }
 
    public static class ViewHolderCategory extends RecyclerView.ViewHolder {
       CardView itemView;
+      @Bind(R.id.textView)
       TextView imageTitle;
+      @Bind(R.id.rightTextView)
       TextView rightTextView;
+      @Bind(R.id.imageView)
       ImageView image;
+      @Bind(R.id.ic_more)
       ImageView moreButton;
+      @Bind(R.id.text_container)
       RelativeLayout textContainer;
 
       public ViewHolderCategory(View itemView) {
          super(itemView);
+         ButterKnife.bind(this, itemView);
          this.itemView = (CardView) itemView;
-         imageTitle = (TextView) itemView.findViewById(R.id.textView);
-         rightTextView = (TextView) itemView.findViewById(R.id.rightTextView);
-         image = (ImageView) itemView.findViewById(R.id.imageView);
-         moreButton = (ImageView) itemView.findViewById(R.id.ic_more);
-         textContainer = (RelativeLayout) itemView.findViewById(R.id.text_container);
       }
    }
 }

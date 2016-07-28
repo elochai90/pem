@@ -23,6 +23,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * Array adapter to fill a default list view
  */
@@ -113,25 +116,28 @@ public class CompareRecyclerListAdapter
    }
 
    public static class ViewHolder extends RecyclerView.ViewHolder {
-      RelativeLayout itemView;
+
+      @Bind(R.id.item1Name)
       TextView itemName1;
+      @Bind(R.id.item2Name)
       TextView itemName2;
+      @Bind(R.id.compareName)
       TextView compareName;
-      ImageView imageItem1;
-      ImageView imageItem2;
+      @Bind(R.id.rightTextView)
       TextView rightTextView;
+      @Bind(R.id.imageItem1)
+      ImageView imageItem1;
+      @Bind(R.id.imageItem2)
+      ImageView imageItem2;
+      @Bind(R.id.ic_more)
       ImageView moreButton;
+
+      RelativeLayout itemView;
 
       public ViewHolder(View itemView) {
          super(itemView);
+         ButterKnife.bind(this, itemView);
          this.itemView = (RelativeLayout) itemView;
-         itemName1 = (TextView) itemView.findViewById(R.id.item1Name);
-         itemName2 = (TextView) itemView.findViewById(R.id.item2Name);
-         compareName = (TextView) itemView.findViewById(R.id.compareName);
-         rightTextView = (TextView) itemView.findViewById(R.id.rightTextView);
-         imageItem1 = (ImageView) itemView.findViewById(R.id.imageItem1);
-         imageItem2 = (ImageView) itemView.findViewById(R.id.imageItem2);
-         moreButton = (ImageView) itemView.findViewById(R.id.ic_more);
       }
    }
 
