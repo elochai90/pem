@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.gruppe1.pem.challengeme.Category;
 import com.gruppe1.pem.challengeme.ListItemIconName;
 import com.gruppe1.pem.challengeme.R;
+import com.gruppe1.pem.challengeme.SquareImageView;
 import com.gruppe1.pem.challengeme.helpers.ColorHelper;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 
@@ -99,7 +100,7 @@ public class CategoriesGridOverlayAdapter
       @Bind (R.id.textView)
       TextView textView;
       @Bind (R.id.imageView)
-      ImageView imageView;
+      SquareImageView imageView;
 
       public ViewHolder(View itemView) {
          super(itemView);

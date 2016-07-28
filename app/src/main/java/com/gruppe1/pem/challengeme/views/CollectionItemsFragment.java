@@ -22,11 +22,15 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -92,6 +96,10 @@ public class CollectionItemsFragment extends Fragment {
    TextView attrWishlistName;
    @Bind(R.id.attrColorIndicator)
    View attrColorIndicator;
+   @Bind(R.id.itemNameLayout)
+   TextInputLayout itemNameLayout;
+   @Bind(R.id.attrCategoryLayout)
+   TextInputLayout attrCategoryLayout;
 
 
    private Category attrCategorySelected;
@@ -102,6 +110,7 @@ public class CollectionItemsFragment extends Fragment {
    private Item editItem;
 
    private ExactColorEditText attrValueColorPicker;
+   private TextInputLayout attrLayoutColorPicker;
 
    private DateEditText attrValueDatePicker;
 
@@ -133,6 +142,12 @@ public class CollectionItemsFragment extends Fragment {
 
       db_helper = new DataBaseHelper(activity);
       db_helper.init();
+
+
+
+      itemNameExitText.addTextChangedListener(new MyTextWatcher(itemNameExitText));
+      attrCategoryValue.addTextChangedListener(new MyTextWatcher(attrCategoryValue));
+
 
       imgPhoto.setOnClickListener(new View.OnClickListener() {
          @Override
@@ -171,6 +186,7 @@ public class CollectionItemsFragment extends Fragment {
          getDb_helper().setTable(Constants.ITEMS_DB_TABLE);
          editItem = new Item(activity, editItemId, getDb_helper());
          parentCategoryId = editItem.getCategoryId();
+
       } else {
          getDb_helper().setTable(Constants.ITEMS_DB_TABLE);
          editItem = new Item(activity, 0, getDb_helper());
@@ -227,6 +243,7 @@ public class CollectionItemsFragment extends Fragment {
 
       if (editItemId > 0) {
          setItemData();
+         activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
       }
       return rootView;
 
@@ -557,6 +574,7 @@ public class CollectionItemsFragment extends Fragment {
          View exactColorLayout = inflater.inflate(R.layout.formular_layout_color, null);
          attrValueColorPicker =
                (ExactColorEditText) exactColorLayout.findViewById(R.id.attrExactColorValue);
+         attrLayoutColorPicker = (TextInputLayout) exactColorLayout.findViewById(R.id.attrExactColorLayout);
          final View attrExactColorIndicator =
                exactColorLayout.findViewById(R.id.attrExactColorIndicator);
 
@@ -583,6 +601,8 @@ public class CollectionItemsFragment extends Fragment {
                attrValueColorPicker.callOnClick();
             }
          });
+
+         attrValueColorPicker.addTextChangedListener(new MyTextWatcher(attrValueColorPicker));
          attributeValueView = exactColorLayout;
       }
       // attribute is DatePicker
@@ -683,7 +703,7 @@ public class CollectionItemsFragment extends Fragment {
    /**
     * creates/updates the item
     */
-   public void saveItem() {
+   private void saveItem() {
       String item_name = itemNameExitText.getText()
             .toString();
       String item_categoryId = (attrCategoryValue.getSelectedItem() == null) ? "-1" :
@@ -772,5 +792,86 @@ public class CollectionItemsFragment extends Fragment {
       int exactColorId = ImageDominantColorExtractor.getInstance()
             .getDominantColor(bitmap);
       attrValueColorPicker.setExactColorId(exactColorId);
+   }
+
+   /**
+    * Validating form
+    */
+   public void submitForm() {
+      if (!validateName() || !validateCategory() || !validateExactColor()) {
+         return;
+      }
+
+      saveItem();
+   }
+
+   private boolean validateName() {
+      if (itemNameExitText.getText()
+            .toString()
+            .trim()
+            .isEmpty()) {
+         // TODO: extract strings
+         itemNameLayout.setError("Geben Sie einen Namen an");
+         itemNameExitText.requestFocus();
+         return false;
+      } else {
+         itemNameLayout.setErrorEnabled(false);
+      }
+      return true;
+   }
+
+   private boolean validateCategory() {
+      if (attrCategoryValue.getSelectedItem() == null) {
+         // TODO: extract strings
+         attrCategoryLayout.setError("Geben Sie eine Kategorie an");
+         attrCategoryValue.requestFocus();
+         return false;
+      } else {
+         attrCategoryLayout.setErrorEnabled(false);
+      }
+      return true;
+   }
+
+
+   private boolean validateExactColor() {
+      if (attrValueColorPicker.getExactColor() == -1) {
+         // TODO: extract strings
+         attrLayoutColorPicker.setError("Geben Sie die Farbe des Kleidungsstückes an");
+         attrValueColorPicker.requestFocus();
+         return false;
+      } else {
+         attrLayoutColorPicker.setErrorEnabled(false);
+      }
+      return true;
+   }
+
+
+   private class MyTextWatcher implements TextWatcher {
+
+      private View view;
+
+      private MyTextWatcher(View view) {
+         this.view = view;
+      }
+
+      public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+      }
+
+      public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+      }
+
+      public void afterTextChanged(Editable editable) {
+         switch (view.getId()) {
+            case R.id.itemName:
+               validateName();
+               break;
+            case R.id.attrCategoryValue:
+               validateCategory();
+               break;
+            case R.id.attrExactColorValue:
+               validateExactColor();
+               break;
+         }
+      }
    }
 }

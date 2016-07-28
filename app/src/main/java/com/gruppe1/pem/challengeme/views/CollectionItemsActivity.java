@@ -1,6 +1,7 @@
 package com.gruppe1.pem.challengeme.views;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -8,6 +9,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 
 import com.gruppe1.pem.challengeme.Item;
 import com.gruppe1.pem.challengeme.ListItemIconName;
@@ -91,6 +93,7 @@ public class CollectionItemsActivity extends ActionBarActivity {
       else {
          currentItemPosition = extras.getInt(Constants.EXTRA_CLICKED_ITEM_POSITION);
          itemCollection = extras.getParcelableArrayList(Constants.EXTRA_ITEM_COLLECTION);
+
       }
       initDataset();
       // ViewPager and its adapters use support library
@@ -145,7 +148,7 @@ public class CollectionItemsActivity extends ActionBarActivity {
 
          case R.id.action_item_save:
             ((CollectionItemsFragment) mItemsCollectionPagerAdapter.getItem(
-                  currentItemPosition)).saveItem();
+                  currentItemPosition)).submitForm();
       }
       return super.onOptionsItemSelected(item);
    }

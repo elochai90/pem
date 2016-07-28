@@ -8,15 +8,20 @@ import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.gruppe1.pem.challengeme.Category;
 import com.gruppe1.pem.challengeme.DefaultSize;
 import com.gruppe1.pem.challengeme.R;
 import com.gruppe1.pem.challengeme.helpers.CategoryEditText;
+import com.gruppe1.pem.challengeme.helpers.ColorEditText;
 import com.gruppe1.pem.challengeme.helpers.ColorHelper;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
@@ -28,11 +33,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class NewCategoryActivity extends AppCompatActivity {
 
    @Bind (R.id.categoryName)
    TextInputEditText newCategory_name;
+   @Bind (R.id.categoryNameLayout)
+   TextInputLayout categoryNameLayout;
+   @Bind (R.id.categoryDefaultSizeLayout)
+   TextInputLayout categoryDefaultSizeLayout;
+   @Bind (R.id.attrExactColorLayout)
+   TextInputLayout attrExactColorLayout;
    @Bind (R.id.categoryDefaultSize)
    DefaultSizesEditText categoryDefaultSize;
    @Bind (R.id.categoryParent)
@@ -64,6 +76,7 @@ public class NewCategoryActivity extends AppCompatActivity {
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_new_category);
+      ButterKnife.bind(this);
       setupToolbar();
       getSupportActionBar().setTitle(R.string.title_activity_new_category);
       extras = getIntent().getExtras();
@@ -78,6 +91,10 @@ public class NewCategoryActivity extends AppCompatActivity {
 
       setupCategoryColorTextField();
       setupCategoryParentTextField();
+
+      newCategory_name.addTextChangedListener(new MyTextWatcher(newCategory_name));
+      categoryDefaultSize.addTextChangedListener(new MyTextWatcher(categoryDefaultSize));
+      categoryColor.addTextChangedListener(new MyTextWatcher(categoryColor));
 
       if (extras != null) {
          if (extras.getInt(Constants.EXTRA_CATEGORY_ID) != 0) {
@@ -112,6 +129,7 @@ public class NewCategoryActivity extends AppCompatActivity {
          categoryDefaultSize.setSelection(indexOfDefaultSize);
          categoryParent.setSelection(getCategoryArray().indexOf(parentCategory));
          dbHelper.close();
+         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
       } else if (parentCategory != null) {
          categoryParent.setSelection(getCategoryArray().indexOf(parentCategory));
          categoryColorHex = Integer.parseInt(parentCategory.getColor(), 16) + 0xFF000000;
@@ -194,7 +212,7 @@ public class NewCategoryActivity extends AppCompatActivity {
             }
          }
       });
-      ((TextInputLayout) findViewById(R.id.textInputLayout)).setHint(
+      ((TextInputLayout) findViewById(R.id.attrExactColorLayout)).setHint(
             getString(R.string.new_category_label_color));
       categoryColor.initialize(this, categoryColorHex);
       categoryColorIndicator.setOnClickListener(new View.OnClickListener() {
@@ -263,6 +281,58 @@ public class NewCategoryActivity extends AppCompatActivity {
    }
 
    /**
+    * Validating form
+    */
+   private void submitForm() {
+      if (!validateName() || !validateDefaultSize() || !validateExactColor()) {
+         return;
+      }
+
+      saveNewCategory();
+   }
+
+   private boolean validateName() {
+      if (newCategory_name.getText()
+            .toString()
+            .trim()
+            .isEmpty()) {
+         // TODO: extract strings
+         categoryNameLayout.setError("Geben Sie einen Namen für die Kategorie an");
+         newCategory_name.requestFocus();
+         return false;
+      } else {
+         categoryNameLayout.setErrorEnabled(false);
+      }
+      return true;
+   }
+
+   private boolean validateDefaultSize() {
+      if (categoryDefaultSize.getSelectedItem() == null) {
+         // TODO: extract strings
+         categoryDefaultSizeLayout.setError("Geben Sie eine Standardgröße für die Kategorie an");
+         categoryDefaultSize.requestFocus();
+         return false;
+      } else {
+         categoryDefaultSizeLayout.setErrorEnabled(false);
+      }
+      return true;
+   }
+
+
+   private boolean validateExactColor() {
+      if (categoryColor.getExactColor() == -1) {
+         // TODO: extract strings
+         attrExactColorLayout.setError("Geben Sie eine Farbe für die Kategorie an");
+         categoryColor.requestFocus();
+         return false;
+      } else {
+         attrExactColorLayout.setErrorEnabled(false);
+      }
+      return true;
+   }
+
+
+   /**
     * creates and saves the new category
     */
    private void saveNewCategory() {
@@ -303,9 +373,38 @@ public class NewCategoryActivity extends AppCompatActivity {
    public boolean onOptionsItemSelected(MenuItem item) {
       switch (item.getItemId()) {
          case R.id.save:
-            saveNewCategory();
+            submitForm();
             return true;
       }
       return super.onOptionsItemSelected(item);
+   }
+
+   private class MyTextWatcher implements TextWatcher {
+
+      private View view;
+
+      private MyTextWatcher(View view) {
+         this.view = view;
+      }
+
+      public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+      }
+
+      public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+      }
+
+      public void afterTextChanged(Editable editable) {
+         switch (view.getId()) {
+            case R.id.categoryName:
+               validateName();
+               break;
+            case R.id.categoryDefaultSize:
+               validateDefaultSize();
+               break;
+            case R.id.attrExactColorValue:
+               validateExactColor();
+               break;
+         }
+      }
    }
 }

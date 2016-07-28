@@ -129,6 +129,8 @@ public class DefaultRecyclerListAdapter extends RecyclerView.Adapter<RecyclerVie
             viewHolder.image.setImageDrawable(
                   ColorHelper.filterIconColor(context, parentCategory.getIcon(), colorHex));
          } else {
+            int padding = (int) context.getResources().getDimension(R.dimen.margin_small);
+            viewHolder.image.setPadding(padding, padding, padding, padding);
             int colorHex = ColorHelper.calculateMinDarkColor(parentCategory.getColor());
             Drawable icon =
                   ColorHelper.filterIconColor(context, parentCategory.getIcon(), colorHex);

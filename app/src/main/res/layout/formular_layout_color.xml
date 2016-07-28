@@ -6,7 +6,7 @@
    android:weightSum="15">
 
    <android.support.design.widget.TextInputLayout
-      android:id="@+id/textInputLayout"
+      android:id="@+id/attrExactColorLayout"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:orientation="horizontal"
