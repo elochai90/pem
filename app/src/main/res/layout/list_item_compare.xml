@@ -37,33 +37,39 @@
       <LinearLayout
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
-         android:layout_toLeftOf="@+id/rightTextView"
+         android:layout_toStartOf="@+id/rightTextView"
          android:orientation="vertical">
 
          <TextView
             android:id="@+id/compareName"
-            android:layout_width="fill_parent"
+            android:textAppearance="@style/OrgaNice.Text.RobotoLight"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/margin_small"
             android:maxLines="1"
-            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:ellipsize="end"
             android:textColor="@color/primary_text"
             android:textSize="16sp" />
 
          <TextView
             android:id="@+id/item1Name"
-            android:layout_width="fill_parent"
+            android:textAppearance="@style/OrgaNice.Text.RobotoLight"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ellipsize="marquee"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:textColor="@color/secondary_text"
             android:maxLines="1"
             android:textSize="14sp" />
 
          <TextView
             android:id="@+id/item2Name"
-            android:layout_width="fill_parent"
+            android:textAppearance="@style/OrgaNice.Text.RobotoLight"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ellipsize="marquee"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:textColor="@color/secondary_text"
             android:maxLines="1"
             android:textSize="14sp" />
@@ -71,10 +77,11 @@
 
       <TextView
          android:id="@+id/rightTextView"
+         android:textAppearance="@style/OrgaNice.Text.RobotoLight"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
          android:layout_alignParentTop="true"
-         android:layout_marginTop="10dp"
+         android:layout_marginTop="@dimen/margin_small"
          android:textColor="@color/secondary_text"
          android:layout_toLeftOf="@+id/ic_more"
          android:textSize="16sp" />
@@ -93,7 +100,6 @@
          android:layout_width="match_parent"
          android:layout_height="0.5dp"
          android:layout_alignParentBottom="true"
-         android:layout_alignBottom="@id/imageItem2"
          android:layout_marginEnd="15dp"
          android:layout_marginRight="15dp"
          android:background="@color/divider" />

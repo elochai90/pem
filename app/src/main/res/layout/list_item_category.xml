@@ -14,34 +14,37 @@
    <RelativeLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_toEndOf="@id/imageView"
-      android:layout_toRightOf="@id/imageView">
+      android:layout_toEndOf="@id/imageView" >
 
       <LinearLayout
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
          android:layout_centerVertical="true"
          android:orientation="vertical"
-         android:layout_toLeftOf="@+id/ic_more">
+         android:layout_toStartOf="@+id/rightTextView">
 
          <TextView
             android:id="@+id/firstLine"
+            android:textAppearance="@style/OrgaNice.Text.RobotoLight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:ellipsize="marquee"
+            android:ellipsize="end"
             android:maxLines="1"
+            android:singleLine="true"
             android:textColor="@color/primary_text"
             android:textSize="16sp" />
       </LinearLayout>
 
       <TextView
          android:id="@+id/rightTextView"
+         android:textAppearance="@style/OrgaNice.Text.RobotoLight"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
          android:layout_centerVertical="true"
          android:textColor="@color/secondary_text"
-         android:layout_toLeftOf="@+id/ic_more"
+         android:layout_toStartOf="@+id/ic_more"
+         android:layout_marginStart="@dimen/margin_small"
          android:textSize="14sp" />
 
       <ImageView
@@ -49,7 +52,6 @@
          android:layout_width="40dp"
          android:layout_height="match_parent"
          android:layout_alignParentEnd="true"
-         android:layout_alignParentRight="true"
          android:layout_centerVertical="true"
          android:scaleType="centerInside"
          android:src="@drawable/ic_more_black" />
@@ -59,7 +61,6 @@
          android:layout_height="0.5dp"
          android:layout_alignParentBottom="true"
          android:layout_marginEnd="15dp"
-         android:layout_marginRight="15dp"
          android:background="@color/divider" />
 
    </RelativeLayout>

@@ -75,9 +75,7 @@ public class CategoryEditText extends TextInputEditText {
                new ListItemIconName(activity, "category", tmpCat.getId(), iconId, tmpCat.getName(),
                      null));
       }
-      gridCateoriesAdapter =
-            new CategoriesGridOverlayAdapter(activity, R.layout.grid_item_overlay_category,
-                  catArray);
+      gridCateoriesAdapter = new CategoriesGridOverlayAdapter(activity, catArray);
 
       setOnClickListener(new OnClickListener() {
          @Override

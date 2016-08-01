@@ -35,6 +35,10 @@ public class SavedComparesDetailActivity extends AppCompatActivity {
 
    private Compare compareItem;
 
+   @Bind (R.id.detail1obenSelectableLayer)
+   ImageView detail1Layer;
+   @Bind (R.id.detail2untenSelectableLayer)
+   ImageView detail2Layer;
    @Bind (R.id.detail1oben)
    ImageView detail1;
    @Bind (R.id.detail2unten)
@@ -88,13 +92,13 @@ public class SavedComparesDetailActivity extends AppCompatActivity {
       picassoSingleton.setImageFit(compareItems.get(1)
             .getImageFile(), detail2, icon2, icon2);
 
-      card_view_item1.setOnClickListener(new View.OnClickListener() {
+      detail1Layer.setOnClickListener(new View.OnClickListener() {
          @Override
          public void onClick(View v) {
             selectItem(0, 0);
          }
       });
-      card_view_item2.setOnClickListener(new View.OnClickListener() {
+      detail2Layer.setOnClickListener(new View.OnClickListener() {
          @Override
          public void onClick(View v) {
             selectItem(1, 1);
@@ -104,7 +108,7 @@ public class SavedComparesDetailActivity extends AppCompatActivity {
       String compareCreatedTimestamp =
             sdf.format(new Date(Long.parseLong(compareItem.getTimestamp())));
       timeStampSavedCompare.setText(
-            getResources().getString(R.string.compare_saved) + ":  " + compareCreatedTimestamp);
+            getResources().getString(R.string.compare_saved) + " " + compareCreatedTimestamp);
 
       dbHelper.close();
    }
@@ -129,34 +133,6 @@ public class SavedComparesDetailActivity extends AppCompatActivity {
          case android.R.id.home:
             setResult(RESULT_OK);
             finish();
-            return true;
-         case R.id.delete:
-
-            String strDelCompareTitleFormat =
-                  getResources().getString(R.string.compare_delete_overlay);
-            String strDelCompareTitle =
-                  String.format(strDelCompareTitleFormat, compareItem.getName());
-
-            new AlertDialog.Builder(this).setTitle(strDelCompareTitle)
-                  .setNegativeButton(android.R.string.no, null)
-                  .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-
-                     public void onClick(DialogInterface arg0, int arg1) {
-
-                        DataBaseHelper dbHelper = new DataBaseHelper(getApplicationContext());
-                        dbHelper.init();
-                        Compare deleteItem =
-                              new Compare(SavedComparesDetailActivity.this, compareItem.getId(),
-                                    dbHelper);
-                        deleteItem.delete();
-                        dbHelper.close();
-
-                        setResult(RESULT_OK);
-                        SavedComparesDetailActivity.this.finish();
-                     }
-                  })
-                  .create()
-                  .show();
             return true;
          case R.id.edit:
             Intent intent = new Intent();
@@ -229,7 +205,7 @@ public class SavedComparesDetailActivity extends AppCompatActivity {
 
          SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy", Locale.ENGLISH);
          String compareCreatedTimestamp = sdf.format(new Date(Long.parseLong(compareTimestamp)));
-         timeStampSavedCompare.setText(getResources().getString(R.string.compare_saved) + ":  " +
+         timeStampSavedCompare.setText(getResources().getString(R.string.compare_saved) + " " +
                compareCreatedTimestamp);
          getSupportActionBar().setTitle(compareName);
 

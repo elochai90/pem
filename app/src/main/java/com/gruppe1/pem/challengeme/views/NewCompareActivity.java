@@ -264,7 +264,7 @@ public class NewCompareActivity extends AppCompatActivity {
       builder.setView(dialogView);
       final AlertDialog alert = builder.create();
       final CategoriesGridOverlayAdapter gridAdapter =
-            new CategoriesGridOverlayAdapter(this, R.layout.grid_item_overlay_category, catArray);
+            new CategoriesGridOverlayAdapter(this, catArray);
       gridAdapter.setOnItemClickListener(onItemClickListener);
       gridView.setAdapter(gridAdapter);
       alert.setButton(DialogInterface.BUTTON_NEGATIVE, getString(android.R.string.cancel),
@@ -338,7 +338,7 @@ public class NewCompareActivity extends AppCompatActivity {
                            .toString();
 
                      if (name.equals("")) {
-                        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy", Locale.ENGLISH);
                         String currentDateandTime = sdf.format(new Date());
                         name =
                               getString(R.string.title_activity_compare) + " " + currentDateandTime;

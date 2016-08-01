@@ -365,8 +365,11 @@ public class CompareFragment extends Fragment {
                   db_helper.close();
 
                   mDataset.remove(position);
+                  mDataset.trimToSize();
                   compareRecyclerListAdapter.notifyItemRemoved(position);
                   compareRecyclerGridAdapter.notifyItemRemoved(position);
+                  compareRecyclerListAdapter.notifyItemRangeChanged(position, mDataset.size());
+                  compareRecyclerGridAdapter.notifyItemRangeChanged(position, mDataset.size());
                }
             })
             .setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {

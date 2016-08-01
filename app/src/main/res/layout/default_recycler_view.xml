@@ -43,7 +43,7 @@
          android:layout_marginEnd="?attr/actionBarSize"
          android:contentDescription="@string/list_grid_view_desc_arrowImage"
          android:padding="10dp"
-         android:src="@drawable/arrow_no_items" />
+         android:src="@drawable/arrow_accent" />
    </RelativeLayout>
 
    <com.github.clans.fab.FloatingActionMenu android:id="@+id/menu"

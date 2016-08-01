@@ -23,7 +23,7 @@
             android:background="@color/gray00"
             android:contentDescription="@string/new_item_desc_itemImage"
             android:scaleType="centerCrop"
-            android:src="@mipmap/addcamera2" />
+            android:src="@drawable/addcamera2" />
 
          <LinearLayout
             android:id="@+id/itemDetailAttributes"
@@ -41,6 +41,7 @@
 
                <android.support.design.widget.TextInputEditText
                   android:id="@+id/itemName"
+                  android:textAppearance="@style/OrgaNice.Text.RobotoLight"
                   android:maxLines="2"
                   android:inputType="textAutoCorrect"
                   android:layout_width="match_parent"
@@ -71,6 +72,7 @@
                <com.gruppe1.pem.challengeme.helpers.CategoryEditText
                   android:id="@+id/attrCategoryValue"
                   android:maxLines="2"
+                  android:textAppearance="@style/OrgaNice.Text.RobotoLight"
                   android:inputType="text"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
@@ -94,6 +96,7 @@
 
                   <com.gruppe1.pem.challengeme.helpers.ColorEditText
                      android:id="@+id/attrColorValue"
+                     android:textAppearance="@style/OrgaNice.Text.RobotoLight"
                      android:maxLines="1"
                      android:inputType="text"
                      android:layout_width="match_parent"

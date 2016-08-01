@@ -15,6 +15,7 @@
 
       <com.gruppe1.pem.challengeme.helpers.ExactColorEditText
          android:id="@+id/attrExactColorValue"
+         android:textAppearance="@style/OrgaNice.Text.RobotoLight"
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
          android:maxLines="1"

@@ -612,6 +612,7 @@ public class CollectionItemsFragment extends Fragment {
                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                      ViewGroup.LayoutParams.WRAP_CONTENT);
          attrValueDatePicker.setLayoutParams(attibuteValueLayoutParams);
+         attrValueDatePicker.setTextAppearance(activity, R.style.OrgaNice_Text_RobotoLight);
          attrValueDatePicker.setHint(attributeType.getName());
          attrValueDatePicker.setId(R.id.dateDialogField);
 
@@ -636,6 +637,7 @@ public class CollectionItemsFragment extends Fragment {
          ViewGroup.LayoutParams attibuteValueLayoutParams =
                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                      ViewGroup.LayoutParams.WRAP_CONTENT);
+         textAttributeValue.setTextAppearance(activity, R.style.OrgaNice_Text_RobotoLight);
          textAttributeValue.setLayoutParams(attibuteValueLayoutParams);
          textAttributeValue.setId(R.id.stringAttrField);
 
@@ -684,7 +686,7 @@ public class CollectionItemsFragment extends Fragment {
 
          picassoSingleton.setImageFit(imgPath, imgPhoto,
                activity.getDrawable(R.drawable.kleiderbuegel),
-               activity.getDrawable(R.mipmap.addcamera2));
+               activity.getDrawable(R.drawable.addcamera2));
       }
       if (editItem.getIsWish() == 0) {
          attrWishlistValue.setChecked(false);
@@ -784,7 +786,7 @@ public class CollectionItemsFragment extends Fragment {
       editItem.setImageFile(item_imageFile);
 
       picassoSingleton.setImageFit(path, imgPhoto, activity.getDrawable(R.drawable.kleiderbuegel),
-            activity.getDrawable(R.mipmap.addcamera2));
+            activity.getDrawable(R.drawable.addcamera2));
       setExactColor(ImageLoader.getPicFromFile(path, 500, 500));
    }
 

@@ -641,7 +641,9 @@ public class SearchResultsActivity extends AppCompatActivity {
                   db_helper.close();
 
                   mDataset.remove(position);
+                  mDataset.trimToSize();
                   defaultRecyclerListAdapter.notifyItemRemoved(position);
+                  defaultRecyclerListAdapter.notifyItemRangeChanged(position, mDataset.size());
                }
             })
             .setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {

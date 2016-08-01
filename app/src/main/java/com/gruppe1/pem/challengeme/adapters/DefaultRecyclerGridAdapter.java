@@ -204,6 +204,8 @@ public class DefaultRecyclerGridAdapter
       LinearLayout secondLine;
       @Bind(R.id.imageView)
       ImageView image;
+      @Bind(R.id.imageViewSelectableLayer)
+      ImageView imageViewSelectableLayer;
       @Bind(R.id.ic_more)
       ImageView moreButton;
       @Bind(R.id.listItemRatingBar)

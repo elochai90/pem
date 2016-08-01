@@ -18,14 +18,13 @@
 
    <TextView
       android:id="@+id/textView"
+      android:textAppearance="@style/OrgaNice.Text.RobotoLight"
       android:layout_width="fill_parent"
-      android:layout_height="30dp"
-      android:background="@drawable/background_grid_item_compare"
+      android:layout_height="wrap_content"
       android:maxLines="1"
       android:ellipsize="marquee"
-      android:gravity="center_vertical"
-      android:paddingEnd="@dimen/margin_small"
-      android:paddingStart="@dimen/margin_small"
+      android:gravity="center"
+      android:padding="@dimen/margin_small"
       android:layout_below="@id/imageView"
       android:textColor="@color/primary_text_light"
       android:textSize="16sp" />

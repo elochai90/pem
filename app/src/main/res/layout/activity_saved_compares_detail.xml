@@ -22,32 +22,21 @@
       android:layout_height="match_parent"
       android:layout_marginTop="?attr/actionBarSize">
 
-      <LinearLayout
-         android:id="@+id/text_container"
+      <TextView
+         android:id="@+id/timeStampSavedCompare"
+         android:textAppearance="@style/OrgaNice.Text.RobotoLight"
+         android:layout_alignParentBottom="true"
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
-         android:orientation="vertical"
-         android:padding="@dimen/activity_vertical_margin">
-
-         <TextView
-            android:id="@+id/timeStampSavedCompare"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:textColor="@color/secondary_text"
-            android:textSize="16sp" />
-
-         <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/divider" />
-      </LinearLayout>
-
+         android:gravity="center_horizontal"
+         android:textColor="@color/secondary_text"
+         android:paddingBottom="@dimen/activity_vertical_margin"
+         android:textSize="16sp" />
       <LinearLayout
-         android:layout_below="@id/text_container"
+         android:layout_above="@id/timeStampSavedCompare"
          android:layout_width="match_parent"
          android:layout_height="match_parent"
+         android:paddingTop="@dimen/activity_horizontal_margin"
          android:orientation="vertical"
          android:weightSum="2">
 
@@ -72,6 +61,13 @@
                   android:layout_height="wrap_content"
 
                   android:contentDescription="@string/compare_desc_image1" />
+               <com.gruppe1.pem.challengeme.SquareImageViewWidth
+                  android:id="@+id/detail1obenSelectableLayer"
+                  android:layout_width="wrap_content"
+                  android:layout_height="match_parent"
+                  android:clickable="true"
+                  android:background="@drawable/selector_overlay_grid_item"
+                  android:contentDescription="@string/compare_desc_image2" />
 
             </RelativeLayout>
          </android.support.v7.widget.CardView>
@@ -95,6 +91,13 @@
                   android:id="@+id/detail2unten"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
+                  android:contentDescription="@string/compare_desc_image2" />
+               <com.gruppe1.pem.challengeme.SquareImageViewWidth
+                  android:id="@+id/detail2untenSelectableLayer"
+                  android:layout_width="wrap_content"
+                  android:layout_height="match_parent"
+                  android:clickable="true"
+                  android:background="@drawable/selector_overlay_grid_item"
                   android:contentDescription="@string/compare_desc_image2" />
 
             </RelativeLayout>

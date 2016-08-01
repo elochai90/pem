@@ -1,6 +1,6 @@
 <resources>
     <!-- inherit from the material theme -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="OrgaNice" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Main theme colors -->
         <!--   your app branding color for the app bar -->
         <item name="colorPrimary">@color/primary</item>
@@ -10,16 +10,21 @@
         <!--   theme UI controls like checkboxes and text fields -->
         <item name="colorAccent">@color/accent</item>
         <item name="actionModeBackground">@color/accent</item>
-
+        <item name="android:textViewStyle">@style/OrgaNice.Text.RobotoLight</item>
+        <item name="android:editTextStyle">@style/OrgaNice.Text.RobotoLight</item>
     </style>
+
     <!-- inherit from the material theme -->
-    <style name="AppThemeSearch" parent="AppTheme">
+    <style name="AppThemeSearch" parent="OrgaNice">
         <item name="actionBarSize">128dp</item>
         <item name="android:actionBarSize">128dp</item>
         <item name="android:toolbarStyle">@style/ToolBarStyle</item>
         <!--<item name="android:height">90dip</item>-->
         <!--<item name="height">90dip</item>-->
 
+    </style>
+    <style name="OrgaNice.AppBarLayout" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:textAppearance">@style/OrgaNice.Text.RobotoLight</item>
     </style>
 
     <style name="ToolBarStyle" parent="">
@@ -29,14 +34,8 @@
         <!--<item name="theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>-->
     </style>
 
-    <!--<style name="FullscreenTheme" parent="android:Theme.NoTitleBar">-->
-        <!--<item name="android:windowContentOverlay">@null</item>-->
-        <!--<item name="android:windowBackground">@null</item>-->
-        <!--<item name="metaButtonBarStyle">@style/ButtonBar</item>-->
-        <!--<item name="metaButtonBarButtonStyle">@style/ButtonBarButton</item>-->
-    <!--</style>-->
 
-    <style name="TransparentStatusBar" parent="@style/AppTheme">
+    <style name="TransparentStatusBar" parent="@style/OrgaNice">
         <item name="android:statusBarColor">@color/transparent</item>
     </style>
     <style name="FullscreenTheme" parent="@style/TransparentStatusBar">
@@ -81,6 +80,8 @@
 
     <style name="AppTheme.TextField" parent="Widget.Design.TextInputLayout" >
         <item name="android:layout_marginBottom">@dimen/margin_small</item>
+        <!--<item name="hintTextAppearance">@style/OrgaNice.Text.RobotoLight</item>-->
+        <!--<item name="errorTextAppearance">@style/OrgaNice.Text.RobotoLight</item>-->
     </style>
 
 </resources>

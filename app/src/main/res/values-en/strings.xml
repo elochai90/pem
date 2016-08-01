@@ -44,7 +44,7 @@
 
 
     <!--For detail compare activity-->
-    <string name="compare_saved">Saved</string>
+    <string name="compare_saved">Saved on the</string>
     <string name="compare_desc_image1">First Item Image</string>
     <string name="compare_desc_image2">Second Item Image</string>
     <string name="compare_delete_overlay">Do you really want to delete \'%1$s\'?</string>
@@ -92,7 +92,7 @@
     <string name="menu_title_saveItem">Save this item</string>
 
     <!--List/Grid view-->
-    <string name="list_grid_view_desc_arrowImage">arrow_no_items</string>
+    <string name="list_grid_view_desc_arrowImage">No items available</string>
     <string name="list_grid_item_desc_image">Image</string>
 
 

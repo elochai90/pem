@@ -26,7 +26,6 @@ import butterknife.ButterKnife;
 public class CategoriesGridOverlayAdapter
       extends RecyclerView.Adapter<CategoriesGridOverlayAdapter.ViewHolder> {
    private Context context;
-   private int layoutResourceId;
    private ArrayList<ListItemIconName> data = new ArrayList<>();
    private DataBaseHelper dbHelper;
    private View.OnClickListener onClickListener;
@@ -35,13 +34,11 @@ public class CategoriesGridOverlayAdapter
     * Constructor of the CategoriesGridOverlayAdapter
     *
     * @param context          the context
-    * @param layoutResourceId Layout resource for a row
     * @param data             the data to fill the overlay grid with
     */
-   public CategoriesGridOverlayAdapter(Context context, int layoutResourceId,
+   public CategoriesGridOverlayAdapter(Context context,
          ArrayList<ListItemIconName> data) {
       super();
-      this.layoutResourceId = layoutResourceId;
       this.context = context;
       this.data = data;
       this.dbHelper = new DataBaseHelper(context);
@@ -55,7 +52,7 @@ public class CategoriesGridOverlayAdapter
    @Override
    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
       View v = LayoutInflater.from(parent.getContext())
-            .inflate(layoutResourceId, parent, false);
+            .inflate(R.layout.grid_item_overlay_category, parent, false);
       ViewHolder vh = new ViewHolder(v);
       return vh;
    }

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+   <style name="OrgaNice.Text.RobotoMedium"
+      parent="android:TextAppearance.Widget.TextView">
+      <item name="android:fontFamily">sans-serif-medium</item>
+   </style>
+
+   <style name="OrgaNice.Text.RobotoLight"
+      parent="android:TextAppearance.Widget.TextView">
+      <item name="android:fontFamily">sans-serif-light</item>
+   </style>
+
+</resources>

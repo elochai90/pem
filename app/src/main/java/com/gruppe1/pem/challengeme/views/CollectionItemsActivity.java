@@ -53,6 +53,7 @@ public class CollectionItemsActivity extends ActionBarActivity {
 
       loadLocale();
       setupToolbar();
+      boolean editItem = false;
 
       Bundle extras = getIntent().getExtras();
       // new item
@@ -93,6 +94,7 @@ public class CollectionItemsActivity extends ActionBarActivity {
       else {
          currentItemPosition = extras.getInt(Constants.EXTRA_CLICKED_ITEM_POSITION);
          itemCollection = extras.getParcelableArrayList(Constants.EXTRA_ITEM_COLLECTION);
+         editItem = true;
 
       }
       initDataset();
@@ -101,7 +103,7 @@ public class CollectionItemsActivity extends ActionBarActivity {
       mItemsCollectionPagerAdapter =
             new ItemsCollectionPagerAdapter(getSupportFragmentManager(), this, itemCollection);
       mViewPager.setAdapter(mItemsCollectionPagerAdapter);
-      mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+      mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
          @Override
          public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -123,6 +125,12 @@ public class CollectionItemsActivity extends ActionBarActivity {
          }
       });
       mViewPager.setCurrentItem(currentItemPosition);
+      if(editItem) {
+         if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(mDataset.get(currentItemPosition)
+                  .getName());
+         }
+      }
    }
 
    private void setupToolbar() {

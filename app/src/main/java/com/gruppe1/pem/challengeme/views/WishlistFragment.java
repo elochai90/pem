@@ -296,6 +296,7 @@ public class WishlistFragment extends Fragment {
                   mDataset.remove(position);
                   mDataset.trimToSize();
                   defaultRecyclerListAdapter.notifyItemRemoved(position);
+                  defaultRecyclerListAdapter.notifyItemRangeChanged(position, mDataset.size());
                }
             })
             .setNegativeButton(R.string.wishlist_button_not_selected,
@@ -307,6 +308,7 @@ public class WishlistFragment extends Fragment {
                         mDataset.remove(position);
                         mDataset.trimToSize();
                         defaultRecyclerListAdapter.notifyItemRemoved(position);
+                        defaultRecyclerListAdapter.notifyItemRangeChanged(position, mDataset.size());
                         HashMap<String, String> itemAttributes = new HashMap<>();
                         itemAttributes.put("name", wishlistItem.getName());
                         itemAttributes.put("image_file", wishlistItem.getImageFile());
