@@ -118,4 +118,13 @@
 
     <string name="title_edit_category_activity">Bearbeite</string>
 
+    <!-- Error Strings -->
+    <string name="item_name_error">Geben Sie einen Namen an</string>
+    <string name="item_category_error">Wählen Sie eine Kategorie aus</string>
+    <string name="item_exact_color_error">Wählen Sie die Farbe des Kleidungsstückes aus</string>
+    <string name="category_name_error">Geben Sie einen Namen für die Kategorie an</string>
+    <string name="category_size_error">Geben Sie eine Standardgröße für die Kategorie an</string>
+    <string name="category_color_error">Geben Sie eine Farbe für die Kategorie an</string>
+    <string name="compare_name_error">Geben Sie einen Namen an</string>
+
 </resources>

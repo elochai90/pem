@@ -296,8 +296,7 @@ public class NewCategoryActivity extends AppCompatActivity {
             .toString()
             .trim()
             .isEmpty()) {
-         // TODO: extract strings
-         categoryNameLayout.setError("Geben Sie einen Namen für die Kategorie an");
+         categoryNameLayout.setError(getString(R.string.category_name_error));
          newCategory_name.requestFocus();
          return false;
       } else {
@@ -308,8 +307,7 @@ public class NewCategoryActivity extends AppCompatActivity {
 
    private boolean validateDefaultSize() {
       if (categoryDefaultSize.getSelectedItem() == null) {
-         // TODO: extract strings
-         categoryDefaultSizeLayout.setError("Geben Sie eine Standardgröße für die Kategorie an");
+         categoryDefaultSizeLayout.setError(getString(R.string.category_size_error));
          categoryDefaultSize.requestFocus();
          return false;
       } else {
@@ -321,8 +319,7 @@ public class NewCategoryActivity extends AppCompatActivity {
 
    private boolean validateExactColor() {
       if (categoryColor.getExactColor() == -1) {
-         // TODO: extract strings
-         attrExactColorLayout.setError("Geben Sie eine Farbe für die Kategorie an");
+         attrExactColorLayout.setError(getString(R.string.category_color_error));
          categoryColor.requestFocus();
          return false;
       } else {

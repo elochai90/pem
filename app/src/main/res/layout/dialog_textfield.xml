@@ -14,16 +14,23 @@
       android:textColor="#ffffffff"
       android:textSize="20sp" />
 
-   <EditText
-      android:id="@id/dialog_text"
-      android:textAppearance="@style/OrgaNice.Text.RobotoLight"
+
+   <android.support.design.widget.TextInputLayout
+      android:id="@+id/dialog_text_layout"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginBottom="4dp"
-      android:layout_marginLeft="4dp"
-      android:layout_marginRight="4dp"
-      android:layout_marginTop="16dp"
-      android:inputType="text"
-      android:maxLines="1" />
+      android:layout_marginLeft="@dimen/activity_horizontal_margin"
+      android:layout_marginRight="@dimen/activity_horizontal_margin"
+      android:layout_marginTop="@dimen/activity_vertical_margin">
+
+      <android.support.design.widget.TextInputEditText
+         android:id="@id/dialog_text"
+         android:textAppearance="@style/OrgaNice.Text.RobotoLight"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:inputType="text"
+         android:maxLines="1"
+         android:hint="@string/compare_name"/>
+   </android.support.design.widget.TextInputLayout>
 
 </LinearLayout>

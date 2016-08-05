@@ -119,4 +119,13 @@
 
     <string name="title_edit_category_activity">Edit </string>
 
+    <!-- Error Strings -->
+    <string name="item_name_error">Enter a name</string>
+    <string name="item_category_error">Select a category</string>
+    <string name="item_exact_color_error">Select the exact color of the item</string>
+    <string name="category_name_error">Enter a name for the category</string>
+    <string name="category_size_error">Select a default size for the category items</string>
+    <string name="category_color_error">Select a color for the category</string>
+    <string name="compare_name_error">Enter a name</string>
+
 </resources>

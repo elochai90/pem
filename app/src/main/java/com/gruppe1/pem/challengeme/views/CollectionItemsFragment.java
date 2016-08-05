@@ -812,8 +812,7 @@ public class CollectionItemsFragment extends Fragment {
             .toString()
             .trim()
             .isEmpty()) {
-         // TODO: extract strings
-         itemNameLayout.setError("Geben Sie einen Namen an");
+         itemNameLayout.setError(activity.getString(R.string.item_name_error));
          itemNameExitText.requestFocus();
          return false;
       } else {
@@ -824,8 +823,7 @@ public class CollectionItemsFragment extends Fragment {
 
    private boolean validateCategory() {
       if (attrCategoryValue.getSelectedItem() == null) {
-         // TODO: extract strings
-         attrCategoryLayout.setError("Geben Sie eine Kategorie an");
+         attrCategoryLayout.setError(activity.getString(R.string.item_category_error));
          attrCategoryValue.requestFocus();
          return false;
       } else {
@@ -837,8 +835,7 @@ public class CollectionItemsFragment extends Fragment {
 
    private boolean validateExactColor() {
       if (attrValueColorPicker.getExactColor() == -1) {
-         // TODO: extract strings
-         attrLayoutColorPicker.setError("Geben Sie die Farbe des Kleidungsstückes an");
+         attrLayoutColorPicker.setError(activity.getString(R.string.item_exact_color_error));
          attrValueColorPicker.requestFocus();
          return false;
       } else {
