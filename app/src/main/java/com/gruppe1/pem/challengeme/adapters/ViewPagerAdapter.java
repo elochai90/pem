@@ -32,7 +32,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
          case 0:
             return CategoriesFragment.newInstance(0, context.getString(R.string.title_activity_categories));
          case 1:
-            return CompareFragment.newInstance(1, context.getString(R.string.title_activity_compare));
+            return CompareFragment.newInstance(1, context.getString(R.string.title_activity_outfits));
          case 2:
             return WishlistFragment.newInstance(2, context.getString(R.string.title_activity_wishlist));
          default:
@@ -57,7 +57,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
          case 0:
             return context.getString(R.string.title_activity_categories);
          case 1:
-            return context.getString(R.string.title_activity_compare);
+            return context.getString(R.string.title_activity_outfits);
          case 2:
             return context.getString(R.string.title_activity_wishlist);
          default:

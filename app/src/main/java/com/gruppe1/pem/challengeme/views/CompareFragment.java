@@ -75,7 +75,7 @@ public class CompareFragment extends Fragment {
 
       ButterKnife.bind(this, rootView);
 
-      noComparesText.setText(R.string.no_compares);
+      noComparesText.setText(R.string.no_outfits);
 
       LinearLayoutManager linearLayoutManagerList =
             new LinearLayoutManager(getActivity().getBaseContext());

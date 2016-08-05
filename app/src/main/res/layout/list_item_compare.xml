@@ -21,7 +21,7 @@
          android:layout_weight="1"
          android:layout_width="30dp"
          android:layout_height="match_parent"
-         android:contentDescription="@string/compare_desc_image1" />
+         android:contentDescription="@string/outfit_desc_image1" />
 
       <com.gruppe1.pem.challengeme.SquareImageViewWidth
          android:id="@+id/imageItem2"
@@ -30,7 +30,7 @@
          android:layout_weight="1"
          android:layout_width="30dp"
          android:layout_height="match_parent"
-         android:contentDescription="@string/compare_desc_image2" />
+         android:contentDescription="@string/outfit_desc_image2" />
    </LinearLayout>
 
    <RelativeLayout

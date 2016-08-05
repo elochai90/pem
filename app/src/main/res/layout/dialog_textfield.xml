@@ -30,7 +30,7 @@
          android:layout_height="wrap_content"
          android:inputType="text"
          android:maxLines="1"
-         android:hint="@string/compare_name"/>
+         android:hint="@string/outfit_name"/>
    </android.support.design.widget.TextInputLayout>
 
 </LinearLayout>

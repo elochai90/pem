@@ -43,7 +43,7 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:padding="100dp"
-            android:contentDescription="@string/compare_desc_image1"
+            android:contentDescription="@string/outfit_desc_image1"
             android:src="@drawable/ic_add" />
       </RelativeLayout>
 
@@ -69,7 +69,7 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
             android:padding="100dp"
-            android:contentDescription="@string/compare_desc_image2"
+            android:contentDescription="@string/outfit_desc_image2"
             android:src="@drawable/ic_add" />
       </RelativeLayout>
 

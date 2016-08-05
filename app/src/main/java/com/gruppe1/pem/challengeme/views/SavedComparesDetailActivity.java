@@ -1,7 +1,5 @@
 package com.gruppe1.pem.challengeme.views;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -108,7 +106,7 @@ public class SavedComparesDetailActivity extends AppCompatActivity {
       String compareCreatedTimestamp =
             sdf.format(new Date(Long.parseLong(compareItem.getTimestamp())));
       timeStampSavedCompare.setText(
-            getResources().getString(R.string.compare_saved) + " " + compareCreatedTimestamp);
+            getResources().getString(R.string.outfit_saved) + " " + compareCreatedTimestamp);
 
       dbHelper.close();
    }
@@ -205,7 +203,7 @@ public class SavedComparesDetailActivity extends AppCompatActivity {
 
          SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy", Locale.ENGLISH);
          String compareCreatedTimestamp = sdf.format(new Date(Long.parseLong(compareTimestamp)));
-         timeStampSavedCompare.setText(getResources().getString(R.string.compare_saved) + " " +
+         timeStampSavedCompare.setText(getResources().getString(R.string.outfit_saved) + " " +
                compareCreatedTimestamp);
          getSupportActionBar().setTitle(compareName);
 

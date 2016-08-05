@@ -24,7 +24,7 @@
          android:layout_width="match_parent"
          android:layout_height="match_parent"
          android:background="@drawable/selector_overlay_grid_item"
-         android:contentDescription="@string/compare_desc_image2" />
+         android:contentDescription="@string/outfit_desc_image2" />
 
       <RelativeLayout
          android:id="@+id/text_container"

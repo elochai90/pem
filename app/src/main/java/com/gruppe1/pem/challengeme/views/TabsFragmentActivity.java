@@ -231,7 +231,7 @@ public class TabsFragmentActivity extends ActionBarActivity {
 
    private void setupFloatingActionMenu() {
       menu.setClosedOnTouchOutside(true);
-      fab_add_compare.setLabelText(getString(R.string.title_activity_saved_compares));
+      fab_add_compare.setLabelText(getString(R.string.title_activity_saved_outfits));
       fab_add_wishlist_item.setLabelText(getString(R.string.title_activity_new_Wishlistitem));
       fab_add_category.setLabelText(getString(R.string.title_activity_new_category));
       fab_add_item.setLabelText(getString(R.string.title_activity_new_item));

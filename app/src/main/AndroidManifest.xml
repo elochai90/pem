@@ -28,7 +28,7 @@
       <activity
          android:name=".views.NewCompareActivity"
          android:configChanges="orientation"
-         android:label="@string/title_activity_saved_compares"
+         android:label="@string/title_activity_saved_outfits"
          android:parentActivityName=".views.TabsFragmentActivity"
          android:screenOrientation="portrait">
          <meta-data
@@ -38,7 +38,7 @@
       <activity
          android:name=".views.SavedComparesDetailActivity"
          android:configChanges="orientation"
-         android:label="@string/title_activity_saved_compares_detail"
+         android:label="@string/title_activity_saved_outfits_detail"
          android:parentActivityName=".views.NewCompareActivity"
          android:screenOrientation="portrait">
          <meta-data

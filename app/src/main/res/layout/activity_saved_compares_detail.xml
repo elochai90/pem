@@ -60,14 +60,14 @@
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
 
-                  android:contentDescription="@string/compare_desc_image1" />
+                  android:contentDescription="@string/outfit_desc_image1" />
                <com.gruppe1.pem.challengeme.SquareImageViewWidth
                   android:id="@+id/detail1obenSelectableLayer"
                   android:layout_width="wrap_content"
                   android:layout_height="match_parent"
                   android:clickable="true"
                   android:background="@drawable/selector_overlay_grid_item"
-                  android:contentDescription="@string/compare_desc_image2" />
+                  android:contentDescription="@string/outfit_desc_image2" />
 
             </RelativeLayout>
          </android.support.v7.widget.CardView>
@@ -91,14 +91,14 @@
                   android:id="@+id/detail2unten"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
-                  android:contentDescription="@string/compare_desc_image2" />
+                  android:contentDescription="@string/outfit_desc_image2" />
                <com.gruppe1.pem.challengeme.SquareImageViewWidth
                   android:id="@+id/detail2untenSelectableLayer"
                   android:layout_width="wrap_content"
                   android:layout_height="match_parent"
                   android:clickable="true"
                   android:background="@drawable/selector_overlay_grid_item"
-                  android:contentDescription="@string/compare_desc_image2" />
+                  android:contentDescription="@string/outfit_desc_image2" />
 
             </RelativeLayout>
          </android.support.v7.widget.CardView>

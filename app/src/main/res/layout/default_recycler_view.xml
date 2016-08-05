@@ -72,7 +72,7 @@
          android:layout_height="wrap_content"
          android:src="@drawable/fab_add"
          style="@style/MenuButtonsStyle"
-         fab:fab_label="@string/title_activity_saved_compares"
+         fab:fab_label="@string/title_activity_saved_outfits"
          fab:fab_size="mini" />
 
       <com.github.clans.fab.FloatingActionButton

@@ -21,7 +21,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.gruppe1.pem.challengeme.Category;
 import com.gruppe1.pem.challengeme.Compare;
@@ -73,7 +72,7 @@ public class NewCompareActivity extends AppCompatActivity {
       ButterKnife.bind(this);
 
       setupToolbar();
-      getSupportActionBar().setTitle(R.string.title_activity_compare);
+      getSupportActionBar().setTitle(R.string.title_activity_new_compare);
 
       sharedPreferences = getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
 
@@ -253,7 +252,7 @@ public class NewCompareActivity extends AppCompatActivity {
       final View dialogView = inflater.inflate(R.layout.dialog_recycler_view, null);
       TextView headline = (TextView) dialogView.findViewById(R.id.dialog_headline);
 
-      headline.setText(getString(R.string.compare_choose_cat_overlay_title));
+      headline.setText(getString(R.string.outfit_choose_cat_overlay_title));
       RecyclerView gridView = (RecyclerView) dialogView.findViewById(R.id.gridView);
 
       StaggeredGridLayoutManager gridLayoutManager =
@@ -328,7 +327,7 @@ public class NewCompareActivity extends AppCompatActivity {
 
          View dialogView = inflater.inflate(R.layout.dialog_textfield, null);
          TextView headline = (TextView) dialogView.findViewById(R.id.dialog_headline);
-         headline.setText(R.string.save_compare);
+         headline.setText(R.string.save_outfits);
          final TextInputLayout inputFieldLayout =
                (TextInputLayout) dialogView.findViewById(R.id.dialog_text_layout);
 
@@ -355,7 +354,7 @@ public class NewCompareActivity extends AppCompatActivity {
                            .toString()
                            .trim()
                            .isEmpty()) {
-                        inputFieldLayout.setError(getString(R.string.compare_name_error));
+                        inputFieldLayout.setError(getString(R.string.outfit_name_error));
                         inputField.requestFocus();
                      } else {
                         inputFieldLayout.setErrorEnabled(false);
