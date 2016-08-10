@@ -16,8 +16,53 @@ public class Constants {
    public static final String ITEM_ATTR_DB_TABLE = DB_TABLE_PREFIX + "item_attribute_types";
    public static final String COLORS_DB_TABLE = DB_TABLE_PREFIX + "colors";
 
+   // DB Items Columns
+   public static final String DB_COLUMN_ITEM_ID = "_id";
+   public static final String DB_COLUMN_ITEM_NAME = "name";
+   public static final String DB_COLUMN_ITEM_IMAGE_FILE = "image_file";
+   public static final String DB_COLUMN_ITEM_CATEGORY_ID = "category_id";
+   public static final String DB_COLUMN_ITEM_IS_WISH = "is_wish";
+   public static final String DB_COLUMN_ITEM_PRIMARY_COLOR = "primary_color";
+   public static final String DB_COLUMN_ITEM_RATING = "rating";
+
+   // DB Category Columns
+   public static final String DB_COLUMN_CATEGORY_ID = "_id";
+   public static final String DB_COLUMN_CATEGORY_NAME_EN = "name_en";
+   public static final String DB_COLUMN_CATEGORY_NAME_DE = "name_de";
+   public static final String DB_COLUMN_CATEGORY_PARENT_CATEGORY_ID = "parent_category_id";
+   public static final String DB_COLUMN_CATEGORY_DEFAULT_ATTR_TYPE = "default_attribute_type";
+   public static final String DB_COLUMN_CATEGORY_ICON = "icon";
+   public static final String DB_COLUMN_CATEGORY_COLOR = "color";
+
+   // DB Attribute Columns
+   public static final String DB_COLUMN_ATTRIBUTE_ID = "_id";
+   public static final String DB_COLUMN_ATTRIBUTE_ITEM_ID = "item_id";
+   public static final String DB_COLUMN_ATTRIBUTE_ATTRIBUTE_TYPE_ID = "attribute_type_id";
+   public static final String DB_COLUMN_ATTRIBUTE_ATTRIBUTE_VALUE = "attribute_value";
+
+   // DB Attribute Type Columns
+   public static final String DB_COLUMN_ATTRIBUTE_TYPE_ID = "_id";
+   public static final String DB_COLUMN_ATTRIBUTE_TYPE_NAME_EN = "name_en";
+   public static final String DB_COLUMN_ATTRIBUTE_TYPE_NAME_DE = "name_de";
+   public static final String DB_COLUMN_ATTRIBUTE_TYPE_VALUE_TYPE = "value_type";
+   public static final String DB_COLUMN_ATTRIBUTE_TYPE_IS_UNIQUE = "is_unique";
+
+   // DB Compare Columns
+   public static final String DB_COLUMN_COMPARE_ID = "_id";
+   public static final String DB_COLUMN_COMPARE_NAME = "name";
+   public static final String DB_COLUMN_COMPARE_ITEM_IDS = "item_ids";
+   public static final String DB_COLUMN_COMPARE_SAVE_DATE = "save_date";
+
+   // DB Color Columns
+   public static final String DB_COLUMN_COLOR_ID = "_id";
+   public static final String DB_COLUMN_COLOR_NAME_EN = "name_en";
+   public static final String DB_COLUMN_COLOR_NAME_DE = "name_de";
+   public static final String DB_COLUMN_COLOR_HEX = "hex";
+
+
    public static String EXTRA_CATEGORY_ID = "extra_category_id";
    public static String EXTRA_PARENT_CATEGORY_ID = "extra_parent_category_id";
+   public static String EXTRA_ITEM_EDIT = "extra_is_item_edit";
    public static String EXTRA_ITEM_ID = "extra_item_id";
    public static String EXTRA_ITEM_PRIMARY_COLOR_ID = "extra_item_primary_color_id";
    public static String EXTRA_ITEM_RATING = "extra_item_rating";

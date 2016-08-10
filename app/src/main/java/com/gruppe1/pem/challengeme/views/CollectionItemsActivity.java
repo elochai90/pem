@@ -1,7 +1,6 @@
 package com.gruppe1.pem.challengeme.views;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -9,14 +8,12 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.inputmethod.InputMethodManager;
 
 import com.gruppe1.pem.challengeme.Item;
 import com.gruppe1.pem.challengeme.ListItemIconName;
 import com.gruppe1.pem.challengeme.R;
 import com.gruppe1.pem.challengeme.adapters.ItemsCollectionPagerAdapter;
 import com.gruppe1.pem.challengeme.helpers.Constants;
-import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -37,7 +34,6 @@ public class CollectionItemsActivity extends ActionBarActivity {
    Toolbar toolbar;
 
    private Locale myLocale;
-   private DataBaseHelper db_helper;
 
    private int currentItemPosition;
    private ArrayList<ListItemIconName> mDataset = new ArrayList<>();
@@ -48,9 +44,6 @@ public class CollectionItemsActivity extends ActionBarActivity {
       setContentView(R.layout.activity_collection_items);
       ButterKnife.bind(this);
 
-      db_helper = new DataBaseHelper(this);
-      db_helper.init();
-
       loadLocale();
       setupToolbar();
       boolean editItem = false;
@@ -60,7 +53,8 @@ public class CollectionItemsActivity extends ActionBarActivity {
       if (extras == null) {
          currentItemPosition = 0;
          itemCollection = new ArrayList<>();
-         itemCollection.add(new Item(this, 0, getDb_helper()));
+         Item item = new Item();
+         itemCollection.add(item);
          if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(getString(R.string.title_activity_new_item));
          }
@@ -69,7 +63,7 @@ public class CollectionItemsActivity extends ActionBarActivity {
       else if (extras.getInt(Constants.EXTRA_CATEGORY_ID, -1) != -1) {
          currentItemPosition = 0;
          itemCollection = new ArrayList<>();
-         Item itemWithParent = new Item(this, 0, getDb_helper());
+         Item itemWithParent = new Item();
          itemWithParent.setCategoryId(extras.getInt(Constants.EXTRA_CATEGORY_ID));
          if (extras.getBoolean(Constants.EXTRA_ITEM_IS_WISHLIST)) {
             itemWithParent.setIsWish(1);
@@ -83,7 +77,7 @@ public class CollectionItemsActivity extends ActionBarActivity {
       else if (extras.getBoolean(Constants.EXTRA_ITEM_IS_WISHLIST)) {
          currentItemPosition = 0;
          itemCollection = new ArrayList<>();
-         Item wishlistItem = new Item(this, 0, getDb_helper());
+         Item wishlistItem = new Item();
          wishlistItem.setIsWish(1);
          itemCollection.add(wishlistItem);
          if (getSupportActionBar() != null) {
@@ -95,13 +89,12 @@ public class CollectionItemsActivity extends ActionBarActivity {
          currentItemPosition = extras.getInt(Constants.EXTRA_CLICKED_ITEM_POSITION);
          itemCollection = extras.getParcelableArrayList(Constants.EXTRA_ITEM_COLLECTION);
          editItem = true;
-
       }
       initDataset();
-      // ViewPager and its adapters use support library
-      // fragments, so use getSupportFragmentManager.
+
       mItemsCollectionPagerAdapter =
-            new ItemsCollectionPagerAdapter(getSupportFragmentManager(), this, itemCollection);
+            new ItemsCollectionPagerAdapter(getSupportFragmentManager(), this, itemCollection,
+                  editItem);
       mViewPager.setAdapter(mItemsCollectionPagerAdapter);
       mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
          @Override
@@ -125,7 +118,7 @@ public class CollectionItemsActivity extends ActionBarActivity {
          }
       });
       mViewPager.setCurrentItem(currentItemPosition);
-      if(editItem) {
+      if (editItem) {
          if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(mDataset.get(currentItemPosition)
                   .getName());
@@ -151,7 +144,7 @@ public class CollectionItemsActivity extends ActionBarActivity {
    public boolean onOptionsItemSelected(MenuItem item) {
       switch (item.getItemId()) {
          case android.R.id.home:
-            super.onBackPressed();
+            onBackPressed();
             return true;
 
          case R.id.action_item_save:
@@ -207,20 +200,6 @@ public class CollectionItemsActivity extends ActionBarActivity {
                .updateConfiguration(newConfig, getBaseContext().getResources()
                      .getDisplayMetrics());
       }
-   }
-
-   /**
-    * Get the db_helper instance for this class
-    *
-    * @return DataBaseHelper instance
-    */
-   private DataBaseHelper getDb_helper() {
-      if (!db_helper.isOpen()) {
-         System.out.println("db helper was closed");
-         db_helper = new DataBaseHelper(this);
-         db_helper.init();
-      }
-      return db_helper;
    }
 }
 

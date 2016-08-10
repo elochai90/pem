@@ -1,255 +1,121 @@
 package com.gruppe1.pem.challengeme.helpers;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.text.TextUtils;
-
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 /**
  * handles the database connection and requests
  */
 public class DataBaseHelper extends SQLiteOpenHelper {
-    private static final int DB_VERSION = 1;
-    private static final String DB_NAME = "organice";
-    private static final String DB_PATH = "/data/data/com.gruppe1.pem.challengeme/databases/";
-    private static final String DB_FULL_PATH = DB_PATH + DB_NAME;
-    private static boolean db_existanceChecked = false;
 
-    private final Context context;
-    private SQLiteDatabase database;
+   public static DataBaseHelper mInstance = null;
+   public static SQLiteDatabase mDataBaseInstance = null;
 
-    private String mTable;
-    private String[] mColumns;
-    private String mWhere;
-    private String mOrderBy;
-    private String mLimit;
-    private ContentValues mValues;
+   private static final String DATABASE_NAME = "organice";
+   private static final int DATABASE_VERSION = 1;
 
-    public DataBaseHelper(Context context){
-        super(context, DB_NAME, null, DB_VERSION);
-        this.context = context;
-        this.mValues = new ContentValues();
-    }
+   String CREATE_TABLE_CATEGORIES = "CREATE TABLE " + Constants.CATEGORIES_DB_TABLE +
+         "(" +
+         Constants.DB_COLUMN_CATEGORY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+         Constants.DB_COLUMN_CATEGORY_NAME_EN + " VARCHAR(50) NOT NULL DEFAULT ''," +
+         Constants.DB_COLUMN_CATEGORY_NAME_DE + " VARCHAR(50) NOT NULL DEFAULT ''," +
+         Constants.DB_COLUMN_CATEGORY_PARENT_CATEGORY_ID + " INT(5) NOT NULL DEFAULT -1," +
+         Constants.DB_COLUMN_CATEGORY_DEFAULT_ATTR_TYPE + " INT(3) NOT NULL DEFAULT -1," +
+         Constants.DB_COLUMN_CATEGORY_ICON + " VARCHAR(50) DEFAULT 'kleiderbuegel'," +
+         Constants.DB_COLUMN_CATEGORY_COLOR + " VARCHAR(50) DEFAULT '5d5d5d'" +
+         ")";
 
-    /**
-     * checks if database exists and otherwise creates it
-     */
-    public void init() {
-        if(!db_existanceChecked) {
-            this.createDataBase();
-            db_existanceChecked = true;
-        }
-        this.openDataBase();
-        this.database.execSQL("PRAGMA foreign_keys=ON;");
-    }
+   String CREATE_TABLE_ITEMS = "CREATE TABLE " + Constants.ITEMS_DB_TABLE +
+         "(" +
+         Constants.DB_COLUMN_ITEM_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+         Constants.DB_COLUMN_ITEM_NAME + " VARCHAR(50) NOT NULL DEFAULT ''," +
+         Constants.DB_COLUMN_ITEM_IMAGE_FILE + " VARCHAR(255)," +
+         Constants.DB_COLUMN_ITEM_CATEGORY_ID + " INT(5) NOT NULL DEFAULT -1," +
+         Constants.DB_COLUMN_ITEM_IS_WISH + " INT(1) DEFAULT 0," +
+         Constants.DB_COLUMN_ITEM_PRIMARY_COLOR + " INT(3)," +
+         Constants.DB_COLUMN_ITEM_RATING + " FLOAT(2), " +
+         "FOREIGN KEY (" + Constants.DB_COLUMN_ITEM_CATEGORY_ID + ") REFERENCES " +
+         Constants.CATEGORIES_DB_TABLE + "(" + Constants.DB_COLUMN_CATEGORY_ID +
+         ") ON DELETE CASCADE" +
+         ")";
 
-    /*
-     * --------------------------------------------------------------------
-     * ------------------------- Getter and setter ------------------------
-     * --------------------------------------------------------------------
-     */
+   String CREATE_TABLE_ATTRIBUTE_TYPES = "CREATE TABLE " + Constants.ATTRIBUTE_TYPES_DB_TABLE +
+         "(" +
+         Constants.DB_COLUMN_ATTRIBUTE_TYPE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+         Constants.DB_COLUMN_ATTRIBUTE_TYPE_NAME_EN + " VARCHAR(50) NOT NULL DEFAULT ''," +
+         Constants.DB_COLUMN_ATTRIBUTE_TYPE_NAME_DE + " VARCHAR(50) NOT NULL DEFAULT ''," +
+         Constants.DB_COLUMN_ATTRIBUTE_TYPE_VALUE_TYPE + " INT(3) NOT NULL DEFAULT 0," +
+         Constants.DB_COLUMN_ATTRIBUTE_TYPE_IS_UNIQUE + " INT(1) DEFAULT 0" +
+         ")";
 
-    public void setTable(String p_table) {
-        this.mTable = p_table;
-    }
+   String CREATE_TABLE_COMPARES = "CREATE TABLE " + Constants.COMPARES_DB_TABLE +
+         "(" +
+         Constants.DB_COLUMN_COMPARE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+         Constants.DB_COLUMN_COMPARE_NAME + " VARCHAR(50) NOT NULL DEFAULT 'My Compare'," +
+         Constants.DB_COLUMN_COMPARE_ITEM_IDS + " VARCHAR(50) NOT NULL DEFAULT ''," +
+         Constants.DB_COLUMN_COMPARE_SAVE_DATE + " DATETIME DEFAULT CURRENT_TIMESTAMP" +
+         ")";
 
-    public String getTable() {
-        return this.mTable;
-    }
+   String CREATE_TABLE_COLORS = "CREATE TABLE " + Constants.COLORS_DB_TABLE +
+         "(" +
+         Constants.DB_COLUMN_COLOR_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+         Constants.DB_COLUMN_COLOR_NAME_EN + " VARCHAR(50) NOT NULL DEFAULT ''," +
+         Constants.DB_COLUMN_COLOR_NAME_DE + " VARCHAR(50) NOT NULL DEFAULT ''," +
+         Constants.DB_COLUMN_COLOR_HEX + " VARCHAR(50) NOT NULL DEFAULT ''" +
+         ")";
 
-    public void setColumns(String[] p_columns) {
-        this.mColumns = p_columns;
-    }
+   String CREATE_TABLE_ITEM_ATTRIBUTE_TYPES = "CREATE TABLE " + Constants.ITEM_ATTR_DB_TABLE +
+         "(" +
+         Constants.DB_COLUMN_ATTRIBUTE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+         Constants.DB_COLUMN_ATTRIBUTE_ITEM_ID + " INT NOT NULL," +
+         Constants.DB_COLUMN_ATTRIBUTE_ATTRIBUTE_TYPE_ID + " INT NOT NULL," +
+         Constants.DB_COLUMN_ATTRIBUTE_ATTRIBUTE_VALUE + " VARCHAR(255)," +
+         "FOREIGN KEY (" + Constants.DB_COLUMN_ATTRIBUTE_ITEM_ID + ") REFERENCES " +
+         Constants.ITEMS_DB_TABLE + "(" + Constants.DB_COLUMN_ITEM_ID +
+         ") ON DELETE CASCADE, " +
+         "FOREIGN KEY (" + Constants.DB_COLUMN_ATTRIBUTE_ATTRIBUTE_TYPE_ID + ") REFERENCES " +
+         Constants.ATTRIBUTE_TYPES_DB_TABLE + "(" + Constants.DB_COLUMN_ATTRIBUTE_TYPE_ID +
+         ")" +
+         ")";
 
-    public String[] getmColumns() {
-        return this.mColumns;
-    }
+   private DataBaseHelper(Context context) {
+      super(context, DATABASE_NAME, null, DATABASE_VERSION);
+   }
 
-    public void setWhere(CharSequence p_concat, String[] p_restrictions) {
-        this.mWhere = TextUtils.join(p_concat + " ", p_restrictions);
-    }
+   public static SQLiteDatabase getDataBaseInstance(Context context) {
+      if (mInstance == null) {
+         mInstance = new DataBaseHelper(context);
+      }
+      if (mDataBaseInstance == null) {
+         mDataBaseInstance = mInstance.getWritableDatabase();
+      }
+      return mDataBaseInstance;
+   }
 
-    public String getWhere() {
-        return this.mWhere;
-    }
+   public static void closeDataBaseInstance() {
+      if (mDataBaseInstance != null) {
+         mDataBaseInstance.close();
+         mInstance.close();
+         mInstance = null;
+         mDataBaseInstance = null;
+      }
+   }
 
-    public void setOrderBy(String p_orderBy) {
-        this.mOrderBy = p_orderBy;
-    }
+   @Override
+   public void onCreate(SQLiteDatabase database) {
+      database.execSQL(CREATE_TABLE_CATEGORIES);
+      database.execSQL(CREATE_TABLE_ITEMS);
+      database.execSQL(CREATE_TABLE_ATTRIBUTE_TYPES);
+      database.execSQL(CREATE_TABLE_ITEM_ATTRIBUTE_TYPES);
+      database.execSQL(CREATE_TABLE_COMPARES);
+      database.execSQL(CREATE_TABLE_COLORS);
 
-    public String getmOrderBy() {
-        return this.mOrderBy;
-    }
+      database.execSQL("PRAGMA foreign_keys=ON;");
+      mDataBaseInstance = database;
+   }
 
-    public void setIntegerValue(String p_key, int p_value) {
-        this.mValues.put(p_key, p_value);
-    }
-
-    public void setFloatValue(String p_key, Float p_value) {
-        this.mValues.put(p_key, p_value);
-    }
-
-    public void setStringValue(String p_key, String p_value) {
-        this.mValues.put(p_key, p_value);
-    }
-
-    public ContentValues getValues(){
-        return this.mValues;
-    }
-
-    public void deleteValues() {
-        this.mValues.clear();
-    }
-
-    @Override
-    public synchronized void close() {
-        if(database != null) {
-            database.close();
-        }
-
-        super.close();
-    }
-
-    public boolean isOpen() {
-        return database.isOpen();
-    }
-
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
-    }
-
-    /**
-     *  creates the database
-     */
-    private void createDataBase() {
-
-        boolean dbExist = checkDataBase();
-
-        if(!dbExist){
-            this.getReadableDatabase();
-
-            try {
-                copyDataBase();
-            } catch (IOException e) {
-                throw new Error("Error copying database");
-            }
-        }
-    }
-
-    /**
-     *  checks wether database can be opened or not
-     *  @return boolean if database can be opened
-     */
-    private boolean checkDataBase() {
-
-        SQLiteDatabase checkDB = null;
-
-        try{
-            checkDB = SQLiteDatabase.openDatabase(DB_FULL_PATH, null, SQLiteDatabase.OPEN_READONLY);
-
-        } catch(SQLiteException e){
-            //database does't exist yet.
-        }
-
-        if(checkDB != null){
-
-        checkDB.close();
-        }
-
-        return checkDB != null;
-    }
-
-
-    /**
-     * copies the database to the used one
-     * @throws IOException
-     */
-    private void copyDataBase() throws IOException {
-
-        //Open your local db as the input stream
-        InputStream myInput = context.getAssets().open(DB_NAME);
-
-        //Open the empty db as the output stream
-        OutputStream myOutput = new FileOutputStream(DB_FULL_PATH);
-
-        //transfer bytes from the inputfile to the outputfile
-        byte[] buffer = new byte[1024];
-        int length;
-        while ((length = myInput.read(buffer) )> 0) {
-        myOutput.write(buffer, 0, length);
-        }
-
-        //Close the streams
-        myOutput.flush();
-        myOutput.close();
-        myInput.close();
-    }
-
-    /**
-     * Open the database
-     */
-    private void openDataBase() {
-        this.database = SQLiteDatabase.openDatabase(DB_FULL_PATH, null, SQLiteDatabase.OPEN_READWRITE);
-    }
-
-    /*
-     * --------------------------------------------------------------------
-     * -------------------------- Query handling --------------------------
-     * --------------------------------------------------------------------
-     */
-
-    /**
-     * sets the SELECT-Query
-     * @return Datacursor
-     */
-    public Cursor select() {
-        return this.database.query(this.mTable, this.mColumns, this.mWhere, null, null,null, this.mOrderBy);
-    }
-
-    /**
-     * sets the INSERT-Query
-     * @return id of new element
-     */
-    public int insert() {
-        this.database.insert(this.mTable, null, this.mValues);
-        this.mColumns = new String[]{"MAX(_id)"};
-        Cursor cursor = this.select();
-
-        if (cursor != null) {
-            cursor.moveToFirst();
-            int cursorInt = cursor.getInt(0);
-            cursor.close();
-            return cursorInt;
-        }
-        return -1;
-    }
-
-    /**
-     * updates selected table at specific rows
-     */
-    public void update(){
-        this.database.update(this.mTable, this.mValues, this.mWhere, null);
-    }
-
-    /**
-     * deteles selected elements
-     */
-    public void delete() {
-        this.database.delete(this.mTable, this.mWhere, null);
-    }
-
+   @Override
+   public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+   }
 }

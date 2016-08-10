@@ -30,11 +30,11 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
    public Fragment getItem(int position) {
       switch (position) {
          case 0:
-            return CategoriesFragment.newInstance(0, context.getString(R.string.title_activity_categories));
+            return CategoriesFragment.newInstance();
          case 1:
-            return CompareFragment.newInstance(1, context.getString(R.string.title_activity_outfits));
+            return CompareFragment.newInstance();
          case 2:
-            return WishlistFragment.newInstance(2, context.getString(R.string.title_activity_wishlist));
+            return WishlistFragment.newInstance();
          default:
             return null;
       }

@@ -28,8 +28,8 @@ import com.gruppe1.pem.challengeme.Compare;
 import com.gruppe1.pem.challengeme.R;
 import com.gruppe1.pem.challengeme.adapters.CompareRecyclerGridAdapter;
 import com.gruppe1.pem.challengeme.adapters.CompareRecyclerListAdapter;
+import com.gruppe1.pem.challengeme.helpers.CompareDataSource;
 import com.gruppe1.pem.challengeme.helpers.Constants;
-import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 import com.gruppe1.pem.challengeme.helpers.GridSpacingItemDecoration;
 
 import java.util.ArrayList;
@@ -61,9 +61,10 @@ public class CompareFragment extends Fragment {
    private CompareRecyclerListAdapter compareRecyclerListAdapter;
    private CompareRecyclerGridAdapter compareRecyclerGridAdapter;
 
-   public static CompareFragment newInstance(int page, String title) {
-      CompareFragment compareFragment = new CompareFragment();
-      return compareFragment;
+   private CompareDataSource compareDataSource;
+
+   public static CompareFragment newInstance() {
+      return new CompareFragment();
    }
 
    @Override
@@ -75,6 +76,8 @@ public class CompareFragment extends Fragment {
 
       ButterKnife.bind(this, rootView);
 
+      compareDataSource = new CompareDataSource(getActivity());
+
       noComparesText.setText(R.string.no_outfits);
 
       LinearLayoutManager linearLayoutManagerList =
@@ -84,7 +87,6 @@ public class CompareFragment extends Fragment {
       StaggeredGridLayoutManager gridLayoutManager =
             new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
       gridView.setLayoutManager(gridLayoutManager);
-      //      gridView.setHasFixedSize(true);
       int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
       gridView.addItemDecoration(new GridSpacingItemDecoration(2, spacingInPixels, false, 0));
 
@@ -234,7 +236,7 @@ public class CompareFragment extends Fragment {
     */
    private void initDataset() {
       mDataset.clear();
-      mDataset.addAll(Compare.geAllCompares(getActivity().getApplicationContext()));
+      mDataset.addAll(compareDataSource.getAllCompares());
       if (mDataset.size() > 0) {
          showNoComparesLayout(false);
       } else {
@@ -338,12 +340,7 @@ public class CompareFragment extends Fragment {
       selectedItem[1] = view;
 
       final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-      // Get the layout inflater
       LayoutInflater inflater = getActivity().getLayoutInflater();
-
-      // Inflate and set the layout for the dialog
-      // Pass null as the parent view because its going in the dialog layout
-
       View dialogView = inflater.inflate(R.layout.dialog_edit, parent, false);
       TextView headline = (TextView) dialogView.findViewById(R.id.dialog_headline);
       headline.setText(mDataset.get(position)
@@ -355,14 +352,7 @@ public class CompareFragment extends Fragment {
                public void onClick(DialogInterface dialog, int which) {
                   int compareId = (int) compareRecyclerListAdapter.getItemId((int) selectedItem[0]);
 
-                  DataBaseHelper db_helper =
-                        new DataBaseHelper(getActivity().getApplicationContext());
-                  db_helper.init();
-
-                  Compare deleteCompare =
-                        new Compare(getActivity().getApplicationContext(), compareId, db_helper);
-                  deleteCompare.delete();
-                  db_helper.close();
+                  compareDataSource.deleteCompare(compareId);
 
                   mDataset.remove(position);
                   mDataset.trimToSize();

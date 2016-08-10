@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,10 +27,10 @@ import com.gruppe1.pem.challengeme.ListItemIconName;
 import com.gruppe1.pem.challengeme.R;
 import com.gruppe1.pem.challengeme.adapters.DefaultRecyclerListAdapter;
 import com.gruppe1.pem.challengeme.helpers.Constants;
-import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
+import com.gruppe1.pem.challengeme.helpers.ItemDataSource;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -50,13 +51,11 @@ public class WishlistFragment extends Fragment {
    @Bind (R.id.noItemText)
    TextView noWishlistItemText;
 
-   DefaultRecyclerListAdapter defaultRecyclerListAdapter;
+   private DefaultRecyclerListAdapter defaultRecyclerListAdapter;
+   private ItemDataSource itemDataSource;
 
-   private DataBaseHelper db_helper;
-
-   public static WishlistFragment newInstance(int page, String title) {
-      WishlistFragment wishlistFragment = new WishlistFragment();
-      return wishlistFragment;
+   public static WishlistFragment newInstance() {
+      return new WishlistFragment();
    }
 
    @Override
@@ -67,8 +66,7 @@ public class WishlistFragment extends Fragment {
       View rootView = inflater.inflate(R.layout.default_recycler_view, container, false);
       ButterKnife.bind(this, rootView);
 
-      db_helper = new DataBaseHelper(getActivity());
-      db_helper.init();
+      itemDataSource = new ItemDataSource(getActivity());
 
       mDataset = new ArrayList<>();
 
@@ -158,11 +156,9 @@ public class WishlistFragment extends Fragment {
     * initializes the dataset
     */
    private void initDataset() {
-      //      mDataset = new ArrayList<>();
       mDataset.clear();
 
-      ArrayList<Item> allWishlistItems =
-            Item.getAllItems(getActivity().getApplicationContext(), true);
+      List<Item> allWishlistItems = itemDataSource.getAllWishlistItems();
 
       for (Item tmpItem : allWishlistItems) {
          int iconId = getResources().getIdentifier("kleiderbuegel", "drawable",
@@ -211,12 +207,12 @@ public class WishlistFragment extends Fragment {
       Intent intent = new Intent();
       intent.setClassName(getActivity().getPackageName(),
             getActivity().getPackageName() + ".views.CollectionItemsActivity");
-      ArrayList<Item> allWishlistItems =
-            Item.getAllItems(getActivity().getApplicationContext(), true);
+      List<Item> allWishlistItems = itemDataSource.getAllWishlistItems();
       intent.putExtra(Constants.EXTRA_CLICKED_ITEM_POSITION, position);
       Bundle b = new Bundle();
       b.putInt(Constants.EXTRA_ITEM_ID, itemid);
-      b.putParcelableArrayList(Constants.EXTRA_ITEM_COLLECTION, allWishlistItems);
+      b.putParcelableArrayList(Constants.EXTRA_ITEM_COLLECTION,
+            new ArrayList<Parcelable>(allWishlistItems));
       intent.putExtras(b);
       startActivityForResult(intent, 1);
    }
@@ -236,15 +232,12 @@ public class WishlistFragment extends Fragment {
       if (requestCode == 1 || requestCode == 0) {
          int itemId = data.getIntExtra(Constants.EXTRA_ITEM_ID, -1);
          if (itemId != -1) {
-            DataBaseHelper dbHelper = new DataBaseHelper(getActivity());
-            dbHelper.init();
-            Item item = new Item(getActivity(), itemId, dbHelper);
+            Item item = itemDataSource.getItem(itemId);
             int iconId = getResources().getIdentifier("kleiderbuegel", "drawable",
                   "com.gruppe1.pem.challengeme");
             mDataset.add(new ListItemIconName(getActivity(), "wishlist", item.getId(), iconId,
                   item.getName(), item.getImageFile()));
             defaultRecyclerListAdapter.notifyItemInserted(mDataset.size() - 1);
-            dbHelper.close();
          } else {
 
             initDataset();
@@ -266,12 +259,7 @@ public class WishlistFragment extends Fragment {
       selectedItem[1] = view;
 
       final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-      // Get the layout inflater
       LayoutInflater inflater = getActivity().getLayoutInflater();
-
-      // Inflate and set the layout for the dialog
-      // Pass null as the parent view because its going in the dialog layout
-
       View dialogView = inflater.inflate(R.layout.dialog_edit, parent, false);
       TextView headline = (TextView) dialogView.findViewById(R.id.dialog_headline);
       headline.setText(mDataset.get(position)
@@ -284,14 +272,7 @@ public class WishlistFragment extends Fragment {
                   int wishlistItemId =
                         (int) defaultRecyclerListAdapter.getItemId((int) selectedItem[0]);
 
-                  DataBaseHelper db_helper =
-                        new DataBaseHelper(getActivity().getApplicationContext());
-                  db_helper.init();
-
-                  Item deleteWishlistItem =
-                        new Item(getActivity().getApplicationContext(), wishlistItemId, db_helper);
-                  deleteWishlistItem.delete();
-                  db_helper.close();
+                  itemDataSource.deleteItem(wishlistItemId);
 
                   mDataset.remove(position);
                   mDataset.trimToSize();
@@ -303,25 +284,19 @@ public class WishlistFragment extends Fragment {
                   new DialogInterface.OnClickListener() {
                      @Override
                      public void onClick(DialogInterface dialogInterface, int i) {
-                        Item wishlistItem = new Item(getActivity(), mDataset.get(position)
-                              .getElementId(), getDb_helper());
+                        Item wishlistItem = itemDataSource.getItem(mDataset.get(position)
+                              .getElementId());
                         mDataset.remove(position);
                         mDataset.trimToSize();
                         defaultRecyclerListAdapter.notifyItemRemoved(position);
-                        defaultRecyclerListAdapter.notifyItemRangeChanged(position, mDataset.size());
-                        HashMap<String, String> itemAttributes = new HashMap<>();
-                        itemAttributes.put("name", wishlistItem.getName());
-                        itemAttributes.put("image_file", wishlistItem.getImageFile());
-                        itemAttributes.put("category_id", wishlistItem.getCategoryId() + "");
-                        itemAttributes.put("primary_color", wishlistItem.getPrimaryColorId() + "");
-                        itemAttributes.put("rating", wishlistItem.getRating() + "");
-                        if (wishlistItem.getIsWish() == 1) {
-                           itemAttributes.put("is_wish", "0");
-                        } else {
-                           itemAttributes.put("is_wish", "1");
+                        defaultRecyclerListAdapter.notifyItemRangeChanged(position,
+                              mDataset.size());
+                        int isWish = 0;
+                        if (wishlistItem.getIsWish() == 0) {
+                           isWish = 1;
                         }
-                        wishlistItem.edit(itemAttributes);
-                        wishlistItem.save();
+                        itemDataSource.editItemIsWishlist(mDataset.get(position)
+                              .getElementId(), isWish);
                      }
                   })
             .setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -333,19 +308,5 @@ public class WishlistFragment extends Fragment {
       builder.create()
             .show();
       return true;
-   }
-
-   /**
-    * Get the db_helper instance for this class
-    *
-    * @return DataBaseHelper instance
-    */
-   private DataBaseHelper getDb_helper() {
-      if (!db_helper.isOpen()) {
-         System.out.println("db helper was closed");
-         db_helper = new DataBaseHelper(getActivity());
-         db_helper.init();
-      }
-      return db_helper;
    }
 }

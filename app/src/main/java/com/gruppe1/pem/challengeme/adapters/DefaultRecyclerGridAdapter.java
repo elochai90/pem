@@ -19,13 +19,15 @@ import com.gruppe1.pem.challengeme.Color;
 import com.gruppe1.pem.challengeme.Item;
 import com.gruppe1.pem.challengeme.ListItemIconName;
 import com.gruppe1.pem.challengeme.R;
+import com.gruppe1.pem.challengeme.helpers.AttributeDataSource;
+import com.gruppe1.pem.challengeme.helpers.CategoryDataSource;
+import com.gruppe1.pem.challengeme.helpers.ColorDataSource;
 import com.gruppe1.pem.challengeme.helpers.ColorHelper;
-import com.gruppe1.pem.challengeme.helpers.Constants;
-import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
+import com.gruppe1.pem.challengeme.helpers.ItemDataSource;
 import com.gruppe1.pem.challengeme.helpers.PicassoSingleton;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -33,15 +35,13 @@ import butterknife.ButterKnife;
 /**
  * Array adapter to fill a default list view
  */
-public class DefaultRecyclerGridAdapter
-      extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class DefaultRecyclerGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
    private Context context;
    private int layoutResourceId;
    private int layoutResourceCategoryId;
    private ArrayList<ListItemIconName> data = new ArrayList<>();
    private boolean isCategory;
    private PicassoSingleton picassoSingleton;
-   private DataBaseHelper dbHelper;
 
    private View.OnClickListener onItemClickListener;
    private View.OnClickListener onIcMoreClickListener;
@@ -49,8 +49,8 @@ public class DefaultRecyclerGridAdapter
    private final int TYPE_CATEGORY = 0;
    private final int TYPE_ITEM = 1;
 
-   public DefaultRecyclerGridAdapter(Context context, int layoutResourceId, int layoutResourceCategoryId,
-         ArrayList<ListItemIconName> data, boolean isCategory) {
+   public DefaultRecyclerGridAdapter(Context context, int layoutResourceId,
+         int layoutResourceCategoryId, ArrayList<ListItemIconName> data, boolean isCategory) {
       super();
       this.layoutResourceId = layoutResourceId;
       this.layoutResourceCategoryId = layoutResourceCategoryId;
@@ -58,8 +58,6 @@ public class DefaultRecyclerGridAdapter
       this.data = data;
       this.isCategory = isCategory;
       this.picassoSingleton = PicassoSingleton.getInstance(context);
-      this.dbHelper = new DataBaseHelper(context);
-      this.dbHelper.init();
    }
 
    public void setOnItemClickListener(View.OnClickListener onClickListener) {
@@ -73,7 +71,7 @@ public class DefaultRecyclerGridAdapter
    @Override
    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
       RecyclerView.ViewHolder vh;
-      if(viewType == TYPE_CATEGORY) {
+      if (viewType == TYPE_CATEGORY) {
          View v = LayoutInflater.from(parent.getContext())
                .inflate(layoutResourceCategoryId, parent, false);
          vh = new ViewHolderCategory(v);
@@ -87,47 +85,58 @@ public class DefaultRecyclerGridAdapter
 
    @Override
    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+      CategoryDataSource categoryDataSource = new CategoryDataSource(context);
+      ItemDataSource itemDataSource = new ItemDataSource(context);
+      ColorDataSource colorDataSource = new ColorDataSource(context);
+      AttributeDataSource attributeDataSource = new AttributeDataSource(context);
+
       final ListItemIconName item = data.get(position);
       int viewType = viewHolder.getItemViewType();
 
-      if(viewType == TYPE_CATEGORY) {
+      if (viewType == TYPE_CATEGORY) {
          ViewHolderCategory holder = (ViewHolderCategory) viewHolder;
          holder.imageTitle.setText(item.getName());
-         Category category = new Category(this.context, item.getElementId(), this.dbHelper);
+         Category category = categoryDataSource.getCategory(item.getElementId());
 
          int colorHex = ColorHelper.calculateMinDarkColor(category.getColor());
-         holder.image.setImageDrawable(ColorHelper.filterIconColor(context, category.getIcon(), colorHex));
+         holder.image.setImageDrawable(
+               ColorHelper.filterIconColor(context, category.getIcon(), colorHex));
          holder.textContainer.setBackgroundColor(colorHex);
          holder.itemView.setBackgroundColor(colorHex);
-         holder.rightTextView.setText(
-               String.valueOf(Item.getItemsCountByCategoryId(context, item.getElementId(), false)));
+         holder.rightTextView.setText(String.valueOf(
+               itemDataSource.getItemsCountByCategoryId(item.getElementId(), false)));
          holder.moreButton.setTag(position);
          holder.itemView.setOnClickListener(onItemClickListener);
          holder.moreButton.setOnClickListener(onIcMoreClickListener);
-      } else if(viewType == TYPE_ITEM) {
+      } else if (viewType == TYPE_ITEM) {
          ViewHolder holder = (ViewHolder) viewHolder;
          holder.imageTitle.setText(item.getName());
-         dbHelper.setTable(Constants.ITEMS_DB_TABLE);
-         Item listItem = new Item(context, item.getElementId(), dbHelper);
-         dbHelper.setTable(Constants.COLORS_DB_TABLE);
-         Color attributeColor = new Color(context, listItem.getPrimaryColorId(), dbHelper);
-         Category parentCategory = new Category(context, listItem.getCategoryId(), dbHelper);
-         ArrayList<Attribute> allAttributes =
-               Attribute.getAttributesByItemId(context, item.getElementId());
-         if(item.getItemFile() == null) {
-            int colorHex = ColorHelper.calculateMinDarkColor(parentCategory.getColor());
-            holder.image.setImageDrawable(ColorHelper.filterIconColor(context, parentCategory.getIcon(), colorHex));
+         Item listItem = itemDataSource.getItem(item.getElementId());
+         Color attributeColor = colorDataSource.getColor(listItem.getPrimaryColorId());
+         Category parentCategory = categoryDataSource.getCategory(listItem.getCategoryId());
+         List<Attribute> allAttributes =
+               attributeDataSource.getAttributesByItemId(item.getElementId());
+         if (item.getItemFile() == null || item.getItemFile()
+               .isEmpty()) {
+            int exactColor = Integer.parseInt(
+                  attributeDataSource.getAttributeExactColorByItemId(listItem.getId())
+                        .getValue()
+                        .toString());
+            int colorHex = ColorHelper.calculateMinDarkColor(exactColor);
+            holder.image.setImageDrawable(
+                  ColorHelper.filterIconColor(context, parentCategory.getIcon(), colorHex));
          } else {
             int colorHex = ColorHelper.calculateMinDarkColor(parentCategory.getColor());
-            Drawable icon = ColorHelper.filterIconColor(context, parentCategory.getIcon(), colorHex);
+            Drawable icon =
+                  ColorHelper.filterIconColor(context, parentCategory.getIcon(), colorHex);
             picassoSingleton.setImageFit(item.getItemFile(), holder.image, icon, icon);
          }
          String secondLineText = "";
          int attributesToShowCount = 0;
          int colorHex = -1;
-         if (!attributeColor.getName()
+         if (!attributeColor.getName(context)
                .equals("")) {
-            secondLineText += attributeColor.getName() + "   ";
+            secondLineText += attributeColor.getName(context) + "   ";
             attributesToShowCount++;
          }
          for (int i = 0; i < allAttributes.size(); i++) {
@@ -143,20 +152,24 @@ public class DefaultRecyclerGridAdapter
                      .toString() + "   ";
                attributesToShowCount++;
             }
-            if(allAttributes.get(i).getAttributeType().getValueType() == 3) {
-               colorHex = Integer.parseInt(allAttributes.get(i).getValue().toString());
+            if (allAttributes.get(i)
+                  .getAttributeType()
+                  .getValueType() == 3) {
+               colorHex = Integer.parseInt(allAttributes.get(i)
+                     .getValue()
+                     .toString());
             }
          }
          holder.secondLineTextView.setText(secondLineText);
          holder.rightTextView.setVisibility(View.GONE);
 
-         if(listItem.getRating() > 0.0f) {
+         if (listItem.getRating() > 0.0f) {
             holder.listItemRatingBar.setRating(listItem.getRating());
          } else {
             holder.listItemRatingBar.setVisibility(View.GONE);
          }
-         if(colorHex == -1) {
-            Color color = new Color(context, listItem.getPrimaryColorId(), dbHelper);
+         if (colorHex == -1) {
+            Color color = colorDataSource.getColor(listItem.getPrimaryColorId());
             colorHex = android.graphics.Color.parseColor(color.getHexColor());
          }
          colorHex = ColorHelper.calculateMinDarkColor(colorHex);
@@ -164,13 +177,13 @@ public class DefaultRecyclerGridAdapter
          holder.moreButton.setTag(position);
          holder.itemView.setOnClickListener(onItemClickListener);
          holder.moreButton.setOnClickListener(onIcMoreClickListener);
-
       }
    }
 
    @Override
    public int getItemViewType(int position) {
-      if(data.get(position).isCategoryElement() || isCategory) {
+      if (data.get(position)
+            .isCategoryElement() || isCategory) {
          return TYPE_CATEGORY;
       } else {
          return TYPE_ITEM;
@@ -194,23 +207,23 @@ public class DefaultRecyclerGridAdapter
 
    public static class ViewHolder extends RecyclerView.ViewHolder {
       CardView itemView;
-      @Bind(R.id.textView)
+      @Bind (R.id.textView)
       TextView imageTitle;
-      @Bind(R.id.rightTextView)
+      @Bind (R.id.rightTextView)
       TextView rightTextView;
-      @Bind(R.id.secondLineTextView)
+      @Bind (R.id.secondLineTextView)
       TextView secondLineTextView;
-      @Bind(R.id.second_line)
+      @Bind (R.id.second_line)
       LinearLayout secondLine;
-      @Bind(R.id.imageView)
+      @Bind (R.id.imageView)
       ImageView image;
-      @Bind(R.id.imageViewSelectableLayer)
+      @Bind (R.id.imageViewSelectableLayer)
       ImageView imageViewSelectableLayer;
-      @Bind(R.id.ic_more)
+      @Bind (R.id.ic_more)
       ImageView moreButton;
-      @Bind(R.id.listItemRatingBar)
+      @Bind (R.id.listItemRatingBar)
       RatingBar listItemRatingBar;
-      @Bind(R.id.text_container)
+      @Bind (R.id.text_container)
       RelativeLayout textContainer;
 
       public ViewHolder(View itemView) {
@@ -222,15 +235,15 @@ public class DefaultRecyclerGridAdapter
 
    public static class ViewHolderCategory extends RecyclerView.ViewHolder {
       CardView itemView;
-      @Bind(R.id.textView)
+      @Bind (R.id.textView)
       TextView imageTitle;
-      @Bind(R.id.rightTextView)
+      @Bind (R.id.rightTextView)
       TextView rightTextView;
-      @Bind(R.id.imageView)
+      @Bind (R.id.imageView)
       ImageView image;
-      @Bind(R.id.ic_more)
+      @Bind (R.id.ic_more)
       ImageView moreButton;
-      @Bind(R.id.text_container)
+      @Bind (R.id.text_container)
       RelativeLayout textContainer;
 
       public ViewHolderCategory(View itemView) {

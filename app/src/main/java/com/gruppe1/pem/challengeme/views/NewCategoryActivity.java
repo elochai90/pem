@@ -15,22 +15,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.gruppe1.pem.challengeme.Category;
 import com.gruppe1.pem.challengeme.DefaultSize;
 import com.gruppe1.pem.challengeme.R;
+import com.gruppe1.pem.challengeme.helpers.CategoryDataSource;
 import com.gruppe1.pem.challengeme.helpers.CategoryEditText;
-import com.gruppe1.pem.challengeme.helpers.ColorEditText;
 import com.gruppe1.pem.challengeme.helpers.ColorHelper;
 import com.gruppe1.pem.challengeme.helpers.Constants;
-import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 import com.gruppe1.pem.challengeme.helpers.DefaultSizesEditText;
 import com.gruppe1.pem.challengeme.helpers.ExactColorEditText;
 import com.gruppe1.pem.challengeme.helpers.IconEditText;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -70,7 +69,9 @@ public class NewCategoryActivity extends AppCompatActivity {
 
    private ArrayList<DefaultSize> defaultSizesArray;
    private ArrayList<String> iconsArray;
-   private ArrayList<Category> categoryArray;
+   private List<Category> categoryArray;
+
+   private CategoryDataSource categoryDataSource;
 
    @Override
    protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +83,8 @@ public class NewCategoryActivity extends AppCompatActivity {
       extras = getIntent().getExtras();
 
       sharedPreferences = getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
+
+      categoryDataSource = new CategoryDataSource(this);
 
       categoryId = -1;
       categoryColorHex = -1;
@@ -102,22 +105,15 @@ public class NewCategoryActivity extends AppCompatActivity {
             categoryId = extras.getInt(Constants.EXTRA_CATEGORY_ID);
          } else if (extras.getInt(Constants.EXTRA_PARENT_CATEGORY_ID) != 0) {
             int parentCategoryId = extras.getInt(Constants.EXTRA_PARENT_CATEGORY_ID);
-            DataBaseHelper dbHelper = new DataBaseHelper(getApplicationContext());
-            dbHelper.init();
-            parentCategory = new Category(this, parentCategoryId, dbHelper);
-            dbHelper.close();
+            parentCategory = categoryDataSource.getCategory(parentCategoryId);
          }
       }
 
       if (categoryId >= 0) {
-         DataBaseHelper dbHelper = new DataBaseHelper(getApplicationContext());
-         dbHelper.init();
-         Category editCategory = new Category(getApplicationContext(), categoryId, dbHelper);
-         Category parentCategory =
-               new Category(getApplicationContext(), editCategory.getParentCategoryId(), dbHelper);
+         Category editCategory = categoryDataSource.getCategory(categoryId);
          getSupportActionBar().setTitle(
-               getString(R.string.title_edit_category_activity) + " " + editCategory.getName());
-         newCategory_name.setText(editCategory.getName());
+               getString(R.string.title_edit_category_activity) + " " + editCategory.getName(this));
+         newCategory_name.setText(editCategory.getName(this));
          categoryColorHex = Integer.parseInt(editCategory.getColor(), 16) + 0xFF000000;
          categoryColor.setExactColorId(categoryColorHex);
          categoryIcon.setSelection(getIconsArray().indexOf(editCategory.getIcon()));
@@ -127,8 +123,10 @@ public class NewCategoryActivity extends AppCompatActivity {
                new DefaultSize(defaultSizeTypeString,
                      sharedPreferences.getString(defaultSizeTypeString, "")));
          categoryDefaultSize.setSelection(indexOfDefaultSize);
-         categoryParent.setSelection(getCategoryArray().indexOf(parentCategory));
-         dbHelper.close();
+         if (editCategory.getParentCategoryId() > 0) {
+            parentCategory = categoryDataSource.getCategory(editCategory.getParentCategoryId());
+            categoryParent.setSelection(getCategoryArray().indexOf(parentCategory));
+         }
          getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
       } else if (parentCategory != null) {
          categoryParent.setSelection(getCategoryArray().indexOf(parentCategory));
@@ -147,11 +145,8 @@ public class NewCategoryActivity extends AppCompatActivity {
    }
 
    private void setupCategoryParentTextField() {
-      ArrayList<Category> allCategories = getCategoryArray();
-      DataBaseHelper dbHelper = new DataBaseHelper(getApplicationContext());
-      dbHelper.init();
-      categoryParent.setItems(this, dbHelper, allCategories);
-      dbHelper.close();
+      List<Category> allCategories = getCategoryArray();
+      categoryParent.setItems(this, allCategories);
       categoryParent.setOnItemSelectedListener(new CategoryEditText.OnItemSelectedListener() {
          @Override
          public void onItemSelectedListener(Category item, int selectedIndex) {
@@ -170,8 +165,8 @@ public class NewCategoryActivity extends AppCompatActivity {
       });
    }
 
-   private ArrayList<Category> getCategoryArray() {
-      categoryArray = Category.getAllCategories(this);
+   private List<Category> getCategoryArray() {
+      categoryArray = categoryDataSource.getAllCategories();
       return categoryArray;
    }
 
@@ -316,7 +311,6 @@ public class NewCategoryActivity extends AppCompatActivity {
       return true;
    }
 
-
    private boolean validateExactColor() {
       if (categoryColor.getExactColor() == -1) {
          attrExactColorLayout.setError(getString(R.string.category_color_error));
@@ -328,39 +322,21 @@ public class NewCategoryActivity extends AppCompatActivity {
       return true;
    }
 
-
    /**
     * creates and saves the new category
     */
    private void saveNewCategory() {
-      DataBaseHelper db_helper = new DataBaseHelper(getApplicationContext());
-      db_helper.init();
-
-      Category editCategory = new Category(getApplicationContext(), categoryId, db_helper);
-      editCategory.setNameEn(newCategory_name.getText()
-            .toString());
-      editCategory.setNameDe(newCategory_name.getText()
-            .toString());
-      editCategory.setDefaultSizeType(categoryDefaultSize.getSelectedItemPosition() - 1);
-      editCategory.setColor(String.format("%06X", (0xFFFFFF & categoryColor.getExactColor())));
-      if (parentCategory == null) {
-         editCategory.setParentCategoryId(-1);
-      } else {
-         editCategory.setParentCategoryId(parentCategory.getId());
+      String name = newCategory_name.getText()
+            .toString();
+      int defaultSizeType = categoryDefaultSize.getSelectedItemPosition() - 1;
+      String color = String.format("%06X", (0xFFFFFF & categoryColor.getExactColor()));
+      int parentCategoryId = -1;
+      if (parentCategory != null) {
+         parentCategoryId = parentCategory.getId();
       }
-      editCategory.setIcon(categoryIcon.getSelectedItem());
-      editCategory.save();
-
-      db_helper.close();
-
-      // sending new Item back to CategoriesFragment for actualizing list view
-      //      Intent i = new Intent();
-      //      i.putExtra("categoryName", editCategory.getName());
-      //      i.putExtra("defaultSize", editCategory.getDefaultSizeType());
-      //      i.putExtra("icon", editCategory.getIcon());
-      //      i.putExtra("categoryId", editCategory.getId());
-      //      i.putExtra("categoryParentId", editCategory.getParentCategoryId());
-      //      i.putExtra("color", editCategory.getColor());
+      String icon = categoryIcon.getSelectedItem();
+      categoryDataSource.editCategory(categoryId, name, name, parentCategoryId, defaultSizeType,
+            icon, color);
 
       setResult(Activity.RESULT_OK);
       this.finish();
@@ -369,6 +345,9 @@ public class NewCategoryActivity extends AppCompatActivity {
    @Override
    public boolean onOptionsItemSelected(MenuItem item) {
       switch (item.getItemId()) {
+         case android.R.id.home:
+            onBackPressed();
+            return true;
          case R.id.save:
             submitForm();
             return true;

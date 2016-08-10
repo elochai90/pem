@@ -21,6 +21,7 @@ import com.github.clans.fab.FloatingActionMenu;
 import com.gruppe1.pem.challengeme.R;
 import com.gruppe1.pem.challengeme.adapters.ViewPagerAdapter;
 import com.gruppe1.pem.challengeme.helpers.Constants;
+import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 import com.gruppe1.pem.challengeme.helpers.DefaultSetup;
 
 import java.util.Locale;
@@ -30,30 +31,28 @@ import butterknife.ButterKnife;
 
 public class TabsFragmentActivity extends ActionBarActivity {
 
-   private String mTitle;
    private Locale myLocale;
 
-   @Bind(R.id.appBar)
+   @Bind (R.id.appBar)
    AppBarLayout appBarLayout;
-   @Bind(R.id.pagerMainViews)
+   @Bind (R.id.pagerMainViews)
    ViewPager mainViewsPager;
-   @Bind(R.id.tabLayout)
+   @Bind (R.id.tabLayout)
    TabLayout tabLayout;
-   @Bind(R.id.toolbar)
+   @Bind (R.id.toolbar)
    Toolbar toolbar;
-   @Bind(R.id.menu)
+   @Bind (R.id.menu)
    FloatingActionMenu menu;
-   @Bind(R.id.add_item)
+   @Bind (R.id.add_item)
    FloatingActionButton fab_add_item;
-   @Bind(R.id.add_category)
+   @Bind (R.id.add_category)
    FloatingActionButton fab_add_category;
-   @Bind(R.id.add_wishlist_item)
+   @Bind (R.id.add_wishlist_item)
    FloatingActionButton fab_add_wishlist_item;
-   @Bind(R.id.add_compare)
+   @Bind (R.id.add_compare)
    FloatingActionButton fab_add_compare;
 
    private ViewPagerAdapter viewPagerAdapter;
-
 
    private void setupToolbar() {
       setSupportActionBar(toolbar);
@@ -72,20 +71,17 @@ public class TabsFragmentActivity extends ActionBarActivity {
       checkFirstDBInit();
 
       setupToolbar();
-
       setupFloatingActionMenu();
-
-      mTitle = getString(R.string.app_name);
 
       setupViewPager(mainViewsPager);
       tabLayout.setupWithViewPager(mainViewsPager);
 
       if (getSupportActionBar() != null) {
-         getSupportActionBar().setTitle(mTitle);
+         getSupportActionBar().setTitle(getString(R.string.app_name));
       }
 
       // Create a tab listener that is called when the user changes tabs.
-      tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+      tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
          @Override
          public void onTabSelected(TabLayout.Tab tab) {
             onTabClickedSwitched(tab);
@@ -102,7 +98,7 @@ public class TabsFragmentActivity extends ActionBarActivity {
          }
       });
 
-      mainViewsPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+      mainViewsPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
          @Override
          public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
          }
@@ -128,7 +124,7 @@ public class TabsFragmentActivity extends ActionBarActivity {
       if (firstDbInit) {
          new DefaultSetup(getApplicationContext());
          editor.putBoolean(Constants.KEY_FIRST_DB_INIT, false);
-         editor.commit();
+         editor.apply();
       }
    }
 
@@ -153,7 +149,6 @@ public class TabsFragmentActivity extends ActionBarActivity {
       viewPagerAdapter = new ViewPagerAdapter(this, getSupportFragmentManager());
       viewPager.setAdapter(viewPagerAdapter);
       viewPagerAdapter.notifyDataSetChanged();
-
    }
 
    public void loadLocale() {
@@ -287,6 +282,7 @@ public class TabsFragmentActivity extends ActionBarActivity {
             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
                public void onClick(DialogInterface arg0, int arg1) {
+                  DataBaseHelper.closeDataBaseInstance();
                   TabsFragmentActivity.super.onBackPressed();
                }
             })
@@ -298,15 +294,21 @@ public class TabsFragmentActivity extends ActionBarActivity {
    @Override
    public void onActivityResult(int requestCode, int resultCode, Intent data) {
       super.onActivityResult(requestCode, resultCode, data);
-      if (viewPagerAdapter.getItem(0).getActivity() != null) {
-         viewPagerAdapter.getItem(0).onActivityResult(requestCode, resultCode, data);
+      if (viewPagerAdapter.getItem(0)
+            .getActivity() != null) {
+         viewPagerAdapter.getItem(0)
+               .onActivityResult(requestCode, resultCode, data);
       }
-      if (viewPagerAdapter.getItem(1).getActivity() != null) {
-         viewPagerAdapter.getItem(1).onActivityResult(requestCode, resultCode, data);
+      if (viewPagerAdapter.getItem(1)
+            .getActivity() != null) {
+         viewPagerAdapter.getItem(1)
+               .onActivityResult(requestCode, resultCode, data);
       }
-//      if (wishlistFragment.getActivity() != null) {
-         viewPagerAdapter.getItem(2).onActivityResult(requestCode, resultCode, data);
-//      }
+      if (viewPagerAdapter.getItem(1)
+            .getActivity() != null) {
+         viewPagerAdapter.getItem(2)
+               .onActivityResult(requestCode, resultCode, data);
+      }
    }
 }
 

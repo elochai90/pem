@@ -28,7 +28,6 @@ public class CategoryEditText extends TextInputEditText {
    int selectedItemPosition = -1;
    private Activity activity;
    private CategoriesGridOverlayAdapter gridCateoriesAdapter;
-   private DataBaseHelper dbHelper;
    private AlertDialog categoriesAlertDialog;
 
    OnItemSelectedListener onItemSelectedListener;
@@ -58,9 +57,8 @@ public class CategoryEditText extends TextInputEditText {
       setClickable(true);
    }
 
-   public void setItems(Activity activity, DataBaseHelper dbHelper, ArrayList<Category> items) {
+   public void setItems(Activity activity, List<Category> items) {
       this.activity = activity;
-      this.dbHelper = dbHelper;
       this.categories = items;
 
       configureOnClickListener();
@@ -71,9 +69,8 @@ public class CategoryEditText extends TextInputEditText {
       for (Category tmpCat : categories) {
          int iconId = getResources().getIdentifier(tmpCat.getIcon(), "drawable",
                "com.gruppe1.pem.challengeme");
-         catArray.add(
-               new ListItemIconName(activity, "category", tmpCat.getId(), iconId, tmpCat.getName(),
-                     null));
+         catArray.add(new ListItemIconName(activity, "category", tmpCat.getId(), iconId,
+               tmpCat.getName(activity), null));
       }
       gridCateoriesAdapter = new CategoriesGridOverlayAdapter(activity, catArray);
 
@@ -114,7 +111,7 @@ public class CategoryEditText extends TextInputEditText {
       if (index >= 0) {
          selectedItemPosition = index;
          setText(categories.get(index)
-               .getName());
+               .getName(activity));
 
          if (onItemSelectedListener != null) {
             onItemSelectedListener.onItemSelectedListener(categories.get(index), index);

@@ -11,14 +11,14 @@ import android.preference.MultiSelectListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.support.v7.widget.Toolbar;
 
 import com.gruppe1.pem.challengeme.Color;
 import com.gruppe1.pem.challengeme.R;
+import com.gruppe1.pem.challengeme.helpers.ColorDataSource;
 import com.gruppe1.pem.challengeme.helpers.Constants;
 
-import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
@@ -28,12 +28,15 @@ public class SettingsFragment extends PreferenceFragment {
    private static SharedPreferences.Editor editor;
    private Locale myLocale;
 
+   private ColorDataSource colorDataSource;
+
    @Override
    public void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       sharedPreferences =
             getActivity().getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
       editor = sharedPreferences.edit();
+      colorDataSource = new ColorDataSource(getActivity());
       setupSimplePreferencesScreen();
    }
 
@@ -48,11 +51,11 @@ public class SettingsFragment extends PreferenceFragment {
 
       addPreferencesFromResource(R.xml.pref_general);
 
-      ArrayList<Color> allColors = com.gruppe1.pem.challengeme.Color.getAllColors(getActivity());
+      List<Color> allColors = colorDataSource.getAllColors();
       CharSequence[] allColorsChars = new CharSequence[allColors.size()];
       for (int i = 0; i < allColors.size(); i++) {
          allColorsChars[i] = allColors.get(i)
-               .getName();
+               .getName(getActivity());
       }
       MultiSelectListPreference favColorPreferences =
             (MultiSelectListPreference) findPreference("favorite_colors");

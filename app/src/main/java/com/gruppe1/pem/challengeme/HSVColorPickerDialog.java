@@ -309,7 +309,7 @@ public class HSVColorPickerDialog extends AlertDialog {
 
          int width, height;
          /*
-			 * Make the view quadratic, with height and width equal and as large as possible
+          * Make the view quadratic, with height and width equal and as large as possible
 			 */
          width = height = Math.min(maxWidth, maxHeight);
 

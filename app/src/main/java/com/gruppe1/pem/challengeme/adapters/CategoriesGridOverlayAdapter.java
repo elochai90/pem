@@ -5,15 +5,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.gruppe1.pem.challengeme.Category;
 import com.gruppe1.pem.challengeme.ListItemIconName;
 import com.gruppe1.pem.challengeme.R;
 import com.gruppe1.pem.challengeme.SquareImageView;
+import com.gruppe1.pem.challengeme.helpers.CategoryDataSource;
 import com.gruppe1.pem.challengeme.helpers.ColorHelper;
-import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 
 import java.util.ArrayList;
 
@@ -27,22 +26,18 @@ public class CategoriesGridOverlayAdapter
       extends RecyclerView.Adapter<CategoriesGridOverlayAdapter.ViewHolder> {
    private Context context;
    private ArrayList<ListItemIconName> data = new ArrayList<>();
-   private DataBaseHelper dbHelper;
    private View.OnClickListener onClickListener;
 
    /**
     * Constructor of the CategoriesGridOverlayAdapter
     *
-    * @param context          the context
-    * @param data             the data to fill the overlay grid with
+    * @param context the context
+    * @param data    the data to fill the overlay grid with
     */
-   public CategoriesGridOverlayAdapter(Context context,
-         ArrayList<ListItemIconName> data) {
+   public CategoriesGridOverlayAdapter(Context context, ArrayList<ListItemIconName> data) {
       super();
       this.context = context;
       this.data = data;
-      this.dbHelper = new DataBaseHelper(context);
-      this.dbHelper.init();
    }
 
    public void setOnItemClickListener(View.OnClickListener onClickListener) {
@@ -59,15 +54,10 @@ public class CategoriesGridOverlayAdapter
 
    @Override
    public void onBindViewHolder(ViewHolder holder, int position) {
-      Category category = new Category(this.context, data.get(position)
-            .getElementId(), this.dbHelper);
-      //      int icon = this.context.getResources()
-      //            .getIdentifier(category.getIcon(), "drawable", "com.gruppe1.pem.challengeme");
-
-      //      int colorHex = ColorHelper.calculateMinDarkColor(category.getColor());
-      //      holder.image.setImageDrawable(ColorHelper.filterIconColor(context, category.getIcon
-      // (), colorHex));
-      String categoryName = category.getName();
+      CategoryDataSource categoryDataSource = new CategoryDataSource(context);
+      Category category = categoryDataSource.getCategory(data.get(position)
+            .getElementId());
+      String categoryName = category.getName(context);
       holder.textView.setText(categoryName);
       int colorHex = ColorHelper.calculateMinDarkColor(category.getColor());
       holder.textView.setBackgroundColor(colorHex);

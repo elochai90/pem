@@ -5,7 +5,6 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.LayerDrawable;
@@ -13,7 +12,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -32,12 +30,15 @@ import com.gruppe1.pem.challengeme.Item;
 import com.gruppe1.pem.challengeme.ListItemIconName;
 import com.gruppe1.pem.challengeme.R;
 import com.gruppe1.pem.challengeme.adapters.DefaultRecyclerListAdapter;
+import com.gruppe1.pem.challengeme.helpers.CategoryDataSource;
+import com.gruppe1.pem.challengeme.helpers.ColorDataSource;
 import com.gruppe1.pem.challengeme.helpers.ColorHelper;
 import com.gruppe1.pem.challengeme.helpers.Constants;
-import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
-import com.gruppe1.pem.challengeme.helpers.GridSpacingItemDecoration;
+import com.gruppe1.pem.challengeme.helpers.ItemDataSource;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -49,39 +50,39 @@ public class SearchResultsActivity extends AppCompatActivity {
 
    private ArrayList<ListItemIconName> mDataset;
 
-   @Bind(R.id.noItemLayout)
+   @Bind (R.id.noItemLayout)
    RelativeLayout noItemLayout;
-   @Bind(R.id.noItemText)
+   @Bind (R.id.noItemText)
    TextView noItemText;
-   @Bind(R.id.noItemArrow)
+   @Bind (R.id.noItemArrow)
    ImageView noItemArrow;
-   @Bind(R.id.listView)
+   @Bind (R.id.listView)
    RecyclerView listView;
-   @Bind(R.id.gridView)
+   @Bind (R.id.gridView)
    RecyclerView gridView;
-   @Bind(R.id.filterColorLayout)
+   @Bind (R.id.filterColorLayout)
    LinearLayout filterColorLayout;
-   @Bind(R.id.filterColorLayoutFirstLine)
+   @Bind (R.id.filterColorLayoutFirstLine)
    LinearLayout filterColorLayoutFirstLine;
-   @Bind(R.id.filterColorLayoutSecondLine)
+   @Bind (R.id.filterColorLayoutSecondLine)
    LinearLayout filterColorLayoutSecondLine;
-   @Bind(R.id.filterCategoryLayout)
+   @Bind (R.id.filterCategoryLayout)
    LinearLayout filterCategoryLayout;
-   @Bind(R.id.filterCategoryLayoutFirstLine)
+   @Bind (R.id.filterCategoryLayoutFirstLine)
    LinearLayout filterCategoryLayoutFirstLine;
-   @Bind(R.id.filterCategoryLayoutSecondLine)
+   @Bind (R.id.filterCategoryLayoutSecondLine)
    LinearLayout filterCategoryLayoutSecondLine;
-   @Bind(R.id.filterRatingLayout)
+   @Bind (R.id.filterRatingLayout)
    LinearLayout filterRatingLayout;
-   @Bind(R.id.filterWishlist)
+   @Bind (R.id.filterWishlist)
    ImageButton filterWishlist;
-   @Bind(R.id.filterRating)
+   @Bind (R.id.filterRating)
    ImageButton filterRating;
-   @Bind(R.id.filterColor)
+   @Bind (R.id.filterColor)
    ImageButton filterColor;
-   @Bind(R.id.filterCategory)
+   @Bind (R.id.filterCategory)
    ImageButton filterCategory;
-   @Bind(R.id.toolbar)
+   @Bind (R.id.toolbar)
    Toolbar toolbar;
 
    private DefaultRecyclerListAdapter defaultRecyclerListAdapter;
@@ -93,12 +94,12 @@ public class SearchResultsActivity extends AppCompatActivity {
    private boolean filterCategoryActivated;
 
    private ArrayList<Integer> filterColorIds;
-   private ArrayList<Integer> filterCategoryIds;
+   private HashSet<Integer> filterCategoryIds;
    private int filterRatingCount;
 
-   private SharedPreferences.Editor editor;
-   private SharedPreferences sharedPreferences;
-
+   private ItemDataSource itemDataSource;
+   private CategoryDataSource categoryDataSource;
+   private ColorDataSource colorDataSource;
 
    @Override
    protected void onCreate(Bundle savedInstanceState) {
@@ -106,20 +107,18 @@ public class SearchResultsActivity extends AppCompatActivity {
       setContentView(R.layout.activity_search_results);
       ButterKnife.bind(this);
 
-      sharedPreferences = getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
-      editor = sharedPreferences.edit();
+      itemDataSource = new ItemDataSource(this);
+      categoryDataSource = new CategoryDataSource(this);
+      colorDataSource = new ColorDataSource(this);
 
       setupToolbar();
 
-      DataBaseHelper db_helper = new DataBaseHelper(this);
-      db_helper.init();
-      db_helper.close();
       mDataset = new ArrayList<>();
       query = "";
       filterWishlistActivated = false;
       filterRatingCount = -1;
       filterColorIds = new ArrayList<>();
-      filterCategoryIds = new ArrayList<>();
+      filterCategoryIds = new HashSet<>();
 
       defaultRecyclerListAdapter = new DefaultRecyclerListAdapter(this, R.layout.list_item_default,
             R.layout.list_item_category, mDataset, false, false);
@@ -129,14 +128,14 @@ public class SearchResultsActivity extends AppCompatActivity {
             searchResultsActivityOnItemClick(v, listView.getChildPosition(v));
          }
       });
-      defaultRecyclerListAdapter.setOnIcMoreClickListener(new DefaultRecyclerListAdapter.OnIcMoreClickListener() {
+      defaultRecyclerListAdapter.setOnIcMoreClickListener(
+            new DefaultRecyclerListAdapter.OnIcMoreClickListener() {
 
-         @Override
-         public void onClick(View view, ListItemIconName item) {
-            searchResultsActivityOnIcMoreClick(listView, view, mDataset.indexOf(item));
-
-         }
-      });
+               @Override
+               public void onClick(View view, ListItemIconName item) {
+                  searchResultsActivityOnIcMoreClick(listView, view, mDataset.indexOf(item));
+               }
+            });
 
       LinearLayoutManager linearLayoutManagerList = new LinearLayoutManager(getBaseContext());
       listView.setLayoutManager(linearLayoutManagerList);
@@ -184,8 +183,8 @@ public class SearchResultsActivity extends AppCompatActivity {
       for (int i = 0; i < filterCategoryLayoutFirstLine.getChildCount(); i++) {
          ImageButton tmpCategoryButton = (ImageButton) filterCategoryLayoutFirstLine.getChildAt(i);
          String tmpIcon = (String) tmpCategoryButton.getTag();
-         int iconId = getResources().getIdentifier(tmpIcon, "drawable",
-               "com.gruppe1.pem.challengeme");
+         int iconId =
+               getResources().getIdentifier(tmpIcon, "drawable", "com.gruppe1.pem.challengeme");
          LayerDrawable newDrawableIcon =
                (LayerDrawable) getDrawable(R.drawable.icon_category_circle);
          newDrawableIcon.setDrawableByLayerId(R.id.circle_icon, getDrawable(iconId));
@@ -194,8 +193,8 @@ public class SearchResultsActivity extends AppCompatActivity {
       for (int i = 0; i < filterCategoryLayoutSecondLine.getChildCount(); i++) {
          ImageButton tmpCategoryButton = (ImageButton) filterCategoryLayoutSecondLine.getChildAt(i);
          String tmpIcon = (String) tmpCategoryButton.getTag();
-         int iconId = getResources().getIdentifier(tmpIcon, "drawable",
-               "com.gruppe1.pem.challengeme");
+         int iconId =
+               getResources().getIdentifier(tmpIcon, "drawable", "com.gruppe1.pem.challengeme");
          LayerDrawable newDrawableIcon =
                (LayerDrawable) getDrawable(R.drawable.icon_category_circle);
          newDrawableIcon.setDrawableByLayerId(R.id.circle_icon, getDrawable(iconId));
@@ -208,7 +207,7 @@ public class SearchResultsActivity extends AppCompatActivity {
             getResources().getDisplayMetrics());
       int colorIconMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5,
             getResources().getDisplayMetrics());
-      ArrayList<Category> allCategories = Category.getAllCategories(getApplicationContext());
+      List<Category> allCategories = categoryDataSource.getAllBaseCategories();
       int positionCategory = 0;
       for (final Category tmpCat : allCategories) {
          ImageButton tmpCategoryButton = new ImageButton(this);
@@ -229,7 +228,10 @@ public class SearchResultsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                if (filterCategoryIds.contains(tmpCat.getId())) {
-                  filterCategoryIds.remove(filterCategoryIds.indexOf(tmpCat.getId()));
+                  filterCategoryIds.remove(tmpCat.getId());
+                  for (Integer id : categoryDataSource.getAllUnderCategoryIds(tmpCat.getId())) {
+                     filterCategoryIds.remove(id);
+                  }
                   int iconId = getResources().getIdentifier(tmpCat.getIcon(), "drawable",
                         "com.gruppe1.pem.challengeme");
                   LayerDrawable newDrawableIcon =
@@ -242,7 +244,8 @@ public class SearchResultsActivity extends AppCompatActivity {
                         (LayerDrawable) getDrawable(R.drawable.icon_category_circle_filled);
                   int colorHex = getResources().getColor(R.color.primary);
                   newDrawableIcon.setDrawableByLayerId(R.id.circle_icon,
-                        ColorHelper.filterIconColor(SearchResultsActivity.this, tmpCat.getIcon(), colorHex));
+                        ColorHelper.filterIconColor(SearchResultsActivity.this, tmpCat.getIcon(),
+                              colorHex));
                   v.setBackground(newDrawableIcon);
                }
                initDataset();
@@ -290,7 +293,8 @@ public class SearchResultsActivity extends AppCompatActivity {
                      (LayerDrawable) getDrawable(R.drawable.icon_category_circle_filled);
                int colorHex = getResources().getColor(R.color.primary);
                newDrawableIcon.setDrawableByLayerId(R.id.circle_icon,
-                     ColorHelper.filterIconColor(SearchResultsActivity.this, "kleiderbuegel", colorHex));
+                     ColorHelper.filterIconColor(SearchResultsActivity.this, "kleiderbuegel",
+                           colorHex));
                filterCategory.setBackground(newDrawableIcon);
                filterCategoryLayout.setVisibility(View.VISIBLE);
                filterCategoryActivated = true;
@@ -304,7 +308,7 @@ public class SearchResultsActivity extends AppCompatActivity {
             getResources().getDisplayMetrics());
       int colorIconMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5,
             getResources().getDisplayMetrics());
-      ArrayList<Color> allColors = Color.getAllColors(getApplicationContext());
+      List<Color> allColors = colorDataSource.getAllColors();
       int positionColor = 0;
       for (final Color tmpColor : allColors) {
          ImageButton tmpColorButton = new ImageButton(this);
@@ -377,7 +381,8 @@ public class SearchResultsActivity extends AppCompatActivity {
                      (LayerDrawable) getDrawable(R.drawable.icon_category_circle_filled);
                int colorHex = getResources().getColor(R.color.primary);
                newDrawableIcon.setDrawableByLayerId(R.id.circle_icon,
-                     ColorHelper.filterIconColor(SearchResultsActivity.this, "ic_color_lens_white", colorHex));
+                     ColorHelper.filterIconColor(SearchResultsActivity.this, "ic_color_lens_white",
+                           colorHex));
                filterColor.setBackground(newDrawableIcon);
                filterColorLayout.setVisibility(View.VISIBLE);
                filterColorActivated = true;
@@ -397,7 +402,8 @@ public class SearchResultsActivity extends AppCompatActivity {
                      (LayerDrawable) getDrawable(R.drawable.icon_wishlist_circle_filled);
                int colorHex = getResources().getColor(R.color.primary);
                newDrawableIcon.setDrawableByLayerId(R.id.circle_icon,
-                     ColorHelper.filterIconColor(SearchResultsActivity.this, "ic_wishlist_white", colorHex));
+                     ColorHelper.filterIconColor(SearchResultsActivity.this, "ic_wishlist_white",
+                           colorHex));
                filterWishlist.setBackground(newDrawableIcon);
             }
             filterWishlistActivated = !filterWishlistActivated;
@@ -461,7 +467,8 @@ public class SearchResultsActivity extends AppCompatActivity {
                      (LayerDrawable) getDrawable(R.drawable.icon_category_circle_filled);
                int colorHex = getResources().getColor(R.color.primary);
                newDrawableIcon.setDrawableByLayerId(R.id.circle_icon,
-                     ColorHelper.filterIconColor(SearchResultsActivity.this, "ic_star_border_white", colorHex));
+                     ColorHelper.filterIconColor(SearchResultsActivity.this, "ic_star_border_white",
+                           colorHex));
                filterRating.setBackground(newDrawableIcon);
                filterRatingLayout.setVisibility(View.VISIBLE);
                filterRatingActivated = true;
@@ -563,12 +570,8 @@ public class SearchResultsActivity extends AppCompatActivity {
     */
    private void initDataset() {
       mDataset.clear();
-
-      DataBaseHelper db_helper = new DataBaseHelper(this);
-      db_helper.init();
-
       ArrayList<Item> searchResultItems =
-            Item.getSearchResults(this, query, filterCategoryIds, filterWishlistActivated,
+            itemDataSource.getSearchResults(query, filterCategoryIds, filterWishlistActivated,
                   filterRatingCount, filterColorIds);
 
       for (Item tmpItem : searchResultItems) {
@@ -582,7 +585,6 @@ public class SearchResultsActivity extends AppCompatActivity {
       } else {
          showNoItemLayout(true);
       }
-      db_helper.close();
       defaultRecyclerListAdapter.notifyDataSetChanged();
    }
 
@@ -593,7 +595,7 @@ public class SearchResultsActivity extends AppCompatActivity {
     */
    private void selectItem(int itemid, int position) {
       ArrayList<Item> searchResultItems =
-            Item.getSearchResults(this, query, filterCategoryIds, filterWishlistActivated,
+            itemDataSource.getSearchResults(query, filterCategoryIds, filterWishlistActivated,
                   filterRatingCount, filterColorIds);
 
       Intent intent = new Intent();
@@ -616,12 +618,7 @@ public class SearchResultsActivity extends AppCompatActivity {
          final int position) {
 
       final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-      // Get the layout inflater
       LayoutInflater inflater = getLayoutInflater();
-
-      // Inflate and set the layout for the dialog
-      // Pass null as the parent view because its going in the dialog layout
-
       View dialogView = inflater.inflate(R.layout.dialog_edit, parent, false);
       TextView headline = (TextView) dialogView.findViewById(R.id.dialog_headline);
       headline.setText(mDataset.get(position)
@@ -633,12 +630,7 @@ public class SearchResultsActivity extends AppCompatActivity {
                public void onClick(DialogInterface dialog, int which) {
                   int itemId = (int) defaultRecyclerListAdapter.getItemId(position);
 
-                  DataBaseHelper db_helper = new DataBaseHelper(getApplicationContext());
-                  db_helper.init();
-
-                  Item deleteItem = new Item(getApplicationContext(), itemId, db_helper);
-                  deleteItem.delete();
-                  db_helper.close();
+                  itemDataSource.deleteItem(itemId);
 
                   mDataset.remove(position);
                   mDataset.trimToSize();

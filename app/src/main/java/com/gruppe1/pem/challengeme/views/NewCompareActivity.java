@@ -29,12 +29,14 @@ import com.gruppe1.pem.challengeme.ListItemIconName;
 import com.gruppe1.pem.challengeme.R;
 import com.gruppe1.pem.challengeme.adapters.CategoriesGridOverlayAdapter;
 import com.gruppe1.pem.challengeme.adapters.CompareImageAdapter;
+import com.gruppe1.pem.challengeme.helpers.CategoryDataSource;
+import com.gruppe1.pem.challengeme.helpers.CompareDataSource;
 import com.gruppe1.pem.challengeme.helpers.Constants;
-import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 import com.gruppe1.pem.challengeme.helpers.GridSpacingItemDecoration;
+import com.gruppe1.pem.challengeme.helpers.ItemDataSource;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -63,7 +65,10 @@ public class NewCompareActivity extends AppCompatActivity {
 
    private int editCompareId;
    private Compare editCompare;
-   private DataBaseHelper db_helper;
+
+   private CompareDataSource compareDataSource;
+   private CategoryDataSource categoryDataSource;
+   private ItemDataSource itemDataSource;
 
    @Override
    protected void onCreate(Bundle savedInstanceState) {
@@ -76,8 +81,9 @@ public class NewCompareActivity extends AppCompatActivity {
 
       sharedPreferences = getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
 
-      db_helper = new DataBaseHelper(this);
-      db_helper.init();
+      compareDataSource = new CompareDataSource(this);
+      categoryDataSource = new CategoryDataSource(this);
+      itemDataSource = new ItemDataSource(this);
 
       if (savedInstanceState == null) {
          Bundle extras = getIntent().getExtras();
@@ -93,42 +99,31 @@ public class NewCompareActivity extends AppCompatActivity {
       viewPager1.setVisibility(View.INVISIBLE);
       viewPager2.setVisibility(View.INVISIBLE);
 
-      ArrayList<Category> allCategories = Category.getAllCategories(getApplicationContext());
+      List<Category> allCategories = categoryDataSource.getAllCategories();
 
       thisActivity = this;
 
       upperCategoriesList = new ArrayList<>();
 
       for (Category cat : allCategories) {
-         int catsize = Item.getItemsCountByCategoryId(getApplicationContext(), cat.getId(),
+         int catsize = itemDataSource.getItemsCountByCategoryId(cat.getId(),
                sharedPreferences.getBoolean(Constants.KEY_WISHLIST_IN_COMPARE, false));
          if (catsize > 0) {
-            ArrayList<Item> items = Item.getItemsByCategoryId(getApplicationContext(), cat.getId(),
+            ArrayList<Item> items = itemDataSource.getItemsByCategoryIdWithImage(cat.getId(),
                   sharedPreferences.getBoolean(Constants.KEY_WISHLIST_IN_COMPARE, false));
-            for (int i = 0; i < items.size(); i++) {
-               if (items.get(i)
-                     .getImageFile() != null) {
-                  upperCategoriesList.add(cat);
-                  break;
-               }
+            if (!items.isEmpty()) {
+               upperCategoriesList.add(cat);
             }
          }
       }
       builder1 = createCategoryOverlay(new View.OnClickListener() {
          @Override
          public void onClick(View view) {
-            firstCatItems = Item.getItemsByCategoryId(getApplicationContext(),
+            firstCatItems = itemDataSource.getItemsByCategoryIdWithImage(
                   upperCategoriesList.get((Integer) view.getTag())
                         .getId(),
                   sharedPreferences.getBoolean(Constants.KEY_WISHLIST_IN_COMPARE, false));
 
-            for (int i = 0; i < firstCatItems.size(); i++) {
-               String imageFile = firstCatItems.get(i)
-                     .getImageFile();
-               if (imageFile == null) {
-                  firstCatItems.remove(i);
-               }
-            }
             CompareImageAdapter adapter = new CompareImageAdapter(thisActivity, firstCatItems, 1);
             viewPager1.setAdapter(adapter);
             img1.setVisibility(View.INVISIBLE);
@@ -147,18 +142,11 @@ public class NewCompareActivity extends AppCompatActivity {
       builder2 = createCategoryOverlay(new View.OnClickListener() {
          @Override
          public void onClick(View view) {
-            secontCatItems = Item.getItemsByCategoryId(getApplicationContext(),
+            secontCatItems = itemDataSource.getItemsByCategoryIdWithImage(
                   upperCategoriesList.get((Integer) view.getTag())
                         .getId(),
                   sharedPreferences.getBoolean(Constants.KEY_WISHLIST_IN_COMPARE, false));
 
-            for (int i = 0; i < secontCatItems.size(); i++) {
-               String imageFile = secontCatItems.get(i)
-                     .getImageFile();
-               if (imageFile == null) {
-                  secontCatItems.remove(i);
-               }
-            }
             CompareImageAdapter adapter = new CompareImageAdapter(thisActivity, secontCatItems, 2);
             viewPager2.setAdapter(adapter);
             img2.setVisibility(View.INVISIBLE);
@@ -195,26 +183,16 @@ public class NewCompareActivity extends AppCompatActivity {
    }
 
    private void setViewsWithEditCompare() {
-      getDb_helper().setTable(Constants.COMPARES_DB_TABLE);
-      editCompare = new Compare(this, editCompareId, getDb_helper());
+      editCompare = compareDataSource.getCompare(editCompareId);
 
       getSupportActionBar().setTitle(editCompare.getName());
 
       ArrayList<Integer> itemIds = editCompare.getItemIds();
-      getDb_helper().close();
-      getDb_helper().setTable(Constants.ITEMS_DB_TABLE);
-      Item item1 = new Item(this, itemIds.get(0), getDb_helper());
-      Item item2 = new Item(this, itemIds.get(1), getDb_helper());
+      Item item1 = itemDataSource.getItem(itemIds.get(0));
+      Item item2 = itemDataSource.getItem(itemIds.get(1));
 
-      firstCatItems = Item.getItemsByCategoryId(getApplicationContext(), item1.getCategoryId(),
+      firstCatItems = itemDataSource.getItemsByCategoryIdWithImage(item1.getCategoryId(),
             sharedPreferences.getBoolean(Constants.KEY_WISHLIST_IN_COMPARE, false));
-      for (int i = 0; i < firstCatItems.size(); i++) {
-         String imageFile = firstCatItems.get(i)
-               .getImageFile();
-         if (imageFile == null) {
-            firstCatItems.remove(i);
-         }
-      }
       CompareImageAdapter adapterFirstItem =
             new CompareImageAdapter(thisActivity, firstCatItems, 1);
       viewPager1.setAdapter(adapterFirstItem);
@@ -222,15 +200,8 @@ public class NewCompareActivity extends AppCompatActivity {
       viewPager1.setVisibility(View.VISIBLE);
       viewPager1.setCurrentItem(adapterFirstItem.getItemPosition(item1));
 
-      secontCatItems = Item.getItemsByCategoryId(getApplicationContext(), item2.getCategoryId(),
+      secontCatItems = itemDataSource.getItemsByCategoryIdWithImage(item2.getCategoryId(),
             sharedPreferences.getBoolean(Constants.KEY_WISHLIST_IN_COMPARE, false));
-      for (int i = 0; i < secontCatItems.size(); i++) {
-         String imageFile = secontCatItems.get(i)
-               .getImageFile();
-         if (imageFile == null) {
-            secontCatItems.remove(i);
-         }
-      }
       CompareImageAdapter adapterSecondItem =
             new CompareImageAdapter(thisActivity, secontCatItems, 2);
       viewPager2.setAdapter(adapterSecondItem);
@@ -268,7 +239,7 @@ public class NewCompareActivity extends AppCompatActivity {
          int iconId = getResources().getIdentifier(tmpCat.getIcon(), "drawable",
                "com.gruppe1.pem.challengeme");
          catArray.add(
-               new ListItemIconName(this, "category", tmpCat.getId(), iconId, tmpCat.getName(),
+               new ListItemIconName(this, "category", tmpCat.getId(), iconId, tmpCat.getName(this),
                      null));
       }
 
@@ -298,7 +269,9 @@ public class NewCompareActivity extends AppCompatActivity {
    @Override
    public boolean onPrepareOptionsMenu(Menu menu) {
       menuItemSave = menu.findItem(R.id.action_item_save);
-      menuItemSave.setVisible(false);
+      if (editCompareId <= 0) {
+         menuItemSave.setVisible(false);
+      }
       return super.onPrepareOptionsMenu(menu);
    }
 
@@ -377,23 +350,11 @@ public class NewCompareActivity extends AppCompatActivity {
             .getId();
       int secondItemID = secontCatItems.get(secondElementPosition)
             .getId();
-      DataBaseHelper dbHelper = new DataBaseHelper(getApplicationContext());
-      dbHelper.init();
 
       // Update compare
       if (editCompareId >= 0) {
-         Compare editCompareLocal = new Compare(getApplicationContext(), editCompareId, dbHelper);
-         HashMap<String, String> compareAttributes = new HashMap<>();
-         compareAttributes.put("name", compareName);
-         compareAttributes.put("item_id_1", firstItemID + "");
-         compareAttributes.put("item_id_2", secondItemID + "");
-
-         editCompareLocal.edit(compareAttributes);
-         editCompareLocal.save();
-         editCompareLocal.closeDBConnection();
-
-         dbHelper.close();
-
+         Compare editCompareLocal =
+               compareDataSource.editCompare(editCompareId, compareName, firstItemID, secondItemID);
          // sending new Item back to CompareDetailView for actualizing the item there
          Intent i = new Intent();
          i.putExtra("compareId", editCompareId);
@@ -407,19 +368,7 @@ public class NewCompareActivity extends AppCompatActivity {
       }
       // Create new compare
       else {
-         Compare newCompare = new Compare(getApplicationContext(), -1, dbHelper);
-         HashMap<String, String> compareAttributes = new HashMap<>();
-         compareAttributes.put("name", compareName);
-         compareAttributes.put("item_id_1", firstItemID + "");
-         compareAttributes.put("item_id_2", secondItemID + "");
-
-         newCompare.edit(compareAttributes);
-         //                        newCompare.setName(name);
-         //                        newCompare.addItemId(firstItemID);
-         //                        newCompare.addItemId(secondItemID);
-         newCompare.save();
-         newCompare.closeDBConnection();
-         dbHelper.close();
+         compareDataSource.createCompare(compareName, firstItemID, secondItemID);
          thisActivity.setResult(RESULT_OK);
          thisActivity.finish();
       }
@@ -438,19 +387,5 @@ public class NewCompareActivity extends AppCompatActivity {
          case 2:
             builder2.show();
       }
-   }
-
-   /**
-    * Get the db_helper instance for this class
-    *
-    * @return DataBaseHelper instance
-    */
-   private DataBaseHelper getDb_helper() {
-      if (!db_helper.isOpen()) {
-         System.out.println("db helper was closed");
-         db_helper = new DataBaseHelper(this);
-         db_helper.init();
-      }
-      return db_helper;
    }
 }

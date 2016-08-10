@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.gruppe1.pem.challengeme.Color;
 import com.gruppe1.pem.challengeme.R;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -24,7 +24,7 @@ public class ColorsGridOverlayAdapter
 
    private Context context;
    private int layoutResourceId;
-   private ArrayList<Color> data;
+   private List<Color> data;
    private View.OnClickListener onClickListener;
 
    /**
@@ -34,7 +34,7 @@ public class ColorsGridOverlayAdapter
     * @param layoutResourceId Layout resource for a item
     * @param data             the list of colors to fill the overlay grid with
     */
-   public ColorsGridOverlayAdapter(Context context, int layoutResourceId, ArrayList<Color> data) {
+   public ColorsGridOverlayAdapter(Context context, int layoutResourceId, List<Color> data) {
       super();
 
       this.context = context;
@@ -58,7 +58,7 @@ public class ColorsGridOverlayAdapter
    public void onBindViewHolder(ViewHolder holder, int position) {
       Color color = data.get(position);
 
-      holder.textView.setText(color.getName());
+      holder.textView.setText(color.getName(context));
       holder.itemView.setBackgroundColor(android.graphics.Color.parseColor(color.getHexColor()));
 
       holder.itemView.setTag(position);
@@ -90,22 +90,5 @@ public class ColorsGridOverlayAdapter
    @Override
    public int getItemCount() {
       return data.size();
-   }
-
-   /**
-    * @param color the color to check
-    * @return if the color has brightness over 60%
-    */
-   public boolean isColorLight(int color) {
-      boolean isColorLight = false;
-      float[] pixelHSV = new float[3];
-      android.graphics.Color.colorToHSV(color, pixelHSV);
-
-      float brightness = pixelHSV[2];
-
-      if (brightness > 0.6) {
-         isColorLight = true;
-      }
-      return isColorLight;
    }
 }

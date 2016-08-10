@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
@@ -18,13 +17,15 @@ import com.gruppe1.pem.challengeme.Color;
 import com.gruppe1.pem.challengeme.Item;
 import com.gruppe1.pem.challengeme.ListItemIconName;
 import com.gruppe1.pem.challengeme.R;
+import com.gruppe1.pem.challengeme.helpers.AttributeDataSource;
+import com.gruppe1.pem.challengeme.helpers.CategoryDataSource;
+import com.gruppe1.pem.challengeme.helpers.ColorDataSource;
 import com.gruppe1.pem.challengeme.helpers.ColorHelper;
-import com.gruppe1.pem.challengeme.helpers.Constants;
-import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
+import com.gruppe1.pem.challengeme.helpers.ItemDataSource;
 import com.gruppe1.pem.challengeme.helpers.PicassoSingleton;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -39,7 +40,6 @@ public class DefaultRecyclerListAdapter extends RecyclerView.Adapter<RecyclerVie
    private ArrayList<ListItemIconName> data = new ArrayList<>();
    private boolean wishlist;
    private boolean isCategory;
-   private DataBaseHelper db_helper;
    private PicassoSingleton picassoSingleton;
 
    private View.OnClickListener onItemClickListener;
@@ -60,10 +60,6 @@ public class DefaultRecyclerListAdapter extends RecyclerView.Adapter<RecyclerVie
       this.data = data;
       this.wishlist = wishlist;
       this.isCategory = isCategory;
-
-      db_helper = new DataBaseHelper(context);
-      db_helper.init();
-
       this.picassoSingleton = PicassoSingleton.getInstance(context);
    }
 
@@ -96,17 +92,22 @@ public class DefaultRecyclerListAdapter extends RecyclerView.Adapter<RecyclerVie
 
    @Override
    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+      CategoryDataSource categoryDataSource = new CategoryDataSource(context);
+      ItemDataSource itemDataSource = new ItemDataSource(context);
+      ColorDataSource colorDataSource = new ColorDataSource(context);
+      AttributeDataSource attributeDataSource = new AttributeDataSource(context);
+
       int viewType = holder.getItemViewType();
       final ListItemIconName item = data.get(position);
       if (viewType == TYPE_CATEGORY) {
-         Category category = new Category(this.context, item.getElementId(), getDb_helper());
+         Category category = categoryDataSource.getCategory(item.getElementId());
          ViewHolderCategory viewHolder = (ViewHolderCategory) holder;
          int colorHex = ColorHelper.calculateMinDarkColor(category.getColor());
          ((ViewHolderCategory) holder).image.setImageDrawable(
                ColorHelper.filterIconColor(context, category.getIcon(), colorHex));
          viewHolder.firstLine.setText(item.getName());
-         viewHolder.rightTextView.setText(
-               String.valueOf(Item.getItemsCountByCategoryId(context, item.getElementId(), false)));
+         viewHolder.rightTextView.setText(String.valueOf(
+               itemDataSource.getItemsCountByCategoryId(item.getElementId(), false)));
          viewHolder.itemView.setOnClickListener(onItemClickListener);
          viewHolder.moreButton.setTag(position);
          viewHolder.moreButton.setOnClickListener(new View.OnClickListener() {
@@ -117,19 +118,23 @@ public class DefaultRecyclerListAdapter extends RecyclerView.Adapter<RecyclerVie
          });
       } else if (viewType == TYPE_ITEM || viewType == TYPE_WISHLIST) {
          ViewHolder viewHolder = (ViewHolder) holder;
-         getDb_helper().setTable(Constants.ITEMS_DB_TABLE);
-         Item listItem = new Item(context, item.getElementId(), getDb_helper());
-         getDb_helper().setTable(Constants.COLORS_DB_TABLE);
-         Color attributeColor = new Color(context, listItem.getPrimaryColorId(), getDb_helper());
-         Category parentCategory = new Category(context, listItem.getCategoryId(), getDb_helper());
-         ArrayList<Attribute> allAttributes =
-               Attribute.getAttributesByItemId(context, item.getElementId());
-         if (item.getItemFile() == null) {
-            int colorHex = ColorHelper.calculateMinDarkColor(parentCategory.getColor());
+         Item listItem = itemDataSource.getItem(item.getElementId());
+         Color attributeColor = colorDataSource.getColor(listItem.getPrimaryColorId());
+         Category parentCategory = categoryDataSource.getCategory(listItem.getCategoryId());
+         List<Attribute> allAttributes =
+               attributeDataSource.getAttributesByItemId(item.getElementId());
+         if (item.getItemFile() == null || item.getItemFile()
+               .isEmpty()) {
+            int exactColor = Integer.parseInt(
+                  attributeDataSource.getAttributeExactColorByItemId(listItem.getId())
+                        .getValue()
+                        .toString());
+            int colorHex = ColorHelper.calculateMinDarkColor(exactColor);
             viewHolder.image.setImageDrawable(
                   ColorHelper.filterIconColor(context, parentCategory.getIcon(), colorHex));
          } else {
-            int padding = (int) context.getResources().getDimension(R.dimen.margin_small);
+            int padding = (int) context.getResources()
+                  .getDimension(R.dimen.margin_small);
             viewHolder.image.setPadding(padding, padding, padding, padding);
             int colorHex = ColorHelper.calculateMinDarkColor(parentCategory.getColor());
             Drawable icon =
@@ -139,9 +144,9 @@ public class DefaultRecyclerListAdapter extends RecyclerView.Adapter<RecyclerVie
          viewHolder.firstLine.setText(item.getName());
          String secondLineText = "";
          int attributesToShowCount = 0;
-         if (!attributeColor.getName()
+         if (attributeColor != null || !attributeColor.getName(context)
                .equals("")) {
-            secondLineText += attributeColor.getName() + "   ";
+            secondLineText += attributeColor.getName(context) + "   ";
             attributesToShowCount++;
          }
          for (int i = 0; i < allAttributes.size(); i++) {
@@ -206,17 +211,17 @@ public class DefaultRecyclerListAdapter extends RecyclerView.Adapter<RecyclerVie
 
    public static class ViewHolder extends RecyclerView.ViewHolder {
       RelativeLayout itemView;
-      @Bind(R.id.firstLine)
+      @Bind (R.id.firstLine)
       TextView firstLine;
-      @Bind(R.id.secondLine)
+      @Bind (R.id.secondLine)
       TextView secondLine;
-      @Bind(R.id.rightTextView)
+      @Bind (R.id.rightTextView)
       TextView rightTextView;
-      @Bind(R.id.imageView)
+      @Bind (R.id.imageView)
       ImageView image;
-      @Bind(R.id.listItemRatingBar)
+      @Bind (R.id.listItemRatingBar)
       RatingBar listItemRatingBar;
-      @Bind(R.id.ic_more)
+      @Bind (R.id.ic_more)
       ImageView moreButton;
 
       public ViewHolder(View itemView) {
@@ -228,13 +233,13 @@ public class DefaultRecyclerListAdapter extends RecyclerView.Adapter<RecyclerVie
 
    public static class ViewHolderCategory extends RecyclerView.ViewHolder {
       RelativeLayout itemView;
-      @Bind(R.id.firstLine)
+      @Bind (R.id.firstLine)
       TextView firstLine;
-      @Bind(R.id.rightTextView)
+      @Bind (R.id.rightTextView)
       TextView rightTextView;
-      @Bind(R.id.imageView)
+      @Bind (R.id.imageView)
       ImageView image;
-      @Bind(R.id.ic_more)
+      @Bind (R.id.ic_more)
       ImageView moreButton;
 
       public ViewHolderCategory(View itemView) {
@@ -242,19 +247,5 @@ public class DefaultRecyclerListAdapter extends RecyclerView.Adapter<RecyclerVie
          ButterKnife.bind(this, itemView);
          this.itemView = (RelativeLayout) itemView;
       }
-   }
-
-   /**
-    * Get the db_helper instance for this class
-    *
-    * @return DataBaseHelper instance
-    */
-   private DataBaseHelper getDb_helper() {
-      if (!db_helper.isOpen()) {
-         System.out.println("db helper was closed");
-         db_helper = new DataBaseHelper(context);
-         db_helper.init();
-      }
-      return db_helper;
    }
 }

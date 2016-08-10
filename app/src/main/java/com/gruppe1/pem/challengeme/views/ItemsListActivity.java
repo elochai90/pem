@@ -28,11 +28,13 @@ import com.gruppe1.pem.challengeme.ListItemIconName;
 import com.gruppe1.pem.challengeme.R;
 import com.gruppe1.pem.challengeme.adapters.DefaultRecyclerGridAdapter;
 import com.gruppe1.pem.challengeme.adapters.DefaultRecyclerListAdapter;
+import com.gruppe1.pem.challengeme.helpers.CategoryDataSource;
 import com.gruppe1.pem.challengeme.helpers.Constants;
-import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 import com.gruppe1.pem.challengeme.helpers.GridSpacingItemDecoration;
+import com.gruppe1.pem.challengeme.helpers.ItemDataSource;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -51,6 +53,9 @@ public class ItemsListActivity extends AppCompatActivity {
 
    private DefaultRecyclerListAdapter defaultRecyclerListAdapter;
    private DefaultRecyclerGridAdapter defaultRecyclerGridAdapter;
+
+   private ItemDataSource itemDataSource;
+   private CategoryDataSource categoryDataSource;
 
    private int categoriesCount = 0;
    @Bind (R.id.menu)
@@ -81,6 +86,9 @@ public class ItemsListActivity extends AppCompatActivity {
       setContentView(R.layout.activity_items_list);
       ButterKnife.bind(this);
 
+      itemDataSource = new ItemDataSource(this);
+      categoryDataSource = new CategoryDataSource(this);
+
       setupToolbar();
       noItemText.setText(R.string.no_items);
 
@@ -101,11 +109,10 @@ public class ItemsListActivity extends AppCompatActivity {
          categoryId = -1;
       }
 
-      DataBaseHelper db_helper = new DataBaseHelper(this);
-      db_helper.init();
-      Category category = new Category(this, categoryId, db_helper);
-      db_helper.close();
-      getSupportActionBar().setTitle(category.getName());
+      Category category = categoryDataSource.getCategory(categoryId);
+      if (getSupportActionBar() != null) {
+         getSupportActionBar().setTitle(category.getName(this));
+      }
       //        setTitle(category.getName());
       mDataset = new ArrayList<>();
 
@@ -240,6 +247,7 @@ public class ItemsListActivity extends AppCompatActivity {
    public void onActivityResult(int p_requestCode, int p_resultCode, Intent p_data) {
       super.onActivityResult(p_requestCode, p_resultCode, p_data);
 
+      System.out.println("onactivityresult");
       if (p_requestCode == 1) {
          // item was updated
          // TODO: get position from data; notifyitemsetchanged
@@ -324,23 +332,20 @@ public class ItemsListActivity extends AppCompatActivity {
    private void initDataset() {
       mDataset.clear();
 
-      DataBaseHelper db_helper = new DataBaseHelper(this);
-      db_helper.init();
-
-      ArrayList<Category> allBaseCategories =
-            Category.getCategoriesWithParentCategory(this, categoryId);
+      List<Category> allBaseCategories =
+            categoryDataSource.getCategoriesWithParentCategory(categoryId);
 
       for (Category tmpCat : allBaseCategories) {
          int iconId = getResources().getIdentifier(tmpCat.getIcon(), "drawable",
                "com.gruppe1.pem.challengeme");
          mDataset.add(
-               new ListItemIconName(this, "category", tmpCat.getId(), iconId, tmpCat.getName(),
+               new ListItemIconName(this, "category", tmpCat.getId(), iconId, tmpCat.getName(this),
                      null));
       }
 
       categoriesCount = mDataset.size();
 
-      ArrayList<Item> allCategoryItems = Item.getItemsByCategoryId(this, categoryId, false);
+      ArrayList<Item> allCategoryItems = itemDataSource.getItemsByCategoryId(categoryId, false);
 
       for (Item tmpItem : allCategoryItems) {
          int iconId = getResources().getIdentifier("kleiderbuegel", "drawable",
@@ -353,7 +358,6 @@ public class ItemsListActivity extends AppCompatActivity {
       } else {
          showNoItemLayout(true);
       }
-      db_helper.close();
    }
 
    /**
@@ -365,7 +369,7 @@ public class ItemsListActivity extends AppCompatActivity {
       Intent intent = new Intent();
       intent.setClassName(getPackageName(), getPackageName() + ".views.CollectionItemsActivity");
 
-      ArrayList<Item> allCategoryItems = Item.getItemsByCategoryId(this, categoryId, false);
+      ArrayList<Item> allCategoryItems = itemDataSource.getItemsByCategoryId(categoryId, false);
       intent.putExtra(Constants.EXTRA_CLICKED_ITEM_POSITION, position);
       Bundle b = new Bundle();
       b.putInt(Constants.EXTRA_ITEM_ID, itemid);
@@ -432,12 +436,7 @@ public class ItemsListActivity extends AppCompatActivity {
                   public void onClick(DialogInterface dialog, int which) {
                      int itemId = (int) defaultRecyclerListAdapter.getItemId((int) selectedItem[0]);
 
-                     DataBaseHelper db_helper = new DataBaseHelper(getApplicationContext());
-                     db_helper.init();
-
-                     Item deleteItem = new Item(getApplicationContext(), itemId, db_helper);
-                     deleteItem.delete();
-                     db_helper.close();
+                     itemDataSource.deleteItem(itemId);
 
                      mDataset.remove(position);
                      mDataset.trimToSize();
@@ -467,13 +466,9 @@ public class ItemsListActivity extends AppCompatActivity {
                            getPackageName() + ".views.NewCategoryActivity");
                      int categoryId =
                            (int) defaultRecyclerListAdapter.getItemId((int) selectedItem[0]);
-                     DataBaseHelper db_helper = new DataBaseHelper(getApplicationContext());
-                     db_helper.init();
 
-                     Category category =
-                           new Category(getApplicationContext(), categoryId, db_helper);
+                     Category category = categoryDataSource.getCategory(categoryId);
 
-                     db_helper.close();
                      intent.putExtra(Constants.EXTRA_CATEGORY_ID, category.getId());
                      intent.putExtra(Constants.EXTRA_PARENT_CATEGORY_ID,
                            category.getParentCategoryId());
@@ -486,19 +481,12 @@ public class ItemsListActivity extends AppCompatActivity {
                      int categoryId =
                            (int) defaultRecyclerListAdapter.getItemId((int) selectedItem[0]);
 
-                     ArrayList<Item> items =
-                           Item.getItemsByCategoryId(getApplicationContext(), categoryId, true);
+                     ArrayList<Item> items = itemDataSource.getItemsByCategoryId(categoryId, true);
                      for (Item c : items) {
-                        c.delete();
+                        itemDataSource.deleteItem(c.getId());
                      }
-                     DataBaseHelper db_helper = new DataBaseHelper(getApplicationContext());
-                     db_helper.init();
 
-                     Category deleteCategory =
-                           new Category(getApplicationContext(), categoryId, db_helper);
-                     deleteCategory.delete();
-
-                     db_helper.close();
+                     categoryDataSource.deleteCategory(categoryId);
 
                      mDataset.remove(position);
                      mDataset.trimToSize();

@@ -16,11 +16,14 @@ import com.gruppe1.pem.challengeme.Category;
 import com.gruppe1.pem.challengeme.Compare;
 import com.gruppe1.pem.challengeme.Item;
 import com.gruppe1.pem.challengeme.R;
+import com.gruppe1.pem.challengeme.helpers.CategoryDataSource;
 import com.gruppe1.pem.challengeme.helpers.ColorHelper;
+import com.gruppe1.pem.challengeme.helpers.CompareDataSource;
 import com.gruppe1.pem.challengeme.helpers.Constants;
-import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
+import com.gruppe1.pem.challengeme.helpers.ItemDataSource;
 import com.gruppe1.pem.challengeme.helpers.PicassoSingleton;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -50,9 +53,13 @@ public class SavedComparesDetailActivity extends AppCompatActivity {
    @Bind (R.id.toolbar)
    Toolbar toolbar;
 
-   PicassoSingleton picassoSingleton;
+   private PicassoSingleton picassoSingleton;
 
    private ArrayList<Item> compareItems = new ArrayList<>();
+
+   private CompareDataSource compareDataSource;
+   private ItemDataSource itemDataSource;
+   private CategoryDataSource categoryDataSource;
 
    @Override
    protected void onCreate(Bundle savedInstanceState) {
@@ -62,24 +69,25 @@ public class SavedComparesDetailActivity extends AppCompatActivity {
 
       picassoSingleton = PicassoSingleton.getInstance(this);
 
-      setupToolbar();
+      compareDataSource = new CompareDataSource(this);
+      categoryDataSource = new CategoryDataSource(this);
+      itemDataSource = new ItemDataSource(this);
 
-      DataBaseHelper dbHelper = new DataBaseHelper(this);
-      dbHelper.init();
+      setupToolbar();
 
       compareItem = (Compare) getIntent().getSerializableExtra("item");
       ArrayList<Integer> itemIds = compareItem.getItemIds();
-      compareItems.add(new Item(this, itemIds.get(0), dbHelper));
-      compareItems.add(new Item(this, itemIds.get(1), dbHelper));
+      compareItems.add(itemDataSource.getItem(itemIds.get(0)));
+      compareItems.add(itemDataSource.getItem(itemIds.get(1)));
 
       if (getSupportActionBar() != null) {
          getSupportActionBar().setTitle(compareItem.getName());
       }
 
-      Category category1 = new Category(this, compareItems.get(0)
-            .getCategoryId(), dbHelper);
-      Category category2 = new Category(this, compareItems.get(1)
-            .getCategoryId(), dbHelper);
+      Category category1 = categoryDataSource.getCategory(compareItems.get(0)
+            .getCategoryId());
+      Category category2 = categoryDataSource.getCategory(compareItems.get(1)
+            .getCategoryId());
 
       int colorHex1 = ColorHelper.calculateMinDarkColor(category1.getColor());
       int colorHex2 = ColorHelper.calculateMinDarkColor(category2.getColor());
@@ -102,13 +110,17 @@ public class SavedComparesDetailActivity extends AppCompatActivity {
             selectItem(1, 1);
          }
       });
-      SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy", Locale.ENGLISH);
-      String compareCreatedTimestamp =
-            sdf.format(new Date(Long.parseLong(compareItem.getTimestamp())));
-      timeStampSavedCompare.setText(
-            getResources().getString(R.string.outfit_saved) + " " + compareCreatedTimestamp);
 
-      dbHelper.close();
+      SimpleDateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+      Date date = null;
+      try {
+         date = iso8601Format.parse(compareItem.getTimestamp());
+      } catch (ParseException e) {
+         e.printStackTrace();
+      }
+      SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy", Locale.ENGLISH);
+      timeStampSavedCompare.setText(
+            getResources().getString(R.string.outfit_saved) + " " + sdf.format(date));
    }
 
    private void setupToolbar() {
@@ -170,26 +182,20 @@ public class SavedComparesDetailActivity extends AppCompatActivity {
       }
       if (p_requestCode == 0) {
          int itemId = p_data.getIntExtra(Constants.EXTRA_ITEM_ID, -1);
-         DataBaseHelper dbHelper = new DataBaseHelper(this);
-         dbHelper.init();
          compareItems.remove(0);
-         compareItems.add(0, new Item(this, itemId, dbHelper));
-         Category category1 = new Category(this, compareItems.get(0)
-               .getCategoryId(), dbHelper);
-         dbHelper.close();
+         compareItems.add(0, itemDataSource.getItem(itemId));
+         Category category1 = categoryDataSource.getCategory(compareItems.get(0)
+               .getCategoryId());
          int colorHex1 = ColorHelper.calculateMinDarkColor(category1.getColor());
          Drawable icon1 = ColorHelper.filterIconColor(this, category1.getIcon(), colorHex1);
          picassoSingleton.setImageFit(compareItems.get(0)
                .getImageFile(), detail1, icon1, icon1);
       } else if (p_requestCode == 1) {
          int itemId = p_data.getIntExtra(Constants.EXTRA_ITEM_ID, -1);
-         DataBaseHelper dbHelper = new DataBaseHelper(this);
-         dbHelper.init();
          compareItems.remove(1);
-         compareItems.add(1, new Item(this, itemId, dbHelper));
-         Category category2 = new Category(this, compareItems.get(1)
-               .getCategoryId(), dbHelper);
-         dbHelper.close();
+         compareItems.add(1, itemDataSource.getItem(itemId));
+         Category category2 = categoryDataSource.getCategory(compareItems.get(1)
+               .getCategoryId());
          int colorHex2 = ColorHelper.calculateMinDarkColor(category2.getColor());
          Drawable icon2 = ColorHelper.filterIconColor(this, category2.getIcon(), colorHex2);
          picassoSingleton.setImageFit(compareItems.get(1)
@@ -201,23 +207,28 @@ public class SavedComparesDetailActivity extends AppCompatActivity {
          String compareTimestamp = p_data.getStringExtra("compareTimestamp");
          String compareName = p_data.getStringExtra("compareName");
 
+         SimpleDateFormat iso8601Format =
+               new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+         Date date = null;
+         try {
+            date = iso8601Format.parse(compareTimestamp);
+         } catch (ParseException e) {
+            e.printStackTrace();
+         }
          SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy", Locale.ENGLISH);
-         String compareCreatedTimestamp = sdf.format(new Date(Long.parseLong(compareTimestamp)));
          timeStampSavedCompare.setText(getResources().getString(R.string.outfit_saved) + " " +
-               compareCreatedTimestamp);
+               sdf.format(date));
          getSupportActionBar().setTitle(compareName);
 
-         DataBaseHelper dbHelper = new DataBaseHelper(this);
-         dbHelper.init();
          compareItems.clear();
-         compareItems.add(new Item(this, compareItemId1, dbHelper));
-         compareItems.add(new Item(this, compareItemId2, dbHelper));
-         compareItem = new Compare(this, compareId, dbHelper);
+         compareItems.add(itemDataSource.getItem(compareItemId1));
+         compareItems.add(itemDataSource.getItem(compareItemId2));
+         compareItem = compareDataSource.getCompare(compareId);
 
-         Category category1 = new Category(this, compareItems.get(0)
-               .getCategoryId(), dbHelper);
-         Category category2 = new Category(this, compareItems.get(1)
-               .getCategoryId(), dbHelper);
+         Category category1 = categoryDataSource.getCategory(compareItems.get(0)
+               .getCategoryId());
+         Category category2 = categoryDataSource.getCategory(compareItems.get(1)
+               .getCategoryId());
 
          int colorHex1 = ColorHelper.calculateMinDarkColor(category1.getColor());
          int colorHex2 = ColorHelper.calculateMinDarkColor(category2.getColor());
@@ -227,7 +238,6 @@ public class SavedComparesDetailActivity extends AppCompatActivity {
                .getImageFile(), detail1, icon1, icon1);
          picassoSingleton.setImageFit(compareItems.get(1)
                .getImageFile(), detail2, icon2, icon2);
-         dbHelper.close();
       }
    }
 }

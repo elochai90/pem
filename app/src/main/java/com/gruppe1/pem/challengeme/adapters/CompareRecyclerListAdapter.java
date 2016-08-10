@@ -14,10 +14,12 @@ import com.gruppe1.pem.challengeme.Category;
 import com.gruppe1.pem.challengeme.Compare;
 import com.gruppe1.pem.challengeme.Item;
 import com.gruppe1.pem.challengeme.R;
+import com.gruppe1.pem.challengeme.helpers.CategoryDataSource;
 import com.gruppe1.pem.challengeme.helpers.ColorHelper;
-import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
+import com.gruppe1.pem.challengeme.helpers.ItemDataSource;
 import com.gruppe1.pem.challengeme.helpers.PicassoSingleton;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,7 +36,6 @@ public class CompareRecyclerListAdapter
    private Context context;
    private int layoutResourceId;
    private ArrayList<Compare> data = new ArrayList<>();
-   private DataBaseHelper db_helper;
    private PicassoSingleton picassoSingleton;
 
    private View.OnClickListener onItemClickListener;
@@ -53,8 +54,6 @@ public class CompareRecyclerListAdapter
       this.layoutResourceId = layoutResourceId;
       this.context = context;
       this.data = data;
-      this.db_helper = new DataBaseHelper(context);
-      this.db_helper.init();
       this.picassoSingleton = PicassoSingleton.getInstance(context);
    }
 
@@ -76,22 +75,31 @@ public class CompareRecyclerListAdapter
 
    @Override
    public void onBindViewHolder(ViewHolder holder, int position) {
-      Compare item = data.get(position);
+      CategoryDataSource categoryDataSource = new CategoryDataSource(context);
+      ItemDataSource itemDataSource = new ItemDataSource(context);
 
-      holder.compareName.setText(item.getName());
+      Compare compare = data.get(position);
 
-      ArrayList<Integer> itemIds = item.getItemIds();
-      Item item1 = new Item(this.context, itemIds.get(0), this.db_helper);
-      Item item2 = new Item(this.context, itemIds.get(1), this.db_helper);
-      Category category1 = new Category(this.context, item1.getCategoryId(), this.db_helper);
-      Category category2 = new Category(this.context, item2.getCategoryId(), this.db_helper);
+      holder.compareName.setText(compare.getName());
+
+      ArrayList<Integer> itemIds = compare.getItemIds();
+      Item item1 = itemDataSource.getItem(itemIds.get(0));
+      Item item2 = itemDataSource.getItem(itemIds.get(1));
+      Category category1 = categoryDataSource.getCategory(item1.getCategoryId());
+      Category category2 = categoryDataSource.getCategory(item2.getCategoryId());
 
       holder.itemName1.setText(item1.getName());
       holder.itemName2.setText(item2.getName());
+      SimpleDateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+      Date date = null;
+      try {
+         date = iso8601Format.parse(compare.getTimestamp());
+      } catch (ParseException e) {
+         e.printStackTrace();
+      }
       SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy", Locale.ENGLISH);
-      String currentDateandTime = sdf.format(new Date(Long.parseLong(item.getTimestamp())));
 
-      holder.rightTextView.setText(currentDateandTime);
+      holder.rightTextView.setText(sdf.format(date));
       int colorHex1 = ColorHelper.calculateMinDarkColor(category1.getColor());
       int colorHex2 = ColorHelper.calculateMinDarkColor(category2.getColor());
       Drawable icon1 = ColorHelper.filterIconColor(context, category1.getIcon(), colorHex1);
@@ -117,19 +125,19 @@ public class CompareRecyclerListAdapter
 
    public static class ViewHolder extends RecyclerView.ViewHolder {
 
-      @Bind(R.id.item1Name)
+      @Bind (R.id.item1Name)
       TextView itemName1;
-      @Bind(R.id.item2Name)
+      @Bind (R.id.item2Name)
       TextView itemName2;
-      @Bind(R.id.compareName)
+      @Bind (R.id.compareName)
       TextView compareName;
-      @Bind(R.id.rightTextView)
+      @Bind (R.id.rightTextView)
       TextView rightTextView;
-      @Bind(R.id.imageItem1)
+      @Bind (R.id.imageItem1)
       ImageView imageItem1;
-      @Bind(R.id.imageItem2)
+      @Bind (R.id.imageItem2)
       ImageView imageItem2;
-      @Bind(R.id.ic_more)
+      @Bind (R.id.ic_more)
       ImageView moreButton;
 
       RelativeLayout itemView;
@@ -139,19 +147,5 @@ public class CompareRecyclerListAdapter
          ButterKnife.bind(this, itemView);
          this.itemView = (RelativeLayout) itemView;
       }
-   }
-
-   /**
-    * Get the db_helper instance for this class
-    *
-    * @return DataBaseHelper instance
-    */
-   private DataBaseHelper getDb_helper() {
-      if (!db_helper.isOpen()) {
-         System.out.println("db helper was closed");
-         db_helper = new DataBaseHelper(context);
-         db_helper.init();
-      }
-      return db_helper;
    }
 }

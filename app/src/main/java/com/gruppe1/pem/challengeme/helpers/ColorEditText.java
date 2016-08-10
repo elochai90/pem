@@ -17,16 +17,15 @@ import com.gruppe1.pem.challengeme.Color;
 import com.gruppe1.pem.challengeme.R;
 import com.gruppe1.pem.challengeme.adapters.ColorsGridOverlayAdapter;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class ColorEditText extends TextInputEditText {
 
-   ArrayList<Color> colors;
+   List<Color> colors;
    CharSequence mHint;
    int selectedItemPosition = -1;
    private Activity activity;
    private ColorsGridOverlayAdapter gridColorsAdapter;
-   private DataBaseHelper dbHelper;
    private AlertDialog colorsAlertDialog;
 
    OnItemSelectedListener onItemSelectedListener;
@@ -56,9 +55,8 @@ public class ColorEditText extends TextInputEditText {
       setClickable(true);
    }
 
-   public void setItems(Activity activity, DataBaseHelper dbHelper, ArrayList<Color> items) {
+   public void setItems(Activity activity, List<Color> items) {
       this.activity = activity;
-      this.dbHelper = dbHelper;
       this.colors = items;
 
       configureOnClickListener();
@@ -105,7 +103,7 @@ public class ColorEditText extends TextInputEditText {
    public void setSelection(int index) {
       selectedItemPosition = index;
       setText(colors.get(index)
-            .getName());
+            .getName(activity));
 
       if (onItemSelectedListener != null) {
          onItemSelectedListener.onItemSelectedListener(colors.get(index), index);

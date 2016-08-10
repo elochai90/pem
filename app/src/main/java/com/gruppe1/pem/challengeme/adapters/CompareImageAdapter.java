@@ -4,24 +4,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.util.DisplayMetrics;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import com.gruppe1.pem.challengeme.Category;
 import com.gruppe1.pem.challengeme.Item;
 import com.gruppe1.pem.challengeme.R;
-import com.gruppe1.pem.challengeme.SquareImageView;
 import com.gruppe1.pem.challengeme.SquareImageViewWidth;
+import com.gruppe1.pem.challengeme.helpers.CategoryDataSource;
 import com.gruppe1.pem.challengeme.helpers.ColorHelper;
-import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
-import com.gruppe1.pem.challengeme.helpers.ExactColorEditText;
 import com.gruppe1.pem.challengeme.helpers.PicassoSingleton;
 import com.gruppe1.pem.challengeme.views.NewCompareActivity;
 
@@ -80,10 +72,8 @@ public class CompareImageAdapter extends PagerAdapter {
       SquareImageViewWidth imageView = (SquareImageViewWidth) layout.findViewById(R.id.imageView);
 
       Item item = categoryItems.get(position);
-      DataBaseHelper dbHelper = new DataBaseHelper(context);
-      dbHelper.init();
-      Category category = new Category(this.context, item.getCategoryId(), dbHelper);
-      dbHelper.close();
+      CategoryDataSource categoryDataSource = new CategoryDataSource(context);
+      Category category = categoryDataSource.getCategory(item.getCategoryId());
 
       int colorHex = ColorHelper.calculateMinDarkColor(category.getColor());
       Drawable icon = ColorHelper.filterIconColor(context, category.getIcon(), colorHex);

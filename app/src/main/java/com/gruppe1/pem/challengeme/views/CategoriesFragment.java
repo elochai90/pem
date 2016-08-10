@@ -20,16 +20,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.gruppe1.pem.challengeme.Category;
-import com.gruppe1.pem.challengeme.Item;
 import com.gruppe1.pem.challengeme.ListItemIconName;
 import com.gruppe1.pem.challengeme.R;
 import com.gruppe1.pem.challengeme.adapters.DefaultRecyclerGridAdapter;
 import com.gruppe1.pem.challengeme.adapters.DefaultRecyclerListAdapter;
+import com.gruppe1.pem.challengeme.helpers.CategoryDataSource;
 import com.gruppe1.pem.challengeme.helpers.Constants;
-import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
 import com.gruppe1.pem.challengeme.helpers.GridSpacingItemDecoration;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -42,22 +42,22 @@ public class CategoriesFragment extends Fragment {
 
    private ArrayList<ListItemIconName> mDataset;
 
+   private CategoryDataSource categoryDataSource;
+
    @Bind (R.id.listView)
    RecyclerView listView;
    @Bind (R.id.gridView)
    RecyclerView gridView;
 
    private Boolean list;
-   private DataBaseHelper db_helper;
 
    private Object[] selectedItem;
 
    private DefaultRecyclerListAdapter defaultRecyclerListAdapter;
    private DefaultRecyclerGridAdapter defaultRecyclerGridAdapter;
 
-   public static CategoriesFragment newInstance(int page, String title) {
-      CategoriesFragment categoriesFragment = new CategoriesFragment();
-      return categoriesFragment;
+   public static CategoriesFragment newInstance() {
+      return new CategoriesFragment();
    }
 
    @Override
@@ -68,16 +68,17 @@ public class CategoriesFragment extends Fragment {
             .inflate(R.layout.default_recycler_view, container, false);
       ButterKnife.bind(this, rootView);
 
+      categoryDataSource = new CategoryDataSource(getActivity());
+
       mDataset = new ArrayList<>();
       sharedPreferences =
             getActivity().getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
       editor = sharedPreferences.edit();
 
-      initDataset();
-
       list = savedInstanceState == null ||
             savedInstanceState.getBoolean(Constants.KEY_VIEW_CATEGORIES_AS_LIST, true);
 
+      initDataset();
       defaultRecyclerListAdapter =
             new DefaultRecyclerListAdapter(getActivity(), R.layout.list_item_default,
                   R.layout.list_item_category, mDataset, true, false);
@@ -234,14 +235,13 @@ public class CategoriesFragment extends Fragment {
    private void initDataset() {
       mDataset.clear();
 
-      ArrayList<Category> allBaseCategories =
-            Category.getCategoriesWithParentCategory(getActivity().getApplicationContext(), -1);
+      List<Category> allBaseCategories = categoryDataSource.getCategoriesWithParentCategory(-1);
 
       for (Category tmpCat : allBaseCategories) {
          int iconId = getResources().getIdentifier(tmpCat.getIcon(), "drawable",
                "com.gruppe1.pem.challengeme");
          mDataset.add(new ListItemIconName(getActivity(), "category", tmpCat.getId(), iconId,
-               tmpCat.getName(), null));
+               tmpCat.getName(getActivity()), null));
       }
    }
 
@@ -253,6 +253,7 @@ public class CategoriesFragment extends Fragment {
    @Override
    public void onActivityResult(int p_requestCode, int p_resultCode, Intent p_data) {
       super.onActivityResult(p_requestCode, p_resultCode, p_data);
+      onResume();
 
       if ((p_requestCode == 1 || p_requestCode == 0) && p_resultCode == Activity.RESULT_OK) {
          // item was updated
@@ -269,12 +270,7 @@ public class CategoriesFragment extends Fragment {
       selectedItem[1] = view;
 
       final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-      // Get the layout inflater
       LayoutInflater inflater = getActivity().getLayoutInflater();
-
-      // Inflate and set the layout for the dialog
-      // Pass null as the parent view because its going in the dialog layout
-
       View dialogView = inflater.inflate(R.layout.dialog_edit, parent, false);
       TextView headline = (TextView) dialogView.findViewById(R.id.dialog_headline);
       headline.setText(mDataset.get(position)
@@ -290,15 +286,7 @@ public class CategoriesFragment extends Fragment {
                   int categoryId =
                         (int) defaultRecyclerListAdapter.getItemId((int) selectedItem[0]);
 
-                  DataBaseHelper db_helper =
-                        new DataBaseHelper(getActivity().getApplicationContext());
-                  db_helper.init();
-
-                  Category category =
-                        new Category(getActivity().getApplicationContext(), categoryId, db_helper);
-
-                  db_helper.close();
-                  intent.putExtra(Constants.EXTRA_CATEGORY_ID, category.getId());
+                  intent.putExtra(Constants.EXTRA_CATEGORY_ID, categoryId);
 
                   startActivityForResult(intent, REQUEST_CODE);
                }
@@ -308,22 +296,7 @@ public class CategoriesFragment extends Fragment {
                public void onClick(DialogInterface dialog, int which) {
                   int categoryId =
                         (int) defaultRecyclerListAdapter.getItemId((int) selectedItem[0]);
-
-                  ArrayList<Item> items =
-                        Item.getItemsByCategoryId(getActivity().getApplicationContext(), categoryId,
-                              true);
-                  for (Item c : items) {
-                     c.delete();
-                  }
-                  DataBaseHelper db_helper =
-                        new DataBaseHelper(getActivity().getApplicationContext());
-                  db_helper.init();
-
-                  Category deleteCategory =
-                        new Category(getActivity().getApplicationContext(), categoryId, db_helper);
-                  deleteCategory.delete();
-
-                  db_helper.close();
+                  categoryDataSource.deleteCategory(categoryId);
 
                   mDataset.remove(position);
                   mDataset.trimToSize();
@@ -349,19 +322,5 @@ public class CategoriesFragment extends Fragment {
    @Override
    public void onAttach(Context context) {
       super.onAttach(context);
-   }
-
-   /**
-    * Get the db_helper instance for this class
-    *
-    * @return DataBaseHelper instance
-    */
-   private DataBaseHelper getDb_helper() {
-      if (!db_helper.isOpen()) {
-         System.out.println("db helper was closed");
-         db_helper = new DataBaseHelper(getContext());
-         db_helper.init();
-      }
-      return db_helper;
    }
 }

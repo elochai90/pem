@@ -16,10 +16,13 @@ import com.gruppe1.pem.challengeme.Category;
 import com.gruppe1.pem.challengeme.Compare;
 import com.gruppe1.pem.challengeme.Item;
 import com.gruppe1.pem.challengeme.R;
+import com.gruppe1.pem.challengeme.helpers.AttributeDataSource;
+import com.gruppe1.pem.challengeme.helpers.CategoryDataSource;
 import com.gruppe1.pem.challengeme.helpers.ColorHelper;
-import com.gruppe1.pem.challengeme.helpers.DataBaseHelper;
+import com.gruppe1.pem.challengeme.helpers.ItemDataSource;
 import com.gruppe1.pem.challengeme.helpers.PicassoSingleton;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,7 +40,6 @@ public class CompareRecyclerGridAdapter
    private Context context;
    private int layoutResourceId;
    private List<Compare> data = new ArrayList<>();
-   private DataBaseHelper dbHelper;
    private PicassoSingleton picassoSingleton;
 
    private View.OnClickListener onItemClickListener;
@@ -49,8 +51,6 @@ public class CompareRecyclerGridAdapter
       this.layoutResourceId = layoutResourceId;
       this.context = context;
       this.data = data;
-      this.dbHelper = new DataBaseHelper(context);
-      this.dbHelper.init();
       this.picassoSingleton = PicassoSingleton.getInstance(context);
    }
 
@@ -72,17 +72,28 @@ public class CompareRecyclerGridAdapter
 
    @Override
    public void onBindViewHolder(ViewHolder holder, int position) {
-      Compare item = data.get(position);
+      CategoryDataSource categoryDataSource = new CategoryDataSource(context);
+      ItemDataSource itemDataSource = new ItemDataSource(context);
+      AttributeDataSource attributeDataSource = new AttributeDataSource(context);
 
-      holder.compareName.setText(item.getName());
+      Compare compare = data.get(position);
 
-      ArrayList<Integer> itemIds = item.getItemIds();
-      Item item1 = new Item(this.context, itemIds.get(0), this.dbHelper);
-      Item item2 = new Item(this.context, itemIds.get(1), this.dbHelper);
-      Category category1 = new Category(this.context, item1.getCategoryId(), this.dbHelper);
-      Category category2 = new Category(this.context, item2.getCategoryId(), this.dbHelper);
+      holder.compareName.setText(compare.getName());
+
+      ArrayList<Integer> itemIds = compare.getItemIds();
+      Item item1 = itemDataSource.getItem(itemIds.get(0));
+      Item item2 = itemDataSource.getItem(itemIds.get(1));
+      Category category1 = categoryDataSource.getCategory(item1.getCategoryId());
+      Category category2 = categoryDataSource.getCategory(item2.getCategoryId());
+      SimpleDateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+      Date date = null;
+      try {
+         date = iso8601Format.parse(compare.getTimestamp());
+      } catch (ParseException e) {
+         e.printStackTrace();
+      }
       SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy", Locale.ENGLISH);
-      String currentDateandTime = sdf.format(new Date(Long.parseLong(item.getTimestamp())));
+      String currentDateandTime = sdf.format(date);
 
       holder.rightTextView.setText(currentDateandTime);
 
@@ -96,16 +107,13 @@ public class CompareRecyclerGridAdapter
       holder.moreButton.setTag(position);
       holder.moreButton.setOnClickListener(onIcMoreClickListener);
 
-      //        int iconId = context.getResources().getIdentifier(category1.getIcon(),
-       // "drawable", "com.gruppe1.pem.challengeme");
-
-      Attribute attribute1 = Attribute.getAttributeExactColorByItemId(context, item1.getId());
+      Attribute attribute1 = attributeDataSource.getAttributeExactColorByItemId(item1.getId());
       int color1 = item1.getPrimaryColorId();
       if (attribute1.getValue() != null) {
          color1 = Integer.parseInt(attribute1.getValue()
                .toString());
       }
-      Attribute attribute2 = Attribute.getAttributeExactColorByItemId(context, item2.getId());
+      Attribute attribute2 = attributeDataSource.getAttributeExactColorByItemId(item2.getId());
       int color2 = item2.getPrimaryColorId();
       if (attribute1.getValue() != null) {
          color2 = Integer.parseInt(attribute2.getValue()
@@ -129,15 +137,15 @@ public class CompareRecyclerGridAdapter
 
    public static class ViewHolder extends RecyclerView.ViewHolder {
       CardView itemView;
-      @Bind(R.id.compareName)
+      @Bind (R.id.compareName)
       TextView compareName;
-      @Bind(R.id.imageItem1)
+      @Bind (R.id.imageItem1)
       ImageView imageItem1;
-      @Bind(R.id.imageItem2)
+      @Bind (R.id.imageItem2)
       ImageView imageItem2;
-      @Bind(R.id.rightTextView)
+      @Bind (R.id.rightTextView)
       TextView rightTextView;
-      @Bind(R.id.ic_more)
+      @Bind (R.id.ic_more)
       ImageView moreButton;
 
       public ViewHolder(View itemView) {
