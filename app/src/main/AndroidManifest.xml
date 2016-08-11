@@ -6,6 +6,7 @@
       android:name="android.hardware.camera"
       android:required="true" />
 
+   <uses-permission android:name="android.permission.INTERNET" />
    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -16,14 +17,18 @@
       android:largeHeap="true"
       android:theme="@style/OrgaNice">
       <activity
-         android:name=".views.TabsFragmentActivity"
-         android:configChanges="orientation"
-         android:label="@string/app_name"
-         android:screenOrientation="portrait">
+         android:name=".views.SplashActivity"
+         android:theme="@style/OrgaNice.SplashTheme">
          <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
          </intent-filter>
+      </activity>
+      <activity
+         android:name=".views.TabsFragmentActivity"
+         android:configChanges="orientation"
+         android:label="@string/app_name"
+         android:screenOrientation="portrait">
       </activity>
       <activity
          android:name=".views.NewCompareActivity"
@@ -84,6 +89,16 @@
             android:value=".views.TabsFragmentActivity" />
       </activity>
       <activity
+         android:name=".views.AboutActivity"
+         android:configChanges="orientation"
+         android:label="@string/title_activity_about"
+         android:parentActivityName=".views.TabsFragmentActivity"
+         android:screenOrientation="portrait">
+         <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".views.TabsFragmentActivity" />
+      </activity>
+      <activity
          android:name=".views.FullscreenImageActivity"
          android:configChanges="orientation|keyboardHidden|screenSize"
          android:label="@string/title_activity_fullscreen_image"
@@ -112,6 +127,7 @@
             android:name="android.app.default_searchable"
             android:value="com.gruppe1.pem.challengeme.views.SearchResultsActivity" />
       </activity>
+      <meta-data android:value="	pub-4706613412044536" android:name="ADMOB_PUBLISHER_ID"/>
    </application>
 
 </manifest>

@@ -311,8 +311,27 @@
                     "startLine": 18,
                     "startColumn": 4,
                     "startOffset": 1170,
+                    "endColumn": 72,
+                    "endOffset": 1238
+                },
+                "from": {
+                    "file": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/23.0.0/res/values-sw600dp/values-sw600dp.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 282,
+                        "endColumn": 72,
+                        "endOffset": 350
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 19,
+                    "startColumn": 4,
+                    "startOffset": 1243,
                     "endColumn": 62,
-                    "endOffset": 1228
+                    "endOffset": 1301
                 },
                 "from": {
                     "file": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/exploded-aar/com.android.support/design/24.1.0/res/values-sw600dp-v13/values-sw600dp-v13.xml",
@@ -327,12 +346,12 @@
             },
             {
                 "to": {
-                    "startLine": 19,
+                    "startLine": 20,
                     "startColumn": 4,
-                    "startOffset": 1233,
-                    "endLine": 22,
+                    "startOffset": 1306,
+                    "endLine": 23,
                     "endColumn": 12,
-                    "endOffset": 1410
+                    "endOffset": 1483
                 },
                 "from": {
                     "file": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/exploded-aar/com.android.support/design/24.1.0/res/values-sw600dp-v13/values-sw600dp-v13.xml",

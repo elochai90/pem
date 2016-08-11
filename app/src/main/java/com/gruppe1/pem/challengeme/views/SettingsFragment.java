@@ -6,7 +6,6 @@ import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
-import android.preference.ListPreference;
 import android.preference.MultiSelectListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -16,6 +15,9 @@ import com.gruppe1.pem.challengeme.Color;
 import com.gruppe1.pem.challengeme.R;
 import com.gruppe1.pem.challengeme.helpers.ColorDataSource;
 import com.gruppe1.pem.challengeme.helpers.Constants;
+import com.gruppe1.pem.challengeme.helpers.CustomEditTextPreferenceDialog;
+import com.gruppe1.pem.challengeme.helpers.CustomListPreferenceDialog;
+import com.gruppe1.pem.challengeme.helpers.CustomMultipleSelectListPreferenceDialog;
 
 import java.util.HashSet;
 import java.util.List;
@@ -157,26 +159,15 @@ public class SettingsFragment extends PreferenceFragment {
             public boolean onPreferenceChange(Preference preference, Object value) {
                String stringValue = value.toString();
 
-               if (preference instanceof ListPreference) {
-                  ListPreference listPreference = (ListPreference) preference;
+               if (preference instanceof CustomListPreferenceDialog) {
+                  CustomListPreferenceDialog listPreference =
+                        (CustomListPreferenceDialog) preference;
                   int index = listPreference.findIndexOfValue(stringValue);
 
                   // Set the summary to reflect the new value.
                   preference.setSummary(index >= 0 ? listPreference.getEntries()[index] : null);
 
                   if (preference.getKey()
-                        .equals("Tops")) {
-                     editor.putString(Constants.KEY_DS_1_NAME, stringValue);
-                     editor.apply();
-                  } else if (preference.getKey()
-                        .equals("Bottoms")) {
-                     editor.putString(Constants.KEY_DS_2_NAME, stringValue);
-                     editor.apply();
-                  } else if (preference.getKey()
-                        .equals("Shoes")) {
-                     editor.putString(Constants.KEY_DS_3_NAME, stringValue);
-                     editor.apply();
-                  } else if (preference.getKey()
                         .equals("Language")) {
                      String lang_in_correct_lang;
                      String lang;
@@ -219,13 +210,30 @@ public class SettingsFragment extends PreferenceFragment {
                            Boolean.parseBoolean(stringValue));
                      editor.apply();
                   }
-               } else if (preference instanceof MultiSelectListPreference) {
+               } else if (preference instanceof CustomMultipleSelectListPreferenceDialog) {
                   if (preference.getKey()
                         .equals("favorite_colors")) {
                      HashSet<String> values = (HashSet<String>) value;
                      editor.putStringSet(Constants.KEY_FAVORITE_COLORS, values);
                      editor.apply();
                      preference.setSummary(stringValue.substring(1, stringValue.length() - 1));
+                  }
+               } else if (preference instanceof CustomEditTextPreferenceDialog) {
+                  if (preference.getKey()
+                        .equals("Tops")) {
+                     editor.putString(Constants.KEY_DS_1_NAME, stringValue);
+                     editor.apply();
+                     preference.setSummary(stringValue);
+                  } else if (preference.getKey()
+                        .equals("Bottoms")) {
+                     editor.putString(Constants.KEY_DS_2_NAME, stringValue);
+                     editor.apply();
+                     preference.setSummary(stringValue);
+                  } else if (preference.getKey()
+                        .equals("Shoes")) {
+                     editor.putString(Constants.KEY_DS_3_NAME, stringValue);
+                     editor.apply();
+                     preference.setSummary(stringValue);
                   }
                } else {
                   // For all other preferences, set the summary to the value's

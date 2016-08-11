@@ -1,97 +1,115 @@
-<android.support.design.widget.CoordinatorLayout android:id="@+id/coordinatorLayout"
+<RelativeLayout xmlns:ads="http://schemas.android.com/apk/res-auto"
    xmlns:android="http://schemas.android.com/apk/res/android"
-   xmlns:app="http://schemas.android.com/apk/res-auto"
-   xmlns:tools="http://schemas.android.com/tools"
    android:layout_width="match_parent"
-   android:layout_height="match_parent"
-   tools:context=".views.TabsFragmentActivity">
+   android:layout_height="match_parent">
 
-   <android.support.design.widget.AppBarLayout
-      android:id="@+id/appBar"
+   <com.google.android.gms.ads.AdView
+      android:id="@+id/adView"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:theme="@style/OrgaNice.AppBarLayout"
-      app:elevation="10dp">
+      android:layout_alignParentBottom="true"
+      android:layout_centerHorizontal="true"
+      ads:adSize="BANNER"
+      ads:adUnitId="@string/banner_ad_banner_1_id"/>
 
-      <android.support.v7.widget.Toolbar
-         android:id="@+id/toolbar"
-         android:layout_width="match_parent"
-         android:layout_height="?attr/actionBarSize"
-         android:background="@color/primary"
-         app:layout_scrollFlags="scroll|enterAlways"
-         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
-      <!--app:layout_scrollFlags="scroll|enterAlways"-->
-      <android.support.design.widget.TabLayout
-         android:id="@+id/tabLayout"
-         android:layout_width="match_parent"
-         android:layout_height="wrap_content"
-         android:background="@color/primary"
-         app:tabIndicatorColor="@color/accent"
-         app:tabIndicatorHeight="2dp" />
-
-   </android.support.design.widget.AppBarLayout>
-
-   <android.support.v4.view.ViewPager
-      android:id="@+id/pagerMainViews"
-      android:layout_width="match_parent"
-      android:layout_height="fill_parent"
-      app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-   <com.github.clans.fab.FloatingActionMenu android:id="@+id/menu"
-      xmlns:fab="http://schemas.android.com/apk/res-auto"
+   <android.support.design.widget.CoordinatorLayout android:id="@+id/coordinatorLayout"
+      xmlns:ads="http://schemas.android.com/apk/res-auto"
+      xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_alignParentBottom="true"
-      android:layout_alignParentEnd="true"
-      android:paddingBottom="10dp"
-      android:paddingEnd="10dp"
-      android:paddingStart="10dp"
-      fab:menu_animationDelayPerItem="50"
-      fab:menu_backgroundColor="@color/gray07_transparent"
-      fab:menu_buttonSpacing="0dp"
-      fab:menu_colorNormal="@color/accent"
-      fab:menu_colorPressed="@color/accent_dark"
-      fab:menu_colorRipple="@color/accent_dark"
-      fab:menu_icon="@drawable/fab_add"
-      fab:menu_openDirection="up"
-      fab:menu_showShadow="true">
+      android:layout_above="@id/adView"
+      tools:context=".views.TabsFragmentActivity">
 
-      <com.github.clans.fab.FloatingActionButton
-         android:id="@+id/add_compare"
-         style="@style/MenuButtonsStyle"
-         android:layout_width="wrap_content"
+      <android.support.design.widget.AppBarLayout
+         android:id="@+id/appBar"
+         android:layout_width="match_parent"
          android:layout_height="wrap_content"
-         android:src="@drawable/fab_add"
-         fab:fab_label="@string/title_activity_saved_outfits"
-         fab:fab_size="mini" />
+         android:theme="@style/OrgaNice.AppBarLayout"
+         app:elevation="10dp">
 
-      <com.github.clans.fab.FloatingActionButton
-         android:id="@+id/add_wishlist_item"
-         style="@style/MenuButtonsStyle"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:src="@drawable/fab_add"
-         fab:fab_label="@string/title_activity_new_Wishlistitem"
-         fab:fab_size="mini" />
+         <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/primary"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+         <!--app:layout_scrollFlags="scroll|enterAlways"-->
+         <android.support.design.widget.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/primary"
+            app:tabIndicatorColor="@color/accent"
+            app:tabIndicatorHeight="2dp" />
 
-      <com.github.clans.fab.FloatingActionButton
-         android:id="@+id/add_category"
-         style="@style/MenuButtonsStyle"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:src="@drawable/fab_add"
-         fab:fab_label="@string/title_activity_new_category"
-         fab:fab_size="mini" />
+      </android.support.design.widget.AppBarLayout>
 
-      <com.github.clans.fab.FloatingActionButton
-         android:id="@+id/add_item"
-         style="@style/MenuButtonsStyle"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:src="@drawable/fab_add"
-         fab:fab_label="@string/title_activity_new_item"
-         fab:fab_size="mini" />
+      <android.support.v4.view.ViewPager
+         android:id="@+id/pagerMainViews"
+         android:layout_width="match_parent"
+         android:layout_height="fill_parent"
+         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-   </com.github.clans.fab.FloatingActionMenu>
+      <com.github.clans.fab.FloatingActionMenu android:id="@+id/menu"
+         xmlns:fab="http://schemas.android.com/apk/res-auto"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:layout_alignParentBottom="true"
+         android:layout_alignParentEnd="true"
+         android:paddingBottom="10dp"
+         android:paddingEnd="10dp"
+         android:paddingStart="10dp"
+         fab:menu_animationDelayPerItem="50"
+         fab:menu_backgroundColor="@color/gray07_transparent"
+         fab:menu_buttonSpacing="0dp"
+         fab:menu_colorNormal="@color/accent"
+         fab:menu_colorPressed="@color/accent_dark"
+         fab:menu_colorRipple="@color/accent_dark"
+         fab:menu_icon="@drawable/fab_add"
+         fab:menu_openDirection="up"
+         fab:menu_showShadow="true">
 
-</android.support.design.widget.CoordinatorLayout>
+         <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/add_compare"
+            style="@style/MenuButtonsStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/fab_add"
+            fab:fab_label="@string/title_activity_saved_outfits"
+            fab:fab_size="mini" />
+
+         <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/add_wishlist_item"
+            style="@style/MenuButtonsStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/fab_add"
+            fab:fab_label="@string/title_activity_new_Wishlistitem"
+            fab:fab_size="mini" />
+
+         <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/add_category"
+            style="@style/MenuButtonsStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/fab_add"
+            fab:fab_label="@string/title_activity_new_category"
+            fab:fab_size="mini" />
+
+         <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/add_item"
+            style="@style/MenuButtonsStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/fab_add"
+            fab:fab_label="@string/title_activity_new_item"
+            fab:fab_size="mini" />
+
+      </com.github.clans.fab.FloatingActionMenu>
+
+   </android.support.design.widget.CoordinatorLayout>
+
+</RelativeLayout>

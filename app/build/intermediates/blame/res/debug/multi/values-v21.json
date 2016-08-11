@@ -1744,9 +1744,28 @@
                     "startLine": 253,
                     "startColumn": 4,
                     "startOffset": 18450,
-                    "endLine": 255,
+                    "endColumn": 121,
+                    "endOffset": 18567
+                },
+                "from": {
+                    "file": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appinvite/9.4.0/res/values-v21/values.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 219,
+                        "endColumn": 121,
+                        "endOffset": 336
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 254,
+                    "startColumn": 4,
+                    "startOffset": 18572,
+                    "endLine": 256,
                     "endColumn": 12,
-                    "endOffset": 18639
+                    "endOffset": 18761
                 },
                 "from": {
                     "file": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/exploded-aar/com.android.support/design/24.1.0/res/values-v21/values-v21.xml",

@@ -1,6 +1,7 @@
 package com.gruppe1.pem.challengeme.helpers;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -22,6 +23,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
    public static DataBaseHelper mInstance = null;
    public static SQLiteDatabase mDataBaseInstance = null;
+   private Context context;
 
    private static final String DATABASE_NAME = "organice";
    private static final int DATABASE_VERSION = 1;
@@ -92,6 +94,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
    private DataBaseHelper(Context context) {
       super(context, DATABASE_NAME, null, DATABASE_VERSION);
+      this.context = context;
    }
 
    public static SQLiteDatabase getDataBaseInstance(Context context) {
@@ -128,5 +131,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
    @Override
    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+      SharedPreferences sharedPreferences =
+            context.getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
+      SharedPreferences.Editor editor = sharedPreferences.edit();
+      editor.putInt(Constants.KEY_OLD_DB_VERSION, oldVersion);
+      editor.putInt(Constants.KEY_NEW_DB_VERSION, newVersion);
+      editor.apply();
    }
 }

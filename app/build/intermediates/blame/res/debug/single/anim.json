@@ -16,12 +16,12 @@
         "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/exploded-aar/com.github.clans/fab/1.5.0/res/anim/fab_scale_up.xml"
     },
     {
-        "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/anim/design_snackbar_out.xml",
-        "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/exploded-aar/com.android.support/design/24.1.0/res/anim/design_snackbar_out.xml"
-    },
-    {
         "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/anim/fab_slide_out_to_right.xml",
         "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/exploded-aar/com.github.clans/fab/1.5.0/res/anim/fab_slide_out_to_right.xml"
+    },
+    {
+        "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/anim/design_snackbar_out.xml",
+        "source": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/exploded-aar/com.android.support/design/24.1.0/res/anim/design_snackbar_out.xml"
     },
     {
         "merged": "/Users/bianka.roppelt/LocalProjects/Android/pem/app/build/intermediates/res/merged/debug/anim/design_fab_in.xml",

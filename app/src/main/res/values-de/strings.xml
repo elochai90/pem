@@ -18,6 +18,7 @@
     <string name="title_activity_items_list">Items</string>
     <string name="title_activity_fullscreen_image">Vollbild</string>
     <string name="title_activity_search_results">Suchergebnisse</string>
+    <string name="title_activity_about">Über die App</string>
     <string name="title_exit1">Möchtest du </string>
     <string name="title_exit2"> wirklich beenden? </string>
 
@@ -31,9 +32,9 @@
     <string name="switch_false"></string>
 
     <!--empty list text-->
-    <string name="no_items">Du hast noch keine Items in dieser Kategorie. Du kannst eines mit dem Button erstellen.</string>
-    <string name="no_outfits">Du hast noch kein Outfit gemacht. Du kannst eines mit dem Button erstellen.</string>
-    <string name="no_wishlist_items">Du hast noch kein Item in deiner Wunschliste. Du kannst eines mit dem Button erstellen.</string>
+    <string name="no_items">Du hast noch keine Items in dieser Kategorie. Du kannst hier eines erstellen.</string>
+    <string name="no_outfits">Du hast noch kein Outfit erstellt. Du kannst hier eines erstellen.</string>
+    <string name="no_wishlist_items">Du hast noch kein Item in deiner Wunschliste. Du kannst hier eines erstellen.</string>
 
     <!--For Wishlist Fragment-->
     <string name="wishlist_button_not_selected">Zur Kategorie hinzufügen</string>

@@ -226,6 +226,12 @@ public class CompareFragment extends Fragment {
                   getActivity().getPackageName() + ".views.SettingsActivity");
             startActivityForResult(intentSettings, 0);
             return true;
+         case R.id.about:
+            Intent intentAbout = new Intent();
+            intentAbout.setClassName(getActivity().getPackageName(),
+                  getActivity().getPackageName() + ".views.AboutActivity");
+            startActivity(intentAbout);
+            return true;
       }
 
       return super.onOptionsItemSelected(item);

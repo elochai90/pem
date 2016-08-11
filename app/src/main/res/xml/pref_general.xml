@@ -1,7 +1,8 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
    <PreferenceCategory android:title="@string/language">
-      <ListPreference android:entries="@array/language_text"
+      <com.gruppe1.pem.challengeme.helpers.CustomListPreferenceDialog android:dialogTitle="@string/chooseLanguage"
+         android:entries="@array/language_text"
          android:entryValues="@array/language_text"
          android:key="Language"
          android:title="@string/chooseLanguage"
@@ -9,27 +10,25 @@
    </PreferenceCategory>
 
    <PreferenceCategory android:title="@string/standardSizes">
-      <ListPreference android:entries="@array/sizes_text"
-         android:entryValues="@array/sizes_text"
+      <com.gruppe1.pem.challengeme.helpers.CustomEditTextPreferenceDialog android:dialogLayout="@layout/dialog_textfield"
          android:key="Tops"
          android:title="@string/tops"
          />
 
-      <ListPreference android:entries="@array/sizes_text"
-         android:entryValues="@array/sizes_text"
+      <com.gruppe1.pem.challengeme.helpers.CustomEditTextPreferenceDialog android:dialogLayout="@layout/dialog_textfield"
          android:key="Bottoms"
          android:title="@string/bottoms"
          />
 
-      <ListPreference android:entries="@array/sizes_shoes_text"
-         android:entryValues="@array/sizes_shoes_text"
+      <com.gruppe1.pem.challengeme.helpers.CustomEditTextPreferenceDialog android:dialogLayout="@layout/dialog_textfield"
          android:key="Shoes"
          android:title="@string/shoes"
          />
    </PreferenceCategory>
 
    <PreferenceCategory android:title="@string/favColors">
-      <MultiSelectListPreference android:key="favorite_colors"
+      <com.gruppe1.pem.challengeme.helpers.CustomMultipleSelectListPreferenceDialog android:dialogTitle="@string/chooseColor"
+         android:key="favorite_colors"
          android:title="@string/chooseColor"
          />
    </PreferenceCategory>

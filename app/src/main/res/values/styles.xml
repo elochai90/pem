@@ -84,4 +84,8 @@
         <!--<item name="errorTextAppearance">@style/OrgaNice.Text.RobotoLight</item>-->
     </style>
 
+    <style name="OrgaNice.SplashTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@drawable/background_splash</item>
+    </style>
+
 </resources>

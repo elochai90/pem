@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:app="http://schemas.android.com/apk/res-auto"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent">
+
+   <android.support.design.widget.AppBarLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+      <android.support.v7.widget.Toolbar
+         android:id="@+id/toolbar"
+         android:layout_width="match_parent"
+         android:layout_height="?attr/actionBarSize"
+         android:background="@color/primary"
+         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+   </android.support.design.widget.AppBarLayout>
+
+   <ScrollView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_below="@id/toolbar"
+      android:layout_marginTop="?attr/actionBarSize">
+
+      <LinearLayout
+         android:id="@+id/impressum_content"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:orientation="vertical"
+         android:padding="@dimen/activity_horizontal_margin">
+
+         <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:text="@string/impr_paragraph"
+            android:textColor="@color/secondary_text"
+            android:textSize="14sp" />
+
+         <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/impr_aufbau_titel"
+            android:textColor="@color/primary_text"
+            android:textSize="16sp" />
+
+         <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:text="@string/impr_aufbau"
+            android:textColor="@color/secondary_text"
+            android:textSize="14sp" />
+
+         <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:text="@string/impr_gewaehr"
+            android:textColor="@color/primary_text"
+            android:textSize="16sp" />
+
+         <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/impr_haftung_inhalte_titel"
+            android:textColor="@color/primary_text"
+            android:textSize="16sp" />
+
+         <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:text="@string/impr_haftung_inhalte"
+            android:textColor="@color/secondary_text"
+            android:textSize="14sp" />
+
+         <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/impr_haftung_links_titel"
+            android:textColor="@color/primary_text"
+            android:textSize="16sp" />
+
+         <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:text="@string/impr_haftung_links"
+            android:textColor="@color/secondary_text"
+            android:textSize="14sp" />
+
+         <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/impr_urheberrecht_titel"
+            android:textColor="@color/primary_text"
+            android:textSize="16sp" />
+
+         <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:text="@string/impr_urheberrecht"
+            android:textColor="@color/secondary_text"
+            android:textSize="14sp" />
+
+         <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/impr_datenschutz_titel"
+            android:textColor="@color/primary_text"
+            android:textSize="16sp" />
+
+         <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:text="@string/impr_datenschutz"
+            android:textColor="@color/secondary_text"
+            android:textSize="14sp" />
+
+         <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/impr_version_titel"
+            android:textColor="@color/primary_text"
+            android:textSize="16sp" />
+
+         <TextView
+            android:id="@+id/impr_version"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/secondary_text"
+            android:textSize="14sp" />
+      </LinearLayout>
+   </ScrollView>
+</android.support.design.widget.CoordinatorLayout>

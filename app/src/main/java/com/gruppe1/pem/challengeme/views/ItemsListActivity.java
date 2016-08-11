@@ -22,6 +22,9 @@ import android.widget.TextView;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.gruppe1.pem.challengeme.Category;
 import com.gruppe1.pem.challengeme.Item;
 import com.gruppe1.pem.challengeme.ListItemIconName;
@@ -214,6 +217,11 @@ public class ItemsListActivity extends AppCompatActivity {
             menu.close(false);
          }
       });
+
+      MobileAds.initialize(getApplicationContext(), getString(R.string.banner_ad_app_id));
+      AdView mAdView = (AdView) findViewById(R.id.adView);
+      AdRequest adRequest = new AdRequest.Builder().build();
+      mAdView.loadAd(adRequest);
    }
 
    private void setupToolbar() {

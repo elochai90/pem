@@ -59,7 +59,6 @@ public class Constants {
    public static final String DB_COLUMN_COLOR_NAME_DE = "name_de";
    public static final String DB_COLUMN_COLOR_HEX = "hex";
 
-
    public static String EXTRA_CATEGORY_ID = "extra_category_id";
    public static String EXTRA_PARENT_CATEGORY_ID = "extra_parent_category_id";
    public static String EXTRA_ITEM_EDIT = "extra_is_item_edit";
@@ -84,6 +83,8 @@ public class Constants {
    public static final String KEY_WISHLIST_IN_COMPARE = "ShowWishlistItemsInCompares";
    public static final String KEY_FAVORITE_COLORS = "FavoriteColors";
    public static final String KEY_LANGUAGE = "Language";
+   public static final String KEY_OLD_DB_VERSION = "old_db_version";
+   public static final String KEY_NEW_DB_VERSION = "new_db_version";
 
    // Shared Preferences Keys for default sizes
    public static final String KEY_DS_1_NAME = "Tops";

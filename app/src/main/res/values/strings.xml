@@ -1,5 +1,10 @@
 <resources>
 
+    <!--<string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>-->
+    <string name="banner_ad_banner_1_id">ca-app-pub-4706613412044536/2088426207</string>
+    <string name="banner_ad_banner_2_id">ca-app-pub-4706613412044536/4505339008</string>
+    <string name="banner_ad_app_id">ca-app-pub-4706613412044536~8134959806</string>
+
     <!--Categories German-->
     <string name="cat_kleiderbuegel_de">Keine</string>
     <string name="cat_accessoires_de">Accessoires</string>
