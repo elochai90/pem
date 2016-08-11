@@ -9,6 +9,17 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DataBaseHelper extends SQLiteOpenHelper {
 
+   /* For update DB do:
+      - update DATABASE_VERSION
+      - in onUpgrade:
+            if (oldVersion < 2) {
+               db.execSQL(TODO);
+               mDataBaseInstance = db;
+            }
+      - in DataSource: save/create new column, save new column in allColumns, in cursorTo add new
+       column
+    */
+
    public static DataBaseHelper mInstance = null;
    public static SQLiteDatabase mDataBaseInstance = null;
 
@@ -87,14 +98,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
       if (mInstance == null) {
          mInstance = new DataBaseHelper(context);
       }
-      if (mDataBaseInstance == null) {
+      if (mDataBaseInstance == null || !mDataBaseInstance.isOpen()) {
          mDataBaseInstance = mInstance.getWritableDatabase();
       }
       return mDataBaseInstance;
    }
 
    public static void closeDataBaseInstance() {
-      if (mDataBaseInstance != null) {
+      if (mDataBaseInstance != null && mDataBaseInstance.isOpen()) {
          mDataBaseInstance.close();
          mInstance.close();
          mInstance = null;

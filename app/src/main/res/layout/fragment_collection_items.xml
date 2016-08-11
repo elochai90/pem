@@ -41,27 +41,29 @@
 
                <android.support.design.widget.TextInputEditText
                   android:id="@+id/itemName"
-                  android:textAppearance="@style/OrgaNice.Text.RobotoLight"
-                  android:maxLines="2"
-                  android:inputType="textAutoCorrect"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:hint="@string/new_item_label_name" />
+                  android:hint="@string/new_item_label_name"
+                  android:inputType="textAutoCorrect"
+                  android:maxLines="2"
+                  android:textAppearance="@style/OrgaNice.Text.RobotoLight" />
 
             </android.support.design.widget.TextInputLayout>
+
             <LinearLayout
                android:id="@+id/itemDetailRating"
                android:layout_width="wrap_content"
                android:layout_height="42dp"
                android:layout_marginBottom="@dimen/margin_small">
+
                <RatingBar
-                  style="@style/RatingBar"
                   android:id="@+id/ratingBar"
+                  style="@style/RatingBar"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:numStars="5"
                   android:stepSize="1.0" />
-               </LinearLayout>
+            </LinearLayout>
 
             <android.support.design.widget.TextInputLayout
                android:id="@+id/attrCategoryLayout"
@@ -71,56 +73,56 @@
 
                <com.gruppe1.pem.challengeme.helpers.CategoryEditText
                   android:id="@+id/attrCategoryValue"
-                  android:maxLines="2"
-                  android:textAppearance="@style/OrgaNice.Text.RobotoLight"
-                  android:inputType="text"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:hint="@string/item_cateory_label" />
+                  android:hint="@string/item_cateory_label"
+                  android:inputType="text"
+                  android:maxLines="2"
+                  android:textAppearance="@style/OrgaNice.Text.RobotoLight" />
 
             </android.support.design.widget.TextInputLayout>
 
             <LinearLayout
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
-               android:orientation="horizontal"
                android:layout_marginBottom="@dimen/margin_small"
+               android:orientation="horizontal"
                android:weightSum="15">
 
                <android.support.design.widget.TextInputLayout
                   android:layout_width="0dp"
                   android:layout_height="wrap_content"
-                  android:orientation="horizontal"
-                  android:layout_weight="13">
-
+                  android:layout_weight="13"
+                  android:orientation="horizontal">
 
                   <com.gruppe1.pem.challengeme.helpers.ColorEditText
                      android:id="@+id/attrColorValue"
-                     android:textAppearance="@style/OrgaNice.Text.RobotoLight"
-                     android:maxLines="1"
-                     android:inputType="text"
                      android:layout_width="match_parent"
                      android:layout_height="wrap_content"
-                     android:hint="@string/item_color_label" />
+                     android:hint="@string/item_color_label"
+                     android:inputType="text"
+                     android:maxLines="1"
+                     android:textAppearance="@style/OrgaNice.Text.RobotoLight" />
                </android.support.design.widget.TextInputLayout>
+
                <LinearLayout
-                  android:layout_gravity="center"
-                  android:gravity="center"
                   android:layout_width="0dp"
                   android:layout_height="wrap_content"
-                  android:layout_weight="2" >
+                  android:layout_gravity="center"
+                  android:layout_weight="2"
+                  android:gravity="center">
 
                   <View
                      android:id="@+id/attrColorIndicator"
                      android:layout_width="30dp"
-                     android:layout_height="30dp"/>
+                     android:layout_height="30dp" />
                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
-               android:layout_marginBottom="@dimen/margin_small"
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
+               android:layout_marginBottom="@dimen/margin_small"
                android:orientation="horizontal">
 
                <Switch
@@ -131,13 +133,14 @@
                   android:showText="true"
                   android:textOff="@string/switch_false"
                   android:textOn="@string/switch_true" />
+
                <TextView
                   android:id="@+id/attrWishlistName"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
+                  android:text="@string/item_wishlist_label"
                   android:textColor="@color/primary_text"
-                  android:textSize="16sp"
-                  android:text="@string/item_wishlist_label"/>
+                  android:textSize="16sp" />
             </LinearLayout>
          </LinearLayout>
 
